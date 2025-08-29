@@ -1,0 +1,132 @@
+[28-Aug-2025 16:08:19 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.home.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.home.i...', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:09:22 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:09:24 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:10:22 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(24): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:12:59 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:13:01 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:13:49 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:01 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:13 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:35 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:46 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
