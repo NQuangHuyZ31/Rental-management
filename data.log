@@ -1,0 +1,223 @@
+[28-Aug-2025 16:08:19 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.home.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.home.i...', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:09:22 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:09:24 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:10:22 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(24): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:12:59 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:13:01 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:13:49 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:01 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:13 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:35 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[28-Aug-2025 16:14:46 Europe/Berlin] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/KLTN-HD/views/customer.index.php in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php:30
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\KLTN-HD\App\Controllers\Customer\HomeController.php(23): Helpers\ViewHelper::render('customer.index', Array)
+#1 [internal function]: App\Controllers\Customer\HomeController->index()
+#2 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(66): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\KLTN-HD\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\KLTN-HD\Router\web.php(26): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\KLTN-HD\index.php(46): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\KLTN-HD\Helpers\ViewHelper.php on line 30
+[29-Aug-2025 12:30:39 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp-v8.2\htdocs\Rental-management\Core/config.inc.php' (include_path='C:\xampp-v8.2\php\PEAR') in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:10
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(13): {closure}('Core\\QueryBuild...')
+#2 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once('C:\\xampp-v8.2\\h...')
+#3 C:\xampp-v8.2\htdocs\Rental-management\App\Models\User.php(5): {closure}('App\\Models\\Mode...')
+#4 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once('C:\\xampp-v8.2\\h...')
+#5 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): {closure}('App\\Models\\User')
+#6 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#7 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#8 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#9 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#10 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#11 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#12 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 10
+[29-Aug-2025 12:31:19 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp-v8.2\htdocs\Rental-management\Core/config.inc.php' (include_path='C:\xampp-v8.2\php\PEAR') in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:10
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(13): {closure}('Core\\QueryBuild...')
+#2 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once('C:\\xampp-v8.2\\h...')
+#3 C:\xampp-v8.2\htdocs\Rental-management\App\Models\User.php(5): {closure}('App\\Models\\Mode...')
+#4 C:\xampp-v8.2\htdocs\Rental-management\index.php(26): require_once('C:\\xampp-v8.2\\h...')
+#5 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): {closure}('App\\Models\\User')
+#6 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#7 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#8 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#9 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#10 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#11 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#12 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 10
+[29-Aug-2025 12:31:40 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot call private Core\Database::__construct() in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:32
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(16): Core\QueryBuilder->__construct()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): App\Models\Model->__construct()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 32
+[29-Aug-2025 12:32:57 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot call private Core\Database::__construct() in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:33
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(16): Core\QueryBuilder->__construct()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): App\Models\Model->__construct()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 33
+[29-Aug-2025 12:33:21 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot call private Core\Database::__construct() in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:33
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(16): Core\QueryBuilder->__construct()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): App\Models\Model->__construct()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 33
+[29-Aug-2025 12:34:20 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot call private Core\Database::__construct() in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php:33
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Models\Model.php(16): Core\QueryBuilder->__construct()
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(13): App\Models\Model->__construct()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(64): App\Controllers\AuthController->__construct()
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\QueryBuilder.php on line 33
+[29-Aug-2025 12:34:42 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function getAllUsers() on null in C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php:17
+Stack trace:
+#0 [internal function]: App\Controllers\AuthController->login()
+#1 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(66): call_user_func_array(Array, Array)
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(98): Core\Router->Core\{closure}(Array)
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(102): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(56): Core\Router->runMiddleware(Array, Object(Closure))
+#5 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(27): Core\Router->handleRequest()
+#6 C:\xampp-v8.2\htdocs\Rental-management\index.php(50): require_once('C:\\xampp-v8.2\\h...')
+#7 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php on line 17

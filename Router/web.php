@@ -1,15 +1,27 @@
 <?php
 
+// Core
+
+use App\Controllers\AuthController;
 use Core\Router;
 
-// User Middleware
-use App\Middleware\AuthMiddleware;
-use App\Middleware\BlockMiddleware;
-
+// Admin Controller
+// Landlord Controller
+use App\Controllers\Landlord\HouseController;
+// Customer Controller
+use App\Controllers\TestController;
 // Khởi tạo đối tượng Router
 $router = new Router();
 
+// =============================================================ROUTER CUSTOMER==================================================
+// Route đến trang chủ
+$router->get('/', [AuthController::class, 'login']);
 
+
+// =============================================================ROUTER ADMIN==================================================
+
+// =============================================================ROUTER LANDLORD==================================================
+$router->get('/landlord', [HouseController::class, 'index']);
 // Route test
 //$router->get('/test', [TestController::class, 'index']);
 // Xử lý request

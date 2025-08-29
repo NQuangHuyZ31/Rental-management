@@ -1,18 +1,18 @@
 <?php
 
+/*
+	name: Model.php
+	Author: Huy Nguyen
+	Date: 2025-08-29
+	Purpose: Base model class
+*/
+
 namespace App\Models;
+Use Core\QueryBuilder;
 
-use Core\Database;
-
-class Model
-{
-
-  protected $db;
-
-  public function __construct()
-  {
-
-    $this->db = Database::getInstance()->getConnection();
-  }
-
+class Model extends QueryBuilder{
+	
+	public function __construct() {
+		parent::__construct();
+	}
 }

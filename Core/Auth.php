@@ -40,12 +40,8 @@ class Auth
                 'username' => $user['username'],
                 'email' => $user['email'],
                 'role' => $user['role'],
+                'session_id' => session_id(),
             ]);
-
-            // if ($user['role'] === 'customer') {
-            // return $user;
-            // }
-            // Lưu thông tin người dùng vào session
             return true;
         }
 

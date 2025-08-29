@@ -1,6 +1,10 @@
 <?php
 
 require_once 'Config/config.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 ob_start(); // Bắt đầu output buffering
 
@@ -10,7 +14,8 @@ ini_set('display_errors', 0); // Ngăn lỗi in ra màn hình
 
 // Nếu cần log lỗi, bật log riêng (tùy chọn)
 ini_set('log_errors', 1);
-ini_set('error_log', 'data.log'); // Thư mục log tùy bạn
+ini_set('error_log', ROOT_PATH . '/Logs/server.log'); // Thư mục log tùy bạn
+// echo ROOT_PATH . '/Logs/server.log';
 // ini_set('error_reporting', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);

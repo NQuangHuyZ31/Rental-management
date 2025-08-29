@@ -4,9 +4,5 @@ define('BASE_URL', rtrim((isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' .
 define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/Rental-management/views/');
 define('VIEW_PATH_USER_LAYOUT', $_SERVER['DOCUMENT_ROOT'] . '/Rental-management/views/user/layout/');
 define('BASE_URL_NAME', '/Rental-management');
-// database
-define("DB_HOST", 'localhost');
-define("DB_USER", 'root');
-define("DB_PASS", '');
-define("DB_NAME", 'kltn');
 define('UPLOAD_DIR', $_SERVER['DOCUMENT_ROOT'] . '/Rental-management/Public/upload/');
+define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/Rental-management');
