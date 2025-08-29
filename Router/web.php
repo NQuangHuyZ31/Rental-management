@@ -1,19 +1,20 @@
 <?php
 
 // Core
+
+use App\Controllers\AuthController;
 use Core\Router;
 
 // Admin Controller
 // Landlord Controller
 // Customer Controller
 use App\Controllers\TestController;
-use App\Controllers\Customer\HomeController;
 // Khởi tạo đối tượng Router
 $router = new Router();
 
 // =============================================================ROUTER CUSTOMER==================================================
 // Route đến trang chủ
-$router->get('/', [HomeController::class, 'index']);
+$router->get('/', [AuthController::class, 'login']);
 
 
 // =============================================================ROUTER ADMIN==================================================

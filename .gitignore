@@ -4,4 +4,7 @@ design-database.drawio
 ghichu.txt
 node_modules
 .prettierrc.json
+.env
+vendor/
+.vscode/
 
