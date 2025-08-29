@@ -9,7 +9,7 @@
                             <i class="fas fa-home text-white text-lg"></i>
                         </div>
                         <!-- Badge số thông báo được đặt ở góc trên phải của icon -->
-                        <div class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                        <div class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center border border-white">
                             <span class="text-white text-xs font-bold">1</span>
                         </div>
                     </div>

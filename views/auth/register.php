@@ -3,6 +3,7 @@
 
 use Core\CSRF;
 use Core\Session;
+$csrf_token = \Core\CSRF::generateToken();
 ?>
 <!DOCTYPE html>
 <html lang="vi">
