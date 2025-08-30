@@ -1,16 +1,12 @@
 <header class="bg-[#15A05C] shadow-lg">
     <nav class="container mx-auto px-4">
-        <div class="flex items-center h-20">
+        <div class="flex items-center h-24">
             <!-- Logo Section -->
             <div class="flex items-center mr-8">
-                <img src="../../Public/images/admin/Icon-lozido-white.jpg" 
-                     alt="LOZIDO Logo" 
-                     class="w-12 h-12 mr-3">
-                <div class="text-white">
-                    <div class="text-xl font-bold">LOZIDO</div>
-                    <div class="bg-lozido-orange text-white text-xs px-2 py-1 rounded">
-                        QUẢN LÝ NHÀ CHO THUÊ
-                    </div>
+                <div>
+                    <img src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.jpg" 
+                         alt="HOSTY Logo" 
+                         class="w-35 h-35">
                 </div>
             </div>
 
@@ -50,6 +46,12 @@
                 <a href="#" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-user text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Tài khoản</span>
+                </a>
+
+                <!-- Cài đặt chung (General Settings) -->
+                <a href="#" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                    <i class="fas fa-cog text-lg mb-1"></i>
+                    <span class="text-sm whitespace-nowrap">Cài đặt chung</span>
                 </a>
 
                 <!-- Đăng xuất (Logout) -->

@@ -10,7 +10,7 @@ $csrf = CSRF::generateToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - LOZIDO</title>
+    <title>Đăng nhập - HOSTY</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,7 +35,7 @@ $csrf = CSRF::generateToken();
         <div class="text-center mb-8">
             <!-- Logo -->
             <div class="mb-4">
-                <img src=" <?= BASE_URL ?>/Public/images/admin/Icon-lozido-white.jpg" alt="LOZIDO Logo" class="w-20 h-20 mx-auto">
+                <img src=" <?= BASE_URL ?>/Public/images/admin/hosty-removebg.jpg" alt="HOSTY Logo" class="w-18 h-20 mx-auto">
             </div>
             <!-- Title Text -->
             <h1 class="text-[#3C9E46] text-4xl font-bold text-center leading-tight whitespace-nowrap">
@@ -52,7 +52,7 @@ $csrf = CSRF::generateToken();
 
             <!-- Login Form -->
             <form action="#" method="POST">
-                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <!-- Email Field -->
                 <div class="mb-6">
                     <label for="email" class="block text-gray-700 text-sm font-medium mb-2">
