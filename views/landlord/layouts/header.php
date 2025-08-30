@@ -1,3 +1,8 @@
+<!--
+Author: Nguyen Xuan Duong
+Date: 2025-08-29
+Purpose: Build Header for Landlord Layout
+-->
 <header class="bg-[#15A05C] shadow-lg">
     <nav class="container mx-auto px-4">
         <div class="flex items-center h-24">

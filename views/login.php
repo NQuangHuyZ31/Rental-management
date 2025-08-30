@@ -1,3 +1,7 @@
+<!-- Author: Nguyen Xuan Duong
+Date: 2025-08-27
+Purpose: Build Login Page -->
+
 <?php
 
 use Core\CSRF;

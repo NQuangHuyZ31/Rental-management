@@ -1,5 +1,11 @@
 <?php
 
+/*
+	Author: Nguyen Xuan Duong
+	Date: 2025-08-29
+	Purpose: Build House Controller
+*/
+
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Controller;
@@ -16,6 +22,7 @@ class HouseController extends Controller
         ViewRender::render('landlord/index', ['houses' => $result]);
     }
 
+    
     
 }
 ?>

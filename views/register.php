@@ -1,3 +1,9 @@
+<!-- 
+Author: Nguyen Xuan Duong
+Date: 2025-08-28
+Purpose: Build Register Page 
+-->
+
 <?php
 //require_once '../../Config/config.php';
 
