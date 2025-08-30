@@ -13,10 +13,11 @@ class Database
 
     private function __construct()
     {
-        $this->host = $_ENV['DB_HOST'];
-        $this->dbname = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USER'];
-        $this->password = $_ENV['DB_PASS'];
+        // Use environment variables if available, otherwise use defaults for XAMPP
+        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
+        $this->dbname = $_ENV['DB_NAME'] ?? 'rental_management';
+        $this->username = $_ENV['DB_USER'] ?? 'root';
+        $this->password = $_ENV['DB_PASS'] ?? '';
         
         try {
             $this->connection = new \PDO(

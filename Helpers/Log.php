@@ -4,134 +4,69 @@ namespace Helpers;
 
 class Log
 {
-    protected static $logFile = ROOT_PATH . '/Logs/';
+    private static function getLogDir()
+    {
+        if (defined('ROOT_PATH')) {
+            return ROOT_PATH . '/Logs/';
+        } else {
+            return __DIR__ . '/../Logs/';
+        }
+    }
+
     protected static $maxFileSize = 10 * 1024 * 1024; // 10MB
     protected static $maxFiles = 5;
-    
-    const LEVEL_DEBUG = 'DEBUG';
-    const LEVEL_INFO = 'INFO';
-    const LEVEL_WARNING = 'WARNING';
-    const LEVEL_ERROR = 'ERROR';
+
+    const LEVEL_DEBUG    = 'DEBUG';
+    const LEVEL_INFO     = 'INFO';
+    const LEVEL_WARNING  = 'WARNING';
+    const LEVEL_ERROR    = 'ERROR';
     const LEVEL_CRITICAL = 'CRITICAL';
 
     /**
-     * Log text message
+     * Ghi log vào file
+     *
+     * @param string      $logData
+     * @param string      $level
+     * @param string|null $logFileName
      */
-    public static function text($logData, $level = self::LEVEL_INFO)
-    {
-        self::writeLog($logData, $level);
-    }
-
-    /**
-     * Log array data
-     */
-    public static function array(array $logData, $level = self::LEVEL_INFO)
-    {
-        self::writeLog(print_r($logData, true), $level);
-    }
-
-    /**
-     * Log JSON data
-     */
-    public static function json($logData, $level = self::LEVEL_INFO)
-    {
-        self::writeLog(json_encode($logData, JSON_PRETTY_PRINT), $level);
-    }
-
-    /**
-     * Log debug information
-     */
-    public static function debug($logData)
-    {
-        self::writeLog($logData, self::LEVEL_DEBUG);
-    }
-
-    /**
-     * Log info message
-     */
-    public static function info($logData)
-    {
-        self::writeLog($logData, self::LEVEL_INFO);
-    }
-
-    /**
-     * Log warning message
-     */
-    public static function warning($logData)
-    {
-        self::writeLog($logData, self::LEVEL_WARNING);
-    }
-
-    /**
-     * Log error message
-     */
-    public static function error($logData)
-    {
-        self::writeLog($logData, self::LEVEL_ERROR);
-    }
-
-    /**
-     * Log critical error
-     */
-    public static function critical($logData)
-    {
-        self::writeLog($logData, self::LEVEL_CRITICAL);
-    }
-
-    /**
-     * Log exception with stack trace
-     */
-    public static function exception(\Exception $exception, $level = self::LEVEL_ERROR)
-    {
-        $logData = sprintf(
-            "Exception: %s\nMessage: %s\nFile: %s\nLine: %d\nStack Trace:\n%s",
-            get_class($exception),
-            $exception->getMessage(),
-            $exception->getFile(),
-            $exception->getLine(),
-            $exception->getTraceAsString()
-        );
-        self::writeLog($logData, $level);
-    }
-
-    /**
-     * Write log to file with rotation
-     */
-    protected static function writeLog($logData, $level = self::LEVEL_INFO)
+    public static function write($logData, $level = self::LEVEL_INFO, $logFileName = null)
     {
         $timestamp = date('Y-m-d H:i:s');
-        $logEntry = sprintf("[%s] [%s] %s%s", $timestamp, $level, $logData, PHP_EOL);
         
-        $logFilePath = self::$logFile . 'server.log';
-        
-        // Check if file exists and rotate if needed
-        if (file_exists($logFilePath) && filesize($logFilePath) > self::$maxFileSize) {
-            self::rotateLogFiles();
+        // Xử lý array hoặc object
+        if (is_array($logData) || is_object($logData)) {
+            $logData = print_r($logData, true);
         }
         
-        // Create directory if it doesn't exist
+        $logEntry = sprintf("[%s] [%s] %s%s", $timestamp, $level, $logData, PHP_EOL);
+
+        $logFilePath = self::getLogDir() . ($logFileName ?: 'server.log');
+
+        // Rotate chỉ áp dụng cho server.log mặc định
+        if ($logFileName === null && file_exists($logFilePath) && filesize($logFilePath) > self::$maxFileSize) {
+            self::rotateLogFiles();
+        }
+
         if (!is_dir(dirname($logFilePath))) {
             mkdir(dirname($logFilePath), 0755, true);
         }
-        
+
         file_put_contents($logFilePath, $logEntry, FILE_APPEND | LOCK_EX);
     }
 
     /**
-     * Rotate log files
+     * Rotate log files (chỉ cho server.log mặc định)
      */
     protected static function rotateLogFiles()
     {
-        $logDir = self::$logFile;
+        $logDir = self::getLogDir();
         $baseLogFile = $logDir . 'server.log';
-        
-        // Remove oldest log file if we have reached max files
+
         $oldestLog = $logDir . 'server.log.' . self::$maxFiles;
         if (file_exists($oldestLog)) {
             unlink($oldestLog);
         }
-        
-        // Shift existing log files
+
         for ($i = self::$maxFiles - 1; $i >= 1; $i--) {
             $oldFile = $logDir . 'server.log.' . $i;
             $newFile = $logDir . 'server.log.' . ($i + 1);
@@ -139,44 +74,39 @@ class Log
                 rename($oldFile, $newFile);
             }
         }
-        
-        // Rename current log file
+
         if (file_exists($baseLogFile)) {
             rename($baseLogFile, $logDir . 'server.log.1');
         }
     }
 
-    /**
-     * Clear all log files
-     */
-    public static function clear()
+    // ==========================
+    // Helper methods
+    // ==========================
+
+    public static function server($msg, $level = self::LEVEL_INFO)
     {
-        $logDir = self::$logFile;
-        $files = glob($logDir . 'server.log*');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
+        self::write($msg, $level, 'server.log');
     }
 
-    /**
-     * Get log file size
-     */
-    public static function getLogSize()
+    public static function queue($msg, $level = self::LEVEL_INFO)
     {
-        $logFilePath = self::$logFile . 'server.log';
-        if (file_exists($logFilePath)) {
-            return filesize($logFilePath);
-        }
-        return 0;
+        self::write($msg, $level, 'queue_worker.log');
     }
 
-    /**
-     * Get log file path
-     */
-    public static function getLogPath()
+    public static function payment($msg, $level = self::LEVEL_INFO)
     {
-        return self::$logFile . 'server.log';
+        self::write($msg, $level, 'payment.log');
+    }
+
+    public static function auth($msg, $level = self::LEVEL_INFO)
+    {
+        self::write($msg, $level, 'auth.log');
+    }
+
+    public static function custom($msg, $fileName, $level = self::LEVEL_INFO)
+    {
+        // Cho phép log ra bất kỳ file nào
+        self::write($msg, $level, $fileName);
     }
 }

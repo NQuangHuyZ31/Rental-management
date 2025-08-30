@@ -15,8 +15,11 @@ $router = new Router();
 
 // =============================================================ROUTER CUSTOMER==================================================
 // Route đến trang chủ
-$router->get('/', [AuthController::class, 'login']);
-
+$router->get('/login', [AuthController::class, 'showLoginPage']);
+$router->get('/register', [AuthController::class, 'showRegisterPage']);
+$router->post('/login', [AuthController::class, 'handleLogin']);
+$router->post('/register', [AuthController::class, 'handleRegister']);
+$router->get('/logout', [AuthController::class, 'logout']);
 
 // =============================================================ROUTER ADMIN==================================================
 

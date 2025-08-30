@@ -7,6 +7,14 @@
         "cloudinary/cloudinary_php": "^2",
         "vlucas/phpdotenv": "^5.6"
     },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "Helpers\\": "Helpers/",
+            "Examples\\": "examples/",
+            "Queue\\": "Queue/"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
