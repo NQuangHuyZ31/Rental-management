@@ -92,11 +92,11 @@ $csrf = CSRF::generateToken();
 
             <!-- Additional Links -->
             <div class="mt-6 text-center">
-                <a href="#" class="text-green-600 hover:text-green-800 text-sm">
+                <a href="<?= BASE_URL ?>/forgot-password" class="text-green-600 hover:text-green-800 text-sm">
                     Quên mật khẩu?
                 </a>
                 <span class="mx-2 text-gray-400">|</span>
-                <a href="register.php" class="text-green-600 hover:text-green-800 text-sm">
+                <a href="<?= BASE_URL ?>/register" class="text-green-600 hover:text-green-800 text-sm">
                     Đăng ký tài khoản
                 </a>
             </div>

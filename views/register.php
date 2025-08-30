@@ -112,8 +112,9 @@ use Core\Session;
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                             <option value="">Chọn vai trò</option>
-                            <option value="host">Chủ nhà</option>
-                            <option value="customer">Khách thuê</option>
+                            <?php foreach ($roles as $role): ?>
+                                <option value="<?= $role['id'] ?>"><?= $role['role_name'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
@@ -166,7 +167,7 @@ use Core\Session;
                 <span class="text-gray-600 text-sm">
                     Đã có tài khoản?
                 </span>
-                <a href="login.php" class="text-green-600 hover:text-green-800 text-sm font-medium ml-1">
+                <a href="<?= BASE_URL ?>/login" class="text-green-600 hover:text-green-800 text-sm font-medium ml-1">
                     Đăng nhập ngay
                 </a>
             </div>

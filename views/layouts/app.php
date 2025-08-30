@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($title) ? e($title) : 'LOZIDO' ?></title>
+    <title><?= isset($title) ? htmlspecialchars($title) : 'LOZIDO' ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

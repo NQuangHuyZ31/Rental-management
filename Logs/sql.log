@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {2025-08-29 17:33:39}{"sql":"SELECT * FROM users WHERE id = ?","params":"[1]","type":"SELECT","table":"users","executed_at":"2025-08-29 17:33:39","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36 Edg\/139.0.0.0"}
 {2025-08-29 17:35:03}{"sql":"SELECT * FROM users WHERE id = ?","params":"[1]","type":"SELECT","table":"users","executed_at":"2025-08-29 17:35:03","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1 Edg\/139.0.0.0"}
 {2025-08-29 17:35:41}{"sql":"SELECT * FROM users WHERE id = ?","params":"[1]","type":"SELECT","table":"users","executed_at":"2025-08-29 17:35:41","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36 Edg\/139.0.0.0"}
@@ -70,3 +71,6 @@
 {2025-08-29 19:33:39}{"sql":"SELECT * FROM users WHERE id = ?","params":"[1]","type":"SELECT","table":"users","executed_at":"2025-08-29 19:33:39","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36 Edg\/139.0.0.0"}
 {2025-08-29 19:33:40}{"sql":"SELECT * FROM users WHERE id = ?","params":"[1]","type":"SELECT","table":"users","executed_at":"2025-08-29 19:33:40","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36 Edg\/139.0.0.0"}
 {2025-08-29 19:33:48}{"sql":"SELECT * FROM houses","params":"[]","type":"RAW","table":"","executed_at":"2025-08-29 19:33:48","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36 Edg\/139.0.0.0"}
+=======
+{2025-08-30 15:53:58}{"sql":"SELECT * FROM roles","params":"[]","type":"SELECT","table":"roles","executed_at":"2025-08-30 15:53:58","user_id":null,"ip_address":"::1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/139.0.0.0 Safari\/537.36"}
+>>>>>>> e72e20e01414038c5818761cae1db7b7e1479c98

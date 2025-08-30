@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [29-Aug-2025 17:57:41 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: printf(): Argument #1 ($format) must be of type string, array given in C:\xampp\htdocs\Rental-management\views\landlord\index.php:2
 Stack trace:
 #0 C:\xampp\htdocs\Rental-management\views\landlord\index.php(2): printf(Array)
@@ -26,3 +27,13 @@ Stack trace:
 #9 C:\xampp\htdocs\Rental-management\index.php(51): require_once('C:\\xampp\\htdocs...')
 #10 {main}
   thrown in C:\xampp\htdocs\Rental-management\views\landlord\index.php on line 2
+=======
+[2025-08-30 15:03:19] [INFO] {"job_id":"3","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:06:02] [INFO] Test message to default log
+[2025-08-30 15:06:25] [INFO] {"job_id":"4","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:07:13] [INFO] {"job_id":"5","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:07:54] [INFO] {"job_id":"6","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:09:07] [INFO] {"job_id":"7","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:17:24] [INFO] {"job_id":"8","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+[2025-08-30 15:17:54] [INFO] {"job_id":"9","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
+>>>>>>> e72e20e01414038c5818761cae1db7b7e1479c98

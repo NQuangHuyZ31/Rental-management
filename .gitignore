@@ -7,4 +7,8 @@ node_modules
 .env
 vendor/
 .vscode/
+<<<<<<< HEAD
 Logs/
+=======
+Logs/
+>>>>>>> e72e20e01414038c5818761cae1db7b7e1479c98

@@ -100,9 +100,17 @@ class Auth
      */
     public function logout()
     {
-        unset($_SESSION['user']);
+        // Xóa tất cả session
+        $_SESSION = [];
+
+        // Hủy session trên server
+        if (session_id() != '' || isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 3600, '/');
+        }
+
         session_destroy();
     }
+
 
     /**
      * Kiểm tra quyền của người dùng
