@@ -8,6 +8,7 @@ use Core\Router;
 // Admin Controller
 // Landlord Controller
 use App\Controllers\Landlord\HouseController;
+use App\Controllers\Landlord\ServiceController;
 // Customer Controller
 use App\Controllers\TestController;
 // Khởi tạo đối tượng Router
@@ -25,6 +26,7 @@ $router->get('/logout', [AuthController::class, 'logout']);
 
 // =============================================================ROUTER LANDLORD==================================================
 $router->get('/landlord', [HouseController::class, 'index']);
+$router->get('/landlord/service', [ServiceController::class, 'index']);
 
 // Route test
 //$router->get('/test', [TestController::class, 'index']);
