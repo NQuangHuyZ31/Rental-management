@@ -25,6 +25,7 @@ $router->get('/logout', [AuthController::class, 'logout']);
 
 // =============================================================ROUTER LANDLORD==================================================
 $router->get('/landlord', [HouseController::class, 'index']);
+
 // Route test
 //$router->get('/test', [TestController::class, 'index']);
 // Xử lý request
