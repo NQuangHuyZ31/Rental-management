@@ -1,24 +1,22 @@
 <?php
-
-require_once 'Config/config.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Load file .env trước
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+// Sau khi $_ENV có dữ liệu rồi mới require config.php
+require_once 'Config/config.php';
 
 ob_start(); // Bắt đầu output buffering
 
 // Ẩn các lỗi Deprecated, Notice, Warning
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
-ini_set('display_errors', 0); // Ngăn lỗi in ra màn hình
+ini_set('display_errors', 1);
 
 // Nếu cần log lỗi, bật log riêng (tùy chọn)
 ini_set('log_errors', 1);
-ini_set('error_log', ROOT_PATH . '/Logs/server.log'); // Thư mục log tùy bạn
-// echo ROOT_PATH . '/Logs/server.log';
-// ini_set('error_reporting', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('error_log', ROOT_PATH . '/Logs/server.log');
 
 // Autoloader để tự động tải class
 spl_autoload_register(function ($class) {
@@ -30,22 +28,15 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Cho phép mọi nguồn truy cập (hoặc thay thế bằng domain cụ thể)
-
+// CORS
 header("Access-Control-Allow-Origin: *");
-// header("Access-Control-Allow-Origin: https://wildhorizonbs.shoplands.store/");
-
-// Cho phép các phương thức HTTP cụ thể
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-
-// Cho phép các header cụ thể
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-// Xử lý yêu cầu OPTIONS (Preflight Request)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Nạp các route
+// Routes
 require_once __DIR__ . '/Router/web.php';

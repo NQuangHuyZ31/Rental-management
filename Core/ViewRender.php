@@ -6,10 +6,6 @@ class ViewRender
 {
     /**
      * Render a view with data
-     * 
-     * @param string $view Path to view file (relative to views directory)
-     * @param array $data Data to pass to the view
-     * @param string|null $layout Layout file to use (optional)
      * @return string Rendered HTML content
      */
     public static function render($view, $data = [], $layout = null)
@@ -24,9 +20,29 @@ class ViewRender
         // Include the view file
         $viewPath = self::getViewPath($view);
         if (file_exists($viewPath)) {
-            require_once $viewPath;
+            if($layout) {
+                return  $viewPath;
+            } else {
+                require_once $viewPath;
+            }
         } else {
             throw new \Exception("View file not found: {$viewPath}");
+        }
+    }
+
+
+    /** Render a view with layout
+     * 
+     * Return the layout default with layout content file
+     */
+    public static function renderWithLayout($view, $data = [], $layout = null)
+    {
+        $layoutPath = self::getViewPath($layout);
+        if (file_exists($layoutPath)) {
+            $content = self::render($view, $data, $layout);
+            require_once $layoutPath;
+        } else {
+            throw new \Exception("Layout file not found: {$layoutPath}");
         }
     }
     
@@ -37,10 +53,7 @@ class ViewRender
      * @return string Full path to view file
      */
     private static function getViewPath($view)
-    {
-        // Remove .php extension if provided
-        // $view = str_replace('.php', '', $view);
-        
+    {        
         return VIEW_PATH . $view . '.php';
     }
     
@@ -49,7 +62,7 @@ class ViewRender
      * 
      * @param string $partial Partial view path
      * @param array $data Data to pass to partial
-     * @return string Rendered partial HTML
+     * @return string    partial HTML
      */
     public static function partial($partial, $data = [])
     {

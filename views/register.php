@@ -16,9 +16,10 @@ use Core\Session;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký - LOZIDO</title>
-    
+    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+     <!-- Modify by Huy Nguyen on 2025-08-31 to use tailwindcss from package.json-->
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/Public/css/output.css">  
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

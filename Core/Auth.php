@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Database;
+use Core\Session;
 
 class Auth
 {
@@ -25,11 +26,11 @@ class Auth
      * @param string $password
      * @return bool
      */
-    public function login($email, $password)
+    public function login($email, $password, $role = '1')
     {
         // Truy vấn người dùng theo email
-        $stmt = $this->db->prepare("select * from users where email = ? and status = 'active'");
-        $stmt->execute([$email]);
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ? AND account_status = 'active' AND deleted = 0 AND role_id = ?");
+        $stmt->execute([$email, $role]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Kiểm tra người dùng và xác minh mật khẩu
@@ -39,7 +40,7 @@ class Auth
                 'id' => $user['id'],
                 'username' => $user['username'],
                 'email' => $user['email'],
-                'role' => $user['role'],
+                'role' => $user['role_id'],
                 'session_id' => session_id(),
             ]);
             return true;
@@ -48,32 +49,31 @@ class Auth
         return false;
     }
 
-    public function loginWithoutPassword($email)
-    {
-        // Truy vấn người dùng theo email
-        $stmt = $this->db->prepare("select * from users where email = ? and status = 'active'");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+    // public function loginWithoutPassword($email)
+    // {
+    //     // Truy vấn người dùng theo email
+    //     $stmt = $this->db->prepare("select * from users where email = ? and status = 'active'");
+    //     $stmt->execute([$email]);
+    //     $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        // Kiểm tra người dùng và xác minh mật khẩu
-        if ($user) {
+    //     // Kiểm tra người dùng và xác minh mật khẩu
+    //     if ($user) {
 
-            Session::set('user', [
-                'id' => $user['id'],
-                'username' => $user['username'],
-                'email' => $user['email'],
-                'role' => $user['role'],
-            ]);
+    //         Session::set('user', [
+    //             'id' => $user['id'],
+    //             'username' => $user['username'],
+    //             'email' => $user['email'],
+    //             'role' => $user['role_id'],
+    //         ]);
+    //         return $user;
+    //         // if ($user['role'] === 'customer') {
+    //         // return $user;
+    //         // }
+    //         // Lưu thông tin người dùng vào session
+    //     }
 
-            // if ($user['role'] === 'customer') {
-            // return $user;
-            // }
-            // Lưu thông tin người dùng vào session
-            return true;
-        }
-
-        return false;
-    }
+    //     return false;
+    // }
 
     /**
      * Kiểm tra người dùng đã đăng nhập

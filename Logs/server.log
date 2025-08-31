@@ -1,0 +1,92 @@
+[2025-08-31 15:30:57] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:30:57] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:32:43] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123456"}
+[2025-08-31 15:32:43] [ERROR] 
+[2025-08-31 15:33:07] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:33:07] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:33:49] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
+[2025-08-31 15:33:49] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:34:49] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:34:49] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:35:47] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:35:47] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:37:59] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:37:59] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:39:12] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:39:12] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:41:56] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123456"}
+[2025-08-31 15:41:56] [ERROR] 
+[2025-08-31 15:42:04] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
+[2025-08-31 15:42:04] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:42:47] [ERROR] null
+[2025-08-31 15:42:58] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:42:58] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:42:58] [ERROR] {"errors":"M\u1eadt kh\u1ea9u ph\u1ea3i c\u00f3 \u00edt nh\u1ea5t 6 k\u00ed t\u1ef1","old":{"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}}
+[2025-08-31 15:43:34] [ERROR] null
+[2025-08-31 15:43:46] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
+[2025-08-31 15:43:46] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:43:46] [ERROR] "M\u1eadt kh\u1ea9u ph\u1ea3i c\u00f3 \u00edt nh\u1ea5t 6 k\u00ed t\u1ef1"
+[2025-08-31 15:44:52] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:44:52] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:45:38] [ERROR] null
+[2025-08-31 15:46:37] [ERROR] null
+[2025-08-31 15:48:07] [ERROR] null
+[2025-08-31 15:48:46] [ERROR] null
+[2025-08-31 15:48:53] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:48:53] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:48:53] [ERROR] "landlord"
+[2025-08-31 15:53:06] [ERROR] null
+[2025-08-31 15:53:15] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
+[2025-08-31 15:53:15] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:53:15] [ERROR] "landlord"
+[2025-08-31 15:54:30] [ERROR] null
+[2025-08-31 15:54:37] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:54:37] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:54:37] [ERROR] "landlord"
+[2025-08-31 15:55:46] [ERROR] null
+[2025-08-31 15:55:53] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
+[2025-08-31 15:55:53] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:55:53] [ERROR] "landlord"
+[2025-08-31 15:56:59] [ERROR] null
+[2025-08-31 15:57:07] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1235"}
+[2025-08-31 15:57:07] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:57:07] [ERROR] "landlord"
+[2025-08-31 15:57:27] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1"}
+[2025-08-31 15:57:27] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:57:27] [ERROR] "landlord"
+[2025-08-31 15:57:30] [ERROR] null
+[2025-08-31 15:57:59] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"","password":""}
+[2025-08-31 15:57:59] [ERROR] Không được để trống
+[2025-08-31 15:57:59] [ERROR] "landlord"
+[2025-08-31 15:58:32] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
+[2025-08-31 15:58:32] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
+[2025-08-31 15:58:32] [ERROR] "landlord"
+[2025-08-31 17:54:13] [ERROR] null
+[2025-08-31 17:54:20] [ERROR] "landlord"
+[2025-08-31 17:55:03] [ERROR] null
+[2025-08-31 17:55:10] [ERROR] "customer"
+[2025-08-31 17:55:16] [ERROR] "customer"
+[2025-08-31 18:54:27] [ERROR] null
+[2025-08-31 18:55:03] [ERROR] null
+[2025-08-31 19:02:26] [ERROR] null
+[2025-08-31 19:08:03] [ERROR] null
+[2025-08-31 19:08:08] [ERROR] null
+[2025-08-31 19:09:18] [ERROR] null
+[2025-08-31 19:09:32] [ERROR] "landlord"
+[31-Aug-2025 19:09:42 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause' in C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php:32
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php(32): PDO->prepare('SELECT * FROM u...')
+#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(48): Core\Auth->login('huynguyenharu31...', '123456', '2')
+#2 [internal function]: App\Controllers\AuthController->handleLogin()
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#6 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#7 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(37): Core\Router->handleRequest()
+#8 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
+#9 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php on line 32
+[2025-08-31 19:10:25] [ERROR] null
+[2025-08-31 19:10:26] [ERROR] null
+[2025-08-31 19:10:35] [ERROR] "customer"
+[2025-08-31 19:11:39] [ERROR] null

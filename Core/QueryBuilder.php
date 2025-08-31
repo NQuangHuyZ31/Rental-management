@@ -25,7 +25,7 @@ class QueryBuilder {
     protected $having = '';
     
     // Logging properties
-    protected $logsql = true;	
+    protected $logsql = false;	
     protected $logsql_file = 'sql.log';
     protected $logsql_folder = ROOT_PATH . '/Logs';
 
