@@ -51,7 +51,27 @@ class Log
             mkdir(dirname($logFilePath), 0755, true);
         }
 
-        file_put_contents($logFilePath, $logEntry, FILE_APPEND | LOCK_EX);
+        // Sử dụng file_put_contents với LOCK_EX để tránh conflict
+        $result = file_put_contents($logFilePath, $logEntry, FILE_APPEND | LOCK_EX);
+        
+        // Nếu ghi thành công, flush buffer để đảm bảo dữ liệu được ghi ngay lập tức
+        if ($result !== false) {
+            // Flush output buffer nếu có
+            if (ob_get_level() > 0) {
+                ob_flush();
+            }
+            
+            // Flush file system buffer
+            if (function_exists('fflush')) {
+                $handle = fopen($logFilePath, 'a');
+                if ($handle) {
+                    fflush($handle);
+                    fclose($handle);
+                }
+            }
+        }
+        
+        return $result !== false;
     }
 
     /**
@@ -86,27 +106,27 @@ class Log
 
     public static function server($msg, $level = self::LEVEL_INFO)
     {
-        self::write($msg, $level, 'server.log');
+        return self::write($msg, $level, 'server.log');
     }
 
     public static function queue($msg, $level = self::LEVEL_INFO)
     {
-        self::write($msg, $level, 'queue_worker.log');
+        return self::write($msg, $level, 'queue_jobs.log');
     }
 
     public static function payment($msg, $level = self::LEVEL_INFO)
     {
-        self::write($msg, $level, 'payment.log');
+        return self::write($msg, $level, 'payment.log');
     }
 
     public static function auth($msg, $level = self::LEVEL_INFO)
     {
-        self::write($msg, $level, 'auth.log');
+        return self::write($msg, $level, 'auth.log');
     }
 
     public static function custom($msg, $fileName, $level = self::LEVEL_INFO)
     {
         // Cho phép log ra bất kỳ file nào
-        self::write($msg, $level, $fileName);
+        return self::write($msg, $level, $fileName);
     }
 }

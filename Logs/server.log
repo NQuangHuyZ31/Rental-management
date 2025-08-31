@@ -1,8 +1,0 @@
-[2025-08-30 15:03:19] [INFO] {"job_id":"3","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:06:02] [INFO] Test message to default log
-[2025-08-30 15:06:25] [INFO] {"job_id":"4","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:07:13] [INFO] {"job_id":"5","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:07:54] [INFO] {"job_id":"6","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:09:07] [INFO] {"job_id":"7","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:17:24] [INFO] {"job_id":"8","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}
-[2025-08-30 15:17:54] [INFO] {"job_id":"9","job_class":"Queue\\SendEmailJob","queue":"emails","priority":3}

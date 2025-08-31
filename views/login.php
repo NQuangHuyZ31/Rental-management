@@ -89,7 +89,7 @@ $csrf = CSRF::generateToken();
                     Đăng nhập
                 </button>
             </form>
-
+            <?php \Helpers\Log::queue('Login form submitted', 'info'); ?>
             <!-- Additional Links -->
             <div class="mt-6 text-center">
                 <a href="<?= BASE_URL ?>/forgot-password" class="text-green-600 hover:text-green-800 text-sm">

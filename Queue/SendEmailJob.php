@@ -11,10 +11,12 @@ class SendEmailJob extends Job
     protected $priority = \Core\Queue::PRIORITY_HIGH;
     protected $queueName = 'emails';
     protected $maxAttempts = 3;
+    protected $sendEmail;
     
     public function __construct($data = [])
     {
         parent::__construct($data);
+        $this->sendEmail = new SendMail();
     }
     
     public function handle($data)
@@ -32,7 +34,7 @@ class SendEmailJob extends Job
                 throw new \Exception("Missing required email data");
             }
 
-            SendMail::sendOTP($to, 'Huy Nguyen','333333', $message);
+            $this->sendEmail->sendOTP($to, 'Huy Nguyen','333333', $message);
             
             // Xử lý sau khi hoàn thành
             $this->after();
@@ -46,16 +48,16 @@ class SendEmailJob extends Job
     
     public function before()
     {
-        Log::server(["Preparing to send email to: " . ($this->data['to'] ?? 'unknown')]);
+        Log::queue(["Preparing to send email to: " . json_encode($this->data)]);
     }
     
     public function after()
     {
-        Log::server(["Email job completed successfully"]);
+        Log::queue(["Email job completed successfully: " . json_encode($this->data)]);
     }
     
     public function failed($exception)
     {
-        Log::server(["Email job failed: " . $exception->getMessage()]);
+        Log::queue(["Email job failed: " . $exception->getMessage() . " " . json_encode($this->data)]);
     }
 }

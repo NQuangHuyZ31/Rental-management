@@ -12,7 +12,8 @@
             "Core\\": "Core/",
             "Helpers\\": "Helpers/",
             "Examples\\": "examples/",
-            "Queue\\": "Queue/"
+            "Queue\\": "Queue/",
+            "Logs\\": "Logs/"
         }
     },
     "minimum-stability": "dev",

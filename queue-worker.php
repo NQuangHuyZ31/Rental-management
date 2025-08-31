@@ -1,97 +1,139 @@
 <?php
 /**
- * Queue Worker - Xử lý các jobs trong queue
- * Chạy file này để xử lý queue: php queue-worker.php
+ * Queue Worker cho Cron Job - Xử lý các jobs trong queue
+ * 
+ * ⚠️  ĐƯỢC THIẾT KẾ ĐẶC BIỆT CHO CRON JOB:
+ *   - Cron chạy mỗi phút (60 giây)
+ *   - Worker sẽ chạy liên tục trong 50 giây với interval 5 giây
+ *   - Sau 50 giây tự động dừng để cron có thể chạy lại
+ *   - Điều này cho phép queue chạy mỗi 5 giây thay vì mỗi phút
+ * 
+ * Cách sử dụng:
+ *   - php queue-worker-cron.php                    # chạy tất cả queues với cron mode
+ *   - php queue-worker-cron.php --queue=emails     # chỉ chạy queue "emails"
+ *   - php queue-worker-cron.php --max-jobs=100     # giới hạn số jobs xử lý
+ * 
+ * Ví dụ cron job:
+ *   * * * * * php /path/to/queue-worker-cron.php
+ *   (Chạy mỗi phút, nhưng queue sẽ xử lý jobs mỗi 5 giây trong 50 giây)
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
 require_once 'Config/config.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Core\Queue;
-use Helpers\Log;
 
-class QueueWorker
+class CronQueueWorker
 {
     private $queue;
-    private $isRunning = false;
     private $processedJobs = 0;
     private $startTime;
+    
+    // Cấu hình cron mode
+    private $cronTimeLimit = 50;        // Chạy trong 50 giây
+    private $jobInterval = 5;           // Xử lý jobs mỗi 5 giây
     
     public function __construct()
     {
         $this->queue = Queue::getInstance();
         $this->startTime = time();
-        
-        // Log khởi tạo worker
-        Log::server("Queue Worker initialized at " . date('Y-m-d H:i:s'));
     }
     
     /**
-     * Khởi động worker
+     * Chạy worker với cron mode
      */
-    public function start($queueName = 'default', $maxJobs = null, $maxTime = null)
+    public function run($queueName = null, $maxJobs = null)
     {
-        $this->isRunning = true;
-        $this->processedJobs = 0;
+        echo "🚀 Cron Queue Worker started at " . date('Y-m-d H:i:s') . "\n";
+        echo "⏰ Cron Mode: Running for {$this->cronTimeLimit}s with {$this->jobInterval}s intervals\n";
+        echo "📋 Target: " . ($queueName ? "Queue '{$queueName}'" : "All queues") . "\n";
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
         
-        $startMessage = "🚀 Queue Worker started at " . date('Y-m-d H:i:s') . "\n";
-        $startMessage .= "📋 Queue: {$queueName}\n";
-        $startMessage .= "⏰ Max Jobs: " . ($maxJobs ?: 'Unlimited') . "\n";
-        $startMessage .= "⏱️  Max Time: " . ($maxTime ?: 'Unlimited') . " seconds\n";
-        $startMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $lastJobTime = time();
         
-        Log::queue($startMessage);
-        
-        // Xử lý signal để dừng worker gracefully
-        $this->setupSignalHandlers();
-        
-        try {
-            while ($this->isRunning) {
-                // Kiểm tra thời gian tối đa
-                if ($maxTime && (time() - $this->startTime) > $maxTime) {
-                    $message = "⏰ Max time reached, stopping worker...\n";
-                    Log::queue($message);
-                    break;
-                }
+        while ((time() - $this->startTime) < $this->cronTimeLimit) {
+            $currentTime = time();
+            
+            // Xử lý jobs mỗi $jobInterval giây
+            if (($currentTime - $lastJobTime) >= $this->jobInterval) {
+                $this->processJobs($queueName, $maxJobs);
+                $lastJobTime = $currentTime;
                 
-                // Kiểm tra số lượng job tối đa
+                // Hiển thị thời gian còn lại
+                $remainingTime = $this->cronTimeLimit - ($currentTime - $this->startTime);
+                echo "⏰ Time remaining: {$remainingTime}s, Jobs processed: {$this->processedJobs}\n";
+                
+                // Kiểm tra giới hạn jobs
                 if ($maxJobs && $this->processedJobs >= $maxJobs) {
-                    $message = "📊 Max jobs reached, stopping worker...\n";
-                    Log::queue($message);
+                    echo "🎯 Reached max jobs limit ({$maxJobs})\n";
                     break;
                 }
-                
-                // Lấy job từ queue
-                $job = $this->queue->pop($queueName);
-                
-                if (!$job) {
-                    // Không có job nào, nghỉ một chút nhưng vẫn tiếp tục chạy
-                    $message = "😴 No jobs available, sleeping for 5 seconds...\n";
-                    Log::queue($message);
-                    sleep(5);
-                    
-                    // Log trạng thái worker
-                    $statusMessage = "🔄 Worker running... Total processed: {$this->processedJobs}, Running time: " . (time() - $this->startTime) . "s\n";
-                    Log::queue($statusMessage);
-                    continue;
-                }
-                
-                // Xử lý job
-                $this->processJob($job);
-                $this->processedJobs++;
-                
-                // Hiển thị thống kê
-                $this->displayStats($queueName);
-                
-                // Nghỉ một chút để tránh quá tải
-                usleep(100000); // 0.1 giây
             }
-        } catch (\Exception $e) {
-            $errorMessage = "❌ Worker error: " . $e->getMessage() . "\n";
-            Log::queue($errorMessage);
+            
+            // Nghỉ 1 giây để tránh quá tải CPU
+            usleep(100000); // 0.1 giây
         }
         
         $this->stop();
+    }
+    
+    /**
+     * Xử lý jobs
+     */
+    private function processJobs($queueName = null, $maxJobs = null)
+    {
+        if ($queueName) {
+            // Xử lý queue cụ thể
+            $this->processSingleQueue($queueName, $maxJobs);
+        } else {
+            // Xử lý tất cả các queue
+            $this->processAllQueues($maxJobs);
+        }
+    }
+    
+    /**
+     * Xử lý một queue cụ thể
+     */
+    private function processSingleQueue($queueName, $maxJobs = null)
+    {
+        $job = $this->queue->pop($queueName);
+        
+        if ($job) {
+            $this->processJob($job);
+            $this->processedJobs++;
+            echo "📋 Queue '{$queueName}': Processed job #{$job['id']}\n";
+        } else {
+            echo "😴 Queue '{$queueName}': No jobs available\n";
+        }
+    }
+    
+    /**
+     * Xử lý tất cả các queue
+     */
+    private function processAllQueues($maxJobs = null)
+    {
+        $queues = $this->getAllQueueNames();
+        $processedSomething = false;
+        
+        foreach ($queues as $queueName) {
+            // Kiểm tra giới hạn jobs
+            if ($maxJobs && $this->processedJobs >= $maxJobs) {
+                break;
+            }
+            
+            $job = $this->queue->pop($queueName);
+            
+            if ($job) {
+                $this->processJob($job);
+                $this->processedJobs++;
+                $processedSomething = true;
+                echo "📋 Queue '{$queueName}': Processed job #{$job['id']}\n";
+            }
+        }
+        
+        if (!$processedSomething) {
+            echo "😴 All queues: No jobs available\n";
+        }
     }
     
     /**
@@ -99,176 +141,22 @@ class QueueWorker
      */
     private function processJob($job)
     {
-        $startTime = microtime(true);
-        
-        $processMessage = "🔄 Processing job #{$job['id']} ({$job['job_class']})...\n";
-        Log::queue($processMessage);
-        
         try {
             $result = $this->queue->processJob($job);
             
-            $duration = round((microtime(true) - $startTime) * 1000, 2);
-            
             if ($result !== false) {
-                $successMessage = "✅ Job #{$job['id']} completed successfully in {$duration}ms\n";
-                Log::queue($successMessage);
+                echo "✅ Job #{$job['id']} ({$job['job_class']}) completed successfully\n";
             } else {
-                $failMessage = "❌ Job #{$job['id']} failed after {$duration}ms\n";
-                Log::queue($failMessage);
+                echo "❌ Job #{$job['id']} ({$job['job_class']}) failed\n";
             }
             
         } catch (\Exception $e) {
-            $duration = round((microtime(true) - $startTime) * 1000, 2);
-            $crashMessage = "💥 Job #{$job['id']} crashed after {$duration}ms: " . $e->getMessage() . "\n";
-            Log::queue($crashMessage);
-        }
-        
-    }
-    
-    /**
-     * Hiển thị thống kê
-     */
-    private function displayStats($queueName)
-    {
-        $stats = $this->queue->getQueueStats($queueName);
-        
-        $statsMessage = "📊 Queue Stats:\n";
-        $statsMessage .= "   Pending: {$stats['pending']}\n";
-        $statsMessage .= "   Processing: {$stats['processing']}\n";
-        $statsMessage .= "   Completed: {$stats['completed']}\n";
-        $statsMessage .= "   Failed: {$stats['failed']}\n";
-        $statsMessage .= "   Total: {$stats['total']}\n";
-        $statsMessage .= "   Processed by worker: {$this->processedJobs}\n";
-        $statsMessage .= "   Running time: " . (time() - $this->startTime) . "s\n";
-        $statsMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
-        
-        Log::queue($statsMessage);
-    }
-    
-    /**
-     * Thiết lập signal handlers
-     */
-    private function setupSignalHandlers()
-    {
-        if (function_exists('pcntl_signal')) {
-            pcntl_signal(SIGTERM, [$this, 'handleSignal']);
-            pcntl_signal(SIGINT, [$this, 'handleSignal']);
+            echo "💥 Job #{$job['id']} ({$job['job_class']}) crashed: " . $e->getMessage() . "\n";
         }
     }
     
     /**
-     * Xử lý signal
-     */
-    public function handleSignal($signal)
-    {
-        $signalMessage = "\n🛑 Received signal {$signal}, stopping worker gracefully...\n";
-        Log::queue($signalMessage);
-        $this->isRunning = false;
-    }
-    
-    /**
-     * Dừng worker
-     */
-    public function stop()
-    {
-        $this->isRunning = false;
-        
-        $totalTime = time() - $this->startTime;
-        
-        $stopMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-        $stopMessage .= "🛑 Queue Worker stopped at " . date('Y-m-d H:i:s') . "\n";
-        $stopMessage .= "📊 Total jobs processed: {$this->processedJobs}\n";
-        $stopMessage .= "⏱️  Total running time: {$totalTime} seconds\n";
-        $stopMessage .= "📈 Average: " . ($this->processedJobs > 0 ? round($totalTime / $this->processedJobs, 2) : 0) . "s per job\n";
-        $stopMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-            
-        Log::queue($stopMessage);
-    }
-    
-    /**
-     * Chạy một lần (không loop)
-     */
-    public function runOnce($queueName = 'default')
-    {
-        $message = "🔄 Running queue once for queue: {$queueName}\n";
-        echo $message;
-        Log::queue($message);
-        
-        $processed = $this->queue->processQueue($queueName, 1);
-        
-        $resultMessage = "✅ Processed {$processed} job(s)\n";
-        echo $resultMessage;
-        Log::queue($resultMessage);
-        
-        return $processed;
-    }
-    
-    /**
-     * Chạy liên tục cho tất cả các queue
-     */
-    public function startAllQueues($maxJobs = null, $maxTime = null)
-    {
-        $startMessage = "🚀 Starting queue worker for all queues\n";
-        $startMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
-        
-        echo $startMessage;
-        Log::queue($startMessage);
-        
-        $this->startTime = time();
-        $this->isRunning = true;
-        $this->setupSignalHandlers();
-        
-        while ($this->isRunning) {
-            // Lấy danh sách tất cả các queue
-            $queues = $this->getAllQueueNames();
-            
-            foreach ($queues as $queueName) {
-                if (!$this->isRunning) break;
-                
-                // Xử lý jobs trong queue này
-                $processed = $this->queue->processQueue($queueName, 10); // Xử lý tối đa 10 jobs mỗi queue
-                $this->processedJobs += $processed;
-                
-                if ($processed > 0) {
-                    $queueProcessedMessage = "📋 Queue '{$queueName}': Processed {$processed} job(s)\n";
-                    echo $queueProcessedMessage;
-                    Log::queue($queueProcessedMessage);
-                } else {
-                    // Không có job nào trong queue này, log để biết
-                    $noJobMessage = "📋 Queue '{$queueName}': No jobs available\n";
-                    echo $noJobMessage;
-                    Log::queue($noJobMessage);
-                }
-                
-                // Kiểm tra giới hạn
-                if ($maxJobs && $this->processedJobs >= $maxJobs) {
-                    $limitMessage = "🎯 Reached max jobs limit ({$maxJobs})\n";
-                    Log::queue($limitMessage);
-                    break 2;
-                }
-                
-                if ($maxTime && (time() - $this->startTime) >= $maxTime) {
-                    $timeLimitMessage = "⏰ Reached max time limit ({$maxTime}s)\n";
-                    Log::queue($timeLimitMessage);
-                    break 2;
-                }
-                
-                // Nghỉ một chút giữa các queue
-                usleep(100000); // 0.1 giây
-            }
-            
-            // Nghỉ giữa các vòng lặp và log trạng thái
-            $statusMessage = "🔄 Worker running... Total processed: {$this->processedJobs}, Running time: " . (time() - $this->startTime) . "s\n";
-            echo $statusMessage;
-            Log::queue($statusMessage);
-            sleep(5); // Tăng thời gian sleep để giảm spam log
-        }
-        
-        $this->stop();
-    }
-    
-    /**
-     * Lấy danh sách tất cả các queue names từ database
+     * Lấy danh sách tất cả các queue names
      */
     private function getAllQueueNames()
     {
@@ -279,66 +167,59 @@ class QueueWorker
             $stmt->execute();
             $queues = $stmt->fetchAll(\PDO::FETCH_COLUMN);
             
-            // Nếu không có queue nào, trả về default
-            if (empty($queues)) {
-                return ['default'];
-            }
-            
-            return $queues;
+            return !empty($queues) ? $queues : ['default'];
         } catch (\Exception $e) {
-            $errorMessage = "⚠️  Error getting queue names: " . $e->getMessage() . "\n";
-            Log::queue($errorMessage);
+            echo "⚠️ Error getting queue names: " . $e->getMessage() . "\n";
             return ['default'];
         }
     }
+    
+    /**
+     * Dừng worker
+     */
+    private function stop()
+    {
+        $totalTime = time() - $this->startTime;
+        
+        echo "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        echo "🛑 Cron Queue Worker stopped at " . date('Y-m-d H:i:s') . "\n";
+        echo "📊 Total jobs processed: {$this->processedJobs}\n";
+        echo "⏱️  Total running time: {$totalTime} seconds\n";
+        echo "📈 Average: " . ($this->processedJobs > 0 ? round($totalTime / $this->processedJobs, 2) : 0) . "s per job\n";
+        echo "⏰ Stopped for cron to run again in " . (60 - $totalTime) . " seconds\n";
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    }
 }
 
-// Xử lý command line arguments
-$options = getopt('', ['queue:', 'max-jobs:', 'max-time:', 'once', 'help', 'all-queues']);
+// --- CLI Options ---
+$options = getopt('', ['queue:', 'max-jobs:', 'help']);
 
 if (isset($options['help'])) {
-    echo "Queue Worker - Xử lý các jobs trong queue\n\n";
-    echo "Usage: php queue-worker.php [options]\n\n";
+    echo "Cron Queue Worker - Xử lý các jobs trong queue cho cron job\n\n";
+    echo "Usage: php queue-worker-cron.php [options]\n\n";
     echo "Options:\n";
-    echo "  --queue=NAME     Tên queue cụ thể (default: default)\n";
-    echo "  --all-queues     Xử lý tất cả các queue\n";
+    echo "  --queue=NAME     Tên queue cụ thể (default: tất cả queues)\n";
     echo "  --max-jobs=N     Số lượng job tối đa (default: unlimited)\n";
-    echo "  --max-time=N     Thời gian chạy tối đa (giây, default: unlimited)\n";
-    echo "  --once           Chạy một lần rồi dừng\n";
     echo "  --help           Hiển thị help này\n\n";
+    echo "Cron Mode:\n";
+    echo "  - Chạy liên tục trong 50 giây với interval 5 giây\n";
+    echo "  - Tự động dừng để cron có thể chạy lại\n";
+    echo "  - Cho phép queue chạy mỗi 5 giây thay vì mỗi phút\n\n";
     echo "Examples:\n";
-    echo "  php queue-worker.php                    # Chạy queue 'default'\n";
-    echo "  php queue-worker.php --all-queues       # Chạy tất cả các queue\n";
-    echo "  php queue-worker.php --queue=emails     # Chạy queue 'emails'\n";
-    echo "  php queue-worker.php --once             # Chạy một lần\n";
-    echo "  php queue-worker.php --all-queues --once # Chạy tất cả queue một lần\n";
+    echo "  php queue-worker.php                    # Chạy tất cả queues\n";
+    echo "  php queue-worker.php --queue=emails     # Chỉ chạy queue emails\n";
+    echo "  php queue-worker.php --max-jobs=100     # Giới hạn 100 jobs\n\n";
+    echo "Cron job example:\n";
+    echo "  * * * * * php /path/to/queue-worker.php\n";
     exit;
 }
 
 // Khởi tạo worker
-$worker = new QueueWorker();
+$worker = new CronQueueWorker();
 
 // Lấy options
-$queueName = $options['queue'] ?? 'default';
+$queueName = $options['queue'] ?? null;
 $maxJobs = isset($options['max-jobs']) ? (int)$options['max-jobs'] : null;
-$maxTime = isset($options['max-time']) ? (int)$options['max-time'] : null;
-$runOnce = isset($options['once']);
-$allQueues = isset($options['all-queues']);
 
-if ($runOnce) {
-    if ($allQueues) {
-        // Chạy một lần cho tất cả các queue
-        // $worker->runOnceAllQueues();
-    } else {
-        // Chạy một lần cho queue cụ thể
-        $worker->runOnce($queueName);
-    }
-} else {
-    if ($allQueues) {
-        // Chạy liên tục cho tất cả các queue
-        $worker->startAllQueues($maxJobs, $maxTime);
-    } else {
-        // Chạy liên tục cho queue cụ thể
-        $worker->start($queueName, $maxJobs, $maxTime);
-    }
-}
+// Chạy worker
+$worker->run($queueName, $maxJobs);
