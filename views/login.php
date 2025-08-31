@@ -22,8 +22,8 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
     <title>Đăng nhập - HOSTY</title>
 
     <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
      <!-- Modify by Huy Nguyen on 2025-08-31 to use tailwindcss from package.json-->
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>/Public/css/output.css">  
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
