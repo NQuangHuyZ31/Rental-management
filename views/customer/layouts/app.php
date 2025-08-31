@@ -9,12 +9,12 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
-    <?= require_once 'header.php' ?>
+    <?php require_once 'header.php'; ?>
     <!-- Main Content -->
     <main class="flex-1">
-        <?= require_once $content ?>
+        <?php require_once $content; ?>
     </main>
     <!-- Footer -->
-    <?= require_once 'footer.php' ?>
+    <?php require_once 'footer.php'; ?>
 </body>
 </html>
