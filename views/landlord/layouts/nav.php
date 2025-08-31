@@ -5,7 +5,7 @@ Purpose: Build Nav for Landlord Layout
 -->
 
 <nav class="bg-gray-100 p-4">
-    <div class="container mx-auto">
+    <div class="max-w-screen-xl container mx-auto">
         <div class="flex gap-6 justify-start overflow-x-auto">
             <!-- Quản lý nhà trọ -->
             <div class="bg-white rounded-lg border border-green-200 p-3 flex items-center min-w-[200px] relative flex-shrink-0">

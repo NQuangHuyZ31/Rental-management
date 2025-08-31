@@ -1,26 +1,50 @@
 <?php
 
+/*
+
+    Author: Huy Nguyen
+    Date: 2025-08-31
+    Purpose: Check if the user is an admin
+*/
+
 namespace App\Middleware;
 
 use Core\Middleware;
 use Core\Session;
+use Core\Request;
+use Core\Response;
 
 class AuthAdminMiddleware implements Middleware
 {
+  protected $request;
+
+  public function __construct()
+  {
+    $this->request = new Request();
+  }
+
   public function handle($request, $next)
   {
 
-    if (Session::has('user') && Session::get('user')['role'] != 'admin') {
-      header('location: ' . BASE_URL . '/');
-      exit;
-    } else {
-      if (!Session::has('admin')) {
-        header('Location:' . BASE_URL . '/admin/login');
-      } else if (Session::get('admin')['role'] != 'admin') {
-        Session::delete('user');
-        header('location:' . BASE_URL . '/admin/login');
-      }
-    }
+    if (!Session::has('user')) {
+			if ($this->isApiRequest($request)) {
+				Response::json(['error' => 'Unauthorized'], 401);
+				exit();
+			}
+			header('location: ' . BASE_URL . '/login');
+			exit();
+		}
+
+		if (Session::has('user') && Session::get('user')['role'] != '1') {
+			header('location: ' . Session::get('current_url'));
+			exit();
+		}
     return $next($request);
+  }
+
+  public function isApiRequest($request)
+  {
+    $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+    return stripos($accept, 'application/json') !== false;
   }
 }
