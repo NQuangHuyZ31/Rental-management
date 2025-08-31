@@ -19,7 +19,7 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
-    <title>Đăng nhập - HOSTY</title>
+    <title>Đăng nhập Admin- HOSTY</title>
 
     <!-- Tailwind CSS -->
      <!-- Modify by Huy Nguyen on 2025-08-31 to use tailwindcss from package.json-->
@@ -57,33 +57,8 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
         <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-auto">
             <!-- Form Title -->
             <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
-                Đăng nhập tài khoản
+                Đăng nhập tài khoản Admin
             </h2>
-
-            <!-- Added by Huy Nguyen on 2025-08-31 to select role -->
-            <!-- Role Selection -->
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-medium mb-3">
-                    Vai trò của bạn <span class="text-red-500">*</span>
-                </label>
-                <div class="flex space-x-3">
-                    <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="role" value="landlord" class="sr-only peer" <?= $old['selected_role'] === 'landlord' ? 'checked' : '' ?>>
-                        <div class="p-3 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
-                            <i class="fas fa-home text-lg mb-1 block"></i>
-                            <span class="text-sm font-medium">Tôi là Chủ nhà</span>
-                        </div>
-                    </label>
-                    
-                    <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="role" value="customer" class="sr-only peer" <?= !isset($old['selected_role']) || $old['selected_role'] === 'customer' ? 'checked' : '' ?>>
-                        <div class="p-3 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
-                            <i class="fas fa-search text-lg mb-1 block"></i>
-                            <span class="text-sm font-medium">Tôi tìm nhà</span>
-                        </div>
-                    </label>
-                </div>
-            </div>
 
             <!-- Login Form -->
             <form action="<?= BASE_URL ?>/login" method="POST">
@@ -134,51 +109,8 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
                     Đăng nhập
                 </button>
             </form>
-            <!-- Additional Links -->
-            <div class="mt-6 text-center">
-                <a href="<?= BASE_URL ?>/forgot-password" class="text-green-600 hover:text-green-800 text-sm">
-                    Quên mật khẩu?
-                </a>
-                <span class="mx-2 text-gray-400">|</span>
-                <a href="<?= BASE_URL ?>/register" class="text-green-600 hover:text-green-800 text-sm">
-                    Đăng ký tài khoản
-                </a>
-            </div>
         </div>
     </div>
-
-    <!-- JavaScript for Role Selection -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const roleInputs = document.querySelectorAll('input[name="role"]');
-            const selectedRoleInput = document.getElementById('selectedRole');
-            
-            roleInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    selectedRoleInput.value = this.value;
-                    
-                    // Remove active class from all role containers
-                    document.querySelectorAll('input[name="role"]').forEach(radio => {
-                        radio.nextElementSibling.classList.remove('border-blue-500', 'bg-blue-500', 'text-white');
-                        radio.nextElementSibling.classList.add('border-gray-200', 'text-gray-700');
-                    });
-                    
-                    // Add active class to selected role container
-                    if (this.checked) {
-                        this.nextElementSibling.classList.remove('border-gray-200', 'text-gray-700');
-                        this.nextElementSibling.classList.add('border-blue-500', 'bg-blue-500', 'text-white');
-                    }
-                });
-            });
-            
-            // Set initial active state for default selected role
-            const defaultRole = document.querySelector('input[name="role"]:checked');
-            if (defaultRole) {
-                defaultRole.nextElementSibling.classList.remove('border-gray-200', 'text-gray-700');
-                defaultRole.nextElementSibling.classList.add('border-blue-500', 'bg-blue-500', 'text-white');
-            }
-        });
-    </script>
 </body>
 
 </html>

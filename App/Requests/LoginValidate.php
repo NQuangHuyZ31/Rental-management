@@ -11,7 +11,7 @@ class LoginValidate
     $error = '';
 
     if (empty($data['email']) || empty($data['password'])) {
-      $error = 'Không được để trống';
+      $error = 'Thông tin đăng nhập không được để trống';
     }
 
     // Kiểm tra hợp lệ email

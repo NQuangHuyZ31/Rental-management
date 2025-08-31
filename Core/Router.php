@@ -32,13 +32,14 @@ class Router
     // Xử lý request
     public function handleRequest()
     {
-
         $currentPath = strtok($_SERVER['REQUEST_URI'], '?'); // Lấy đường dẫn không chứa query string
         $currentMethod = strtoupper($_SERVER['REQUEST_METHOD']);
-        $baseUrl = BASE_URL_NAME; // Đây là thư mục gốc của ứng dụng
+        $baseUrl = BASE_URL; // Đây là thư mục gốc của ứng dụng
+
         if (strpos($currentPath, $baseUrl) === 0) {
             $currentPath = substr($currentPath, strlen($baseUrl));
         }
+
         foreach ($this->routes as $route) {
             if ($currentMethod === $route['method']) {
                 // Kiểm tra xem đường dẫn có chứa tham số hay không
@@ -81,7 +82,8 @@ class Router
         // Nếu không tìm thấy route phù hợp
         http_response_code(404);
         // echo '<img src="' . BASE_URL . '/Public/images/unnamed-13.jpg" alt="" style="width:100%;height:100%">';
-        header('location:' . BASE_URL . '/');
+        header('Location: ' . BASE_URL . '/404');
+        exit;
     }
     // Xử lí middleware
     private function runMiddleware($middlewareList, $next)
