@@ -4,12 +4,18 @@ Purpose: Build Login Page -->
 
 <?php
 use Core\CSRF;
+use Core\Session;
 use Helpers\Log;
+    // Session::destroy();
+Log::write(json_encode(['redirect' => Session::get('current_url'), 'message' => 'success']), Log::LEVEL_ERROR);
+if (Session::has('user')) {
+    header('location: ' . Session::get('current_url'));
+    exit();
+}
 
 $flashData = $request->getFlashData();
 $errors = $flashData['errors'] ??[];
 $old = $flashData['old'] ??[];
-Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +29,6 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-     <!-- Modify by Huy Nguyen on 2025-08-31 to use tailwindcss from package.json-->
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -69,16 +74,16 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
                 <div class="flex space-x-3">
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="role" value="landlord" class="sr-only peer" <?= $old['selected_role'] === 'landlord' ? 'checked' : '' ?>>
-                        <div class="p-3 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
-                            <i class="fas fa-home text-lg mb-1 block"></i>
+                        <div class="p-2 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
+                            <i class="fas fa-home text-lg mb-1"></i>
                             <span class="text-sm font-medium">Tôi là Chủ nhà</span>
                         </div>
                     </label>
                     
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="role" value="customer" class="sr-only peer" <?= !isset($old['selected_role']) || $old['selected_role'] === 'customer' ? 'checked' : '' ?>>
-                        <div class="p-3 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
-                            <i class="fas fa-search text-lg mb-1 block"></i>
+                        <div class="p-2 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
+                            <i class="fas fa-search text-lg mb-1"></i>
                             <span class="text-sm font-medium">Tôi tìm nhà</span>
                         </div>
                     </label>

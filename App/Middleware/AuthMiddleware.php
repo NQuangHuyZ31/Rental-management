@@ -1,61 +1,43 @@
 <?php
 
+/*
+
+    Author: Huy Nguyen
+    Date: 2025-08-31
+    Purpose: Check if the user is authenticated
+*/
+
 namespace App\Middleware;
 
-// use Core\JWTHandler;
-// use Core\Response;
-
-// class AuthMiddleware
-// {
-//   public static function verify()
-//   {
-//     $headers = getallheaders(); // Lấy tất cả headers của request
-
-//     if (!isset($headers['Authorization'])) {
-//       Response::json(["message" => "Authorization token is missing"], 401);
-//       exit();
-//     }
-
-//     $token = str_replace("Bearer ", "", $headers['Authorization']);
-//     $decoded = JWTHandler::verifyToken($token);
-
-//     if (!$decoded) {
-
-//       Response::json(["message" => "Invalid or expired token"], 401);
-//       exit();
-//     }
-
-//     return $decoded; // Trả về thông tin user từ token
-//   }
-// }
-
 use Core\Middleware;
+use Core\Response;
 use Core\Session;
+use Core\Request;
 
 class AuthMiddleware implements Middleware
 {
+  protected $request;
+
+  public function __construct()
+  {
+    $this->request = new Request();
+  }
+
   public function handle($request, $next)
   {
-    // Nếu chưa đăng nhập
     if (!Session::has('user')) {
-      // Nếu là request từ trình duyệt -> chuyển hướng
-      if (!self::isApiRequest($request)) {
-        header('Location:' . BASE_URL . '/dang-nhap');
-      } else {
-        // Nếu là request API -> trả JSON lỗi
-        http_response_code(401);
-        echo json_encode(['error' => 'Chưa đăng nhập', 'login_url' => BASE_URL . '/dang-nhap']);
+      if ($this->isApiRequest($request)) {
+        Response::json(['error' => 'Unauthorized'], 401);
+        exit();
       }
-      exit; // Quan trọng!
+      header('location: ' . BASE_URL . '/login');
+      exit();
     }
 
-    // Nếu không phải customer → hủy session
-    if (Session::get('user')['role'] != 'customer') {
-      Session::delete('user');
-      header('Location:' . BASE_URL . '/');
-      exit;
+    if (Session::has('user') && Session::get('user')['role'] != '3') {
+      header('location: ' . Session::get('current_url'));
+      exit();
     }
-
     return $next($request);
   }
 

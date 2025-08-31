@@ -1,97 +1,99 @@
-[2025-08-31 15:30:57] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:30:57] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:32:43] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123456"}
-[2025-08-31 15:32:43] [ERROR] 
-[2025-08-31 15:33:07] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:33:07] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:33:49] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
-[2025-08-31 15:33:49] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:34:49] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:34:49] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:35:47] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:35:47] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:37:59] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:37:59] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:39:12] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:39:12] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:41:56] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123456"}
-[2025-08-31 15:41:56] [ERROR] 
-[2025-08-31 15:42:04] [ERROR] {"selected_role":"customer","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"12345"}
-[2025-08-31 15:42:04] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:42:47] [ERROR] null
-[2025-08-31 15:42:58] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:42:58] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:42:58] [ERROR] {"errors":"M\u1eadt kh\u1ea9u ph\u1ea3i c\u00f3 \u00edt nh\u1ea5t 6 k\u00ed t\u1ef1","old":{"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}}
-[2025-08-31 15:43:34] [ERROR] null
-[2025-08-31 15:43:46] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
-[2025-08-31 15:43:46] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:43:46] [ERROR] "M\u1eadt kh\u1ea9u ph\u1ea3i c\u00f3 \u00edt nh\u1ea5t 6 k\u00ed t\u1ef1"
-[2025-08-31 15:44:52] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:44:52] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:45:38] [ERROR] null
-[2025-08-31 15:46:37] [ERROR] null
-[2025-08-31 15:48:07] [ERROR] null
-[2025-08-31 15:48:46] [ERROR] null
-[2025-08-31 15:48:53] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:48:53] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:48:53] [ERROR] "landlord"
-[2025-08-31 15:53:06] [ERROR] null
-[2025-08-31 15:53:15] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
-[2025-08-31 15:53:15] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:53:15] [ERROR] "landlord"
-[2025-08-31 15:54:30] [ERROR] null
-[2025-08-31 15:54:37] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:54:37] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:54:37] [ERROR] "landlord"
-[2025-08-31 15:55:46] [ERROR] null
-[2025-08-31 15:55:53] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1234"}
-[2025-08-31 15:55:53] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:55:53] [ERROR] "landlord"
-[2025-08-31 15:56:59] [ERROR] null
-[2025-08-31 15:57:07] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1235"}
-[2025-08-31 15:57:07] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:57:07] [ERROR] "landlord"
-[2025-08-31 15:57:27] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"1"}
-[2025-08-31 15:57:27] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:57:27] [ERROR] "landlord"
-[2025-08-31 15:57:30] [ERROR] null
-[2025-08-31 15:57:59] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"","password":""}
-[2025-08-31 15:57:59] [ERROR] Không được để trống
-[2025-08-31 15:57:59] [ERROR] "landlord"
-[2025-08-31 15:58:32] [ERROR] {"selected_role":"landlord","csrf_token":"ebd21065d92f693ea2be2f65f4f63fd8644f7f2cf18ae4b801711149fa33f696","email":"huynguyenharu31@gmail.com","password":"123"}
-[2025-08-31 15:58:32] [ERROR] Mật khẩu phải có ít nhất 6 kí tự
-[2025-08-31 15:58:32] [ERROR] "landlord"
-[2025-08-31 17:54:13] [ERROR] null
-[2025-08-31 17:54:20] [ERROR] "landlord"
-[2025-08-31 17:55:03] [ERROR] null
-[2025-08-31 17:55:10] [ERROR] "customer"
-[2025-08-31 17:55:16] [ERROR] "customer"
-[2025-08-31 18:54:27] [ERROR] null
-[2025-08-31 18:55:03] [ERROR] null
-[2025-08-31 19:02:26] [ERROR] null
-[2025-08-31 19:08:03] [ERROR] null
-[2025-08-31 19:08:08] [ERROR] null
-[2025-08-31 19:09:18] [ERROR] null
-[2025-08-31 19:09:32] [ERROR] "landlord"
-[31-Aug-2025 19:09:42 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause' in C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php:32
+[2025-08-31 19:37:55] [ERROR] null
+[2025-08-31 19:43:11] [ERROR] null
+[2025-08-31 19:43:40] [ERROR] null
+[2025-08-31 19:43:57] [ERROR] null
+[2025-08-31 19:44:04] [ERROR] null
+[2025-08-31 19:49:50] [ERROR] null
+[2025-08-31 19:50:06] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:24] [ERROR] null
+[2025-08-31 19:50:50] [ERROR] null
+[2025-08-31 19:52:16] [ERROR] null
+[2025-08-31 19:55:36] [ERROR] null
+[2025-08-31 19:55:55] [ERROR] null
+[2025-08-31 19:59:17] [ERROR] null
+[2025-08-31 19:59:32] [ERROR] null
+[2025-08-31 20:01:57] [ERROR] null
+[2025-08-31 20:03:05] [ERROR] null
+[2025-08-31 20:04:04] [ERROR] null
+[2025-08-31 20:04:28] [ERROR] null
+[2025-08-31 20:05:25] [ERROR] null
+[2025-08-31 20:05:41] [ERROR] null
+[2025-08-31 20:07:33] [ERROR] null
+[2025-08-31 20:07:58] [ERROR] null
+[2025-08-31 20:09:47] [ERROR] null
+[2025-08-31 20:12:19] [ERROR] null
+[2025-08-31 20:12:52] [ERROR] null
+[2025-08-31 20:13:28] [ERROR] null
+[2025-08-31 20:13:51] [ERROR] null
+[2025-08-31 20:15:09] [ERROR] null
+[2025-08-31 20:15:49] [ERROR] null
+[2025-08-31 20:16:41] [ERROR] "customer"
+[2025-08-31 20:16:55] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 20:21:15] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[31-Aug-2025 20:25:29 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/Rental-management/views//admin/auth/login.php in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php:29
 Stack trace:
-#0 C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php(32): PDO->prepare('SELECT * FROM u...')
-#1 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\AuthController.php(48): Core\Auth->login('huynguyenharu31...', '123456', '2')
-#2 [internal function]: App\Controllers\AuthController->handleLogin()
-#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
-#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
-#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
-#6 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
-#7 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(37): Core\Router->handleRequest()
-#8 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
-#9 {main}
-  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\Auth.php on line 32
-[2025-08-31 19:10:25] [ERROR] null
-[2025-08-31 19:10:26] [ERROR] null
-[2025-08-31 19:10:35] [ERROR] "customer"
-[2025-08-31 19:11:39] [ERROR] null
-[2025-08-31 14:38:15] [ERROR] null
-[2025-08-31 14:39:49] [ERROR] null
-[2025-08-31 15:05:51] [ERROR] null
-[2025-08-31 15:05:55] [ERROR] null
-[2025-08-31 15:06:07] [ERROR] null
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\Admin\AuthAdminController.php(27): Core\ViewRender::render('/admin/auth/log...', Array)
+#1 [internal function]: App\Controllers\Admin\AuthAdminController->showLoginPage()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(40): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php on line 29
+[31-Aug-2025 20:25:42 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/Rental-management/views/admin/auth/login.php in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php:29
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\Admin\AuthAdminController.php(27): Core\ViewRender::render('admin/auth/logi...', Array)
+#1 [internal function]: App\Controllers\Admin\AuthAdminController->showLoginPage()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(40): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php on line 29
+[2025-08-31 20:54:30] [ERROR] {"redirect":null,"message":"success","user_id":1}
+[2025-08-31 20:56:53] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:57:26] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:58:47] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:59:46] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:00:31] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:02:08] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:02:17] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:06:54] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:07:00] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:08:22] [ERROR] {"redirect":"\/","message":"success","user_id":8}
+[2025-08-31 21:08:29] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
+[2025-08-31 21:14:45] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
+[2025-08-31 21:19:57] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:22:16] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:22:20] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:22:25] [ERROR] {"redirect":"\/Rental-management\/landlord","message":"success"}
+[2025-08-31 21:34:11] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:34:24] [ERROR] {"redirect":"\/","message":"success","user_id":8}
+[2025-08-31 21:48:32] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:43] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:48:43] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:54] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:55] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:49:04] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:50] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:52] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:55] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:52:52] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:53:03] [ERROR] {"redirect":"\/Rental-management\/landlord","message":"success"}
+[2025-08-31 21:53:29] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:53:34] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:54:30] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:54:58] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:21] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:39] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:47] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}

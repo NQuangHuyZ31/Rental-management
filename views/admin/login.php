@@ -4,12 +4,16 @@ Purpose: Build Login Page -->
 
 <?php
 use Core\CSRF;
-use Helpers\Log;
+use Core\Session;
+
+if (Session::has('user')) {
+    header('location: ' . Session::get('current_url'));
+    exit();
+}
 
 $flashData = $request->getFlashData();
 $errors = $flashData['errors'] ??[];
 $old = $flashData['old'] ??[];
-Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
 ?>
 
 <!DOCTYPE html>
@@ -22,8 +26,7 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
     <title>Đăng nhập Admin- HOSTY</title>
 
     <!-- Tailwind CSS -->
-     <!-- Modify by Huy Nguyen on 2025-08-31 to use tailwindcss from package.json-->
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>/Public/css/output.css">  
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,7 +64,7 @@ Log::write(json_encode($old['selected_role']), Log::LEVEL_ERROR);
             </h2>
 
             <!-- Login Form -->
-            <form action="<?= BASE_URL ?>/login" method="POST">
+            <form action="<?= BASE_URL ?>/admin/auth/login" method="POST">
                 <input type="hidden" name="selected_role" id="selectedRole" value="<?= $old['selected_role'] ?? 'customer' ?>">
                 <?= CSRF::getTokenField() ?>
                 <!-- Email Field -->

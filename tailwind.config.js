@@ -1,5 +1,5 @@
 module.exports = {
-    darkMode: 'class',
+    darkMode: false, // Tắt dark mode để luôn sử dụng light theme
     content: ['./views/**/*.{html,js,ts,jsx,tsx,php}', './index.php'],
     // content: ['./**/*.php', './**/*.html', './**/*.js'],
     theme: {
@@ -10,6 +10,14 @@ module.exports = {
             colors: {
                 'lozido-green': '#10B981',
                 'lozido-orange': '#F59E0B',
+                background: {
+                    light: '#ffffff',
+                    dark: '#111827',
+                },
+                text: {
+                    light: '#000000',
+                    dark: '#ffffff',
+                },
             },
         },
     },
