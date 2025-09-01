@@ -1,32 +1,207 @@
-[2025-09-01 19:37:48] [INFO] 398113
-[2025-09-01 19:37:48] [INFO] mYp0dHQomSrLLow76U6ej1pR8XhLGICGmLAs71bmigbYnxVaC67tdhUlv2NiI8OXXplm3tdKO0shye0/vwnnLg==
-[2025-09-01 19:37:48] [INFO] 398113
-[2025-09-01 19:37:48] [INFO] 1
-[2025-09-01 19:37:48] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 19:39:02] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 19:39:07] [ERROR] {"redirect":"\/","message":"success","user_id":64}
-[2025-09-01 19:41:13] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 19:41:41] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 19:42:10] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 19:53:45] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:53:57] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:54:41] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:54:48] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:55:03] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:55:16] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:55:43] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:56:06] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:56:35] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 19:58:19] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 20:01:17] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 20:03:54] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 20:04:06] [ERROR] {"redirect":"\/landlord","message":"success","user_id":66}
-[2025-09-01 20:04:26] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 22:09:32] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 23:32:19] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 23:33:26] [ERROR] {"redirect":"\/","message":"success","user_id":8}
-[2025-09-01 23:44:04] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 23:44:18] [ERROR] {"redirect":"\/","message":"success","user_id":68}
-[2025-09-01 23:44:27] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
-[2025-09-01 23:47:12] [ERROR] {"redirect":null,"message":"success"}
-[2025-09-01 23:47:21] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 19:37:55] [ERROR] null
+[2025-08-31 19:43:11] [ERROR] null
+[2025-08-31 19:43:40] [ERROR] null
+[2025-08-31 19:43:57] [ERROR] null
+[2025-08-31 19:44:04] [ERROR] null
+[2025-08-31 19:49:50] [ERROR] null
+[2025-08-31 19:50:06] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:07] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:08] [ERROR] null
+[2025-08-31 19:50:24] [ERROR] null
+[2025-08-31 19:50:50] [ERROR] null
+[2025-08-31 19:52:16] [ERROR] null
+[2025-08-31 19:55:36] [ERROR] null
+[2025-08-31 19:55:55] [ERROR] null
+[2025-08-31 19:59:17] [ERROR] null
+[2025-08-31 19:59:32] [ERROR] null
+[2025-08-31 20:01:57] [ERROR] null
+[2025-08-31 20:03:05] [ERROR] null
+[2025-08-31 20:04:04] [ERROR] null
+[2025-08-31 20:04:28] [ERROR] null
+[2025-08-31 20:05:25] [ERROR] null
+[2025-08-31 20:05:41] [ERROR] null
+[2025-08-31 20:07:33] [ERROR] null
+[2025-08-31 20:07:58] [ERROR] null
+[2025-08-31 20:09:47] [ERROR] null
+[2025-08-31 20:12:19] [ERROR] null
+[2025-08-31 20:12:52] [ERROR] null
+[2025-08-31 20:13:28] [ERROR] null
+[2025-08-31 20:13:51] [ERROR] null
+[2025-08-31 20:15:09] [ERROR] null
+[2025-08-31 20:15:49] [ERROR] null
+[2025-08-31 20:16:41] [ERROR] "customer"
+[2025-08-31 20:16:55] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 20:21:15] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[31-Aug-2025 20:25:29 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/Rental-management/views//admin/auth/login.php in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php:29
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\Admin\AuthAdminController.php(27): Core\ViewRender::render('/admin/auth/log...', Array)
+#1 [internal function]: App\Controllers\Admin\AuthAdminController->showLoginPage()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(40): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php on line 29
+[31-Aug-2025 20:25:42 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Exception: View file not found: C:/xampp-v8.2/htdocs/Rental-management/views/admin/auth/login.php in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php:29
+Stack trace:
+#0 C:\xampp-v8.2\htdocs\Rental-management\App\Controllers\Admin\AuthAdminController.php(27): Core\ViewRender::render('admin/auth/logi...', Array)
+#1 [internal function]: App\Controllers\Admin\AuthAdminController->showLoginPage()
+#2 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#3 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#4 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#5 C:\xampp-v8.2\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#6 C:\xampp-v8.2\htdocs\Rental-management\Router\web.php(40): Core\Router->handleRequest()
+#7 C:\xampp-v8.2\htdocs\Rental-management\index.php(42): require_once('C:\\xampp-v8.2\\h...')
+#8 {main}
+  thrown in C:\xampp-v8.2\htdocs\Rental-management\Core\ViewRender.php on line 29
+[2025-08-31 20:54:30] [ERROR] {"redirect":null,"message":"success","user_id":1}
+[2025-08-31 20:56:53] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:57:26] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:58:47] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 20:59:46] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:00:31] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:02:08] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:02:17] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:06:54] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:07:00] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:08:22] [ERROR] {"redirect":"\/","message":"success","user_id":8}
+[2025-08-31 21:08:29] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
+[2025-08-31 21:14:45] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
+[2025-08-31 21:19:57] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:22:16] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:22:20] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:22:25] [ERROR] {"redirect":"\/Rental-management\/landlord","message":"success"}
+[2025-08-31 21:34:11] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:34:24] [ERROR] {"redirect":"\/","message":"success","user_id":8}
+[2025-08-31 21:48:32] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:43] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 21:48:43] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:54] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:48:55] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:49:04] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:50] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:52] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:50:55] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:52:52] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:53:03] [ERROR] {"redirect":"\/Rental-management\/landlord","message":"success"}
+[2025-08-31 21:53:29] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:53:34] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:54:30] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:54:58] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:21] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:39] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 21:55:47] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-08-31 17:37:58] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 17:38:54] [ERROR] {"redirect":null,"message":"success"}
+[2025-08-31 17:39:06] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-09-01 12:48:01] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-01 12:48:10] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[2025-09-01 13:42:43] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-01 13:58:44] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-01 14:01:35] [ERROR] {"redirect":"\/landlord","message":"success","user_id":7}
+[01-Sep-2025 14:01:52 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\service\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(26): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\ServiceController.php(17): Core\ViewRender::render('landlord/servic...')
+#3 [internal function]: App\Controllers\Landlord\ServiceController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(97): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(96): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(46): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
+[2025-09-01 14:02:20] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-01 14:02:29] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[01-Sep-2025 15:15:03 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh Y\u00ean Y\u00ean","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:15:45 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh Y\u00ean","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:15:53 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh Y\u00ean","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:16:18 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:19:54 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:19:54 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":26,"due_date":3,"updated_at":"2025-09-01 15:19:54"}
+[01-Sep-2025 15:19:54 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:26:27 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"11","house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5"}
+[01-Sep-2025 15:26:27 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":10,"due_date":5,"updated_at":"2025-09-01 15:26:27"}
+[01-Sep-2025 15:26:27 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:27:51 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:27:59 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:27:59 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:27:59 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"11","house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5"}
+[01-Sep-2025 15:27:59 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":10,"due_date":5,"updated_at":"2025-09-01 15:27:59"}
+[01-Sep-2025 15:27:59 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:27:59 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:30:05 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:30:19 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:30:19 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:30:19 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:30:19 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":26,"due_date":3,"updated_at":"2025-09-01 15:30:19"}
+[01-Sep-2025 15:30:19 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:30:19 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:30:40 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:30:40 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:30:40 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_id":"2","house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":"26","due_date":"3"}
+[01-Sep-2025 15:30:40 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"Nh\u00e0 tr\u1ecd B\u00ecnh","province":"H\u1ed3 Ch\u00ed Minh","district":"11","ward":"13","address":"937 \u0110\u01b0\u1eddng 3 Th\u00e1ng 2","payment_date":26,"due_date":3,"updated_at":"2025-09-01 15:30:40"}
+[01-Sep-2025 15:30:40 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:30:40 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:37:39 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:37:40 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:37:50 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:37:50 Europe/Berlin] CREATE HOUSE REQUEST RECEIVED: {"house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5"}
+[01-Sep-2025 15:37:50 Europe/Berlin] BEFORE CREATE - House data: {"owner_id":2,"house_name":"V\u00f4 H\u1ea1n","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5","created_at":"2025-09-01 15:37:50","updated_at":"2025-09-01 15:37:50"}
+[01-Sep-2025 15:37:50 Europe/Berlin] CREATE RESULT: SUCCESS
+[01-Sep-2025 15:37:50 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:40:02 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:40:14 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:40:14 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:40:14 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_name":"V\u00f4","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5","house_id":"12"}
+[01-Sep-2025 15:40:14 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"V\u00f4","province":"H\u1ed3 Ch\u00ed Minh","district":"G\u00f2 V\u1ea5p","ward":"01","address":"217 Nguy\u1ec5n V\u0103n Nghi","payment_date":"10","due_date":"5","updated_at":"2025-09-01 15:40:14"}
+[01-Sep-2025 15:40:14 Europe/Berlin] UPDATE EXCEPTION: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[01-Sep-2025 15:40:14 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:40:43 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:40:43 Europe/Berlin] CREATE HOUSE REQUEST RECEIVED: {"house_name":"cc","province":"B\u00ecnh \u0110\u1ecbnh","district":"T\u00e2y S\u01a1n","ward":"T\u00e2y Vinh","address":"sss","payment_date":"1","due_date":"1"}
+[01-Sep-2025 15:40:43 Europe/Berlin] BEFORE CREATE - House data: {"owner_id":2,"house_name":"cc","province":"B\u00ecnh \u0110\u1ecbnh","district":"T\u00e2y S\u01a1n","ward":"T\u00e2y Vinh","address":"sss","payment_date":"1","due_date":"1","created_at":"2025-09-01 15:40:43","updated_at":"2025-09-01 15:40:43"}
+[01-Sep-2025 15:40:43 Europe/Berlin] CREATE RESULT: SUCCESS
+[01-Sep-2025 15:40:43 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:43:08 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:43:37 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:43:37 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:43:37 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_name":"c","province":"B\u00ecnh \u0110\u1ecbnh","district":"T\u00e2y S\u01a1n","ward":"T\u00e2y Vinh","address":"sss","payment_date":"1","due_date":"1","house_id":"13"}
+[01-Sep-2025 15:43:37 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"c","province":"B\u00ecnh \u0110\u1ecbnh","district":"T\u00e2y S\u01a1n","ward":"T\u00e2y Vinh","address":"sss","payment_date":"1","due_date":"1","updated_at":"2025-09-01 15:43:37"}
+[01-Sep-2025 15:43:37 Europe/Berlin] UPDATE RESULT: SUCCESS
+[01-Sep-2025 15:43:37 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:44:38 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 15:44:38 Europe/Berlin] UPDATE METHOD CALLED
+[01-Sep-2025 15:44:38 Europe/Berlin] UPDATE HOUSE REQUEST RECEIVED: {"house_name":"Nh\u00e0 L\u1ed3n","province":"B\u1ebfn Tre","district":"B\u1ebfn Tre","ward":"Ph\u00fa T\u00e2n","address":"Jack","payment_date":"2","due_date":"2","house_id":"13"}
+[01-Sep-2025 15:44:38 Europe/Berlin] BEFORE UPDATE - House data: {"house_name":"Nh\u00e0 L\u1ed3n","province":"B\u1ebfn Tre","district":"B\u1ebfn Tre","ward":"Ph\u00fa T\u00e2n","address":"Jack","payment_date":"2","due_date":"2","updated_at":"2025-09-01 15:44:38"}
+[01-Sep-2025 15:44:38 Europe/Berlin] UPDATE RESULT: SUCCESS
+[01-Sep-2025 15:44:38 Europe/Berlin] HOUSE CONTROLLER CONSTRUCTOR CALLED
+[01-Sep-2025 16:57:11 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\service\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(26): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\ServiceController.php(17): Core\ViewRender::render('landlord/servic...')
+#3 [internal function]: App\Controllers\Landlord\ServiceController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(67): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(100): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(97): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(96): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(104): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(57): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(50): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
