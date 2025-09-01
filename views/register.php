@@ -9,20 +9,25 @@ Purpose: Build Register Page
 
 use Core\CSRF;
 use Core\Session;
+
+$flashData = $request->getFlashData();
+$errors = $flashData['errors'] ??[];
+$old = $flashData['old'] ??[];
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký - LOZIDO</title>
+    <title>Đăng ký - HOSTY</title>
     <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <style>
         body {
             background-color: #f7fafc;
@@ -55,8 +60,9 @@ use Core\Session;
             </h2>
             
             <!-- Register Form -->
-            <form action="#" method="POST">
+            <form action="<?= BASE_URL ?>/register" method="POST">
                 <!-- Username and Email Row -->
+                <?= CSRF::getTokenField() ?>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <!-- Username Field -->
                     <div>
@@ -70,6 +76,7 @@ use Core\Session;
                             required
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Nhập tên người dùng"
+                            value="<?= $old['username'] ?? '' ?>"
                         >
                     </div>
                     
@@ -85,6 +92,7 @@ use Core\Session;
                             required
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Nhập email của bạn"
+                            value="<?= $old['email'] ?? '' ?>"
                         >
                     </div>
                 </div>
@@ -103,6 +111,7 @@ use Core\Session;
                             required
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Nhập số điện thoại của bạn"
+                            value="<?= $old['phone'] ?? '' ?>"
                         >
                     </div>
                     
@@ -117,9 +126,8 @@ use Core\Session;
                             required
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
-                            <option value="">Chọn vai trò</option>
                             <?php foreach ($roles as $role): ?>
-                                <option value="<?= $role['id'] ?>"><?= $role['role_name'] ?></option>
+                                <option value="<?= $role['id'] ?>" <?php if ($old['role'] == $role['id']) echo 'selected'; ?>><?= $role['vn_name'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -157,7 +165,12 @@ use Core\Session;
                         >
                     </div>
                 </div>
-                
+                <!-- Added by Huy Nguyen on 2025-08-31 to show errors -->
+                <?php if (!empty($errors)): ?>
+                    <div class="mb-4 text-center">
+                        <div class="text-red-500 text-sm"><?= $errors ?></div>
+                    </div>
+                <?php endif; ?>
                 <!-- Register Button -->
                 <button 
                     type="submit" 
@@ -179,25 +192,9 @@ use Core\Session;
             </div>
         </div>
     </div>
-    
-    <!-- JavaScript for form handling -->
-    <script>
-        // Handle register form submission
-        const registerForm = document.querySelector('form');
-        
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(registerForm);
-            const email = formData.get('email');
-            
-            // Here you would typically send the registration data to your backend
-            console.log('Submitting registration form...');
-            
-            // Redirect to OTP verification page with email parameter
-            window.location.href = `verify-otp.php?email=${encodeURIComponent(email)}`;
-        });
-    </script>
+
+    <!-- Library js -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </body>
 </html>

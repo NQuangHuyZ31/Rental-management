@@ -1,12 +1,18 @@
 <?php
 
+/*
+    Author: Huy Nguyen
+    Date: 2025-09-01
+    Purpose: provide view render functionality
+*/
+
 namespace Core;
 
 class ViewRender
 {
     /**
      * Render a view with data
-     * @return string Rendered HTML content
+     * @return void - Outputs directly to browser
      */
     public static function render($view, $data = [], $layout = null)
     {
@@ -15,16 +21,10 @@ class ViewRender
             extract($data);
         }
         
-        // Start output buffering
-        ob_start(); 
-        // Include the view file
+        // Include the view file directly (no output buffering)
         $viewPath = self::getViewPath($view);
         if (file_exists($viewPath)) {
-            if($layout) {
-                return  $viewPath;
-            } else {
-                require_once $viewPath;
-            }
+            require_once $viewPath;
         } else {
             throw new \Exception("View file not found: {$viewPath}");
         }
@@ -33,14 +33,26 @@ class ViewRender
 
     /** Render a view with layout
      * 
-     * Return the layout default with layout content file
+     * Outputs the layout with view content directly to browser
      */
     public static function renderWithLayout($view, $data = [], $layout = null)
     {
+        // Extract data to variables for use in layout
+        if (!empty($data)) {
+            extract($data);
+        }
+        
+        // Start output buffering to capture view content
+        ob_start();
+        
+        // Render the view content first
+        self::render($view, $data);
+        $content = ob_get_clean();
+        
+        // Include the layout file (which will use $content variable)
         $layoutPath = self::getViewPath($layout);
         if (file_exists($layoutPath)) {
-            $content = self::render($view, $data, $layout);
-            require_once $layoutPath;
+            include $layoutPath;
         } else {
             throw new \Exception("Layout file not found: {$layoutPath}");
         }

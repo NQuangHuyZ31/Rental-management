@@ -12,7 +12,9 @@ use App\Controllers\Controller;
 use Core\ViewRender;
 
 class HomeController extends Controller {
+	protected $title = 'Trang chủ';
+	
 	public function index() {
-		ViewRender::renderWithLayout('customer/index', [],'customer/layouts/app');
+		ViewRender::renderWithLayout('customer/index', ['title' => $this->title],'customer/layouts/app');
 	}
 }

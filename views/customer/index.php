@@ -1,6 +1,9 @@
-<!-- <div>
-	<p>aaaaaa</p>
-</div> -->
+<!-- 
+	Author: Huy Nguyen
+	Date: 2025-09-01
+	Purpose: provide home page for customer
+-->
 
-<?php
-echo $_SERVER['HTTP_REFERER'];
+<div>
+	<p>aaaaaa</p>
+</div>

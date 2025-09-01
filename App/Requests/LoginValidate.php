@@ -1,4 +1,10 @@
 <?php
+/*
+
+* Author: Huy Nguyen
+* Date: 2025-09-01
+* Purpose: Validate Login
+*/
 
 namespace App\Requests;
 

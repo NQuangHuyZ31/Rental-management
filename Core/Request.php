@@ -1,5 +1,11 @@
 <?php
 
+/*
+* Author: Huy Nguyen
+* Date: 2025-09-01
+* Purpose: Request
+*/
+
 namespace Core;
 
 class Request
@@ -112,7 +118,7 @@ class Request
     /**
      * Redirect về route với data
      */
-    public function redirect($route, $statusCode = 200, $data = [])
+    public function redirect($route, $data = [], $statusCode = 200)
     {
         // Lưu data vào session flash
         if (!empty($data)) {
@@ -134,7 +140,7 @@ class Request
     {
         $referer = $this->getReferer();
         if ($referer) {
-            $this->redirect($referer, $statusCode);
+            $this->redirect($referer, [], $statusCode);
         } else {
             $this->redirect('/', $statusCode);
         }
@@ -146,7 +152,7 @@ class Request
     public function redirectWithSuccess($route, $message)
     {
         $data['success'] = $message;
-        $this->redirect($route, 200, $data);
+        $this->redirect($route, $data, 200);
     }
     
     /**
@@ -155,7 +161,7 @@ class Request
     public function redirectWithError($route, $message)
     {
         $data['error'] = $message;
-        $this->redirect($route, 400, $data);
+        $this->redirect($route, $data, 400);
     }
     
     /**
@@ -167,7 +173,7 @@ class Request
             'errors' => $errors,
             'old' => $this->post()
         ];
-        $this->redirect($route, 400, $data);
+        $this->redirect($route, $data, 400);
     }
     
     /**

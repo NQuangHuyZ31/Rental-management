@@ -1,5 +1,11 @@
 <?php
 
+/*
+* Author: Huy Nguyen
+* Date: 2025-09-01
+* Purpose: Validate OTP
+*/
+
 namespace App\Requests;
 
 class VerifyOtpValidate
@@ -8,16 +14,20 @@ class VerifyOtpValidate
   {
     $errors = '';
 
-    // Kiểm tra xem 'code_verify' có tồn tại và là mảng
-    foreach ($data['code_verify'] as $key => $value) {
-      if ($value == '' || !ctype_digit($value) || strlen($value) != 1) {
-        $errors = "Mã OTP không hợp lệ";
-      }
+    if ($data == '') {
+      $errors = 'Mã OTP không được để trống.';
     }
-    // Kiểm tra độ dài tổng thể OTP (ví dụ: 6 ký tự)
-    if (count($data['code_verify']) !== 4) {
-      $errors = 'Mã OTP phải có đủ 4 chữ số.';
+
+    // Kiểm tra độ dài mã OTP
+    elseif (strlen($data) !== 6) {
+      $errors = 'Mã OTP phải có đủ 6 chữ số.';
     }
+
+    // Kiểm tra otp code có phải là số
+    elseif (!is_numeric($data)) {
+      $errors = 'Mã OTP phải là số.';
+    }
+
     return $errors;
   }
 }

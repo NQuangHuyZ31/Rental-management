@@ -1,19 +1,21 @@
 <?php
 
 /*
-	name: Role Model
-	Author: Huy Nguyen
-	Date: 2025-08-30
-*/
+ * Author: Huy Nguyen
+ * Date: 2025-09-01
+ * Purpose: Role Model
+ */
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class Role extends Model {
-	protected $table = 'roles';
+    protected $table = 'roles';
 
-	public function getAllRoles() {
-		return $this->table($this->table)->get();
-	}
- }
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function getAllRoles() {
+        return $this->table($this->table)->where('role_name', '<>', 'admin')->get();
+    }
+}

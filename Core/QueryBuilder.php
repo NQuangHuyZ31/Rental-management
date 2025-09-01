@@ -8,6 +8,7 @@
 
 namespace Core;
 use Core\Database;
+use Helpers\Log;
 
 class QueryBuilder {
 
@@ -15,6 +16,8 @@ class QueryBuilder {
 	// Query builder properties
     protected $table = '';
     protected $select = '*';
+    protected $columns = [];
+    protected $values = [];
     protected $where = [];
     protected $whereOr = [];
     protected $orderBy = '';
@@ -40,6 +43,7 @@ class QueryBuilder {
      */
     public function table($table)
     {
+        $this->reset();
         $this->table = $table;
         return $this;
     }
@@ -307,11 +311,17 @@ class QueryBuilder {
         $columns = array_keys($data);
         $placeholders = ':' . implode(', :', $columns);
         $columnList = implode(', ', $columns);
-        
+        $this->columns[] = $columnList;
+        $this->values[] = $data;
+
         $sql = "INSERT INTO {$this->table} ({$columnList}) VALUES ({$placeholders})";
         
         $this->logQuery($sql, $data, 'INSERT');
-        
+
+        if ($this->getCurrentUserId()) {
+            $this->logActivityDB($sql, 'INSERT');
+        }
+
         try {
             $stmt = $this->connection->prepare($sql);
             $stmt->execute($data);
@@ -328,8 +338,15 @@ class QueryBuilder {
     public function update($data)
     {
         $setClause = [];
-        foreach (array_keys($data) as $column) {
-            $setClause[] = "{$column} = :{$column}";
+        $setParams = [];
+        $paramIndex = 0;
+        
+        // Build SET clause with positional parameters
+        foreach ($data as $column => $value) {
+            $setClause[] = "{$column} = ?";
+            $this->columns[] = $column;
+            $setParams[] = $value;
+            $this->values[] = $value;
         }
         $setClause = implode(', ', $setClause);
         
@@ -339,9 +356,13 @@ class QueryBuilder {
             $sql .= " WHERE {$whereClause}";
         }
         
-        $params = array_merge($data, $this->getWhereParameters());
-        
+        // Combine SET parameters with WHERE parameters
+        $params = array_merge($setParams, $this->getWhereParameters());
         $this->logQuery($sql, $params, 'UPDATE');
+
+        if ($this->getCurrentUserId()) {
+            $this->logActivityDB($sql, 'UPDATE');
+        }
         
         try {
             $stmt = $this->connection->prepare($sql);
@@ -366,6 +387,9 @@ class QueryBuilder {
         $params = $this->getWhereParameters();
         
         $this->logQuery($sql, $params, 'DELETE');
+        if ($this->getCurrentUserId()) {
+            $this->logActivityDB($sql, 'DELETE');
+        }
         
         try {
             $stmt = $this->connection->prepare($sql);
@@ -495,6 +519,7 @@ class QueryBuilder {
         // Add AND conditions
         foreach ($this->where as $condition) {
             $column = $condition['column'];
+            $this->columns[] = $column;
             $operator = $condition['operator'];
             $value = $condition['value'];
             
@@ -515,9 +540,10 @@ class QueryBuilder {
             $orConditions = [];
             foreach ($this->whereOr as $condition) {
                 $column = $condition['column'];
+                $this->columns[] = $column;
                 $operator = $condition['operator'];
                 $value = $condition['value'];
-                
+
                 if ($operator === 'IN' || $operator === 'NOT IN') {
                     if (is_array($value)) {
                         $placeholders = str_repeat('?,', count($value) - 1) . '?';
@@ -549,6 +575,7 @@ class QueryBuilder {
         foreach ($this->where as $condition) {
             $operator = $condition['operator'];
             $value = $condition['value'];
+            $this->values[] = $value;
             
             if ($operator === 'IN' || $operator === 'NOT IN') {
                 if (is_array($value)) {
@@ -563,6 +590,7 @@ class QueryBuilder {
         foreach ($this->whereOr as $condition) {
             $operator = $condition['operator'];
             $value = $condition['value'];
+            $this->values[] = $value;
             
             if ($operator === 'IN' || $operator === 'NOT IN') {
                 if (is_array($value)) {
@@ -607,6 +635,12 @@ class QueryBuilder {
         }
     }
 
+    public function logActivityDB($sql, $type)
+    {
+        $this->query("INSERT INTO activity_logs (user_id, action, table_name, field_name, value, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+            [$this->getCurrentUserId(), $type, $this->table, json_encode($this->columns), json_encode($this->values), $sql, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]);
+    }
+
 
     // ==================== UTILITY METHODS ====================
 
@@ -615,10 +649,7 @@ class QueryBuilder {
      */
     private function getCurrentUserId()
     {
-        if (isset($_SESSION['user_id'])) {
-            return $_SESSION['user_id'];
-        }
-        return null;
+        return Session::get('user')['id'];
     }
 
     /**
@@ -650,6 +681,8 @@ class QueryBuilder {
     {
         $this->table = '';
         $this->select = '*';
+        $this->columns = [];
+        $this->values = [];
         $this->where = [];
         $this->whereOr = [];
         $this->orderBy = '';

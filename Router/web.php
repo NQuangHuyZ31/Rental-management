@@ -22,13 +22,16 @@ $router = new Router();
 
 // =============================================================ROUTER CUSTOMER==================================================
 // Route đến trang chủ
-$router->get('/', [HomeController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/', [HomeController::class, 'index']);
 
 $router->get('/login', [AuthController::class, 'showLoginPage']);
 $router->get('/register', [AuthController::class, 'showRegisterPage']);
 $router->post('/login', [AuthController::class, 'handleLogin']);
 $router->post('/register', [AuthController::class, 'handleRegister']);
 $router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/verify-account', [AuthController::class, 'verifyAccount']);
+$router->post('/verify-account', [AuthController::class, 'handleVerifyAccount']);
+$router->post('/resend-otp', [AuthController::class, 'handleResendOTP']);
 
 // =============================================================ROUTER ADMIN==================================================
 $router->get('/admin', [AuthAdminController::class, 'index'],[AuthAdminMiddleware::class]);
@@ -40,6 +43,6 @@ $router->get('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddlew
 $router->get('/landlord/service', [ServiceController::class, 'index'],[AuthLandlordMiddleware::class]);
 
 // Route test
-//$router->get('/test', [TestController::class, 'index']);
+$router->get('/test', [TestController::class, 'index']);
 // Xử lý request
 $router->handleRequest();

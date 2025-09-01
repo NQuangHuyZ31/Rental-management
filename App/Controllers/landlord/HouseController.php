@@ -21,8 +21,5 @@ class HouseController extends Controller
         $result = $query->queryAll($sql);
         ViewRender::render('landlord/index', ['houses' => $result]);
     }
-
-    
-    
 }
 ?>

@@ -1,5 +1,11 @@
 <?php
 
+/*
+    Author: Huy Nguyen
+    Date: 2025-09-01
+    Purpose: provide response functionality
+*/
+
 namespace Core;
 
 class Response

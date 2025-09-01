@@ -1,4 +1,10 @@
 <?php
+/*
+    Author: Huy Nguyen
+    Date: 2025-09-01
+    Purpose: Queue Worker for Cron Job
+*/
+
 /**
  * Queue Worker cho Cron Job - Xử lý các jobs trong queue
  * 
@@ -18,8 +24,14 @@
  *   (Chạy mỗi phút, nhưng queue sẽ xử lý jobs mỗi 5 giây trong 50 giây)
  */
 
-require_once 'Config/config.php';
-require_once __DIR__ . '/vendor/autoload.php';
+ require_once __DIR__ . '/vendor/autoload.php';
+
+ // Load file .env trước
+ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+ $dotenv->load();
+ 
+ // Sau khi $_ENV có dữ liệu rồi mới require config.php
+ require_once 'Config/config.php';
 
 use Core\Queue;
 

@@ -1,5 +1,11 @@
 <?php
 
+/*
+    Author: Huy Nguyen
+    Date: 2025-09-01
+    Purpose: Log helper
+*/
+
 namespace Helpers;
 
 class Log
@@ -7,9 +13,9 @@ class Log
     private static function getLogDir()
     {
         if (defined('ROOT_PATH')) {
-            return ROOT_PATH . '/Logs/';
+            return ROOT_PATH . '/Logs';
         } else {
-            return __DIR__ . '/../Logs/';
+            return __DIR__ . '/../Logs';
         }
     }
 
@@ -40,7 +46,7 @@ class Log
         
         $logEntry = sprintf("[%s] [%s] %s%s", $timestamp, $level, $logData, PHP_EOL);
 
-        $logFilePath = self::getLogDir() . ($logFileName ?: 'server.log');
+        $logFilePath = self::getLogDir() . ($logFileName ?: '/server.log');
 
         // Rotate chỉ áp dụng cho server.log mặc định
         if ($logFileName === null && file_exists($logFilePath) && filesize($logFilePath) > self::$maxFileSize) {
@@ -80,23 +86,23 @@ class Log
     protected static function rotateLogFiles()
     {
         $logDir = self::getLogDir();
-        $baseLogFile = $logDir . 'server.log';
+        $baseLogFile = $logDir . '/server.log';
 
-        $oldestLog = $logDir . 'server.log.' . self::$maxFiles;
+        $oldestLog = $logDir . '/server.log.' . self::$maxFiles;
         if (file_exists($oldestLog)) {
             unlink($oldestLog);
         }
 
         for ($i = self::$maxFiles - 1; $i >= 1; $i--) {
-            $oldFile = $logDir . 'server.log.' . $i;
-            $newFile = $logDir . 'server.log.' . ($i + 1);
+            $oldFile = $logDir . '/server.log.' . $i;
+            $newFile = $logDir . '/server.log.' . ($i + 1);
             if (file_exists($oldFile)) {
                 rename($oldFile, $newFile);
             }
         }
 
         if (file_exists($baseLogFile)) {
-            rename($baseLogFile, $logDir . 'server.log.1');
+            rename($baseLogFile, $logDir . '/server.log.1');
         }
     }
 
@@ -106,27 +112,27 @@ class Log
 
     public static function server($msg, $level = self::LEVEL_INFO)
     {
-        return self::write($msg, $level, 'server.log');
+        return self::write($msg, $level, '/server.log');
     }
 
     public static function queue($msg, $level = self::LEVEL_INFO)
     {
-        return self::write($msg, $level, 'queue_jobs.log');
+        return self::write($msg, $level, '/queue_jobs.log');
     }
 
     public static function payment($msg, $level = self::LEVEL_INFO)
     {
-        return self::write($msg, $level, 'payment.log');
+        return self::write($msg, $level, '/payment.log');
     }
 
     public static function auth($msg, $level = self::LEVEL_INFO)
     {
-        return self::write($msg, $level, 'auth.log');
+        return self::write($msg, $level, '/auth.log');
     }
 
     public static function custom($msg, $fileName, $level = self::LEVEL_INFO)
     {
         // Cho phép log ra bất kỳ file nào
-        return self::write($msg, $level, $fileName);
+        return self::write($msg, $level, '/' . $fileName);
     }
 }

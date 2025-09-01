@@ -1,4 +1,9 @@
 <?php
+/*
+    Author: Huy Nguyen
+    Date: 2025-08-25
+    Purpose: provide auth functionality
+*/
 
 namespace Core;
 

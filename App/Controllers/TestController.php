@@ -21,7 +21,7 @@ class TestController
     // } else {
     //   echo "Có lỗi";
     // }
-
+    echo Hash::decrypt('mYp0dHQomSrLLow76U6ej1pR8XhLGICGmLAs71bmigbYnxVaC67tdhUlv2NiI8OXXplm3tdKO0shye0/vwnnLg==');
     // $result = UploadClound::extractPublicId('https://res.cloudinary.com/whr-clound/image/upload/v1745473515/whr_images/feedback_images/1745473513_f8717c2c6f76beb7e07819c35ab6505437528c20.jpg');
     // UploadClound::delete('whr_images/feedback_images/' . $result);
   }

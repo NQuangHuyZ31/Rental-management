@@ -1,5 +1,11 @@
 <?php
 
+/*
+    Author: Huy Nguyen
+    Date: 2025-08-29
+    Purpose: provide CSRF functionality
+*/
+
 namespace Core;
 
 use Core\Session;

@@ -1,5 +1,11 @@
 <?php
 
+/*
+* Author: Huy Nguyen
+* Date: 2025-09-01
+* Purpose: Queue
+*/
+
 namespace Core;
 
 use Core\Database;
@@ -56,9 +62,9 @@ class Queue
         }
         
         try {
-            $sql = "INSERT INTO queue_jobs (job_class, job_data, priority, queue_name) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO queue_jobs (job_class, job_data, priority, queue_name, created_at) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->db->prepare($sql);
-            $result = $stmt->execute([$jobClass, json_encode($jobData), $priority, $queueName]);
+            $result = $stmt->execute([$jobClass, json_encode($jobData), $priority, $queueName, date('Y-m-d H:i:s')]);
             
             if ($result) {
                 $jobId = $this->db->lastInsertId();

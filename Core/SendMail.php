@@ -1,11 +1,17 @@
 <?php
 
+/*
+    Author: Huy Nguyen
+    Date: 2025-09-01
+    Purpose: provide send mail functionality
+*/
+
 namespace Core;
 
 use Helpers\Log;
+use Helpers\EmailTemplate;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
 require 'vendor/autoload.php';
 class SendMail
@@ -16,30 +22,21 @@ class SendMail
     $this->mail = new PHPMailer(true);
   }
 
-  public function sendOTP($email, $customer, $otp, $content)
+  public function sendOTP($email, $customer, $otpCode, $purpose = 'Xác minh tài khoản')
   {
     try {
       $this->config();
-      $this->mail->addAddress($email, $customer);     //Add a recipient
-      // $mail->addAddress('ellen@example.com');               //Name is optional
-      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Wild Horizon BookShop');
-      // $mail->addCC('cc@example.com');
-      // $mail->addBCC('bcc@example.com');
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
 
-      //Attachments
-      // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-      // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-      //Content                                  //Set email format to HTML
-      $this->mail->Subject = $content;
-      $this->mail->Body = '<p style="font-size: 20px; font-weight: 600;">Mã xác minh của bạn: <span style="font-size: 30px; font-weight: 600;">' . $otp . '</span></p>
-      <p>Làm ơn không tiết lộ trong bất kì hình thức nào để đảm bảo an toàn cho bạn.</p>
-      <p>Đây là mã xác minh để ' . $content . '. Vui lòng đảm bảo xác minh trong vòng <strong>5 phút</strong>.</p>';
+      $this->mail->Subject = "Mã xác minh OTP - {$purpose}";
+      $this->mail->Body = EmailTemplate::renderOTP($customer, $otpCode, $purpose);
       $this->mail->send();
-      Log::queue("Email sent successfully to: " . $email);
+      Log::queue("OTP Email sent successfully to: " . $email);
       return true;
     } catch (Exception $e) {
-      echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
+      Log::queue("Failed to send OTP email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
     }
   }
 
@@ -55,9 +52,9 @@ class SendMail
       $this->mail->Encoding = 'base64';        // hoặc 'quoted-printable'                                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
       //Recipients
-      $this->mail->setFrom('huynguyenharu3108@gmail.com', 'Wild Horizon BookShop');
+      $this->mail->setFrom('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
       // $mail->addAddress('ellen@example.com');               //Name is optional
-      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Wild Horizon BookShop');
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
       // $mail->addCC('cc@example.com');
       // $mail->addBCC('bcc@example.com');
 
@@ -68,4 +65,110 @@ class SendMail
       //Content
       $this->mail->isHTML(true);                                  //Set email format to HTML
   }
+
+  /**
+   * Gửi email chào mừng cho người dùng mới
+   */
+  public function sendWelcome($email, $customer, $loginUrl)
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = "Chào mừng bạn đến với hệ thống quản lý cho thuê nhà";
+      $this->mail->Body = EmailTemplate::renderWelcome($customer, $loginUrl);
+      $this->mail->send();
+      Log::queue("Welcome email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send welcome email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
+  /**
+   * Gửi email thông báo đặt lịch xem nhà
+   */
+  public function sendAppointment($email, $customer, $houseName, $houseAddress, $housePrice, $appointmentDate, $appointmentTime, $appointmentUrl, $notes = null)
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = "Thông báo đặt lịch xem nhà - {$houseName}";
+      $this->mail->Body = EmailTemplate::renderAppointment($customer, $houseName, $houseAddress, $housePrice, $appointmentDate, $appointmentTime, $appointmentUrl, $notes);
+      $this->mail->send();
+      Log::queue("Appointment email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send appointment email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
+  /**
+   * Gửi email đặt lại mật khẩu
+   */
+  public function sendPasswordReset($email, $customer, $resetUrl)
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = "Đặt lại mật khẩu - Hệ thống quản lý cho thuê nhà";
+      $this->mail->Body = EmailTemplate::renderPasswordReset($customer, $resetUrl);
+      $this->mail->send();
+      Log::queue("Password reset email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send password reset email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
+  /**
+   * Gửi email thông báo chung
+   */
+  public function sendNotification($email, $customer, $data)
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = $data['emailTitle'] ?? 'Thông báo từ hệ thống';
+      $this->mail->Body = EmailTemplate::renderNotification($data);
+      $this->mail->send();
+      Log::queue("Notification email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send notification email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
+  /**
+   * Gửi email tùy chỉnh
+   */
+  public function sendCustom($email, $customer, $subject, $template, $data = [])
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = $subject;
+      $this->mail->Body = EmailTemplate::renderCustom($template, $data);
+      $this->mail->send();
+      Log::queue("Custom email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send custom email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
 }

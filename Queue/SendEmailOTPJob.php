@@ -1,15 +1,22 @@
 <?php
 
+/*
+	Author: Huy Nguyen
+	Date: 2025-09-01
+	Purpose: Send OTP email
+*/
+
 namespace Queue;
 
 use Core\Job;
 use Core\SendMail;
+use Helpers\Hash;
 use Helpers\Log;
 
-class SendEmailJob extends Job
+class SendEmailOTPJob extends Job
 {
     protected $priority = \Core\Queue::PRIORITY_HIGH;
-    protected $queueName = 'emails';
+    protected $queueName = 'emails-otp';
     protected $maxAttempts = 3;
     protected $sendEmail;
     
@@ -27,16 +34,17 @@ class SendEmailJob extends Job
         try {
             // Giả lập gửi email
             $to = $data['to'] ?? '';
-            $subject = $data['subject'] ?? '';
-            $message = $data['message'] ?? '';
+            $customer = $data['customer'] ?? '';
+            $otpCode = $data['otpCode'] ?? '';
+            $purpose = $data['purpose'] ?? '';
+            $otpCodeDecoded = Hash::decrypt($otpCode)?? '';
             
-            if (empty($to) || empty($subject) || empty($message)) {
+            if (empty($to) || empty($customer) || empty($otpCodeDecoded) || empty($purpose)) {
                 throw new \Exception("Missing required email data");
             }
-
-            $this->sendEmail->sendOTP($to, 'Huy Nguyen','333333', $message);
             
             // Xử lý sau khi hoàn thành
+            $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
             $this->after();
             
         } catch (\Exception $e) {
