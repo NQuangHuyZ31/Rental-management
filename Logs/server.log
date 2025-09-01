@@ -28,3 +28,5 @@
 [2025-09-01 23:44:04] [ERROR] {"redirect":null,"message":"success"}
 [2025-09-01 23:44:18] [ERROR] {"redirect":"\/","message":"success","user_id":68}
 [2025-09-01 23:44:27] [ERROR] {"redirect":"\/Rental-management\/","message":"success"}
+[2025-09-01 23:47:12] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-01 23:47:21] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
