@@ -27,7 +27,6 @@
         <div class="bg-white min-h-screen p-6">
             <div class="max-w-full mx-auto">
                 <div class="flex gap-8">
-
                     <!-- Left Column: Service Management (30%) -->
                     <div class="w-1/3">
                         <div class="flex items-center justify-between mb-6">
@@ -35,10 +34,10 @@
                                 <div class="w-1 h-8 bg-green-600 mr-3"></div>
                                 <div>
                                     <h3 class="text-base font-medium text-gray-800">Quản lý dịch vụ:</h3>
-                                    <p class="text-gray-600 italic mt-1 text-sm">Các dịch vụ khách thuê xài</p>
+                                    <p class="text-gray-600 italic mt-1 text-sm">Các dịch vụ khách thuê sử dụng</p>
                                 </div>
                             </div>
-                            <button class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
+                            <button onclick="openAddServiceModal()" class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
@@ -167,7 +166,7 @@
                             <div class="w-1 h-8 bg-green-600 mr-3"></div>
                             <div>
                                 <h3 class="text-base font-medium text-gray-800">Khách thuê sử dụng trong tháng:</h3>
-                                <p class="text-gray-600 italic mt-1 text-sm">Thống kê mỗi tháng khách thuê xài</p>
+                                <p class="text-gray-600 italic mt-1 text-sm">Thống kê mỗi tháng khách thuê sử dụng</p>
                             </div>
                         </div>
 
@@ -260,10 +259,8 @@
 
                         <!-- Empty State -->
                         <div class="text-center py-12">
-                            <div class="w-32 h-32 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                </svg>
+                            <div class="w-48 h-48 mx-auto mb-4">
+                                <img src="<?= BASE_URL . '/Public/images/admin/empty-houses.jpg' ?>" alt="Không có dữ liệu" class="w-full h-full object-cover rounded-lg">
                             </div>
                             <p class="text-gray-500 text-lg">Không tìm thấy dữ liệu!</p>
                         </div>
@@ -274,6 +271,148 @@
     </main>
     <!-- Footer -->
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
+
+    <!-- Modal thêm dịch vụ mới -->
+    <div id="addServiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0 bg-white">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-concierge-bell text-white text-sm"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-800">Thêm dịch vụ mới</h2>
+                </div>
+                <button onclick="closeAddServiceModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto min-h-0">
+                <div class="p-6">
+                    <!-- Thông tin cơ bản -->
+                    <div class="mb-6">
+                        <div class="flex mb-4">
+                            <div class="w-1 bg-green-600 mr-3"></div>
+                            <div>
+                                <h3 class="text-base font-medium text-gray-800">Thông tin cơ bản:</h3>
+                                <p class="text-gray-600 italic mt-1 text-sm">Thông tin cơ bản về dịch vụ mới</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Tên dịch vụ -->
+                            <div class="relative">
+                                <input type="text" id="service_name" name="service_name" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                                <label for="service_name" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tên dịch vụ <span class="text-red-500">*</span></label>
+                            </div>
+
+                            <!-- Loại dịch vụ -->
+                            <div class="relative">
+                                <select id="service_type" name="service_type" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
+                                    <option value="">Chọn loại dịch vụ</option>
+                                    <option value="electric">Điện</option>
+                                    <option value="water">Nước</option>
+                                    <option value="internet">Internet</option>
+                                    <option value="garbage">Rác</option>
+                                    <option value="parking">Gửi xe</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                                <label for="service_type" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not([value=''])]:top-0 peer-[:not([value=''])]:text-xs peer-[:not([value=''])]:text-blue-500 peer-[:not([value=''])]:font-medium">Loại dịch vụ <span class="text-red-500">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Đơn vị và giá -->
+                    <div class="mb-6">
+                        <div class="flex mb-4">
+                            <div class="w-1 bg-green-600 mr-3"></div>
+                            <div>
+                                <h3 class="text-base font-medium text-gray-800">Đơn vị và giá:</h3>
+                                <p class="text-gray-600 italic mt-1 text-sm">Nhập thông tin đơn vị tính và giá</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Đơn vị -->
+                            <div class="relative">
+                                <select id="unit" name="unit" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
+                                    <option value="">Chọn đơn vị</option>
+                                    <option value="KWH">KWH</option>
+                                    <option value="m3">m³</option>
+                                    <option value="month">Tháng</option>
+                                    <option value="person">Người</option>
+                                </select>
+                                <label for="unit" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not([value=''])]:top-0 peer-[:not([value=''])]:text-xs peer-[:not([value=''])]:text-blue-500 peer-[:not([value=''])]:font-medium">Đơn vị <span class="text-red-500">*</span></label>
+                            </div>
+
+                            <!-- Giá dịch vụ -->
+                            <div class="relative">
+                                <input type="number" id="service_price" name="service_price" min="0" step="100" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                                <label for="service_price" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Giá dịch vụ (VNĐ) <span class="text-red-500">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chọn phòng muốn áp dụng -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-1 h-8 bg-green-600 mr-3"></div>
+                                <div>
+                                    <h3 class="text-base font-medium text-gray-800">Chọn phòng muốn áp dụng:</h3>
+                                    <p class="text-gray-600 italic mt-1 text-sm">Danh sách phòng chọn áp dụng</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="selectAllCheckbox" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <label for="selectAllCheckbox" class="text-sm font-medium text-gray-900">Chọn tất cả</label>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách phòng -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_101" name="rooms[]" value="101" class="mr-3">
+                                <label for="room_101" class="text-sm text-gray-700">Phòng 101</label>
+                            </div>
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_102" name="rooms[]" value="102" class="mr-3">
+                                <label for="room_102" class="text-sm text-gray-700">Phòng 102</label>
+                            </div>
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_103" name="rooms[]" value="103" class="mr-3">
+                                <label for="room_103" class="text-sm text-gray-700">Phòng 103</label>
+                            </div>
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_201" name="rooms[]" value="201" class="mr-3">
+                                <label for="room_201" class="text-sm text-gray-700">Phòng 201</label>
+                            </div>
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_202" name="rooms[]" value="202" class="mr-3">
+                                <label for="room_202" class="text-sm text-gray-700">Phòng 202</label>
+                            </div>
+                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                <input type="checkbox" id="room_203" name="rooms[]" value="203" class="mr-3">
+                                <label for="room_203" class="text-sm text-gray-700">Phòng 203</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-end gap-3 p-6 border-t border-gray-200 flex-shrink-0 bg-white">
+                <button onclick="closeAddServiceModal()" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    Đóng
+                </button>
+                <button onclick="createService()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    Tạo dịch vụ
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Month/Year Picker functionality
@@ -353,6 +492,122 @@
             updateInput(); // Set initial value in input
             updateYearDisplay();
             highlightSelectedMonth();
+        });
+
+        // Add Service Modal functionality
+        function openAddServiceModal() {
+            document.getElementById('addServiceModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddServiceModal() {
+            document.getElementById('addServiceModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // Reset form when closing modal
+            resetServiceForm();
+        }
+
+        // Reset service form
+        function resetServiceForm() {
+            document.getElementById('service_name').value = '';
+            document.getElementById('service_type').value = '';
+            document.getElementById('unit').value = '';
+            document.getElementById('service_price').value = '';
+            
+            // Uncheck all room checkboxes
+            const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
+            roomCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Uncheck select all checkbox
+            document.getElementById('selectAllCheckbox').checked = false;
+        }
+
+        // Select all rooms
+        function selectAllRooms() {
+            const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
+            roomCheckboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        // Deselect all rooms
+        function deselectAllRooms() {
+            const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
+            roomCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        // Create service
+        function createService() {
+            // Get form data
+            const formData = {
+                service_name: document.getElementById('service_name').value,
+                service_type: document.getElementById('service_type').value,
+                unit: document.getElementById('unit').value,
+                service_price: document.getElementById('service_price').value,
+                rooms: Array.from(document.querySelectorAll('input[name="rooms[]"]:checked')).map(cb => cb.value)
+            };
+
+            // Validate required fields
+            if (!formData.service_name || !formData.service_type || !formData.unit || !formData.service_price || formData.rooms.length === 0) {
+                alert('Vui lòng điền đầy đủ thông tin bắt buộc và chọn ít nhất một phòng!');
+                return;
+            }
+
+            // Send data to server (you can modify this according to your API)
+            console.log('Service data:', formData);
+
+            // TODO: Call API to create service
+            // fetch('/api/services', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(formData)
+            // });
+
+            alert('Tạo dịch vụ thành công!');
+            closeAddServiceModal();
+        }
+
+        // Event listeners for room selection
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle select all checkbox
+            document.getElementById('selectAllCheckbox').addEventListener('change', function() {
+                if (this.checked) {
+                    selectAllRooms();
+                } else {
+                    deselectAllRooms();
+                }
+            });
+            
+            // Update select all checkbox when individual rooms change
+            const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
+            roomCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const allChecked = Array.from(roomCheckboxes).every(cb => cb.checked);
+                    
+                    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+                    selectAllCheckbox.checked = allChecked;
+                });
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('addServiceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddServiceModal();
+            }
+        });
+
+        // Close modal when pressing ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAddServiceModal();
+            }
         });
     </script>
 </body>
