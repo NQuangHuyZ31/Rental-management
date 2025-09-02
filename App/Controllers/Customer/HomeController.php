@@ -13,8 +13,9 @@ use Core\ViewRender;
 
 class HomeController extends Controller {
 	protected $title = 'Trang chủ';
+	protected $subNav = true;
 	
 	public function index() {
-		ViewRender::renderWithLayout('customer/index', ['title' => $this->title],'customer/layouts/app');
+		ViewRender::renderWithLayout('customer/index', ['title' => $this->title, 'subNav' => $this->subNav],'customer/layouts/app');
 	}
 }

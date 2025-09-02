@@ -75,7 +75,7 @@ $message = $flashData['success'] ?? '';
                 </label>
                 <div class="flex space-x-3">
                     <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="role" value="landlord" class="sr-only peer" <?=$old['selected_role'] === 'landlord' ? 'checked' : ''?>>
+                        <input type="radio" name="role" value="landlord" class="sr-only peer" <?=$old['selected_role'] == 'landlord' || $_GET['type'] == 'landlord' ? 'checked' : ''?>>
                         <div class="p-2 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
                             <i class="fas fa-home text-lg mb-1"></i>
                             <span class="text-sm font-medium">Tôi là Chủ nhà</span>
@@ -83,7 +83,7 @@ $message = $flashData['success'] ?? '';
                     </label>
 
                     <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="role" value="customer" class="sr-only peer" <?=!isset($old['selected_role']) || $old['selected_role'] === 'customer' ? 'checked' : ''?>>
+                        <input type="radio" name="role" value="customer" class="sr-only peer" <?=!isset($_GET['type']) || $old['selected_role'] == 'customer' || $_GET['type'] == 'customer' ? 'checked' : ''?>>
                         <div class="p-2 text-center rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white transition-all duration-200 hover:border-gray-300">
                             <i class="fas fa-search text-lg mb-1"></i>
                             <span class="text-sm font-medium">Tôi tìm nhà</span>
