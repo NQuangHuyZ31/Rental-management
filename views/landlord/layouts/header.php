@@ -18,7 +18,7 @@ Purpose: Build Header for Landlord Layout
             <!-- All Navigation Items -->
             <div class="flex items-center space-x-4">
                 <!-- Quản lý nhà (House Management) - Active -->
-                <a href="#" class="nav-item active flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <a href="<?= BASE_URL ?>/landlord" class="nav-item active flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-home text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Quản lý nhà</span>
                 </a>

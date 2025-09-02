@@ -46,117 +46,51 @@
 
                         <!-- Service List -->
                         <div class="space-y-4">
-                            <!-- Service 1: Electricity -->
-                            <div class="bg-white border border-[#DCDCDC] rounded-lg p-4 flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <?php if (!empty($services)): ?>
+                                <?php foreach ($services as $service): ?>
+                                    <div class="bg-white border border-[#DCDCDC] rounded-lg p-4 flex items-center justify-between">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-gray-800"><?= htmlspecialchars($service['service_name']) ?> (<?= htmlspecialchars($service['unit']) ?>)</h3>
+                                                <p class="text-gray-600 text-sm"><?= number_format($service['service_price']) ?>₫/ <?= htmlspecialchars($service['unit']) ?></p>
+                                                <p class="text-green-600 text-sm">Đang áp dụng cho <?= $service['room_count'] ?? 0 ?> phòng</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
+                                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="bg-white border border-[#DCDCDC] rounded-lg p-8 text-center">
+                                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                         </svg>
                                     </div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Tiền điện (người)</h3>
-                                        <p class="text-gray-600 text-sm">1.700đ/ Người</p>
-                                        <p class="text-green-600 text-sm">Đang áp dụng cho 1 phòng</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
-                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </button>
-                                    <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có dịch vụ nào</h3>
+                                    <p class="text-gray-500 mb-4">Bạn chưa tạo dịch vụ nào cho nhà trọ này</p>
+                                    <button onclick="openAddServiceModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                        <i class="fas fa-plus mr-2"></i>Tạo dịch vụ đầu tiên
                                     </button>
                                 </div>
-                            </div>
+                            <?php endif; ?>
 
-                            <!-- Service 2: Water -->
-                            <div class="bg-white border border-[#DCDCDC] rounded-lg p-4 flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Tiền nước (người)</h3>
-                                        <p class="text-gray-600 text-sm">18.000₫/ Người</p>
-                                        <p class="text-green-600 text-sm">Đang áp dụng cho 1 phòng</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
-                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </button>
-                                    <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
 
-                            <!-- Service 3: Garbage -->
-                            <div class="bg-white border border-[#DCDCDC] rounded-lg p-4 flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Tiền rác (người)</h3>
-                                        <p class="text-gray-600 text-sm">15.000₫/ Người</p>
-                                        <p class="text-green-600 text-sm">Đang áp dụng cho 1 phòng</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
-                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </button>
-                                    <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Service 4: WiFi -->
-                            <div class="bg-white border border-[#DCDCDC] rounded-lg p-4 flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Tiền wifi (người)</h3>
-                                        <p class="text-gray-600 text-sm">50.000₫/ Người</p>
-                                        <p class="text-green-600 text-sm">Đang áp dụng cho 1 phòng</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">
-                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </button>
-                                    <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -274,7 +208,7 @@
 
     <!-- Modal thêm dịch vụ mới -->
     <div id="addServiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
             <!-- Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0 bg-white">
                 <div class="flex items-center">
@@ -288,9 +222,13 @@
                 </button>
             </div>
 
-            <!-- Content -->
-            <div class="flex-1 overflow-y-auto min-h-0">
-                <div class="p-6">
+            <!-- Form -->
+            <form id="serviceForm" method="POST" action="<?= BASE_URL ?>/landlord/service/create" onsubmit="return validateServiceForm()" class="flex flex-col flex-1 min-h-0">
+                <?= \Core\CSRF::getTokenField() ?>
+                <input type="hidden" name="house_id" value="<?= $selectedHouse['id'] ?? '' ?>">
+
+                <!-- Content -->
+                <div class="flex-1 overflow-y-auto p-6 min-h-0" style="max-height: calc(90vh - 200px);">
                     <!-- Thông tin cơ bản -->
                     <div class="mb-6">
                         <div class="flex mb-4">
@@ -304,13 +242,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Tên dịch vụ -->
                             <div class="relative">
-                                <input type="text" id="service_name" name="service_name" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                                <input type="text" id="service_name" name="service_name" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
                                 <label for="service_name" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tên dịch vụ <span class="text-red-500">*</span></label>
                             </div>
 
                             <!-- Loại dịch vụ -->
                             <div class="relative">
-                                <select id="service_type" name="service_type" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
+                                <select id="service_type" name="service_type" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
                                     <option value="">Chọn loại dịch vụ</option>
                                     <option value="electric">Điện</option>
                                     <option value="water">Nước</option>
@@ -337,7 +275,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Đơn vị -->
                             <div class="relative">
-                                <select id="unit" name="unit" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
+                                <select id="unit" name="unit" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
                                     <option value="">Chọn đơn vị</option>
                                     <option value="KWH">KWH</option>
                                     <option value="m3">m³</option>
@@ -349,7 +287,7 @@
 
                             <!-- Giá dịch vụ -->
                             <div class="relative">
-                                <input type="number" id="service_price" name="service_price" min="0" step="100" class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                                <input type="number" id="service_price" name="service_price" min="0" step="100" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
                                 <label for="service_price" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Giá dịch vụ (VNĐ) <span class="text-red-500">*</span></label>
                             </div>
                         </div>
@@ -373,44 +311,32 @@
 
                         <!-- Danh sách phòng -->
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_101" name="rooms[]" value="101" class="mr-3">
-                                <label for="room_101" class="text-sm text-gray-700">Phòng 101</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_102" name="rooms[]" value="102" class="mr-3">
-                                <label for="room_102" class="text-sm text-gray-700">Phòng 102</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_103" name="rooms[]" value="103" class="mr-3">
-                                <label for="room_103" class="text-sm text-gray-700">Phòng 103</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_201" name="rooms[]" value="201" class="mr-3">
-                                <label for="room_201" class="text-sm text-gray-700">Phòng 201</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_202" name="rooms[]" value="202" class="mr-3">
-                                <label for="room_202" class="text-sm text-gray-700">Phòng 202</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
-                                <input type="checkbox" id="room_203" name="rooms[]" value="203" class="mr-3">
-                                <label for="room_203" class="text-sm text-gray-700">Phòng 203</label>
-                            </div>
+                            <?php if (!empty($rooms)): ?>
+                                <?php foreach ($rooms as $room): ?>
+                                    <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
+                                        <input type="checkbox" id="room_<?= $room['id'] ?>" name="rooms[]" value="<?= $room['id'] ?>" class="mr-3">
+                                        <label for="room_<?= $room['id'] ?>" class="text-sm text-gray-700">Phòng <?= htmlspecialchars($room['room_number'] ?? $room['id']) ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="col-span-2 text-center text-gray-500 py-4">
+                                    Chưa có phòng nào trong nhà này
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Footer -->
-            <div class="flex justify-end gap-3 p-6 border-t border-gray-200 flex-shrink-0 bg-white">
-                <button onclick="closeAddServiceModal()" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                    Đóng
-                </button>
-                <button onclick="createService()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    Tạo dịch vụ
-                </button>
-            </div>
+                <!-- Footer -->
+                <div class="flex justify-end gap-3 p-6 border-t border-gray-200 flex-shrink-0 bg-white">
+                    <button type="button" onclick="closeAddServiceModal()" class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors mr-3">
+                        Hủy
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Tạo dịch vụ
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -504,22 +430,8 @@
             document.getElementById('addServiceModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
             // Reset form when closing modal
-            resetServiceForm();
-        }
+            document.getElementById('serviceForm').reset();
 
-        // Reset service form
-        function resetServiceForm() {
-            document.getElementById('service_name').value = '';
-            document.getElementById('service_type').value = '';
-            document.getElementById('unit').value = '';
-            document.getElementById('service_price').value = '';
-            
-            // Uncheck all room checkboxes
-            const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
-            roomCheckboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            
             // Uncheck select all checkbox
             document.getElementById('selectAllCheckbox').checked = false;
         }
@@ -540,37 +452,45 @@
             });
         }
 
-        // Create service
-        function createService() {
-            // Get form data
-            const formData = {
-                service_name: document.getElementById('service_name').value,
-                service_type: document.getElementById('service_type').value,
-                unit: document.getElementById('unit').value,
-                service_price: document.getElementById('service_price').value,
-                rooms: Array.from(document.querySelectorAll('input[name="rooms[]"]:checked')).map(cb => cb.value)
-            };
+        // Validate service form
+        function validateServiceForm() {
+            const serviceName = document.getElementById('service_name').value.trim();
+            const serviceType = document.getElementById('service_type').value;
+            const unit = document.getElementById('unit').value;
+            const servicePrice = document.getElementById('service_price').value.trim();
+            const selectedRooms = Array.from(document.querySelectorAll('input[name="rooms[]"]:checked')).map(cb => cb.value);
 
             // Validate required fields
-            if (!formData.service_name || !formData.service_type || !formData.unit || !formData.service_price || formData.rooms.length === 0) {
-                alert('Vui lòng điền đầy đủ thông tin bắt buộc và chọn ít nhất một phòng!');
-                return;
+            if (!serviceName) {
+                alert('Vui lòng nhập tên dịch vụ!');
+                document.getElementById('service_name').focus();
+                return false;
             }
 
-            // Send data to server (you can modify this according to your API)
-            console.log('Service data:', formData);
+            if (!serviceType) {
+                alert('Vui lòng chọn loại dịch vụ!');
+                document.getElementById('service_type').focus();
+                return false;
+            }
 
-            // TODO: Call API to create service
-            // fetch('/api/services', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(formData)
-            // });
+            if (!unit) {
+                alert('Vui lòng chọn đơn vị!');
+                document.getElementById('unit').focus();
+                return false;
+            }
 
-            alert('Tạo dịch vụ thành công!');
-            closeAddServiceModal();
+            if (!servicePrice || servicePrice <= 0) {
+                alert('Vui lòng nhập giá dịch vụ hợp lệ!');
+                document.getElementById('service_price').focus();
+                return false;
+            }
+
+            if (selectedRooms.length === 0) {
+                alert('Vui lòng chọn ít nhất một phòng!');
+                return false;
+            }
+
+            return true;
         }
 
         // Event listeners for room selection
@@ -583,13 +503,13 @@
                     deselectAllRooms();
                 }
             });
-            
+
             // Update select all checkbox when individual rooms change
             const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
             roomCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const allChecked = Array.from(roomCheckboxes).every(cb => cb.checked);
-                    
+
                     const selectAllCheckbox = document.getElementById('selectAllCheckbox');
                     selectAllCheckbox.checked = allChecked;
                 });

@@ -187,6 +187,7 @@ Purpose: Build Index house for Landlord
                         <!-- Search Bar -->
                         <div class="relative">
                             <input type="text"
+                                id="roomSearchInput"
                                 placeholder="Tìm tên phòng..."
                                 class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                             <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -198,7 +199,7 @@ Purpose: Build Index house for Landlord
                 <?php if ($selectedHouse && !empty($rooms)): ?>
                 <div class="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
                     <div class="overflow-x-auto">
-                        <table class="w-full">
+                        <table id="roomsTable" class="w-full">
                             <thead class="bg-[#F9FAFB]">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tên phòng</th>
@@ -315,6 +316,75 @@ Purpose: Build Index house for Landlord
 
     <!-- Footer -->
     <?php include 'layouts/footer.php'; ?>
+    
+    <!-- Search Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('roomSearchInput');
+            const roomsTable = document.getElementById('roomsTable');
+            
+            if (searchInput && roomsTable) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const tableRows = roomsTable.querySelectorAll('tbody tr');
+                    
+                    tableRows.forEach(function(row) {
+                        const roomNameCell = row.querySelector('td:first-child span');
+                        if (roomNameCell) {
+                            const roomName = roomNameCell.textContent.toLowerCase();
+                            
+                            if (roomName.includes(searchTerm)) {
+                                row.style.display = '';
+                                row.classList.remove('hidden');
+                            } else {
+                                row.style.display = 'none';
+                                row.classList.add('hidden');
+                            }
+                        }
+                    });
+                    
+                    // Hiển thị thông báo nếu không tìm thấy kết quả
+                    const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+                    const noResultsMessage = document.getElementById('noSearchResults');
+                    
+                    if (visibleRows.length === 0 && searchTerm !== '') {
+                        if (!noResultsMessage) {
+                            const messageRow = document.createElement('tr');
+                            messageRow.id = 'noSearchResults';
+                            messageRow.innerHTML = `
+                                <td colspan="8" class="px-6 py-8 text-center text-gray-500 border border-gray-200">
+                                    <div class="flex flex-col items-center">
+                                        <i class="fas fa-search text-gray-400 text-2xl mb-2"></i>
+                                        <p>Không tìm thấy phòng nào có tên "${searchTerm}"</p>
+                                    </div>
+                                </td>
+                            `;
+                            roomsTable.querySelector('tbody').appendChild(messageRow);
+                        }
+                    } else if (noResultsMessage) {
+                        noResultsMessage.remove();
+                    }
+                });
+                
+                // Xóa kết quả tìm kiếm khi xóa hết text
+                searchInput.addEventListener('keyup', function() {
+                    if (this.value === '') {
+                        const noResultsMessage = document.getElementById('noSearchResults');
+                        if (noResultsMessage) {
+                            noResultsMessage.remove();
+                        }
+                        
+                        // Hiển thị lại tất cả các dòng
+                        const tableRows = roomsTable.querySelectorAll('tbody tr');
+                        tableRows.forEach(function(row) {
+                            row.style.display = '';
+                            row.classList.remove('hidden');
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

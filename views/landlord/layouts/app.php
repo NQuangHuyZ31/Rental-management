@@ -11,6 +11,7 @@ Purpose: Libraries and Dependencies for Landlord Layout
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
+<?= \Core\CSRF::getTokenMeta() ?>
 <!-- Custom Tailwind Config -->
 <script>
     tailwind.config = {

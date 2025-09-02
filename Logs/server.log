@@ -205,3 +205,79 @@ Stack trace:
 #13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
 #14 {main}
   thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
+[2025-09-02 10:26:55] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-02 10:27:05] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[02-Sep-2025 10:38:15 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\service\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(27): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\ServiceController.php(17): Core\ViewRender::render('landlord/servic...')
+#3 [internal function]: App\Controllers\Landlord\ServiceController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(73): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(106): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(103): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(102): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(63): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(53): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
+[02-Sep-2025 10:41:42 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\service\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(27): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\ServiceController.php(17): Core\ViewRender::render('landlord/servic...')
+#3 [internal function]: App\Controllers\Landlord\ServiceController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(73): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(106): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(103): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(102): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(63): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(53): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
+[2025-09-02 10:50:43] [ERROR] {"redirect":null,"message":"success"}
+[2025-09-02 10:50:51] [ERROR] {"redirect":"\/landlord","message":"success","user_id":2}
+[02-Sep-2025 10:56:28 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(29): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\HouseController.php(89): Core\ViewRender::render('landlord/index', Array)
+#3 [internal function]: App\Controllers\Landlord\HouseController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(73): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(106): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(103): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(102): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(63): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(53): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
+[02-Sep-2025 10:56:31 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php:20
+Stack trace:
+#0 C:\xampp\htdocs\Rental-management\views\landlord\index.php(23): include()
+#1 C:\xampp\htdocs\Rental-management\Core\ViewRender.php(29): require_once('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\Rental-management\App\Controllers\landlord\HouseController.php(89): Core\ViewRender::render('landlord/index', Array)
+#3 [internal function]: App\Controllers\Landlord\HouseController->index()
+#4 C:\xampp\htdocs\Rental-management\Core\Router.php(73): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\Rental-management\Core\Router.php(106): Core\Router->Core\{closure}(Array)
+#6 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#7 C:\xampp\htdocs\Rental-management\Core\Router.php(103): Core\Router->runMiddleware(Array, Object(Closure))
+#8 C:\xampp\htdocs\Rental-management\App\Middleware\AuthLandlordMiddleware.php(40): Core\Router->Core\{closure}(Array)
+#9 C:\xampp\htdocs\Rental-management\Core\Router.php(102): App\Middleware\AuthLandlordMiddleware->handle(Array, Object(Closure))
+#10 C:\xampp\htdocs\Rental-management\Core\Router.php(110): Core\Router->Core\{closure}(Array)
+#11 C:\xampp\htdocs\Rental-management\Core\Router.php(63): Core\Router->runMiddleware(Array, Object(Closure))
+#12 C:\xampp\htdocs\Rental-management\Router\web.php(53): Core\Router->handleRequest()
+#13 C:\xampp\htdocs\Rental-management\index.php(42): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+  thrown in C:\xampp\htdocs\Rental-management\views\landlord\layouts\nav.php on line 20
