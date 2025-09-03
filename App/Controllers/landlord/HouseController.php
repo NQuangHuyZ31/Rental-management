@@ -8,22 +8,21 @@
 
 namespace App\Controllers\Landlord;
 
-use App\Controllers\Controller;
-use App\Models\Landlord\House;
+use App\Controllers\Landlord\LandlordController;
 use App\Models\Landlord\Room;
 use Core\Request;
 use Core\Session;
 use Core\ViewRender;
+use Core\CSRF;
 
-class HouseController extends Controller
+class HouseController extends LandlordController
 {
-    private $houseModel;
     private $roomModel;
     private $request;
 
     public function __construct()
     {
-        $this->houseModel = new House();
+        parent::__construct();
         $this->roomModel = new Room();
         $this->request = new Request();
     }
@@ -37,36 +36,16 @@ class HouseController extends Controller
         $user = Session::get('user');
         $ownerId = $user['id'];
 
-        // Lấy danh sách nhà trọ của landlord
-        $houses = $this->houseModel->getHousesByOwnerId($ownerId);
+        // Sử dụng logic chung từ BaseLandlordController
+        [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($ownerId, $this->request->get('house_id'));
 
-        // Xác định nhà trọ được chọn
-        $selectedHouseId = $this->request->input('house_id');
-        $selectedHouse = null;
         $rooms = [];
         $roomStats = [];
 
-        if (!empty($houses)) {
-            if ($selectedHouseId) {
-                // Tìm nhà trọ được chọn
-                foreach ($houses as $house) {
-                    if ($house['id'] == $selectedHouseId) {
-                        $selectedHouse = $house;
-                        break;
-                    }
-                }
-            }
-
-            // Nếu không có nhà trọ được chọn, lấy nhà trọ đầu tiên
-            if (!$selectedHouse) {
-                $selectedHouse = $houses[0];
-            }
-
-            // Lấy danh sách phòng của nhà trọ được chọn
-            if ($selectedHouse) {
-                $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
-                $roomStats = $this->roomModel->getRoomStatistics($selectedHouse['id']);
-            }
+        // Lấy danh sách phòng của nhà trọ được chọn
+        if ($selectedHouse) {
+            $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
+            $roomStats = $this->roomModel->getRoomStatistics($selectedHouse['id']);
         }
 
         // Tính toán dữ liệu cho summary cards
@@ -109,6 +88,12 @@ class HouseController extends Controller
             return;
         }
 
+        // Kiểm tra CSRF token
+        if (!CSRF::validatePostRequest()) {
+            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            return;
+        }
+
         // Lấy thông tin user đã đăng nhập
         $user = Session::get('user');
         $ownerId = $user['id'];
@@ -118,7 +103,6 @@ class HouseController extends Controller
             'owner_id' => $ownerId,
             'house_name' => $this->request->post('house_name'),
             'province' => $this->request->post('province'),
-            'district' => $this->request->post('district'),
             'ward' => $this->request->post('ward'),
             'address' => $this->request->post('address'),
             'payment_date' => $this->request->post('payment_date'),
@@ -128,10 +112,11 @@ class HouseController extends Controller
         ];
 
         // Validate dữ liệu
-        if (empty($houseData['house_name']) || empty($houseData['province']) || 
-            empty($houseData['district']) || empty($houseData['ward']) || 
-            empty($houseData['address']) || empty($houseData['payment_date']) || 
-            empty($houseData['due_date'])) {
+        if (
+            empty($houseData['house_name']) || empty($houseData['province']) ||
+            empty($houseData['ward']) || empty($houseData['address']) ||
+            empty($houseData['payment_date']) || empty($houseData['due_date'])
+        ) {
             $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc');
             return;
         }
@@ -139,7 +124,7 @@ class HouseController extends Controller
         try {
             // Gọi model để tạo nhà trọ
             $result = $this->houseModel->createHouse($houseData);
-            
+
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Tạo nhà trọ thành công!');
             } else {
@@ -158,6 +143,12 @@ class HouseController extends Controller
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            return;
+        }
+
+        // Kiểm tra CSRF token
+        if (!CSRF::validatePostRequest()) {
+            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
             return;
         }
 
@@ -184,7 +175,6 @@ class HouseController extends Controller
         $houseData = [
             'house_name' => $this->request->post('house_name'),
             'province' => $this->request->post('province'),
-            'district' => $this->request->post('district'),
             'ward' => $this->request->post('ward'),
             'address' => $this->request->post('address'),
             'payment_date' => $this->request->post('payment_date'),
@@ -193,10 +183,11 @@ class HouseController extends Controller
         ];
 
         // Validate dữ liệu
-        if (empty($houseData['house_name']) || empty($houseData['province']) || 
-            empty($houseData['district']) || empty($houseData['ward']) || 
-            empty($houseData['address']) || empty($houseData['payment_date']) || 
-            empty($houseData['due_date'])) {
+        if (
+            empty($houseData['house_name']) || empty($houseData['province']) ||
+            empty($houseData['ward']) || empty($houseData['address']) ||
+            empty($houseData['payment_date']) || empty($houseData['due_date'])
+        ) {
             $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc');
             return;
         }
@@ -204,7 +195,7 @@ class HouseController extends Controller
         try {
             // Gọi model để cập nhật nhà trọ
             $result = $this->houseModel->updateHouse($houseId, $houseData);
-            
+
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Cập nhật nhà trọ thành công!');
             } else {
@@ -222,16 +213,16 @@ class HouseController extends Controller
     {
         // Lấy owner_id từ session
         $ownerId = Session::get('user_id');
-        
+
         if (!$ownerId) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng');
             return;
         }
-        
+
         try {
             // Lấy thông tin nhà trọ
             $house = $this->houseModel->getHouseById($houseId, $ownerId);
-            
+
             if ($house) {
                 // Trả về JSON response
                 header('Content-Type: application/json');
@@ -266,6 +257,12 @@ class HouseController extends Controller
             return;
         }
 
+        // Kiểm tra CSRF token
+        if (!CSRF::validatePostRequest()) {
+            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            return;
+        }
+
         // Lấy thông tin user đã đăng nhập
         $user = Session::get('user');
         $ownerId = $user['id'];
@@ -288,7 +285,7 @@ class HouseController extends Controller
         try {
             // Gọi model để xóa nhà trọ (soft delete)
             $result = $this->houseModel->deleteHouse($houseId);
-            
+
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Xóa nhà trọ thành công!');
             } else {
@@ -299,4 +296,3 @@ class HouseController extends Controller
         }
     }
 }
-?>

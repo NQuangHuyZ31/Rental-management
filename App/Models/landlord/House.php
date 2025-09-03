@@ -62,7 +62,6 @@ class House extends Model
         $sql = "UPDATE houses SET 
                 house_name = :house_name, 
                 province = :province, 
-                district = :district, 
                 ward = :ward, 
                 address = :address, 
                 payment_date = :payment_date, 
