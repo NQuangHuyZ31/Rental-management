@@ -282,6 +282,15 @@ class HouseController extends LandlordController
             return;
         }
 
+        // Kiểm tra xem nhà trọ có phòng nào không
+        $roomModel = new Room();
+        $rooms = $roomModel->getRoomsByHouseId($houseId);
+        
+        if (!empty($rooms)) {
+            $this->request->redirectWithError('/landlord', 'Không thể xóa nhà trọ này vì đang có ' . count($rooms) . ' phòng. Vui lòng xóa tất cả phòng trước khi xóa nhà trọ.');
+            return;
+        }
+
         try {
             // Gọi model để xóa nhà trọ (soft delete)
             $result = $this->houseModel->deleteHouse($houseId);

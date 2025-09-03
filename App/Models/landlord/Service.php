@@ -89,6 +89,27 @@ class Service extends Model
         
         return $result ? $result['count'] : 0;
     }
+
+    /**
+     * Lấy danh sách phòng của một dịch vụ
+     */
+    public function getRoomsByServiceId($serviceId, $ownerId)
+    {
+        $query = new QueryBuilder();
+        $result = $query->table('room_services')
+                        ->select('room_services.room_id')
+                        ->join('rooms', 'room_services.room_id', '=', 'rooms.id')
+                        ->join('houses', 'rooms.house_id', '=', 'houses.id')
+                        ->where('room_services.service_id', $serviceId)
+                        ->where('houses.owner_id', $ownerId)
+                        ->get();
+        
+        if ($result) {
+            return array_column($result, 'room_id');
+        }
+        
+        return false;
+    }
     
     /**
      * Gán dịch vụ cho phòng
@@ -100,6 +121,17 @@ class Service extends Model
             'room_id' => $roomId,
             'service_id' => $serviceId
         ]);
+    }
+
+    /**
+     * Xóa tất cả phòng khỏi dịch vụ
+     */
+    public function removeAllRoomsFromService($serviceId)
+    {
+        $query = new QueryBuilder();
+        return $query->table('room_services')
+                    ->where('service_id', $serviceId)
+                    ->delete();
     }
     
     /**
