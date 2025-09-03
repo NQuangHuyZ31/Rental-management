@@ -40,6 +40,11 @@ $router->post('/admin/auth/login', [AuthAdminController::class, 'handleLogin']);
 
 // =============================================================ROUTER LANDLORD==================================================
 $router->get('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/house/create', [HouseController::class, 'create'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/house/update', [HouseController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/house/delete', [HouseController::class, 'delete'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/house/get/{id}', [HouseController::class, 'getHouse'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/service', [ServiceController::class, 'index'],[AuthLandlordMiddleware::class]);
 
 // Route test

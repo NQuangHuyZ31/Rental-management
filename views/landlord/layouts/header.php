@@ -60,7 +60,7 @@ Purpose: Build Header for Landlord Layout
                 </a>
 
                 <!-- Đăng xuất (Logout) -->
-                <a href="#" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <a href="<?= BASE_URL ?>/logout" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-sign-out-alt text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Đăng xuất</span>
                 </a>

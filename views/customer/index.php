@@ -3,7 +3,11 @@
 	Date: 2025-09-01
 	Purpose: provide home page for customer
 -->
+<?php
 
+use Helpers\Format;
+var_dump($rentalHotDeals);
+?>
 <!-- Hero Section with Full Background -->
 <section class="relative min-h-screen bg-gradient-to-br from-teal-400 via-blue-500 to-teal-600 overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/backgroud_plaform.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 	<!-- Main Content -->
@@ -391,176 +395,49 @@
 			<!-- Property Cards Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<!-- Property Card 1 -->
-				<a class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200">
-						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-							<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-								<i class="fas fa-home text-gray-400 text-2xl"></i>
+				<?php foreach ($rentalHotDeals as $rentalHotDeal) { ?>
+					<a class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+						<!-- Image Area -->
+						<div class="relative h-60 bg-gray-200">
+							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+								<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
+									<i class="fas fa-home text-gray-400 text-2xl"></i>
+								</div>
+							</div>
+							<!-- Verified Badge -->
+							<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
+								<i class="fas fa-check text-white mr-1"></i>
+								Đã xác minh
+							</div>
+							<!-- Camera -->
+							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
+								<i class="fas fa-camera text-gray-600"></i>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
 							</div>
 						</div>
-						<!-- Verified Badge -->
-						<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
-							<i class="fas fa-check text-white mr-1"></i>
-							Đã xác minh
-						</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
-						</div>
-					</div>
 
-					<!-- Content Area -->
-					<div class="p-4">
-						<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-							Cho thuê phòng trọ mới 20m2 giá tốt.
-						</h3>
-						<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
-							<i class="fas fa-user text-gray-400 mr-2"></i>
-							<span>Chị Hương - Thanh Trì . Hà Nội</span>
-						</div>
-						<div class="flex items-start justify-between flex-col">
-							<div class="flex items-center gap-2">
-								<span class="text-gray-400 line-through text-sm mr-2">2.700.000₫</span>
-								<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded">8% OFF</span>
+						<!-- Content Area -->
+						<div class="p-4">
+							<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
+								<?= $rentalHotDeal['rental_post_title'] ?>
+							</h3>
+							<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
+								<i class="fas fa-user text-gray-400 mr-2"></i>
+								<span><?= $rentalHotDeal['contact'] ?> - <?= $rentalHotDeal['province'] ?> . <?= $rentalHotDeal['ward'] ?></span>
 							</div>
-							<div class="text-right flex w-full items-center justify-between pt-1">
-								<div class="text-[16px] font-bold text-red-600">2.500.000đ/tháng</div>
-								<div class="text-sm text-gray-600 font-medium mr-3">20m2</div>
-							</div>
-						</div>
-					</div>
-				</a>
-
-				<!-- Property Card 2 -->
-				<a class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200">
-						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-							<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-								<i class="fas fa-building text-gray-400 text-2xl"></i>
+							<div class="flex items-start justify-between flex-col">
+								<div class="flex items-center gap-2">
+									<span class="text-gray-400 line-through text-sm mr-2"><?= Format::forMatPrice($rentalHotDeal['price']) ?>₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded"><?= round(($rentalHotDeal['price'] - $rentalHotDeal['price_discount']) / $rentalHotDeal['price'] * 100) ?>% OFF</span>
+								</div>
+								<div class="text-right flex w-full items-center justify-between pt-1">
+									<div class="text-[16px] font-bold text-red-600"><?= Format::forMatPrice($rentalHotDeal['price_discount']) ?>đ/tháng</div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?= $rentalHotDeal['area'] ?></div>
+								</div>
 							</div>
 						</div>
-						<!-- Verified Badge -->
-						<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
-							<i class="fas fa-check text-white mr-1"></i>
-							Đã xác minh
-						</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
-						</div>
-					</div>
-
-					<!-- Content Area -->
-					<div class="p-4">
-						<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-							Phòng trọ Gò Vấp, mới, full nội thất tại Phường 14, Gò Vấp, Thành p...
-						</h3>
-						<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
-							<i class="fas fa-user text-gray-400 mr-2"></i>
-							<span>Thảo - Gò Vấp . Thành phố Hồ Chí Minh</span>
-						</div>
-						<div class="flex items-start justify-between flex-col">
-							<div class="flex items-center gap-2">
-								<span class="text-gray-400 line-through text-sm mr-2">4.300.000₫</span>
-								<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded">3% OFF</span>
-							</div>
-							<div class="text-right flex w-full items-center justify-between pt-1">
-								<div class="text-[16px] font-bold text-red-600">4.200.000đ/tháng</div>
-								<div class="text-sm text-gray-600 font-medium mr-3">18m2</div>
-							</div>
-						</div>
-					</div>
-				</a>
-
-				<!-- Property Card 3 -->
-				<a class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200">
-						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-							<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-								<i class="fas fa-home text-gray-400 text-2xl"></i>
-							</div>
-						</div>
-						<!-- Verified Badge -->
-						<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
-							<i class="fas fa-check text-white mr-1"></i>
-							Đã xác minh
-						</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
-						</div>
-					</div>
-
-					<!-- Content Area -->
-					<div class="p-4">
-						<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-							Cho thuê phòng trọ Hoàng Quốc Việt, Nghĩa Tân, Cầu Giấy
-						</h3>
-						<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
-							<i class="fas fa-user text-gray-400 mr-2"></i>
-							<span>Huyền - Cầu Giấy . Hà Nội</span>
-						</div>
-						<div class="flex items-start justify-between flex-col">
-							<div class="flex items-center gap-2">
-								<span class="text-gray-400 line-through text-sm mr-2">3.000.000₫</span>
-								<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded">7% OFF</span>
-							</div>
-							<div class="text-right flex w-full items-center justify-between pt-1">
-								<div class="text-[16px] font-bold text-red-600">2.800.000đ/tháng</div>
-								<div class="text-sm text-gray-600 font-medium mr-3">28m2</div>
-							</div>
-						</div>
-					</div>
-				</a>
-
-				<!-- Property Card 4 -->
-				<a class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200">
-						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-							<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-								<i class="fas fa-building text-gray-400 text-2xl"></i>
-							</div>
-						</div>
-						<!-- Verified Badge -->
-						<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
-							<i class="fas fa-check text-white mr-1"></i>
-							Đã xác minh
-						</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
-						</div>
-					</div>
-
-					<!-- Content Area -->
-					<div class="p-4">
-						<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-							Cho thuê căn hộ rộng rãi, an ninh, đầy đủ nội thất H.Nhà Bè
-						</h3>
-						<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
-							<i class="fas fa-user text-gray-400 mr-2"></i>
-							<span>Kitty - Nhà Bè . Hồ Chí Minh</span>
-						</div>
-						<div class="flex items-start justify-between flex-col">
-							<div class="flex items-center gap-2">
-								<span class="text-gray-400 line-through text-sm mr-2">3.300.000₫</span>
-								<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded">25% OFF</span>
-							</div>
-							<div class="text-right flex w-full items-center justify-between pt-1">
-								<div class="text-[16px] font-bold text-red-600">2.500.000đ/tháng</div>
-								<div class="text-sm text-gray-600 font-medium" mr-3>120m2</div>
-							</div>
-						</div>
-					</div>
-				</a>
+					</a>
+				<?php } ?>		
 			</div>
 		</div>
 	</section>
@@ -868,6 +745,326 @@
 						</div>
 					</div>
 				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Latest Rooms Section -->
+	<section class="py-4 bg-white rounded-md">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<!-- Section Header -->
+			<div class="flex items-center mb-4">
+				<div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+					<i class="fas fa-star text-white"></i>
+				</div>
+				<div class="w-1 h-5 rounded-md bg-green-500 mr-4"></div>
+				<div>
+					<h2 class="text-lg font-bold text-green-600">PHÒNG TRỌ - MỚI NHẤT</h2>
+					<p class="text-sm text-gray-600">Phòng vừa được phê duyệt</p>
+				</div>
+			</div>
+
+			<!-- Property Cards Grid - Horizontal Layout -->
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<!-- Property Card 1 -->
+				<div class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+							<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
+								<i class="fas fa-bed text-gray-400 text-lg"></i>
+							</div>
+						</div>
+						<!-- Verified Badge -->
+						<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
+							<i class="fas fa-check text-white mr-1"></i>
+							Đã xác minh
+						</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center">6</span>
+						</div>
+					</div>
+
+					<!-- Content Area -->
+					<div class="p-3 flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
+							Cho thuê studio giường tầng giá rẻ gần Cầu Rồng – Full nội thất, chỉ 4,5 triệu
+						</h3>
+						<div class="flex items-center text-xs text-gray-600 mb-2">
+							<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+							<span class="truncate">K128 H10/36 Nguyễn Văn Linh, Phước Ninh, Hải Châu...</span>
+						</div>
+						<div class="flex items-center justify-between mb-2">
+							<div class="h-11">
+								<div class="flex items-center gap-1 mb-1">
+									<span class="text-gray-400 line-through text-xs">5.000.000₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded">10% OFF</span>
+								</div>
+								<div class="text-base font-bold text-red-600">4.500.000đ/tháng</div>
+							</div>
+							<div class="text-xs text-gray-600 font-medium">15 m2</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center text-xs text-gray-500">
+								<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
+									<i class="fas fa-user text-gray-600 text-[8px]"></i>
+								</div>
+								<span>A Phú</span>
+								<span class="ml-1">1 tuần trước</span>
+							</div>
+							<div class="flex space-x-1">
+								<button class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600">
+									Zalo
+								</button>
+								<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
+									<i class="fas fa-phone mr-1"></i>Xem SĐT
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Property Card 2 -->
+				<div class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+							<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
+								<i class="fas fa-home text-gray-400 text-lg"></i>
+							</div>
+						</div>
+						<!-- Verified Badge -->
+						<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
+							<i class="fas fa-check text-white mr-1"></i>
+							Đã xác minh
+						</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center">5</span>
+						</div>
+					</div>
+
+					<!-- Content Area -->
+					<div class="p-3 flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
+							Cho thuê căn hộ gần Mikazuki Đà Nẵng
+						</h3>
+						<div class="flex items-center text-xs text-gray-600 mb-2">
+							<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+							<span class="truncate">Phan Văn Định, Hòa Khánh Bắc, Liên Chiểu...</span>
+						</div>
+						<div class="flex items-center justify-between mb-2">
+							<div class="h-11">
+								<div class="flex items-center gap-1 mb-1">
+									<span class="text-gray-400 line-through text-xs">3.500.000₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded">14% OFF</span>
+								</div>
+								<div class="text-base font-bold text-red-600">3.000.000đ/tháng</div>
+							</div>
+							<div class="text-xs text-gray-600 font-medium">30 m2</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center text-xs text-gray-500">
+								<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
+									<i class="fas fa-user text-gray-600 text-[8px]"></i>
+								</div>
+								<span>Thanh</span>
+								<span class="ml-1">1 tuần trước</span>
+							</div>
+							<div class="flex space-x-1">
+								<button class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600">
+									Zalo
+								</button>
+								<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
+									<i class="fas fa-phone mr-1"></i>Xem SĐT
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Property Card 4 -->
+				<div class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+							<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
+								<i class="fas fa-home text-gray-400 text-lg"></i>
+							</div>
+						</div>
+						<!-- Verified Badge -->
+						<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
+							<i class="fas fa-check text-white mr-1"></i>
+							Đã xác minh
+						</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center">8</span>
+						</div>
+					</div>
+
+					<!-- Content Area -->
+					<div class="p-3 flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
+							Căn hộ cho thuê full nội thất sạch đẹp tại Hòa Minh, Liên Chiểu, Thành phố Đà Nẵng
+						</h3>
+						<div class="flex items-center text-xs text-gray-600 mb-2">
+							<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+							<span class="truncate">49 Trung Nghĩa 4, Hòa Minh, Liên Chiểu...</span>
+						</div>
+						<div class="flex items-center justify-between mb-2">
+							<div class="h-11">
+								<div class="flex items-center gap-1 mb-1">
+									<span class="text-gray-400 line-through text-xs">6.000.000₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded">17% OFF</span>
+								</div>
+								<div class="text-base font-bold text-red-600">5.000.000đ/tháng</div>
+							</div>
+							<div class="text-xs text-gray-600 font-medium">30 m2</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center text-xs text-gray-500">
+								<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
+									<i class="fas fa-user text-gray-600 text-[8px]"></i>
+								</div>
+								<span>Nga</span>
+								<span class="ml-1">1 tháng trước</span>
+							</div>
+							<div class="flex space-x-1">
+								<button class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600">
+									Zalo
+								</button>
+								<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
+									<i class="fas fa-phone mr-1"></i>Xem SĐT
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Property Card 5 -->
+				<div class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+							<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
+								<i class="fas fa-building text-gray-400 text-lg"></i>
+							</div>
+						</div>
+						<!-- Verified Badge -->
+						<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
+							<i class="fas fa-check text-white mr-1"></i>
+							Đã xác minh
+						</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center">1</span>
+						</div>
+					</div>
+
+					<!-- Content Area -->
+					<div class="p-3 flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
+							Cho thuế phòng trọ Full Nội thất
+						</h3>
+						<div class="flex items-center text-xs text-gray-600 mb-2">
+							<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+							<span class="truncate">Số 10 Đô Độc Lộc, Hòa Xuân, Cẩm Lệ...</span>
+						</div>
+						<div class="flex items-center justify-between mb-2">
+							<div class="h-11">
+								<div class="flex items-center mb-1">
+									<span class="text-white text-nowrap text-[8px] px-1 py-0.5 rounded mr-1"></span>
+								</div>
+								<div class="text-base font-bold text-red-600">4.000.000đ/tháng</div>
+
+							</div>
+							<div class="text-xs text-gray-600 font-medium">25 m2</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center text-xs text-gray-500">
+								<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
+									<i class="fas fa-user text-gray-600 text-[8px]"></i>
+								</div>
+								<span>Minh</span>
+								<span class="ml-1">3 tuần trước</span>
+							</div>
+							<div class="flex space-x-1">
+								<button class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600">
+									Zalo
+								</button>
+								<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
+									<i class="fas fa-phone mr-1"></i>Xem SĐT
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Property Card 6 -->
+				<div class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+						<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+							<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
+								<i class="fas fa-home text-gray-400 text-lg"></i>
+							</div>
+						</div>
+						<!-- Verified Badge -->
+						<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
+							<i class="fas fa-check text-white mr-1"></i>
+							Đã xác minh
+						</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center">6</span>
+						</div>
+					</div>
+
+					<!-- Content Area -->
+					<div class="p-3 flex-1">
+						<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
+							Cho thuể căn hộ có gác lửng Liên Chiểu, Đà Nẵng
+						</h3>
+						<div class="flex items-center text-xs text-gray-600 mb-2">
+							<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+							<span class="truncate">86 phan văn định, Hòa Khánh Bắc, Liên Chiểu...</span>
+						</div>
+						<div class="flex items-center justify-between mb-2">
+							<div class="h-11">
+								<div class="flex items-center mb-1 gap-1">
+									<span class="text-gray-400 line-through text-xs">4.000.000₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded">20% OFF</span>
+								</div>
+								<div class="text-base font-bold text-red-600">3.200.000đ/tháng</div>
+							</div>
+							<div class="text-xs text-gray-600 font-medium">40 m2</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center text-xs text-gray-500">
+								<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
+									<i class="fas fa-user text-gray-600 text-[8px]"></i>
+								</div>
+								<span>Thanh</span>
+								<span class="ml-1">1 tuần trước</span>
+							</div>
+							<div class="flex space-x-1">
+								<button class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600">
+									Zalo
+								</button>
+								<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
+									<i class="fas fa-phone mr-1"></i>Xem SĐT
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>

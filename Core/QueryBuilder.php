@@ -319,7 +319,7 @@ class QueryBuilder {
         $this->logQuery($sql, $data, 'INSERT');
 
         if ($this->getCurrentUserId()) {
-            $this->logActivityDB($sql, 'INSERT');
+            $this->logActivityDB($sql, 'CREATE');
         }
 
         try {

@@ -148,8 +148,8 @@
                         <span class="text-sm">Văn phòng</span>
                     </a>
                     <a href="#" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="roommate">
-                        <div class="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center">
-                            <i class="fas fa-users text-green-600"></i>
+                        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-gray-600"></i>
                         </div>
                         <span class="text-sm font-medium">Ở ghép & pass phòng</span>
                     </a>

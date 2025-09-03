@@ -71,4 +71,66 @@ Purpose: Libraries and Dependencies for Landlord Layout
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+
+    // Configure SweetAlert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    // Function to show success message
+    function showSuccessMessage(message) {
+        Toast.fire({
+            icon: 'success',
+            title: message
+        });
+    }
+
+    // Function to show error message
+    function showErrorMessage(message) {
+        Toast.fire({
+            icon: 'error',
+            title: message
+        });
+    }
+
+    // Function to show warning message
+    function showWarningMessage(message) {
+        Toast.fire({
+            icon: 'warning',
+            title: message
+        });
+    }
+
+    // Function to show info message
+    function showInfoMessage(message) {
+        Toast.fire({
+            icon: 'info',
+            title: message
+        });
+    }
+
+    // Check for flash messages on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php
+        $request = new \Core\Request();
+        $successMessage = $request->getFlashData('success');
+        $errorMessage = $request->getFlashData('error');
+        ?>
+        
+        <?php if ($successMessage): ?>
+            showSuccessMessage('<?= addslashes($successMessage) ?>');
+        <?php endif; ?>
+        
+        <?php if ($errorMessage): ?>
+            showErrorMessage('<?= addslashes($errorMessage) ?>');
+        <?php endif; ?>
+    });
 </script>

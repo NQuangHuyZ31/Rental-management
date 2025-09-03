@@ -22,6 +22,7 @@ Purpose: Build Index house for Landlord
     <!-- Navigation Menu -->
     <?php include 'layouts/nav.php'; ?>
 
+    <?php if (!empty($houses)): ?>
     <!-- Room Management Dashboard -->
     <main class="min-h-screen bg-gray-100 w-full">
         <div class="w-full px-4 py-6">
@@ -37,7 +38,7 @@ Purpose: Build Index house for Landlord
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Tổng số tiền khách nợ</p>
-                                    <p class="text-red-500 font-bold text-lg">0₫</p>
+                                    <p class="text-red-500 font-bold text-lg"><?= number_format($totalDebt) ?>₫</p>
                                 </div>
                             </div>
                             <i class="fas fa-arrow-right text-gray-400"></i>
@@ -53,7 +54,7 @@ Purpose: Build Index house for Landlord
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Tổng số tiền cọc</p>
-                                    <p class="text-green-500 font-bold text-lg">0₫</p>
+                                    <p class="text-green-500 font-bold text-lg"><?= number_format($totalDeposit) ?>₫</p>
                                 </div>
                             </div>
                             <i class="fas fa-arrow-right text-gray-400"></i>
@@ -69,7 +70,7 @@ Purpose: Build Index house for Landlord
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Tổng số tiền cọc giữ chỗ phòng</p>
-                                    <p class="text-green-500 font-bold text-lg">0₫</p>
+                                    <p class="text-green-500 font-bold text-lg"><?= number_format($totalReservationDeposit) ?>₫</p>
                                 </div>
                             </div>
                             <i class="fas fa-arrow-right text-gray-400"></i>
@@ -85,7 +86,7 @@ Purpose: Build Index house for Landlord
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Sự cố phòng</p>
-                                    <p class="text-red-500 font-bold text-lg">0 Vấn đề</p>
+                                    <p class="text-red-500 font-bold text-lg"><?= $maintenanceIssues ?> Vấn đề</p>
                                 </div>
                             </div>
                             <i class="fas fa-arrow-right text-gray-400"></i>
@@ -104,7 +105,13 @@ Purpose: Build Index house for Landlord
                                 <div class="w-1 h-6 bg-green-600 mx-3"></div>
                                 Quản lý danh sách phòng
                             </h1>
-                            <p class="text-gray-600 mt-2">Tất cả danh sách phòng trong Nhà trọ Vô Hạn Thành</p>
+                            <p class="text-gray-600 mt-2">
+                                <?php if ($selectedHouse): ?>
+                                    Tất cả danh sách phòng trong <?= htmlspecialchars($selectedHouse['house_name']) ?>
+                                <?php else: ?>
+                                    Vui lòng chọn nhà để xem danh sách phòng
+                                <?php endif; ?>
+                            </p>
                         </div>
 
                         <div class="flex items-center space-x-3">
@@ -188,52 +195,66 @@ Purpose: Build Index house for Landlord
                 </div>
 
                 <!-- Room List Table -->
+                <?php if ($selectedHouse && !empty($rooms)): ?>
                 <div class="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead class="bg-[#F9FAFB]">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tên phòng</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Nhóm</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tầng</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Diện tích</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Giá thuê</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tiền cọc</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tiền nợ</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Khách thuê</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Ngày lập hóa đơn</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Ngày vào ở</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Số người tối đa</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tình trạng</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tài chính</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200"></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-[#FFF5F2]">
+                                <?php foreach ($rooms as $room): ?>
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <span class="text-sm font-medium text-gray-900">201</span>
+                                        <span class="text-sm font-medium text-gray-900"><?= htmlspecialchars($room['room_name']) ?></span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">Tầng trệt</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200"><?= htmlspecialchars($room['floor']) ?></td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <div class="text-sm font-medium text-gray-900">2.000.000 ₫</div>
-                                        <div class="text-sm text-red-500">Chưa thu lần nào</div>
+                                        <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($room['area']) ?> m²</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">0 ₫</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">0 ₫</td>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
+                                        <div class="text-sm font-medium text-gray-900"><?= number_format($room['room_price']) ?> ₫</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200"><?= number_format($room['deposit']) ?> ₫</td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
                                         <div class="flex items-center">
                                             <i class="fas fa-user text-gray-400 mr-1"></i>
-                                            <span class="text-sm text-gray-900">0/1 người</span>
+                                            <span class="text-sm text-gray-900"><?= htmlspecialchars($room['max_people']) ?> người</span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">Ngày 10</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">Không xác định</td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
-                                            Đang trống
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            Chờ kỳ thu tới
+                                        <?php
+                                        $statusClass = '';
+                                        $statusText = '';
+                                        switch($room['room_status']) {
+                                            case 'available':
+                                                $statusClass = 'bg-green-100 text-green-800';
+                                                $statusText = 'Đang trống';
+                                                break;
+                                            case 'occupied':
+                                                $statusClass = 'bg-blue-100 text-blue-800';
+                                                $statusText = 'Đã thuê';
+                                                break;
+                                            case 'maintenance':
+                                                $statusClass = 'bg-orange-100 text-orange-800';
+                                                $statusText = 'Bảo trì';
+                                                break;
+                                            default:
+                                                $statusClass = 'bg-gray-100 text-gray-800';
+                                                $statusText = 'Không xác định';
+                                        }
+                                        ?>
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full <?= $statusClass ?>">
+                                            <?= $statusText ?>
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium border border-gray-200">
@@ -242,19 +263,30 @@ Purpose: Build Index house for Landlord
                                         </button>
                                     </td>
                                 </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <?php elseif ($selectedHouse && empty($rooms)): ?>
+                <div class="text-center py-12">
+                    <div class="mb-4">
+                        <i class="fas fa-door-open text-gray-400 text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Chưa có phòng nào</h3>
+                    <p class="text-gray-500">Nhà này chưa có phòng nào được tạo.</p>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </main>
 
+    <?php else: ?>
     <!-- Non house content -->
-    <!-- <main class="min-h-screen flex items-center bg-white pt-20">
+    <main class="min-h-screen flex items-center bg-white pt-20">
         <div class="max-w-4xl mx-auto text-center px-4 -mt-80">
             <div class="mb-12">
-                <img src="../../Public/images/admin/empty-houses.jpg" 
+                <img src="<?= BASE_URL ?>/Public/images/admin/empty-houses.jpg" 
                      alt="Empty Houses" 
                      class="w-64 h-64 mx-auto object-cover">
             </div>
@@ -278,7 +310,8 @@ Purpose: Build Index house for Landlord
                 </button>
             </div>
         </div>
-    </main> -->
+    </main>
+    <?php endif; ?>
 
     <!-- Footer -->
     <?php include 'layouts/footer.php'; ?>
