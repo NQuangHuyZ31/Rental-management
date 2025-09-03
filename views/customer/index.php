@@ -6,7 +6,7 @@
 <?php
 
 use Helpers\Format;
-var_dump($rentalHotDeals);
+
 ?>
 <!-- Hero Section with Full Background -->
 <section class="relative min-h-screen bg-gradient-to-br from-teal-400 via-blue-500 to-teal-600 overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/backgroud_plaform.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
