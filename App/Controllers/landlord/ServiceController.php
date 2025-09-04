@@ -56,6 +56,11 @@ class ServiceController extends LandlordController
                 
                 // Tạo unit_vi dựa trên unit
                 $service['unit_vi'] = $this->getUnitVietnamese($service['unit']);
+                
+                // Kiểm tra có thể xóa dịch vụ không
+                $canDelete = $this->serviceModel->canDeleteService($service['id'], $userId);
+                $service['can_delete'] = $canDelete['can_delete'];
+                $service['delete_reason'] = $canDelete['reason'];
             }
         }
         
@@ -108,8 +113,8 @@ class ServiceController extends LandlordController
         // Validate dữ liệu
         if (empty($serviceData['house_id']) || empty($serviceData['service_name']) || 
             empty($serviceData['service_price']) || empty($serviceData['service_type']) || 
-            empty($serviceData['unit']) || empty($selectedRooms)) {
-            $this->request->redirectWithError('/landlord/service', 'Vui lòng điền đầy đủ thông tin bắt buộc và chọn ít nhất một phòng');
+            empty($serviceData['unit'])) {
+            $this->request->redirectWithError('/landlord/service', 'Vui lòng điền đầy đủ thông tin bắt buộc');
             return;
         }
 
@@ -127,9 +132,11 @@ class ServiceController extends LandlordController
             $serviceId = $this->serviceModel->createService($serviceData);
             
             if ($serviceId) {
-                // Gán dịch vụ cho các phòng được chọn
-                foreach ($selectedRooms as $roomId) {
-                    $this->serviceModel->assignServiceToRoom($roomId, $serviceId);
+                // Gán dịch vụ cho các phòng được chọn (nếu có)
+                if (!empty($selectedRooms)) {
+                    foreach ($selectedRooms as $roomId) {
+                        $this->serviceModel->assignServiceToRoom($roomId, $serviceId);
+                    }
                 }
                 
                 // Commit transaction
@@ -186,8 +193,8 @@ class ServiceController extends LandlordController
         // Validate dữ liệu
         if (empty($serviceId) || empty($serviceData['service_name']) || 
             empty($serviceData['service_price']) || empty($serviceData['service_type']) || 
-            empty($serviceData['unit']) || empty($selectedRooms)) {
-            $this->request->redirectWithError('/landlord/service', 'Vui lòng điền đầy đủ thông tin bắt buộc và chọn ít nhất một phòng');
+            empty($serviceData['unit'])) {
+            $this->request->redirectWithError('/landlord/service', 'Vui lòng điền đầy đủ thông tin bắt buộc');
             return;
         }
 
@@ -208,9 +215,11 @@ class ServiceController extends LandlordController
                 // Xóa tất cả phòng cũ của dịch vụ
                 $this->serviceModel->removeAllRoomsFromService($serviceId);
                 
-                // Gán dịch vụ cho các phòng mới được chọn
-                foreach ($selectedRooms as $roomId) {
-                    $this->serviceModel->assignServiceToRoom($roomId, $serviceId);
+                // Gán dịch vụ cho các phòng mới được chọn (nếu có)
+                if (!empty($selectedRooms)) {
+                    foreach ($selectedRooms as $roomId) {
+                        $this->serviceModel->assignServiceToRoom($roomId, $serviceId);
+                    }
                 }
                 
                 // Commit transaction
@@ -323,14 +332,8 @@ class ServiceController extends LandlordController
         }
 
         try {
-            // Debug logging
-            error_log("ServiceController::getUsageByMonth - houseId: $houseId, month: $month, year: $year");
-            
             // Lấy dữ liệu sử dụng theo tháng
             $usageData = $this->serviceUsageModel->getUsageByMonthAndHouse($houseId, $month, $year);
-            
-            // Debug logging
-            error_log("ServiceController::getUsageByMonth - usageData: " . json_encode($usageData));
             
             if ($usageData !== false) {
                 if (empty($usageData)) {
@@ -347,9 +350,6 @@ class ServiceController extends LandlordController
                 // Xử lý dữ liệu để hiển thị theo format mong muốn
                 $processedData = $this->processUsageDataForDisplay($usageData);
                 
-                // Debug logging
-                error_log("ServiceController::getUsageByMonth - processedData: " . json_encode($processedData));
-                
                 header('Content-Type: application/json');
                 echo json_encode([
                     'success' => true,
@@ -363,7 +363,6 @@ class ServiceController extends LandlordController
                 ]);
             }
         } catch (\Exception $e) {
-            error_log("ServiceController::getUsageByMonth - Exception: " . $e->getMessage());
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
@@ -402,5 +401,49 @@ class ServiceController extends LandlordController
         }
         
         return array_values($rooms);
+    }
+
+    /**
+     * Xóa dịch vụ
+     */
+    public function delete()
+    {
+        // Kiểm tra request method
+        if (!$this->request->isPost()) {
+            $this->request->redirectWithError('/landlord/service', 'Phương thức không hợp lệ');
+            return;
+        }
+
+        // Kiểm tra CSRF token
+        if (!CSRF::validatePostRequest()) {
+            $this->request->redirectWithError('/landlord/service', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            return;
+        }
+
+        // Lấy thông tin user đã đăng nhập
+        $user = Session::get('user');
+        $ownerId = $user['id'];
+
+        // Lấy service_id từ request
+        $serviceId = $this->request->post('service_id');
+
+        // Validate dữ liệu
+        if (empty($serviceId)) {
+            $this->request->redirectWithError('/landlord/service', 'Thiếu thông tin dịch vụ cần xóa');
+            return;
+        }
+
+        try {
+            // Xóa dịch vụ
+            $result = $this->serviceModel->deleteService($serviceId, $ownerId);
+            
+            if ($result['success']) {
+                $this->request->redirectWithSuccess('/landlord/service', $result['message']);
+            } else {
+                $this->request->redirectWithError('/landlord/service', $result['message']);
+            }
+        } catch (\Exception $e) {
+            $this->request->redirectWithError('/landlord/service', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
 }

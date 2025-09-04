@@ -27,8 +27,8 @@
         <div class="bg-white min-h-screen p-6">
             <div class="max-w-full mx-auto">
                 <div class="flex gap-8">
-                    <!-- Left Column: Service Management (30%) -->
-                    <div class="w-1/3">
+                    <!-- Left Column: Service Management (25%) -->
+                    <div class="w-1/4">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="w-1 h-8 bg-green-600 mr-3"></div>
@@ -67,7 +67,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                             </button>
-                                            <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                            <button onclick="deleteService(<?= $service['id'] ?>, '<?= htmlspecialchars($service['service_name']) ?>', <?= $service['can_delete'] ? 'true' : 'false' ?>, '<?= htmlspecialchars($service['delete_reason']) ?>')" class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors" title="Xóa dịch vụ">
                                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -94,8 +94,8 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Tenant Usage Statistics (70%) -->
-                    <div class="w-2/3">
+                    <!-- Right Column: Tenant Usage Statistics (75%) -->
+                    <div class="w-3/4">
                         <div class="flex items-center mb-6">
                             <div class="w-1 h-8 bg-green-600 mr-3"></div>
                             <div>
@@ -163,8 +163,11 @@
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300" colspan="2">Tiền nước</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300" colspan="2">Tiền rác</th>
                                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300" colspan="2">Tiền wifi</th>
+                                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300" colspan="2">Tiền xe</th>
                                     </tr>
                                     <tr>
+                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300">Sử dụng</th>
+                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300">Thành tiền</th>
                                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300">Sử dụng</th>
                                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300">Thành tiền</th>
                                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-900 tracking-wider border border-gray-300">Sử dụng</th>
@@ -208,8 +211,8 @@
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
 
     <!-- Modal thêm dịch vụ mới -->
-    <div id="addServiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+    <div id="addServiceModal" class="modal-container hidden">
+        <div class="modal-content flex flex-col overflow-hidden">
             <!-- Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0 bg-white">
                 <div class="flex items-center">
@@ -301,8 +304,8 @@
                             <div class="flex items-center">
                                 <div class="w-1 h-8 bg-green-600 mr-3"></div>
                                 <div>
-                                    <h3 class="text-base font-medium text-gray-800">Chọn phòng muốn áp dụng:</h3>
-                                    <p class="text-gray-600 italic mt-1 text-sm">Danh sách phòng chọn áp dụng</p>
+                                    <h3 class="text-base font-medium text-gray-800">Chọn phòng muốn áp dụng: <span class="text-gray-500 text-sm font-normal">(Tùy chọn)</span></h3>
+                                    <p class="text-gray-600 italic mt-1 text-sm">Danh sách phòng chọn áp dụng - có thể để trống</p>
                                 </div>
                             </div>
                             <div class="flex items-center">
@@ -322,7 +325,10 @@
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="col-span-2 text-center text-gray-500 py-4">
-                                    Chưa có phòng nào trong nhà này
+                                    <div class="text-sm">
+                                        <p>Chưa có phòng nào trong nhà này</p>
+                                        <p class="text-xs mt-1">Bạn vẫn có thể tạo dịch vụ và gán phòng sau</p>
+                                    </div>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -356,7 +362,15 @@
             // Get current date
             const now = new Date();
             let currentYear = now.getFullYear();
-            let selectedMonth = (now.getMonth() + 1).toString().padStart(2, '0');
+
+            // Set mặc định là tháng trước (tháng đã kết thúc)
+            let selectedMonth = now.getMonth(); // getMonth() trả về 0-11, tháng trước sẽ là tháng hiện tại - 1
+            if (selectedMonth === 0) {
+                // Nếu tháng hiện tại là tháng 1 (0), thì tháng trước là tháng 12 của năm trước
+                selectedMonth = 12;
+                currentYear = now.getFullYear() - 1;
+            }
+            selectedMonth = selectedMonth.toString().padStart(2, '0');
 
             // Toggle picker visibility
             function togglePicker() {
@@ -410,7 +424,7 @@
                     updateInput();
                     highlightSelectedMonth();
                     togglePicker();
-                    
+
                     // Load dữ liệu sử dụng cho tháng được chọn
                     loadUsageData(selectedMonth, currentYear);
                 });
@@ -427,8 +441,8 @@
             updateInput(); // Set initial value in input
             updateYearDisplay();
             highlightSelectedMonth();
-            
-            // Load dữ liệu ban đầu cho tháng hiện tại
+
+            // Load dữ liệu ban đầu cho tháng trước (tháng đã kết thúc)
             loadUsageData(selectedMonth, currentYear);
         });
 
@@ -539,6 +553,60 @@
             document.getElementById('serviceForm').action = '<?= BASE_URL ?>/landlord/service/update';
         }
 
+        function deleteService(serviceId, serviceName, canDelete, deleteReason) {
+            if (!canDelete) {
+                // Không thể xóa - hiển thị thông báo lý do
+                Swal.fire({
+                    title: 'Không thể xóa dịch vụ',
+                    text: deleteReason,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đóng'
+                });
+                return;
+            }
+
+            // Có thể xóa - hiển thị xác nhận
+            Swal.fire({
+                title: 'Xác nhận xóa dịch vụ',
+                text: `Bạn có chắc chắn muốn xóa dịch vụ "${serviceName}"?Dịch vụ sẽ được gỡ bỏ khỏi tất cả phòng trống.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa dịch vụ',
+                cancelButtonText: 'Hủy bỏ',
+                focusCancel: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tạo form để gửi request xóa
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '<?= BASE_URL ?>/landlord/service/delete';
+
+                    // Thêm CSRF token
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrf_token';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+
+                    // Thêm service_id
+                    const serviceIdInput = document.createElement('input');
+                    serviceIdInput.type = 'hidden';
+                    serviceIdInput.name = 'service_id';
+                    serviceIdInput.value = serviceId;
+                    form.appendChild(serviceIdInput);
+
+                    // Thêm form vào body và submit
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+
+
         // Select all rooms
         function selectAllRooms() {
             const roomCheckboxes = document.querySelectorAll('input[name="rooms[]"]');
@@ -590,10 +658,7 @@
                 return false;
             }
 
-            if (selectedRooms.length === 0) {
-                alert('Vui lòng chọn ít nhất một phòng!');
-                return false;
-            }
+            // Không bắt buộc chọn phòng - có thể để trống
 
             return true;
         }
@@ -646,14 +711,18 @@
         });
 
         // ==================== USAGE DATA LOADING ====================
-        
+
         /**
          * Load dữ liệu sử dụng dịch vụ theo tháng
          */
         function loadUsageData(month, year) {
             const houseId = '<?= $selectedHouse['id'] ?? '' ?>';
-            console.log('loadUsageData called with:', { month, year, houseId });
-            
+            console.log('loadUsageData called with:', {
+                month,
+                year,
+                houseId
+            });
+
             if (!houseId) {
                 console.log('No house selected');
                 showEmptyState('Chưa chọn nhà trọ');
@@ -662,10 +731,10 @@
 
             // Hiển thị loading
             showLoadingState();
-            
+
             const apiUrl = `<?= BASE_URL ?>/landlord/service/usage?house_id=${houseId}&month=${month}&year=${year}`;
             console.log('Calling API:', apiUrl);
-            
+
             // Gọi API để lấy dữ liệu
             fetch(apiUrl)
                 .then(response => {
@@ -699,7 +768,7 @@
         function renderUsageTable(roomsData) {
             const tbody = document.getElementById('usageTableBody');
             console.log('renderUsageTable called with:', roomsData);
-            
+
             if (!roomsData || roomsData.length === 0) {
                 console.log('No data to render');
                 showEmptyState('Không có dữ liệu sử dụng cho tháng này');
@@ -712,7 +781,7 @@
 
             // Tạo HTML cho bảng
             let html = '';
-            
+
             // Dữ liệu đã được xử lý từ backend, chỉ cần render trực tiếp
             roomsData.forEach(room => {
                 console.log('Rendering room:', room);
@@ -725,10 +794,11 @@
                         ${renderServiceColumns(room.services, 'water')}
                         ${renderServiceColumns(room.services, 'garbage')}
                         ${renderServiceColumns(room.services, 'internet')}
+                        ${renderServiceColumns(room.services, 'parking')}
                     </tr>
                 `;
             });
-            
+
             console.log('Generated HTML:', html);
             tbody.innerHTML = html;
         }
@@ -737,10 +807,13 @@
          * Render cột dịch vụ
          */
         function renderServiceColumns(services, serviceType) {
-            console.log('renderServiceColumns called with:', { services, serviceType });
-            
+            console.log('renderServiceColumns called with:', {
+                services,
+                serviceType
+            });
+
             const service = services[serviceType];
-            
+
             if (!service) {
                 console.log(`No service found for type: ${serviceType}`);
                 return `
@@ -750,10 +823,10 @@
             }
 
             console.log(`Service found for ${serviceType}:`, service);
-            
+
             const usageText = service.usage_amount > 0 ? service.usage_amount + ' ' + service.unit_vi : '-';
             const amountText = service.total_amount > 0 ? formatCurrency(service.total_amount) : '-';
-            
+
             return `
                 <td class="px-4 py-3 text-sm text-gray-900 text-center border border-gray-300">${usageText}</td>
                 <td class="px-4 py-3 text-sm text-gray-900 text-center border border-gray-300">${amountText}</td>

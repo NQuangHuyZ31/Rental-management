@@ -51,6 +51,53 @@ Purpose: Libraries and Dependencies for Landlord Layout
         font-size: 12px;
         font-weight: bold;
     }
+    
+    /* SweetAlert2 Layout Fix */
+    .swal2-container {
+        z-index: 9999 !important;
+    }
+    
+    .swal2-html-container {
+        overflow: visible !important;
+    }
+    
+    /* Modal Layout Fix - Chỉ sửa để không vỡ layout */
+    .modal-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 1rem !important;
+        z-index: 9999 !important;
+    }
+    
+    .modal-container.hidden {
+        display: none !important;
+    }
+    
+    .modal-content {
+        background: white !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        width: 100% !important;
+        max-width: 32rem !important;
+    }
+    
+    .modal-content.large {
+        max-width: 48rem !important;
+    }
+    
+    /* Đảm bảo modal content không làm vỡ layout */
+    .modal-content * {
+        box-sizing: border-box !important;
+    }
 </style>
 
 <script>
