@@ -226,7 +226,7 @@ class Service extends Model
                 $occupiedRoomCount = $result ? $result['count'] : 0;
                 
                 if ($occupiedRoomCount > 0) {
-                    return ['can_delete' => false, 'reason' => 'Không thể xóa dịch vụ đang được sử dụng bởi ' . $occupiedRoomCount . ' phòng có khách thuê'];
+                    return ['can_delete' => false, 'reason' => 'Dịch vụ đang được sử dụng bởi ' . $occupiedRoomCount . ' phòng có khách thuê'];
                 }
                 
                 // Có phòng sử dụng nhưng không có khách thuê - có thể xóa

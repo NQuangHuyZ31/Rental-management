@@ -11,6 +11,7 @@ use Core\Router;
 // Landlord Controller
 use App\Controllers\Landlord\HouseController;
 use App\Controllers\Landlord\ServiceController;
+use App\Controllers\Landlord\AmenityController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Middleware\AuthAdminMiddleware;
@@ -51,6 +52,12 @@ $router->post('/landlord/service/update', [ServiceController::class, 'update'],[
 $router->post('/landlord/service/delete', [ServiceController::class, 'delete'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/service/get-rooms/{id}', [ServiceController::class, 'getServiceRooms'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/service/usage', [ServiceController::class, 'getUsageByMonth'],[AuthLandlordMiddleware::class]);
+
+$router->get('/landlord/amenity', [AmenityController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/amenity/create', [AmenityController::class, 'create'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/amenity/update', [AmenityController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/amenity/delete', [AmenityController::class, 'delete'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/amenity/get-rooms/{id}', [AmenityController::class, 'getAmenityRooms'],[AuthLandlordMiddleware::class]);
 
 // Route test
 $router->get('/test', [TestController::class, 'index']);

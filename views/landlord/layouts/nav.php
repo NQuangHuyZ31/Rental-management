@@ -65,7 +65,7 @@ Purpose: Build Nav for Landlord Layout
             </a>
 
             <!-- Tài sản -->
-            <a href="#" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
+            <a href="<?= BASE_URL ?>/landlord/amenity" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
                 <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mb-2">
                     <i class="fas fa-couch text-white text-lg"></i>
                 </div>

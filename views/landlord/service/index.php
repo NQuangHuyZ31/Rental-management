@@ -57,7 +57,7 @@
                                             </div>
                                             <div>
                                                 <h3 class="font-semibold text-gray-800"><?= htmlspecialchars($service['service_name']) ?> (<?= htmlspecialchars($service['unit_vi']) ?>)</h3>
-                                                <p class="text-gray-600 text-sm"><?= number_format($service['service_price']) ?>đ/ <?= htmlspecialchars($service['unit_vi']) ?></p>
+                                                <p class="text-gray-600 text-sm"><?= \Helpers\Format::forMatPrice($service['service_price']) ?>đ/ <?= htmlspecialchars($service['unit_vi']) ?></p>
                                                 <p class="text-green-600 text-sm">Đang áp dụng cho <?= $service['room_count'] ?? 0 ?> phòng</p>
                                             </div>
                                         </div>
@@ -569,7 +569,7 @@
             // Có thể xóa - hiển thị xác nhận
             Swal.fire({
                 title: 'Xác nhận xóa dịch vụ',
-                text: `Bạn có chắc chắn muốn xóa dịch vụ "${serviceName}"?Dịch vụ sẽ được gỡ bỏ khỏi tất cả phòng trống.`,
+                html: `Bạn có chắc chắn muốn xóa dịch vụ "<strong>${serviceName}</strong>"?<br>Dịch vụ sẽ được gỡ bỏ khỏi tất cả phòng trống.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -834,13 +834,10 @@
         }
 
         /**
-         * Format tiền tệ
+         * Format tiền tệ (giống Helper/Format::forMatPrice)
          */
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(amount);
+            return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
         }
 
         /**
