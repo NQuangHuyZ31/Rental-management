@@ -14,9 +14,9 @@ class UploadClound
 
     Configuration::instance([
       'cloud' => [
-        'cloud_name' => clound_name,
-        'api_key' => clound_api_key,
-        'api_secret' => clound_api_serect
+        'cloud_name' => CLOUD_NAME,
+        'api_key' => CLOUD_API_KEY,
+        'api_secret' => CLOUD_API_SECRET
       ],
       'url' => [
         'secure' => true
@@ -26,7 +26,7 @@ class UploadClound
     $data = (new UploadApi())->upload($file, [
       'public_id' =>  $path,
 
-      'folder' => 'whr_images/' . $folder . ''
+      'folder' => 'rental_management/' . $folder . ''
     ]);
 
     return $data['secure_url'];
@@ -82,9 +82,9 @@ class UploadClound
     // Cấu hình Cloudinary
     $config = Configuration::instance([
       'cloud' => [
-        'cloud_name' => clound_name,
-        'api_key' => clound_api_key,
-        'api_secret' => clound_api_serect
+        'cloud_name' => CLOUD_NAME,
+        'api_key' => CLOUD_API_KEY,
+        'api_secret' => CLOUD_API_SECRET
       ],
       'url' => [
         'secure' => true

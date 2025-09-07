@@ -37,5 +37,6 @@
     <script src="<?=BASE_URL?>/Public/js/app.js"></script>
     <script src="<?=BASE_URL?>/Public/js/auth.js"></script>
     <script src="<?=BASE_URL?>/Public/js/index.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/customer-layout.js"></script>
 </body>
 </html>

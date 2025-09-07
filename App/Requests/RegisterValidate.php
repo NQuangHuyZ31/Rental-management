@@ -27,8 +27,8 @@ class RegisterValidate
     }
 
     // Kiểm tra hợp lệ username
-    else if (!preg_match('/^[a-zA-ZÀ-Ỵà-ỵ\s]+$/u', $data['username'])) {
-      $error = 'Tên người dùng không đúng định dạng. Ví dụ: Nguyễn Văn A';
+    elseif (!preg_match('/^(?=.*\s)[a-zA-ZÀ-Ỵà-ỵ\s\'-]+$/u', $data['username'])) {
+      $error = 'Tên người dùng phải có ít nhất hai từ. Ví dụ: Nguyễn Quang Huy';
     }
 
     // Kiểm tra email đúng dạng

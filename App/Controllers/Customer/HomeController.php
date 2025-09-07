@@ -31,6 +31,26 @@ class HomeController extends Controller {
 									->select(['id', 'rental_post_title', 'contact', 'phone', 'price', 'price_discount', 'area', 'province', 'ward', 'image_primary', 'images'])
 									->where('deleted', 0)->where('status', 'active')
 									->where('approval_status', 'approved')->orderBy('price_discount', 'asc')->limit(8)->get();
-		ViewRender::renderWithLayout('customer/index', ['title' => $this->title, 'subNav' => $this->subNav, 'rentalHotDeals' => $rentalHotDeals],'customer/layouts/app');
+		
+		$rentalStayNow = $this->queryBuilder->table('rental_posts')
+									->select(['id', 'rental_post_title', 'contact', 'phone', 'price', 'price_discount', 'area', 'province', 'ward', 'image_primary', 'images'])
+									->where('deleted', 0)->where('status', 'active')
+									->where('stay_start_date', '>=', date('Y-m-d'))
+									->where('approval_status', 'approved')->limit(8)->get();
+
+		$rentalNewPosts = $this->queryBuilder->table('rental_posts')
+									->select(['id', 'rental_post_title', 'contact', 'phone', 'price', 'price_discount', 'area', 'province', 'ward', 'image_primary', 'images'])
+									->where('deleted', 0)->where('status', 'active')
+									->where('approval_status', 'approved')->orderBy('created_at', 'desc')->limit(10)->get();
+		
+		ViewRender::renderWithLayout('customer/index', 
+		[
+			'title' => $this->title, 
+			'subNav' => $this->subNav, 
+			'rentalHotDeals' => $rentalHotDeals, 
+			'rentalStayNow' => $rentalStayNow,
+			'rentalNewPosts' => $rentalNewPosts
+		]
+		,'customer/layouts/app');
 	}
 }

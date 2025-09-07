@@ -83,6 +83,14 @@ class QueryBuilder {
 
     /**
      * Where OR clause
+     * 
+     * Usage examples:
+     * 
+     * For query: SELECT * FROM table WHERE deleted = 0 AND (status = 1 OR status = 2)
+     * Use: $qb->where('deleted', 0)->whereOr('status', 1)->whereOr('status', 2)
+     * 
+     * For query: SELECT * FROM table WHERE (deleted = 0 OR deleted = 1) AND owner_id = 2  
+     * Use: $qb->whereOr('deleted', 0)->whereOr('deleted', 1)->where('owner_id', 2)
      */
     public function whereOr($column, $operator, $value = null)
     {
@@ -514,7 +522,7 @@ class QueryBuilder {
      */
     private function buildWhereClause()
     {
-        $conditions = [];
+        $allConditions = [];
         
         // Add AND conditions
         foreach ($this->where as $condition) {
@@ -526,16 +534,16 @@ class QueryBuilder {
             if ($operator === 'IN' || $operator === 'NOT IN') {
                 if (is_array($value)) {
                     $placeholders = str_repeat('?,', count($value) - 1) . '?';
-                    $conditions[] = "{$column} {$operator} ({$placeholders})";
+                    $allConditions[] = "{$column} {$operator} ({$placeholders})";
                 }
             } elseif ($operator === 'IS NULL' || $operator === 'IS NOT NULL') {
-                $conditions[] = "{$column} {$operator}";
+                $allConditions[] = "{$column} {$operator}";
             } else {
-                $conditions[] = "{$column} {$operator} ?";
+                $allConditions[] = "{$column} {$operator} ?";
             }
         }
         
-        // Add OR conditions
+        // Add OR conditions as a group
         if (!empty($this->whereOr)) {
             $orConditions = [];
             foreach ($this->whereOr as $condition) {
@@ -557,11 +565,11 @@ class QueryBuilder {
             }
             
             if (!empty($orConditions)) {
-                $conditions[] = '(' . implode(' OR ', $orConditions) . ')';
+                $allConditions[] = '(' . implode(' OR ', $orConditions) . ')';
             }
         }
         
-        return implode(' AND ', $conditions);
+        return implode(' AND ', $allConditions);
     }
 
     /**
@@ -602,6 +610,22 @@ class QueryBuilder {
         }
         
         return $params;
+    }
+
+    /**
+     * Get SQL query for testing purposes
+     */
+    public function getSql()
+    {
+        return $this->buildSelectQuery();
+    }
+
+    /**
+     * Get parameters for testing purposes
+     */
+    public function getParams()
+    {
+        return $this->getWhereParameters();
     }
 
     // ==================== LOGGING METHODS ====================
@@ -647,9 +671,9 @@ class QueryBuilder {
     /**
      * Get current user ID (from session or auth)
      */
-    private function getCurrentUserId()
+    protected function getCurrentUserId()
     {
-        return Session::get('user')['id'];
+        return Session::get('user')['id'] ?? 0;
     }
 
     /**

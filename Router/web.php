@@ -10,6 +10,7 @@ use Core\Router;
 // Admin Controller
 // Landlord Controller
 use App\Controllers\Landlord\HouseController;
+use App\Controllers\Landlord\RentalPostController;
 use App\Controllers\Landlord\ServiceController;
 // Customer Controller
 use App\Controllers\TestController;
@@ -48,6 +49,8 @@ $router->get('/landlord/service', [ServiceController::class, 'index'],[AuthLandl
 $router->post('/landlord/service/create', [ServiceController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/service/update', [ServiceController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/service/delete', [ServiceController::class, 'delete'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/post-news', [RentalPostController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/posts/create', [RentalPostController::class, 'create'],[AuthLandlordMiddleware::class]);
 
 // Route test
 $router->get('/test', [TestController::class, 'index']);
