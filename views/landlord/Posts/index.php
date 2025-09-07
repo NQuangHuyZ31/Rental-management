@@ -666,6 +666,7 @@ use Helpers\Format;
 
     <!-- Include posts.js -->
     <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </body>
 
 </html>
