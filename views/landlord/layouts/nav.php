@@ -65,7 +65,7 @@ Purpose: Build Nav for Landlord Layout
             </a>
 
             <!-- Tài sản -->
-            <a href="#" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
+            <a href="<?= BASE_URL ?>/landlord/amenity" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
                 <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mb-2">
                     <i class="fas fa-couch text-white text-lg"></i>
                 </div>
@@ -84,8 +84,8 @@ Purpose: Build Nav for Landlord Layout
 </nav>
 
 <!-- Modal danh sách nhà trọ -->
-<div id="houseListModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+<div id="houseListModal" class="modal-container hidden">
+    <div class="modal-content flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0 bg-white">
             <div class="flex items-center">
@@ -114,18 +114,18 @@ Purpose: Build Nav for Landlord Layout
                                     <h3 class="font-bold text-lg mb-2"><?= htmlspecialchars($house['house_name']) ?></h3>
                                     <p class="text-green-100 text-sm"><?= htmlspecialchars($house['address']) ?>, <?= htmlspecialchars($house['ward']) ?>, <?= htmlspecialchars($house['province']) ?></p>
                                 </div>
-                                <div class="flex items-center space-x-2 ml-4">
+                                <div class="flex items-center space-x-3 ml-4">
                                     <!-- Nút xóa -->
-                                    <button onclick="deleteHouse(<?= $house['id'] ?>)" class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors" title="Xóa nhà trọ">
-                                        <i class="fas fa-trash text-white text-xs"></i>
+                                    <button onclick="deleteHouse(<?= $house['id'] ?>)" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors" title="Xóa nhà trọ">
+                                        <i class="fas fa-trash text-white text-sm"></i>
                                     </button>
                                     <!-- Nút chỉnh sửa -->
-                                    <button onclick="editHouse(<?= $house['id'] ?>)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors" title="Chỉnh sửa">
-                                        <i class="fas fa-pencil-alt text-gray-700 text-xs"></i>
+                                    <button onclick="editHouse(<?= $house['id'] ?>)" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors" title="Chỉnh sửa">
+                                        <i class="fas fa-pencil-alt text-gray-700 text-sm"></i>
                                     </button>
                                     <!-- Nút chuyển tới nhà trọ -->
-                                    <button onclick="goToHouse(<?= $house['id'] ?>)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors" title="Chuyển tới nhà trọ">
-                                        <i class="fas fa-arrow-right text-gray-700 text-xs"></i>
+                                    <button onclick="goToHouse(<?= $house['id'] ?>)" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors" title="Chuyển tới nhà trọ">
+                                        <i class="fas fa-arrow-right text-gray-700 text-sm"></i>
                                     </button>
                                 </div>
                             </div>
@@ -150,8 +150,8 @@ Purpose: Build Nav for Landlord Layout
 </div>
 
 <!-- Modal thêm nhà trọ -->
-<div id="addHouseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+<div id="addHouseModal" class="modal-container hidden">
+    <div class="modal-content large flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0 bg-white">
             <div class="flex items-center">
@@ -532,8 +532,8 @@ Purpose: Build Nav for Landlord Layout
 
     function deleteHouse(houseId) {
         Swal.fire({
-            title: 'Xác nhận xóa',
-            text: 'Bạn có chắc chắn muốn xóa nhà trọ này?',
+            title: 'Xác nhận xóa nhà trọ',
+            text: 'Bạn có chắc chắn muốn xóa nhà trọ này? Hệ thống sẽ kiểm tra xem nhà trọ có phòng nào không trước khi xóa.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
