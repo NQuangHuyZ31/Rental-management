@@ -46,10 +46,11 @@ class AmenityController extends LandlordController
             // Lấy danh sách tài sản của nhà được chọn
             $amenities = $this->amenityModel->getAmenitiesByHouseId($selectedHouse['id']);
             
-            // Tính số lượng tài sản đang được sử dụng cho mỗi tài sản
+            // Lấy thông tin phòng và kiểm tra quyền xóa cho mỗi tài sản
             foreach ($amenities as &$amenity) {
-                $usedQuantity = $this->amenityModel->getUsedQuantityByAmenityId($amenity['id'], $selectedHouse['id']);
-                $amenity['used_quantity'] = $usedQuantity;
+                // Lấy danh sách phòng đang áp dụng tài sản
+                $usedRooms = $this->amenityModel->getUsedRoomsByAmenityId($amenity['id'], $selectedHouse['id']);
+                $amenity['used_rooms'] = $usedRooms;
                 
                 // Kiểm tra có thể xóa tài sản không
                 $canDeleteResult = $this->amenityModel->canDeleteAmenity($amenity['id'], $userId);

@@ -73,7 +73,7 @@ Purpose: Build Nav for Landlord Layout
             </a>
 
             <!-- Khách thuê -->
-            <a href="#" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
+            <a href="<?= BASE_URL ?>/landlord/tenant" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
                 <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mb-2">
                     <i class="fas fa-users text-white text-lg"></i>
                 </div>
@@ -283,9 +283,9 @@ Purpose: Build Nav for Landlord Layout
 </div>
 
 <script>
-    // Khai báo biến cho selectors
-    const PROVINCE = '#province';
-    const WARD = '#ward';
+    // Khai báo biến cho selectors (chỉ cho modal nhà trọ)
+    const PROVINCE = '#addHouseModal #province';
+    const WARD = '#addHouseModal #ward';
 
     // Modal danh sách nhà trọ
     function openHouseListModal() {
@@ -345,6 +345,10 @@ Purpose: Build Nav for Landlord Layout
                 return response.json();
             })
             .then(function(provinces) {
+                // Clear dropdown trước khi thêm options mới
+                $(PROVINCE).html('<option value="">Chọn tỉnh/thành phố</option>');
+                console.log('Loading provinces for house modal:', provinces.length);
+                
                 provinces.forEach((province) => {
                     $(PROVINCE).append(
                         `<option value="${province.name}" data-code="${province.code}" ${province_value != '' ? (province.name == province_value ? 'selected' : '') : ''}>${
@@ -352,6 +356,7 @@ Purpose: Build Nav for Landlord Layout
                          }</option>`
                     );
                 });
+                console.log('Provinces loaded for house modal');
             })
             .catch(function(err) {
                 console.log(err);
@@ -362,10 +367,13 @@ Purpose: Build Nav for Landlord Layout
 
     // Lấy danh sách phường xã
     window.getWard = function(ward_value) {
+        console.log('House modal getWard called with ward_value:', ward_value);
         const selectedOption = $(PROVINCE + ' option:selected');
         const provinceCode = selectedOption.attr('data-code');
+        console.log('House modal selected province code:', provinceCode);
 
         if (!provinceCode) {
+            console.log('No province code found in house modal, disabling ward dropdown');
             $(WARD).html('<option value="">Chọn phường/xã</option>');
             $(WARD).attr('disabled', true);
             return;
@@ -376,14 +384,18 @@ Purpose: Build Nav for Landlord Layout
                 return response.json();
             })
             .then(function(provinceData) {
+                console.log('House modal province data:', provinceData);
                 $(WARD).html('<option value="">Chọn phường/xã</option>');
                 if (provinceData.wards && provinceData.wards.length > 0) {
+                    console.log('House modal wards found:', provinceData.wards.length);
                     provinceData.wards.forEach((ward) => {
                         $(WARD).append(`<option value="${ward.name}" data-code="${ward.code}" ${ward_value != '' ? (ward.name == ward_value ? 'selected' : '') : ''}>${ward.name}</option>`);
                     });
                     $(WARD).attr('disabled', false);
+                    console.log('House modal ward dropdown enabled');
                 } else {
                     $(WARD).attr('disabled', true);
+                    console.log('No wards found in house modal, dropdown disabled');
                 }
             })
     };
@@ -572,10 +584,12 @@ Purpose: Build Nav for Landlord Layout
     // Event listeners cho dropdown
     $(document).ready(function() {
         $(PROVINCE).change(function() {
-            getWard();
+            console.log('House modal province changed:', $(this).val());
             // Reset ward khi thay đổi province
             $(WARD).html('<option value="">Chọn phường/xã</option>');
             $(WARD).attr('disabled', true);
+            // Sau đó mới gọi getWard để load dữ liệu
+            getWard();
         });
     });
 

@@ -49,11 +49,10 @@
                             <table class="min-w-full border border-gray-300">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Tên tài sản</th>
-                                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Giá trị tài sản</th>
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Tên tài sản</th>
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Giá trị tài sản</th>
                                         <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Tổng số lượng</th>
-                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Đang sử dụng</th>
-                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Còn dư</th>
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Phòng đang áp dụng</th>
                                         <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300">Thao tác</th>
                                     </tr>
                                 </thead>
@@ -61,8 +60,6 @@
                                     <?php foreach ($amenities as $amenity): ?>
                                         <?php 
                                         $totalQuantity = $amenity['quantity'];
-                                        $usedQuantity = $amenity['used_quantity'] ?? 0;
-                                        $remainingQuantity = $totalQuantity - $usedQuantity;
                                         $totalValue = $amenity['amenity_price'] * $totalQuantity;
                                         ?>
                                         <tr class="hover:bg-gray-50 transition-colors">
@@ -77,15 +74,21 @@
                                                     <?= $totalQuantity ?>
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center border border-gray-300">
-                                                <span class="text-sm font-medium text-gray-900">
-                                                    <?= $usedQuantity ?>
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center border border-gray-300">
-                                                <span class="text-sm font-medium text-gray-900">
-                                                    <?= $remainingQuantity ?>
-                                                </span>
+                                            <td class="px-6 py-4 border border-gray-300">
+                                                <?php if (!empty($amenity['used_rooms'])): ?>
+                                                    <div class="flex flex-wrap gap-1">
+                                                        <?php foreach ($amenity['used_rooms'] as $room): ?>
+                                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                                <?= htmlspecialchars($room['room_name']) ?>
+                                                                <?php if ($room['quantity'] > 1): ?>
+                                                                    <span class="ml-1">(<?= $room['quantity'] ?>)</span>
+                                                                <?php endif; ?>
+                                                            </span>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <span class="text-sm text-gray-400 italic">Chưa có phòng nào áp dụng</span>
+                                                <?php endif; ?>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium border border-gray-300">
                                                 <div class="flex items-center justify-center space-x-2">
@@ -239,7 +242,7 @@
                         Hủy
                     </button>
                     <button type="submit" id="amenitySubmitBtn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Tạo tài sản
+                        Tạo tài sản
                     </button>
                 </div>
         </form>
@@ -278,7 +281,7 @@ function resetAmenityFormToCreate() {
     document.getElementById('amenityModalTitle').textContent = 'Thêm tài sản mới';
     
     // Reset submit button
-    document.getElementById('amenitySubmitBtn').innerHTML = '<i class="fas fa-plus mr-2"></i>Tạo tài sản';
+    document.getElementById('amenitySubmitBtn').innerHTML = 'Tạo tài sản';
     
     // Clear hidden ID field
     document.getElementById('amenity_id').value = '';
@@ -342,7 +345,7 @@ function editAmenity(amenityId) {
     document.getElementById('amenityModalTitle').textContent = 'Chỉnh sửa tài sản';
 
     // Thay đổi nút submit
-    document.getElementById('amenitySubmitBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Cập nhật tài sản';
+    document.getElementById('amenitySubmitBtn').innerHTML = 'Cập nhật tài sản';
 
     // Thay đổi form action
     document.getElementById('amenityForm').action = '<?= BASE_URL ?>/landlord/amenity/update';
