@@ -42,6 +42,8 @@ class Room extends Model
     }
 
     // Added by Huy Nguyen get all rooms by user id
-    public function getAllRoomsByUserId($userId)
+    public function getAllRoomsByUserId($userId) {
+        
+    }
 }
 

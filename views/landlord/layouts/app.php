@@ -98,6 +98,11 @@ Purpose: Libraries and Dependencies for Landlord Layout
         max-width: 48rem !important;
     }
     
+    .modal-content.extra-large {
+        max-width: 80vw !important;
+        width: 80vw !important;
+    }
+    
     /* Đảm bảo modal content không làm vỡ layout */
     .modal-content * {
         box-sizing: border-box !important;

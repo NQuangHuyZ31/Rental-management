@@ -121,6 +121,25 @@ class Amenity
     }
     
     /**
+     * Lấy danh sách phòng đang áp dụng tài sản (tất cả phòng)
+     */
+    public function getUsedRoomsByAmenityId($amenityId, $houseId = null)
+    {
+        $query = $this->queryBuilder
+            ->table('room_amenities')
+            ->select(['rooms.room_name', 'room_amenities.quantity', 'rooms.room_status'])
+            ->join('rooms', 'room_amenities.room_id', '=', 'rooms.id')
+            ->where('room_amenities.amenity_id', $amenityId)
+            ->where('rooms.deleted', 0);
+            
+        if ($houseId) {
+            $query->where('rooms.house_id', $houseId);
+        }
+        
+        return $query->get();
+    }
+    
+    /**
      * Gán tài sản cho phòng
      */
     public function assignAmenityToRoom($roomId, $amenityId, $quantity = 1)
