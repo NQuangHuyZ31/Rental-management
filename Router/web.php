@@ -14,6 +14,7 @@ use App\Controllers\Landlord\RentalPostController;
 use App\Controllers\Landlord\ServiceController;
 use App\Controllers\Landlord\AmenityController;
 use App\Controllers\Landlord\TenantController;
+use App\Controllers\Landlord\InvoiceController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Middleware\AuthAdminMiddleware;
@@ -65,6 +66,12 @@ $router->get('/landlord/tenant', [TenantController::class, 'index'],[AuthLandlor
 $router->post('/landlord/tenant/create', [TenantController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/tenant/edit/{id}', [TenantController::class, 'edit'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/update', [TenantController::class, 'update'],[AuthLandlordMiddleware::class]);
+
+$router->get('/landlord/invoice', [InvoiceController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/invoice/getInvoicesByMonth', [InvoiceController::class, 'getInvoicesByMonth'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/invoice/updateStatus', [InvoiceController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/invoice/getRentedRooms', [InvoiceController::class, 'getRentedRooms'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/invoice/getRoomServices', [InvoiceController::class, 'getRoomServices'],[AuthLandlordMiddleware::class]);
 
 $router->get('/landlord/post-news', [RentalPostController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/create', [RentalPostController::class, 'create'],[AuthLandlordMiddleware::class]);
