@@ -4,32 +4,19 @@ $(document).ready(function () {
 
     // Add event listener for province select
     $(PROVINCE).on('click', function () {
-        App.getProvinceData().then(function (data) {
-            if (!data || !Array.isArray(data)) {
-                console.error('Không lấy được dữ liệu tỉnh', data);
-                return;
-            }
-
-            $.each(data, function (index, province) {
-                $(PROVINCE).append(
-                    `<option value="${province.name}" data-code="${province.code}">
-                        ${province.name}
-                    </option>`
-                );
-            });
-        });
+        App.setProvinceData(PROVINCE).then(function () {});
     });
 
-    // Add event listener for ward select
+    // Add event listener for province change
     $(PROVINCE).on('change', function () {
+        const selectedValue = $(this).val();
         const code = $(this).find(':selected').data('code');
-        console.log(code);
-        App.getWardData(code).then(function (data) {
-            console.log(data);
-            $(WARD).html('<option value="">Chọn phường/xã</option>');
-            $.each(data.wards, function (index, district) {
-                $(WARD).append(`<option value="${district.name}" data-code="${district.code}">${district.name}</option>`);
+
+        if (code) {
+            App.setWardData(code, WARD).then(function () {
+                // Keep the selected province value
+                PROVINCE.val(selectedValue);
             });
-        });
+        }
     });
 });

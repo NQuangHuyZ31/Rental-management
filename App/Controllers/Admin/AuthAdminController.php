@@ -47,7 +47,13 @@ class AuthAdminController extends Controller {
 			exit;
 		}
 
-		$this->request->redirect('/admin');
+		$this->request->redirect('/admin/dashboard');
+		exit;
+	}
+
+	public function logout() {
+		$this->auth->logout();
+		$this->request->redirect('/admin/auth/login');
 		exit;
 	}
 }

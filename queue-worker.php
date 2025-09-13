@@ -33,6 +33,16 @@
  // Sau khi $_ENV có dữ liệu rồi mới require config.php
  require_once 'Config/config.php';
 
+ // Autoloader để tự động tải class
+ spl_autoload_register(function ($class) {
+     $classPath = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
+     if (file_exists($classPath)) {
+         require_once $classPath;
+     } else {
+         die("Không tìm thấy file: $classPath");
+     }
+ });
+
 use Core\Queue;
 
 class CronQueueWorker

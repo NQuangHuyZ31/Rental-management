@@ -3,8 +3,13 @@
 // Core
 
 use App\Controllers\Admin\AuthAdminController;
+use App\Controllers\Admin\DashboardAdminController;
+use App\Controllers\Admin\PostManagementController;
 use App\Controllers\AuthController;
+use App\Controllers\Customer\BillCustomerController;
 use App\Controllers\Customer\HomeController;
+use App\Controllers\Customer\ProfileCustomerController;
+use App\Controllers\Customer\RentalRoomCustomerController;
 use Core\Router;
 
 // Admin Controller
@@ -35,10 +40,27 @@ $router->get('/verify-account', [AuthController::class, 'verifyAccount']);
 $router->post('/verify-account', [AuthController::class, 'handleVerifyAccount']);
 $router->post('/resend-otp', [AuthController::class, 'handleResendOTP']);
 
+
+// PROFILE
+$router->get('/customer/profile', [ProfileCustomerController::class, 'profile'],[AuthMiddleware::class]);
+$router->get('/customer/bills', [BillCustomerController::class, 'bills'],[AuthMiddleware::class]);
+$router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
+$router->get('/customer/settings', [ProfileCustomerController::class, 'settings'],[AuthMiddleware::class]);
+$router->get('/customer/rented-rooms', [RentalRoomCustomerController::class, 'rentedRooms'],[AuthMiddleware::class]);
+$router->get('/customer/room-detail/{id}', [RentalRoomCustomerController::class, 'roomDetail'],[AuthMiddleware::class]);
+$router->get('/customer/favorites', [ProfileCustomerController::class, 'favorites'],[AuthMiddleware::class]);
+$router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
+
 // =============================================================ROUTER ADMIN==================================================
 $router->get('/admin', [AuthAdminController::class, 'index'],[AuthAdminMiddleware::class]);
 $router->get('/admin/auth/login', [AuthAdminController::class, 'showLoginPage']);
 $router->post('/admin/auth/login', [AuthAdminController::class, 'handleLogin']);
+$router->get('/admin/auth/logout', [AuthAdminController::class, 'logout']);
+$router->get('/admin/dashboard', [DashboardAdminController::class, 'dashboard'],[AuthAdminMiddleware::class]);
+
+
+// POST MANAGEMENT
+$router->get('/admin/posts', [PostManagementController::class, 'index'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
 $router->get('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddleware::class]);
@@ -62,6 +84,10 @@ $router->get('/landlord/amenity/get-rooms/{id}', [AmenityController::class, 'get
 
 $router->get('/landlord/post-news', [RentalPostController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/create', [RentalPostController::class, 'create'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/posts/get', [RentalPostController::class, 'getPost'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/posts/update', [RentalPostController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/posts/hide', [RentalPostController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/posts/delete', [RentalPostController::class, 'delete'],[AuthLandlordMiddleware::class]);
 
 // Route test
 $router->get('/test', [TestController::class, 'index']);

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
 * Author: Huy Nguyen
@@ -8,10 +8,14 @@
 
 namespace App\Models;
 
-class RentalPost extends Model {
+use Helpers\Log;
+
+class RenTalPost extends Model
+{
 	protected $table = 'rental_posts';
 
-	public function getAllRentalPosts($limit = 10, $offset = 0) {
+	public function getAllRentalPosts($limit = 10, $offset = 0)
+	{
 		return $this->table($this->table)
 			->select([
 				'rental_posts.*',
@@ -28,7 +32,8 @@ class RentalPost extends Model {
 			->get();
 	}
 
-	public function getRentalPostsByStatus($status, $limit = 10, $offset = 0) {
+	public function getRentalPostsByStatus($status, $limit = 10, $offset = 0)
+	{
 		return $this->table($this->table)
 			->select([
 				'rental_posts.*',
@@ -46,7 +51,8 @@ class RentalPost extends Model {
 			->get();
 	}
 
-	public function getRentalPostsByCategory($categoryId, $limit = 10, $offset = 0) {
+	public function getRentalPostsByCategory($categoryId, $limit = 10, $offset = 0)
+	{
 		return $this->table($this->table)
 			->select([
 				'rental_posts.*',
@@ -64,7 +70,8 @@ class RentalPost extends Model {
 			->get();
 	}
 
-	public function searchRentalPosts($searchTerm, $limit = 10, $offset = 0) {
+	public function searchRentalPosts($searchTerm, $limit = 10, $offset = 0)
+	{
 		return $this->table($this->table)
 			->select([
 				'rental_posts.*',
@@ -75,7 +82,7 @@ class RentalPost extends Model {
 			->join('users', 'rental_posts.owner_id', '=', 'users.id')
 			->where('rental_posts.deleted', 0)
 			->where('rental_posts.owner_id', $this->getCurrentUserId())
-			->whereOr('rental_posts.title', 'LIKE', "%{$searchTerm}%")
+			->whereOr('rental_posts.rental_post_title', 'LIKE', "%{$searchTerm}%")
 			->whereOr('rental_posts.description', 'LIKE', "%{$searchTerm}%")
 			->whereOr('rental_posts.address', 'LIKE', "%{$searchTerm}%")
 			->orderBy('rental_posts.created_at', 'DESC')
@@ -84,7 +91,8 @@ class RentalPost extends Model {
 			->get();
 	}
 
-	public function getRentalPostById($id) {
+	public function getRentalPostById($id)
+	{
 		return $this->table($this->table)
 			->select([
 				'rental_posts.*',
@@ -101,24 +109,26 @@ class RentalPost extends Model {
 			->first();
 	}
 
-	public function createRentalPost($data) {
+	public function createRentalPost($data)
+	{
 		$postData = [
 			'owner_id' => $this->getCurrentUserId(),
 			'rental_category_id' => $data['category'],
-			'title' => $data['title'],
+			'rental_post_title' => $data['title'],
+			'contact' => $data['contact_name'],
+			'phone' => $data['contact_phone'],
 			'description' => $data['description'] ?? '',
-			'contact_username' => $data['contact_username'],
-			'contact_phone' => $data['contact_phone'],
-			'price' => $this->convertCurrencyToNumber($data['price']),
-			'promotional_price' => isset($data['promotional_price']) ? $this->convertCurrencyToNumber($data['promotional_price']) : null,
-			'deposit' => isset($data['deposit']) ? $this->convertCurrencyToNumber($data['deposit']) : null,
+			'price' => $data['price'],
+			'price_discount' => isset($data['promotional_price']) ? $data['promotional_price'] : '0',
+			'rental_deposit' => isset($data['deposit']) ? $data['deposit'] : '0',
 			'area' => $data['area'],
-			'electricity_price' => $this->convertCurrencyToNumber($data['electricity_price']),
-			'water_price' => $this->convertCurrencyToNumber($data['water_price']),
-			'max_occupants' => $data['max_occupants'] ?? 1,
-			'available_date' => $data['available_date'],
-			'opening_time' => $data['opening_time'] ?? 'all',
-			'closing_time' => $data['closing_time'] ?? 'all',
+			'electric_fee' => $data['electricity_price'],
+			'water_fee' => $data['water_price'],
+			'max_number_of_people' => $data['max_occupants'] ?? 1,
+			'stay_start_date' => $data['available_date'],
+			'rental_amenities' => json_encode($data['amenities']),
+			'rental_open_time' => $data['opening_time'] ?? 'all',
+			'rental_close_time' => $data['closing_time'] ?? 'all',
 			'province' => $data['province'],
 			'ward' => $data['ward'],
 			'address' => $data['address'],
@@ -130,23 +140,26 @@ class RentalPost extends Model {
 		return $this->table($this->table)->insert($postData);
 	}
 
-	public function updateRentalPost($id, $data) {
+	public function updateRentalPost($id, $data)
+	{
 		$updateData = [
+			'owner_id' => $this->getCurrentUserId(),
 			'rental_category_id' => $data['category'],
-			'title' => $data['title'],
+			'rental_post_title' => $data['title'],
+			'contact' => $data['contact_name'],
+			'phone' => $data['contact_phone'],
 			'description' => $data['description'] ?? '',
-			'contact_username' => $data['contact_username'],
-			'contact_phone' => $data['contact_phone'],
-			'price' => $this->convertCurrencyToNumber($data['price']),
-			'promotional_price' => isset($data['promotional_price']) ? $this->convertCurrencyToNumber($data['promotional_price']) : null,
-			'deposit' => isset($data['deposit']) ? $this->convertCurrencyToNumber($data['deposit']) : null,
+			'price' => $data['price'],
+			'price_discount' => isset($data['promotional_price']) ? $data['promotional_price'] : '0',
+			'rental_deposit' => isset($data['deposit']) ? $data['deposit'] : '0',
 			'area' => $data['area'],
-			'electricity_price' => $this->convertCurrencyToNumber($data['electricity_price']),
-			'water_price' => $this->convertCurrencyToNumber($data['water_price']),
-			'max_occupants' => $data['max_occupants'] ?? 1,
-			'available_date' => $data['available_date'],
-			'opening_time' => $data['opening_time'] ?? 'all',
-			'closing_time' => $data['closing_time'] ?? 'all',
+			'electric_fee' => $data['electricity_price'],
+			'water_fee' => $data['water_price'],
+			'max_number_of_people' => $data['max_occupants'] ?? 1,
+			'stay_start_date' => $data['available_date'],
+			'rental_amenities' => json_encode($data['amenities']),
+			'rental_open_time' => $data['opening_time'] ?? 'all',
+			'rental_close_time' => $data['closing_time'] ?? 'all',
 			'province' => $data['province'],
 			'ward' => $data['ward'],
 			'address' => $data['address'],
@@ -159,7 +172,8 @@ class RentalPost extends Model {
 			->update($updateData);
 	}
 
-	public function updateRentalPostStatus($id, $status) {
+	public function updateRentalPostStatus($id, $status)
+	{
 		return $this->table($this->table)
 			->where('id', $id)
 			->where('owner_id', $this->getCurrentUserId())
@@ -169,7 +183,8 @@ class RentalPost extends Model {
 			]);
 	}
 
-	public function deleteRentalPost($id) {
+	public function deleteRentalPost($id)
+	{
 		return $this->table($this->table)
 			->where('id', $id)
 			->where('owner_id', $this->getCurrentUserId())
@@ -179,7 +194,8 @@ class RentalPost extends Model {
 			]);
 	}
 
-	public function getTotalRentalPostsCount($filters = []) {
+	public function getTotalRentalPostsCount($filters = [])
+	{
 		$query = $this->table($this->table)
 			->where('deleted', 0)
 			->where('owner_id', $this->getCurrentUserId());
@@ -193,15 +209,16 @@ class RentalPost extends Model {
 		}
 
 		if (isset($filters['search']) && !empty($filters['search'])) {
-			$query->whereOr('title', 'LIKE', "%{$filters['search']}%")
-				  ->whereOr('description', 'LIKE', "%{$filters['search']}%")
-				  ->whereOr('address', 'LIKE', "%{$filters['search']}%");
+			$query->whereOr('rental_post_title', 'LIKE', "%{$filters['search']}%")
+				->whereOr('description', 'LIKE', "%{$filters['search']}%")
+				->whereOr('address', 'LIKE', "%{$filters['search']}%");
 		}
 
 		return $query->count();
 	}
 
-	public function getRentalPostAmenities($postId) {
+	public function getRentalPostAmenities($postId)
+	{
 		return $this->table('rental_post_amenities')
 			->select([
 				'rental_amenities.id',
@@ -212,30 +229,34 @@ class RentalPost extends Model {
 			->get();
 	}
 
-	public function saveRentalPostAmenities($postId, $amenityIds) {
-		// Delete existing amenities
-		$this->table('rental_post_amenities')
-			->where('post_id', $postId)
-			->delete();
-
-		// Insert new amenities
-		if (!empty($amenityIds)) {
-			foreach ($amenityIds as $amenityId) {
-				$this->table('rental_post_amenities')->insert([
-					'post_id' => $postId,
-					'amenity_id' => $amenityId,
-					'created_at' => date('Y-m-d H:i:s')
+	public function updatePostImages($postId, $images)
+	{
+		try {
+			$result = $this->table($this->table)
+				->where('id', $postId)
+				->update([
+					'images' => json_encode($images),
+					'updated_at' => date('Y-m-d H:i:s')
 				]);
-			}
+			return $result;
+		} catch (\Exception $e) {
+			Log::server("Exception in updatePostImages: " . $e->getMessage());
+			return false;
 		}
-
-		return true;
 	}
 
-	public function convertCurrencyToNumber($value) {
-		if (empty($value)) return null;
-		
-		// Remove commas and convert to number
-		return (int) str_replace(',', '', $value);
+	public function getCountRentalPostsByStatus($approvedStatus='', $status='') {
+		$query = $this->table($this->table)
+			->where('deleted', 0);
+
+		if ($approvedStatus != '') {
+			$query->where('approval_status', $approvedStatus);
+		}
+
+		if ($status != '') {
+			$query->where('status', $status);
+		}
+
+		return $query->count();
 	}
 }

@@ -40,5 +40,8 @@ class Room extends Model
                     ->groupBy('room_status')
                     ->get();
     }
+
+    // Added by Huy Nguyen get all rooms by user id
+    public function getAllRoomsByUserId($userId)
 }
 

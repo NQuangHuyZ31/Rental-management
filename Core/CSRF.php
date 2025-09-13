@@ -89,6 +89,13 @@ class CSRF
         
         return $token;
     }
+
+    public static function getTokenRefresh()
+    {
+        self::refreshToken();
+        $token = self::getToken();
+        return $token;
+    }
     
     /**
      * Hàm tạo HTML input field cho CSRF token

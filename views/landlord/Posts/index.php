@@ -82,7 +82,7 @@ use Helpers\Format;
                                     <div class="grid grid-cols-14 gap-4 items-center">
                                         <!-- Title Column -->
                                         <div class="col-span-5 flex items-start space-x-4">
-                                            <img src="<?= BASE_URL ?>/Public/images/<?= json_decode($rentalPost['images'])[0] ?>.png" alt="Post Image" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                                            <img src="<?= json_decode($rentalPost['images'])[0] ?>" alt="Post Image" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             <div class="flex-1 min-w-0">
                                                 <div class="text-sm font-medium text-blue-600 mb-1">#<?= $rentalPost['id'] ?>: <?= $rentalPost['rental_post_title'] ?></div>
                                                 <div class="text-xs text-gray-500 mb-2"><?= $rentalPost['address'] . ', ' . $rentalPost['ward'] . ', ' . $rentalPost['province'] ?></div>
@@ -162,18 +162,22 @@ use Helpers\Format;
                                                 </button>
                                                 <div class="hidden absolute right-0 top-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
                                                     <div class="py-1">
-                                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        <div onclick="viewPost(<?= $rentalPost['id'] ?>)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                             <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                                                        </a>
-                                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                            <i class="fas fa-edit mr-2"></i>Chỉnh sửa
-                                                        </a>
-                                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                            <i class="fas fa-eye-slash mr-2"></i>Ẩn tin
-                                                        </a>
-                                                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                                        </div>
+                                                        <?php if ($rentalPost['status'] == 'active'): ?>
+                                                            <div onclick="hidePost(<?= $rentalPost['id'] ?>, 'inactive')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                <i class="fas fa-eye-slash mr-2"></i>Ẩn tin
+                                                            </div>
+                                                        <?php endif; ?>
+                                                        <?php if ($rentalPost['status'] == 'inactive'): ?>
+                                                            <div onclick="hidePost(<?= $rentalPost['id'] ?>, 'active')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                <i class="fas fa-eye-slash mr-2"></i>Hiện tin
+                                                            </div>
+                                                        <?php endif; ?>
+                                                        <div onclick="deletePost(<?= $rentalPost['id'] ?>)" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                                             <i class="fas fa-trash mr-2"></i>Xóa
-                                                        </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,10 +292,11 @@ use Helpers\Format;
     </main>
     <!-- Modal New Post -->
     <dialog id="modalNewPost" class="modal">
-        <div class="modal-box w-11/12 max-w-5xl">
+        <div class="modal-box w-11/12 max-w-2xl">
             <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 modalNewPost-button-close">✕</button>
             </form>
+            <input type="hidden" name="post_id" value="">
             <form id="formNewPost">
                 <?= \Core\CSRF::getTokenField() ?>
 
@@ -300,7 +305,7 @@ use Helpers\Format;
                     <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-building text-green-600 text-lg"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900">Thêm tin đăng</h3>
+                    <h3 id="modalNewPost-title" class="text-xl font-semibold text-gray-900">Thêm tin đăng</h3>
                 </div>
 
                 <!-- Thông tin chủ nhà -->
@@ -334,7 +339,7 @@ use Helpers\Format;
                                     Tiêu đề <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" name="title" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập tiêu đề" required />
+                            <input type="text" name="title" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập tiêu đề" />
                         </div>
                         <div class="form-control">
                             <label class="label">
@@ -359,7 +364,7 @@ use Helpers\Format;
                                 Tên người liên hệ <span class="text-red-500">*</span>
                             </span>
                             </label>
-                            <input type="text" name="contact_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập tên người liên hệ" required />
+                            <input type="text" name="contact_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập tên người liên hệ" />
                         </div>
                         <div class="form-control">
                             <label class="label">
@@ -368,7 +373,7 @@ use Helpers\Format;
                                     SĐT <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="tel" name="contact_phone" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập số điện thoại" required />
+                            <input type="tel" name="contact_phone" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập số điện thoại" />
                         </div>
                     </div>
                 </div>
@@ -409,7 +414,7 @@ use Helpers\Format;
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Giá thuê <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập giá thuê" required />
+                            <input type="text" name="price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập giá thuê" />
                         </div>
                         <div class="form-control">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -431,19 +436,19 @@ use Helpers\Format;
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Diện tích <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="area" data-type="number" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Diện tích (m²)" required />
+                            <input type="text" name="area" data-type="number" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Diện tích (m²)" />
                         </div>
                         <div class="form-control">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Giá điện <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="electricity_price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Giá điện/kWh" required />
+                            <input type="text" name="electricity_price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Giá điện/kWh" />
                         </div>
                         <div class="form-control">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Giá nước <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="water_price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Giá nước/m³" required />
+                            <input type="text" name="water_price" data-type="currency" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Giá nước/m³" />
                         </div>
                     </div>
 
@@ -466,7 +471,7 @@ use Helpers\Format;
                                 Ngày có thể vào ở <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
-                                <input type="date" name="available_date" data-type="date" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" required />
+                                <input type="date" name="available_date" data-type="date" class="cleave-input w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" />
                                 <i class="fas fa-calendar-alt absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
                             </div>
                         </div>
@@ -558,7 +563,7 @@ use Helpers\Format;
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Chọn Tỉnh/Thành phố <span class="text-red-500">*</span>
                             </label>
-                            <select name="province" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer" required>
+                            <select name="province" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer">
                                 <option value="">Chọn Tỉnh/Thành phố</option>
                             </select>
                         </div>
@@ -568,7 +573,7 @@ use Helpers\Format;
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Chọn Phường/Xã <span class="text-red-500">*</span>
                             </label>
-                            <select name="ward" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer" required>
+                            <select name="ward" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer">
                                 <option value="">Chọn Phường/Xã</option>
                             </select>
                         </div>
@@ -578,7 +583,7 @@ use Helpers\Format;
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Địa chỉ chi tiết. Ví dụ: 122 - Đường Nguyễn Duy Trinh <span class="text-red-500">*</span>
                             </label>
-                            <textarea name="address" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập địa chỉ chi tiết: số nhà, tên đường, ghi chú thêm..." required></textarea>
+                            <textarea name="address" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Nhập địa chỉ chi tiết: số nhà, tên đường, ghi chú thêm..."></textarea>
                         </div>
                     </div>
 
@@ -623,7 +628,7 @@ use Helpers\Format;
 
                     <!-- Form Actions -->
                     <div class="modal-action">
-                        <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2">
+                        <button type="button" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 addNewPostBtn">
                             <i class="fas fa-save"></i>
                             Tạo tin đăng
                         </button>

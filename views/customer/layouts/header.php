@@ -20,7 +20,7 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-2">
                 <!-- Logo Section -->
-                <div class="flex items-center">
+                <a href="<?= BASE_URL ?>/" class="flex items-center">
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
                             <span class="text-green-600 font-bold text-lg">H</span>
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Center Navigation -->
                 <nav class="hidden lg:flex items-center space-x-2" id="main-nav">
@@ -78,7 +78,7 @@
                                 <div class="text-xs text-nowrap flex flex-col flex-start">
                                     <div class="font-medium text-[9px]">Khách thuê, tìm việc</div>
                                     <div class="text-xs text-nowrap flex gap-2 items-center underline">
-                                        <a href="<?php echo BASE_URL ?>/login?type=customer" class="hover:text-green-900">Xin chào, <?php echo \Core\Session::get('user')['username'] ?>!</a> |
+                                        <a href="<?php echo BASE_URL ?>/customer/profile" class="hover:text-green-900">Xin chào, <?php echo \Core\Session::get('user')['username'] ?>!</a> |
                                         <a href="<?php echo BASE_URL ?>/logout" class="hover:text-green-900">Đăng xuất</a>
                                     </div>
                                 </div>

@@ -28,14 +28,13 @@ use Helpers\Format;
 				<form action="" method='GET'>
 					<div class="flex flex-col lg:flex-row gap-4 items-center">
 						<!-- Location Input -->
-						<div class="flex-1 max-w-32 overflow-hidden cursor-pointer">
+						<div class="min-w-0 cursor-pointer">
 							<div class="relative">
-								<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors">
-									<i class="fas fa-map-marker-alt text-gray-500 text-sm mr-3"></i>
-									<div class="flex-1">
-										<div class="text-sm font-medium text-gray-900">Hà Nội</div>
-									</div>
-									<i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+								<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors shadow-sm">
+									<i class="fas fa-map-marker-alt text-gray-500 text-sm mr-3 flex-shrink-0"></i>
+									<select id="province" name="province" class="w-full bg-transparent border-none outline-none text-gray-900 text-sm cursor-pointer">
+										<option value="">Chọn tỉnh/thành phố</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -578,16 +577,6 @@ use Helpers\Format;
 									</div>
 									<span><?=$rentalNewPost['contact']?></span>
 									<span class="ml-1"></span>
-								</div>
-								<div class="flex space-x-1">
-									<div class="bg-blue-500 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-600"
-										onclick="event.stopPropagation(); window.location.href='https://zalo.me/<?=$rentalNewPost['phone']?>'">
-										Zalo
-									</div>
-
-									<button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px] hover:bg-blue-700">
-										<i class="fas fa-phone mr-1"></i>Xem SĐT
-									</button>
 								</div>
 							</div>
 						</div>

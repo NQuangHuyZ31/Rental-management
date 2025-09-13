@@ -11,25 +11,49 @@ class UploadClound
 {
   public static function upload($file, $folder, $path)
   {
+    try {
+      // Kiểm tra file có tồn tại không
+      if (!file_exists($file)) {
+        Log::server("UploadClound: File not found: " . $file);
+        return false;
+      }
 
-    Configuration::instance([
-      'cloud' => [
-        'cloud_name' => CLOUD_NAME,
-        'api_key' => CLOUD_API_KEY,
-        'api_secret' => CLOUD_API_SECRET
-      ],
-      'url' => [
-        'secure' => true
-      ]
-    ]);
+      // Kiểm tra cấu hình Cloudinary
+      if (!defined('CLOUD_NAME') || !defined('CLOUD_API_KEY') || !defined('CLOUD_API_SECRET')) {
+        Log::server("UploadClound: Cloudinary configuration missing");
+        return false;
+      }
 
-    $data = (new UploadApi())->upload($file, [
-      'public_id' =>  $path,
+      Configuration::instance([
+        'cloud' => [
+          'cloud_name' => CLOUD_NAME,
+          'api_key' => CLOUD_API_KEY,
+          'api_secret' => CLOUD_API_SECRET
+        ],
+        'url' => [
+          'secure' => true
+        ]
+      ]);
 
-      'folder' => 'rental_management/' . $folder . ''
-    ]);
+      self::delete($path);
 
-    return $data['secure_url'];
+      $data = (new UploadApi())->upload($file, [
+        'public_id' => $path,
+        'folder' => 'rental_management/' . $folder
+      ]);
+
+      if (isset($data['secure_url'])) {
+        Log::server("UploadClound: Successfully uploaded to: " . $data['secure_url']);
+        return $data['secure_url'];
+      } else {
+        Log::server("UploadClound: No secure_url in response: " . json_encode($data));
+        return false;
+      }
+
+    } catch (\Exception $e) {
+      Log::server("UploadClound: Exception during upload: " . $e->getMessage());
+      return false;
+    }
   }
 
   public static function getPublicIdFromUrl($url)

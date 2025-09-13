@@ -9,10 +9,14 @@
 
 namespace App\Models;
 Use Core\QueryBuilder;
+use Core\Session;
 
-class Model extends QueryBuilder{
+class Model extends QueryBuilder {
+	
+	protected $userID;
 	
 	public function __construct() {
 		parent::__construct();
+		$this->userID = Session::get('user')['id'] ?? '';
 	}
 }

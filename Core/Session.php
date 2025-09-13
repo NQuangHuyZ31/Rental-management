@@ -13,6 +13,11 @@ class Session
     // Khởi tạo session
     public static function start()
     {
+        // Không khởi tạo session trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return;
+        }
+        
         if (session_status() == PHP_SESSION_NONE) {
             session_set_cookie_params([
                 'lifetime' => 0, // session cookie (xóa khi đóng trình duyệt)
@@ -35,6 +40,10 @@ class Session
     // Lưu dữ liệu vào session
     public static function set($key, $value)
     {
+        // Không làm gì trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return;
+        }
         self::start();
         $_SESSION[$key] = $value;
     }
@@ -42,6 +51,10 @@ class Session
     // Lấy dữ liệu từ session
     public static function get($key)
     {
+        // Trả về null trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return null;
+        }
         self::start();
         return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
@@ -49,6 +62,10 @@ class Session
     // Kiểm tra sự tồn tại của session
     public static function has($key)
     {
+        // Trả về false trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return false;
+        }
         self::start();
         return isset($_SESSION[$key]);
     }
@@ -56,6 +73,10 @@ class Session
     // Xóa dữ liệu khỏi session
     public static function delete($key)
     {
+        // Không làm gì trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return;
+        }
         self::start();
         if (self::has($key)) {
             unset($_SESSION[$key]);
@@ -65,6 +86,10 @@ class Session
     // Hủy toàn bộ session
     public static function destroy()
     {
+        // Không làm gì trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            return;
+        }
         self::start();
         session_unset();
         session_destroy();
@@ -73,6 +98,11 @@ class Session
 
     public static function debug()
     {
+        // Không làm gì trong CLI mode
+        if (php_sapi_name() === 'cli') {
+            echo "Session debug not available in CLI mode\n";
+            return;
+        }
         self::start();
         echo '<pre>';
         print_r($_SESSION);

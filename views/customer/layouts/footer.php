@@ -4,7 +4,7 @@
     Purpose: Footer for customer layout
 -->
 
-<footer class="py-4 mt-3">
+<footer class="py-4 mt-3 <?php echo $noFooter ? 'hidden' : ''; ?>">
     <section class="bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-5">

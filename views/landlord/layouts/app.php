@@ -12,6 +12,7 @@ Purpose: Libraries and Dependencies for Landlord Layout
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?=BASE_URL?>/Public/css/app.css">
 <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
 <?= \Core\CSRF::getTokenMeta() ?>

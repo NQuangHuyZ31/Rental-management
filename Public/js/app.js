@@ -7,11 +7,15 @@
 // Config
 window.App = {
     appURL: '/Rental-management/',
+    PROVINCE: null,
+    WARD: null,
+
     getToken: function () {
         return $('input[name="csrf_token"]').val();
     },
 
     setToken: function (token) {
+        console.log('setToken', token);
         $('input[name="csrf_token"]').val(token);
     },
 
@@ -58,6 +62,31 @@ window.App = {
     getWardData: function (provinceCode) {
         return fetch(`https://provinces.open-api.vn/api/v2/p/${provinceCode}?depth=2`).then((response) => response.json());
     },
+
+    setProvinceData: function (Element) {
+        return this.getProvinceData().then(function (data) {
+            if (!data || !Array.isArray(data)) {
+                console.error('Không lấy được dữ liệu tỉnh', data);
+                return;
+            }
+
+            $.each(data, function (index, province) {
+                $(Element).append(
+                    `<option value="${province.name}" data-code="${province.code}">
+                        ${province.name}
+                    </option>`
+                );
+            });
+        });
+    },
+
+    setWardData: function (provinceCode, Element) {
+        return this.getWardData(provinceCode).then(function (data) {
+            $.each(data.wards, function (index, district) {
+                $(Element).append(`<option value="${district.name}" data-code="${district.code}">${district.name}</option>`);
+            });
+        });
+    },
 };
 
 // config toastr
@@ -84,19 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Config Loading Overplay
     JsLoadingOverlay.setOptions({
+        containerID: null, // append trực tiếp vào body
         overlayBackgroundColor: '#FFFFFF',
-        overlayOpacity: '0.7',
+        overlayOpacity: 0.7,
         spinnerIcon: 'ball-clip-rotate-multiple',
         spinnerColor: '#DE812F',
         spinnerSize: '1x',
         overlayIDName: 'overlay',
         spinnerIDName: 'spinner',
-        offsetX: 0,
-        offsetY: 0,
-        containerID: null,
-        lockScroll: false,
-        overlayZIndex: 9998,
-        spinnerZIndex: 9999,
+        overlayZIndex: 10000, // cao hơn modal
+        spinnerZIndex: 10001, // cao hơn cả overlay
     });
 
     $('.cleave-input').each(function () {
@@ -138,6 +164,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
         }
 
-        new Cleave(this, cleaveConfig);
+        const cleaveInstance = new Cleave(this, cleaveConfig);
+
+        // Nếu input đã có value từ trước => format lại
+        if ($(this).val()) {
+            cleaveInstance.setRawValue($(this).val());
+        }
     });
 });
