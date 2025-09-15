@@ -37,5 +37,5 @@ $content = '
     <p>⏰ <strong>Thời gian hiệu lực:</strong> <span class="timer">30 phút</span></p>
 </div>';
 
-include 'views/emails/layout.php';
+include_once VIEW_PATH . 'emails/layout.php';
 ?>

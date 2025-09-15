@@ -8,10 +8,10 @@
 
 namespace App\Controllers\Customer;
 
-use App\Controllers\Controller;
+use App\Controllers\Customer\CustomerController;
 use Core\ViewRender;
 
-class RentalRoomCustomerController extends Controller {
+class RentalRoomCustomerController extends CustomerController {
 	protected $sidebar = true;
 	protected $noFooter = true;
 	protected $title = 'Phòng đang thuê';
@@ -23,6 +23,7 @@ class RentalRoomCustomerController extends Controller {
 				'sidebar' => $this->sidebar,
 				'noFooter' => $this->noFooter,
 				'title' => $this->title,
+				'sidebarData' => $this->sidebarData(),
 			],
 			'customer/layouts/app'
 		);

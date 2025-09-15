@@ -4,7 +4,7 @@
     Date: 2025-08-31
     Purpose: Build Service Usage Model
 */
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 

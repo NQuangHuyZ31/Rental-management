@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;

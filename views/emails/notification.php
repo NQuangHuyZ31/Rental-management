@@ -47,5 +47,5 @@ if (isset($successMessage)) {
     </div>';
 }
 
-include 'views/emails/layout.php';
+include_once VIEW_PATH . 'emails/layout.php';
 ?>

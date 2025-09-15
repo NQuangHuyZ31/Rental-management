@@ -14,7 +14,7 @@ use Core\Session;
 use Core\Request;
 use Core\CSRF;
 
-use App\Models\Landlord\Invoice;
+use App\Models\Invoice;
 
 class InvoiceController extends LandlordController{
     private $invoiceModel;

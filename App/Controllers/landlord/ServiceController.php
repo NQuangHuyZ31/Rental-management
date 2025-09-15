@@ -8,9 +8,9 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
 use Core\ViewRender;
-use App\Models\Landlord\Service;
-use App\Models\Landlord\Room;
-use App\Models\Landlord\ServiceUsage;
+use App\Models\Service;
+use App\Models\Room;
+use App\Models\ServiceUsage;
 use Core\Session;
 use Core\Request;
 use Core\CSRF;

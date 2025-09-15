@@ -22,6 +22,7 @@ use App\Controllers\Landlord\TenantController;
 use App\Controllers\Landlord\InvoiceController;
 // Customer Controller
 use App\Controllers\TestController;
+use App\Controllers\Customer\PaymentController;
 use App\Middleware\AuthAdminMiddleware;
 use App\Middleware\AuthLandlordMiddleware;
 use App\Middleware\AuthMiddleware;
@@ -45,6 +46,7 @@ $router->post('/resend-otp', [AuthController::class, 'handleResendOTP']);
 
 // PROFILE
 $router->get('/customer/profile', [ProfileCustomerController::class, 'profile'],[AuthMiddleware::class]);
+$router->post('/customer/profile/update', [ProfileCustomerController::class, 'update'],[AuthMiddleware::class]);
 $router->get('/customer/bills', [BillCustomerController::class, 'bills'],[AuthMiddleware::class]);
 $router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
 $router->get('/customer/settings', [ProfileCustomerController::class, 'settings'],[AuthMiddleware::class]);
@@ -52,6 +54,10 @@ $router->get('/customer/rented-rooms', [RentalRoomCustomerController::class, 're
 $router->get('/customer/room-detail/{id}', [RentalRoomCustomerController::class, 'roomDetail'],[AuthMiddleware::class]);
 $router->get('/customer/favorites', [ProfileCustomerController::class, 'favorites'],[AuthMiddleware::class]);
 $router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
+
+// =============================================================ROUTER API PAYMENT==================================================
+// API thanh toán 
+$router->post('/customer/payment', [PaymentController::class, 'payment'],[AuthMiddleware::class]);
 
 // =============================================================ROUTER ADMIN==================================================
 $router->get('/admin', [AuthAdminController::class, 'index'],[AuthAdminMiddleware::class]);

@@ -1,0 +1,293 @@
+/* Payment Modal Styling */
+
+.payment-modal {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.payment-modal .modal-content {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* QR Code Container */
+.qr-code-container {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.qr-code-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code-container img {
+    transition: all 0.3s ease;
+}
+
+.qr-code-container:hover img {
+    filter: brightness(1.1);
+}
+
+/* Payment Status Animation */
+.payment-status {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.payment-status.success {
+    animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Invoice Information Cards */
+.invoice-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.invoice-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-card.invoice-details {
+    border-left-color: #3b82f6;
+}
+
+.invoice-card.room-info {
+    border-left-color: #10b981;
+}
+
+.invoice-card.payment-breakdown {
+    border-left-color: #f59e0b;
+}
+
+.invoice-card.instructions {
+    border-left-color: #ef4444;
+}
+
+/* Action Buttons */
+.action-button {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.action-button:hover::before {
+    left: 100%;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+/* Loading States */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .payment-modal .modal-content {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+
+    .payment-modal .modal-body {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .payment-modal .modal-body > div {
+        width: 100% !important;
+    }
+
+    .payment-modal .modal-body .left-side {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    .payment-modal .modal-body .right-side {
+        padding: 1rem;
+    }
+
+    .qr-code-container {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-modal .modal-header {
+        padding: 1rem;
+    }
+
+    .payment-modal .modal-header h2 {
+        font-size: 1.125rem;
+    }
+
+    .payment-modal .modal-header p {
+        font-size: 0.75rem;
+    }
+
+    .invoice-card {
+        padding: 0.75rem;
+    }
+
+    .invoice-card h4 {
+        font-size: 0.875rem;
+    }
+
+    .invoice-card .text-sm {
+        font-size: 0.75rem;
+    }
+
+    .qr-code-container {
+        width: 150px;
+        height: 150px;
+    }
+
+    .action-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .payment-modal {
+        background-color: #1f2937;
+        color: #f9fafb;
+    }
+
+    .invoice-card {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .qr-code-container {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .payment-modal {
+        position: static;
+        background: white;
+        box-shadow: none;
+    }
+
+    .payment-modal .modal-header,
+    .payment-modal .action-buttons {
+        display: none;
+    }
+
+    .payment-modal .modal-body {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .payment-modal .modal-body > div {
+        width: 100% !important;
+        border: none !important;
+    }
+}
+
+/* Accessibility Improvements */
+.payment-modal button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.payment-modal button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Custom Scrollbar for Modal */
+.payment-modal .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+}
+
+.payment-modal .overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.payment-modal .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.payment-modal .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

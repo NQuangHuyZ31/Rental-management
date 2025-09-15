@@ -9,7 +9,7 @@
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Controller;
-use App\Models\Landlord\House;
+use App\Models\House;
 use Core\Session;
 
 abstract class LandlordController extends Controller

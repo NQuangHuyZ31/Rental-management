@@ -26,6 +26,10 @@ class User extends Model {
 		}
 	}
 
+	public function getUserById($id) {
+		return $this->table($this->table)->where('id', $id)->where('deleted', 0)->first();
+	}
+
 	public function insertUser($data) {
 		return $this->table($this->table)->insert($data);
 	}
@@ -48,6 +52,22 @@ class User extends Model {
 			error_log("Error checking phone: " . $e->getMessage());
 			return false;
 		}
+	}
+
+	public function updateUser($id, $data) {
+		$data = [
+			'username' => $data['username'],
+			'phone' => $data['phone'],
+			'birthday' => $data['birthday'],
+			'gender' => $data['gender'],
+			'job' => $data['job'],
+			'province' => $data['province'],
+			'ward' => $data['ward'],
+			'address' => $data['address'],
+			'updated_at' => date('Y-m-d H:i:s'),
+		];
+
+		return $this->table($this->table)->where('id', $id)->update($data);
 	}
 
 	public function updateColumn($id, $column, $value) {

@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Toastr -->
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <!-- Empty States CSS -->
+    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/empty-states.css">
+    <!-- Pagination CSS -->
+    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/pagination.css">
+    <!-- Fix Scrollbar CSS -->
+    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/fix-scrollbar.css">
+    <!-- Payment Modal CSS -->
+    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/payment-modal.css">
+    <!-- Bootstrap Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .sidebar-transition {
@@ -40,9 +50,9 @@
         @media (max-width: 1023px) {
             #sidebar {
                 position: fixed;
-                top: 4rem;
+                top: 8rem; /* Adjusted for header height */
                 left: 0;
-                height: calc(100vh - 4rem);
+                height: calc(100vh - 8rem);
                 z-index: 30;
                 overflow-y: auto;
             }
@@ -57,35 +67,37 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 h-screen overflow-hidden">
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
     <!-- Header -->
     <?php require_once 'header.php'; ?>
 
     <!-- Main Container -->
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <?php if (isset($sidebar) && $sidebar) { ?>
-            <?php require_once 'sidebar.php'; ?>
-        <?php } ?>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto">
-            <!-- Mobile Sidebar Toggle Button -->
+    <div class="main-content-wrapper" style="height: calc(100vh - 8rem);">
+        <div class="flex h-full overflow-hidden">
+            <!-- Sidebar -->
             <?php if (isset($sidebar) && $sidebar) { ?>
-                <div class="lg:hidden p-4">
-                    <button id="sidebarToggle" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                        <i class="fas fa-bars mr-2"></i>
-                        Menu
-                    </button>
-                </div>
+                <?php require_once 'sidebar.php'; ?>
             <?php } ?>
 
-            <!-- Content -->
-            <div class="">
-                <?= $content ?>
-            </div>
-        </main>
+            <!-- Main Content Area -->
+            <main class="content-area flex-1">
+                <!-- Mobile Sidebar Toggle Button -->
+                <?php if (isset($sidebar) && $sidebar) { ?>
+                    <div class="lg:hidden p-4">
+                        <button id="sidebarToggle" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-bars mr-2"></i>
+                            Menu
+                        </button>
+                    </div>
+                <?php } ?>
+
+                <!-- Content -->
+                <div class="h-full">
+                    <?= $content ?>
+                </div>
+            </main>
+        </div>
     </div>
 
     <!-- Sidebar Overlay for Mobile -->
@@ -98,6 +110,7 @@
     
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/lazysizes.min.js"></script>
@@ -106,6 +119,9 @@
     <script src="<?=BASE_URL?>/Public/js/auth.js"></script>
     <script src="<?=BASE_URL?>/Public/js/index.js"></script>
     <script src="<?=BASE_URL?>/Public/js/customer-layout.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/customer-profile.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/payment.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/fix-scrollbar.js"></script>
 
 </body>
 </html>

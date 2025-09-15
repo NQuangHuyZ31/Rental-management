@@ -5,7 +5,7 @@
     Purpose: Build Invoice Model
 */
 
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
@@ -13,9 +13,11 @@ use Core\QueryBuilder;
 class Invoice extends Model
 {
     private $queryBuilder;
+	protected $table = 'invoices';
     
     public function __construct()
     {
+		parent::__construct();
         $this->queryBuilder = new QueryBuilder();
     }
     
@@ -306,6 +308,94 @@ class Invoice extends Model
             ->where('rooms.deleted', 0)
             ->orderBy('services.service_type', 'ASC')
             ->get();
+    }
+	
+	// Added by Huy Nguyen get all invoices
+	public function getAllInvoices($data = []) {
+        $query = $this->table('invoices')->select('invoices.*, rooms.room_name, houses.house_name')
+                        ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+                        ->join('houses', 'rooms.house_id', '=', 'houses.id')->where('invoices.deleted', 0)->where('invoices.user_id', $this->userID);
+
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                if ($value != '') {
+                    $query->where($key, $value);
+                }
+            }
+        }
+		return $query->get();
+	}
+
+	// Added by Huy Nguyen get all invoices by status
+	public function getAllInvoicesByStatus($status) {
+		return $this->table('invoices')->where('invoice_status', $status)->where('deleted', 0)->where('user_id', $this->userID)->get();
+	}
+
+	// Added by Huy Nguyen get total amount
+	public function getTotalAmount() {
+		return $this->table('invoices')->select('SUM(total) as total')->where('deleted', 0)
+            ->where('user_id', $this->userID)->where('invoice_status', 'paid')->first();
+	}
+
+	// Added by Huy Nguyen - Phân trang hóa đơn
+	public function getAllInvoicesWithPagination($data = [], $limit = 10, $offset = 0) {
+        $query = $this->queryBuilder
+            ->table('invoices')
+            ->select('invoices.*, rooms.room_name, houses.house_name')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->where('invoices.deleted', 0)
+            ->where('invoices.user_id', $this->userID);
+
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                if ($value != '') {
+                    $query->where($key, $value);
+                }
+            }
+        }
+
+        return $query->orderBy('invoices.invoice_month', 'DESC')
+                    ->limit($limit)
+                    ->offset($offset)
+                    ->get();
+	}
+
+	// Added by Huy Nguyen - Đếm tổng số hóa đơn
+	public function getTotalInvoicesCount($data = []) {
+        $query = $this->queryBuilder
+            ->table('invoices')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->where('invoices.deleted', 0)
+            ->where('invoices.user_id', $this->userID);
+
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                if ($value != '') {
+                    $query->where($key, $value);
+                }
+            }
+        }
+
+        return $query->count();
+	}
+
+    // Added by Huy Nguyen on 2025-09-14 get invoice by user id
+    public function getInvoiceByUserId($invoiceId, $userId) {
+        return $this->table('invoices')->where('id', $invoiceId)->where('user_id', $userId)->where('deleted', 0)->first();
+    }
+
+    // Added by Huy Nguyen on 2025-09-14 get invoice with room and house info
+    public function getInvoiceWithRoomInfo($invoiceId, $userId) {
+        return $this->table('invoices')
+            ->select('invoices.*, rooms.room_name, houses.house_name')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->where('invoices.id', $invoiceId)
+            ->where('invoices.user_id', $userId)
+            ->where('invoices.deleted', 0)
+            ->first();
     }
 }
 

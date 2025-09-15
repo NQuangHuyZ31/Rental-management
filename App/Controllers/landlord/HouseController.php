@@ -9,7 +9,7 @@
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
-use App\Models\Landlord\Room;
+use App\Models\Room;
 use Core\Request;
 use Core\Session;
 use Core\ViewRender;

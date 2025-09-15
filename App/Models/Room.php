@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
@@ -8,6 +8,10 @@ use Core\QueryBuilder;
 class Room extends Model
 {
     protected $table = 'rooms';
+
+    public function __construct() {
+        parent::__construct();
+    }
     
     public function getRoomsByHouseId($houseId)
     {
@@ -39,11 +43,6 @@ class Room extends Model
                     ->where('house_id', $houseId)
                     ->groupBy('room_status')
                     ->get();
-    }
-
-    // Added by Huy Nguyen get all rooms by user id
-    public function getAllRoomsByUserId($userId) {
-        
     }
 }
 

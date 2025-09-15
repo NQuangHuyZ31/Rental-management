@@ -4,7 +4,7 @@
 	Date: 2025-09-05
 	Purpose: Build Amenity Model
 */
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use Core\QueryBuilder;
 

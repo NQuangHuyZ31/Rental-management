@@ -22,7 +22,7 @@ class EmailTemplate
         ob_start();
         
         // Include template file
-        $templatePath = __DIR__ . '/../views/emails/' . $template . '.php';
+        $templatePath =  __DIR__ . '/../views/emails/' . $template . '.php';
         if (file_exists($templatePath)) {
             include $templatePath;
         } else {

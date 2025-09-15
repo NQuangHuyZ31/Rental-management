@@ -1,0 +1,133 @@
+/* Fix Double Scrollbar Issue */
+
+/* Reset default scrollbar behavior */
+html,
+body {
+    height: 100% !important;
+    overflow: hidden !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure main container takes full height */
+.main-content-wrapper {
+    height: calc(100vh - 8rem) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Main content area should be the only scrollable element */
+.content-area {
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Sidebar should not cause overflow */
+#sidebar {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: 100% !important;
+}
+
+/* Prevent any nested elements from causing overflow */
+.content-area > * {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Fix for mobile devices */
+@media (max-width: 1023px) {
+    .main-content-wrapper {
+        height: calc(100vh - 8rem) !important;
+    }
+
+    #sidebar {
+        height: calc(100vh - 8rem) !important;
+        top: 8rem !important;
+    }
+}
+
+/* Ensure pagination and other components don't cause overflow */
+.pagination-container {
+    overflow: visible;
+}
+
+.empty-state {
+    overflow: visible;
+}
+
+/* Fix for any modals or overlays */
+.modal,
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+/* Ensure header stays fixed */
+header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+}
+
+/* Remove any margin/padding that might cause overflow */
+body > * {
+    box-sizing: border-box;
+}
+
+/* Fix for any absolute positioned elements */
+.absolute,
+.fixed {
+    box-sizing: border-box;
+}
+
+/* Ensure smooth scrolling */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+.content-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Firefox scrollbar */
+.content-area {
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+    .content-area {
+        overflow-x: hidden !important;
+    }
+
+    .content-area * {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+}

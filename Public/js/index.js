@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    const PROVINCE = $('select[name="province"]');
-    const WARD = $('select[name="ward"]');
+    const PROVINCE = '#province';
+    const WARD = '#ward';
 
     // Add event listener for province select
     $(PROVINCE).on('click', function () {
@@ -9,13 +9,14 @@ $(document).ready(function () {
 
     // Add event listener for province change
     $(PROVINCE).on('change', function () {
+        $(WARD).html('<option value="">Chọn phường/xã</option>');
         const selectedValue = $(this).val();
         const code = $(this).find(':selected').data('code');
 
         if (code) {
             App.setWardData(code, WARD).then(function () {
-                // Keep the selected province value
-                PROVINCE.val(selectedValue);
+                // Re-set province value sau khi load xong
+                $(PROVINCE).val(selectedValue);
             });
         }
     });
