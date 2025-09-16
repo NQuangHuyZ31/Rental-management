@@ -397,5 +397,10 @@ class Invoice extends Model
             ->where('invoices.deleted', 0)
             ->first();
     }
+
+    // Added by Huy Nguyen on 2025-09-17 update invoice status
+    public function updateInvoiceOnlyStatus($invoiceId, $status) {
+        return $this->table('invoices')->update(['invoice_status' => $status])->where('id', $invoiceId)->where('deleted', 0);
+    }
 }
 

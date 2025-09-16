@@ -8,17 +8,20 @@ Purpose: Payment Controller
  */
 namespace App\Controllers\Customer;
 
+use App\Models\PaymentHistory;
 use App\Models\UserBanking;
 use Core\CSRF;
 use Core\Response;
-use Helpers\Log;
+use Core\Session;
 
 class PaymentController extends CustomerController {
     private $userBankingModel;
+    private $paymentHistoryModel;
 
     public function __construct() {
         parent::__construct();
         $this->userBankingModel = new UserBanking();
+        $this->paymentHistoryModel = new PaymentHistory();
     }
 
     public function payment() {
@@ -41,48 +44,87 @@ class PaymentController extends CustomerController {
 
         // Lấy thông tin tài khoản
         $userBanking = $this->userBankingModel->getUserBankingByUserId($roomInfo['owner_id']);
-        $qrCode = $this->generateQRCode($invoice, $userBanking);
+        $this->saveSessionAccountBank($userBanking, $invoice);
 
+        $qrCode = $this->generateQRCode($invoice, $userBanking);
         $bankingInfo = [
-            'bank_name' => $userBanking['bank_account_name'] ?? ACCOUNT_BANK_NAME,
-            'bank_number' => $userBanking['bank_account_number'] ?? ACCOUNT_BANK_NUMBER,
-            'user_name' => $userBanking['user_name'] ?? 'Nguyễn Quang Huy',
+            'bank_name' => $userBanking['bank_account_name'],
+            'bank_number' => $userBanking['bank_account_number'],
+            'user_name' => $userBanking['user_name'],
         ];
 
         Response::json(['status' => 'success', 'data' => $invoice, 'roomInfo' => $roomInfo, 'qrCode' => $qrCode, 'bankingInfo' => $bankingInfo, 'token' => CSRF::getTokenRefresh()], 200);
     }
 
+    private function saveSessionAccountBank($bankingInfo, $invoice) {
+        Session::set('account_bank', $bankingInfo);
+    }
+
     public function callback() {
-        Log::payment('Callback payment', Log::LEVEL_INFO);
         // get data from webhook
         $data = json_decode(file_get_contents('php://input'));
+
         if (!is_object($data)) {
-            Response::json(['success' => 'error', 'message' => 'No data'], 400);
+            Response::json(['status' => 'error', 'message' => 'No data'], 400);
             exit;
         }
 
-        $gateway = $data->gateway;
-        $transaction_date = $data->transactionDate;
-        $account_number = $data->accountNumber;
-        $sub_account = $data->subAccount;
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? null;
 
-        $transfer_type = $data->transferType;
-        $transfer_amount = $data->transferAmount;
-        $accumulated = $data->accumulated;
+        // Tách ra API Key (bỏ chữ "Apikey ")
+        if (stripos($authHeader, 'Apikey ') === 0) {
+            $apiKey = substr($authHeader, 7); // cắt phần "Apikey "
+        } else {
+            $apiKey = $authHeader; // fallback
+        }
 
-        $code = $data->code;
-        $transaction_content = $data->content;
-        $reference_number = $data->referenceCode;
-        $body = $data->description;
+        if ($apiKey != Session::get('account_bank')['api_key'] && $data->accountNumber != Session::get('account_bank')['bank_account_number']) {
+            Response::json(['status' => 'error', 'message' => 'API Key không hợp lệ'], 400);
+            exit;
+        }
 
-        $amount_in = 0;
-        $amount_out = 0;
+        try {
+            $this->db->beginTransaction();
 
-        // Kiem tra giao dich tien vao hay tien ra
-        if ($transfer_type == "in") {
-            $amount_in = $transfer_amount;
-        } else if ($transfer_type == "out") {
-            $amount_out = $transfer_amount;
+            if (preg_match('/HD\d+/', $data->description, $matches)) {
+                $maHoaDon = $matches[0];
+                $invoiceID = substr($maHoaDon, -2);
+            }
+
+            $dataPayment = [
+                'invoice_id' => $invoiceID,
+                'payer_id' => Session::get('user')['id'],
+                'receiver_id' => Session::get('account_bank')['user_id'],
+                'order_id' => $data->id,
+                'transaction_id' => $data->referenceCode,
+                'amount' => $data->transferAmount,
+                'payment_date' => date('Y-m-d', strtotime($data->transactionDate)),
+                'description' => $data->description,
+                'gateway' => $data->gateway,
+                'account_number' => $data->accountNumber,
+                'transferType' => $data->transferType,
+                'referenceCode' => $data->referenceCode,
+                'type' => 'invoice',
+                'status' => 'success-paid',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+
+            // create payment history
+            $this->paymentHistoryModel->create($dataPayment);
+
+            // update invoice status
+            $this->invoiceModel->updateInvoiceOnlyStatus($invoiceID, 'paid');
+            Session::delete('account_bank');
+
+            Response::json(['status' => 'success', 'payment_status' => 'paid'], 200);
+
+            $this->db->commit();
+        } catch (\Throwable $th) {
+            $this->db->rollback();
+            Response::json(['status' => 'error', 'payment_status' => 'failed'], 400);
+            exit;
         }
 
     }

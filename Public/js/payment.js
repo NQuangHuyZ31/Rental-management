@@ -38,7 +38,6 @@ $(document).ready(function () {
     // check payment status
     function checkPaymentStatus(invoiceId) {
         if (isPaymentCompleted) return;
-        console.log('checkPaymentStatus', invoiceId);
 
         // Make AJAX call to check payment status
         $.ajax({
@@ -57,13 +56,23 @@ $(document).ready(function () {
                         paymentCheckInterval = null;
                         updatePaymentStatus('success');
                         showSuccess('Thanh toán thành công!');
+                        setTimeout(() => {
+                            closePaymentModalFunc();
+                            $('.btn-payment').addClass('hidden pointer-events-none opacity-50');
+                        }, 3000);
                     } else {
                         updatePaymentStatus('pending');
                     }
                 }
             },
             error: function (xhr, status, error) {
-                console.log('Error checking payment status:', xhr.responseJSON);
+                if (xhr.responseJSON.payment_status === 'failed') {
+                    isPaymentCompleted = true;
+                    clearInterval(paymentCheckInterval);
+                    paymentCheckInterval = null;
+                    updatePaymentStatus('failed');
+                    showError('Thanh toán thất bại!');
+                }
             },
         });
     }
@@ -218,7 +227,7 @@ $(document).ready(function () {
     function showSuccess(message) {
         // You can use toastr or any other notification library
         if (typeof toastr !== 'undefined') {
-            toastr.success(message);
+            toastr['success'](message);
         } else {
             alert(message);
         }
@@ -227,7 +236,7 @@ $(document).ready(function () {
     // Function to show error message
     function showError(message) {
         if (typeof toastr !== 'undefined') {
-            toastr.error(message);
+            toastr['error'](message);
         } else {
             alert(message);
         }

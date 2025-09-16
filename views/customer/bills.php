@@ -191,7 +191,7 @@
         <?php
         $allPaid = true;
         foreach ($allInvoices as $invoice) {
-            if (in_array($invoice->invoice_status, ['pending', 'overdue'])) {
+            if (in_array($invoice['invoice_status'], ['pending', 'overdue'])) {
                 $allPaid = false;
                 break;
             }
@@ -201,7 +201,7 @@
         <?php
         $hasOverdue = false;
         foreach ($allInvoices as $invoice) {
-            if ($invoice->invoice_status === 'overdue') {
+            if ($invoice['invoice_status'] === 'overdue') {
                 $hasOverdue = true;
                 break;
             }
@@ -211,7 +211,7 @@
         <?php
         $hasPending = false;
         foreach ($allInvoices as $invoice) {
-            if ($invoice->invoice_status === 'pending') {
+            if ($invoice['invoice_status'] === 'pending') {
                 $hasPending = true;
                 break;
             }
@@ -252,12 +252,12 @@
 
         <!-- Bills List -->
         <?php foreach ($allInvoices as $invoice) { ?>
-            <div class="bg-white rounded-lg shadow-sm border invoice-item <?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'border-red-200' : 'border-green-200'; ?> overflow-hidden" data-invoice-id="<?= $invoice['id'] ?>">
+            <div class="bg-white rounded-lg shadow-sm border invoice-item <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'border-red-200' : 'border-green-200'; ?> overflow-hidden" data-invoice-id="<?= $invoice['id'] ?>">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 <?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'bg-red-100' : 'bg-green-100'; ?> rounded-lg flex items-center justify-center">
-                                <i class="fas fa-file-invoice-dollar <?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?> text-xl"></i>
+                            <div class="w-12 h-12 <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'bg-red-100' : 'bg-green-100'; ?> rounded-lg flex items-center justify-center">
+                                <i class="fas fa-file-invoice-dollar <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?> text-xl"></i>
                             </div>
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">Hóa đơn #HD-<?= $invoice['invoice_month'] ?></h3>
@@ -265,9 +265,9 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-bold <?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?>"><?= Format::formatUnit($invoice['total']) ?></p>
-                            <span class="inline-block <?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'; ?> text-xs px-2 py-1 rounded-full">
-                                <i class="fas fa-exclamation-triangle mr-1"></i><?= in_array($invoice->invoice_status, ['pending', 'overdue']) ? 'Chưa thanh toán' : 'Đã thanh toán' ?>
+                            <p class="text-2xl font-bold <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?>"><?= Format::formatUnit($invoice['total']) ?></p>
+                            <span class="inline-block <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'; ?> text-xs px-2 py-1 rounded-full">
+                                <i class="fas fa-exclamation-triangle mr-1"></i><?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'Chưa thanh toán' : 'Đã thanh toán' ?>
                             </span>
                         </div>
                     </div>
