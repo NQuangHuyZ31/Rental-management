@@ -10,9 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const body = document.body;
         const html = document.documentElement;
 
-        // Ensure body and html don't have overflow
-        body.style.overflow = 'hidden';
-        html.style.overflow = 'hidden';
+        // Only hide overflow on specific elements, not body/html
+        // Don't modify body and html overflow to preserve footer visibility
 
         // Find main content area
         const mainContent = document.querySelector('.content-area');
@@ -30,11 +29,28 @@ document.addEventListener('DOMContentLoaded', function () {
             sidebar.style.overflowX = 'hidden';
         }
 
-        // Remove any horizontal scroll
-        const allElements = document.querySelectorAll('*');
-        allElements.forEach((element) => {
-            if (element.scrollWidth > element.clientWidth) {
-                element.style.overflowX = 'hidden';
+        // Remove horizontal scroll only from specific elements, not body/html
+        const problematicElements = document.querySelectorAll('.main-content-wrapper, .content-area, #sidebar');
+        problematicElements.forEach((element) => {
+            if (element && element.scrollWidth > element.clientWidth) {
+                // Check if element contains camera number badges
+                const hasCameraBadge = element.querySelector('.absolute.-top-1.-right-1');
+                if (!hasCameraBadge) {
+                    element.style.overflowX = 'hidden';
+                } else {
+                    // Ensure camera badge containers have visible overflow
+                    element.style.overflow = 'visible';
+                }
+            }
+        });
+
+        // Ensure camera number badges are always visible
+        const cameraBadges = document.querySelectorAll('.absolute.-top-1.-right-1');
+        cameraBadges.forEach((badge) => {
+            let parent = badge.parentElement;
+            while (parent && parent !== document.body) {
+                parent.style.overflow = 'visible';
+                parent = parent.parentElement;
             }
         });
     }

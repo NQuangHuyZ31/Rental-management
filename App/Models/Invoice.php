@@ -389,7 +389,7 @@ class Invoice extends Model
     // Added by Huy Nguyen on 2025-09-14 get invoice with room and house info
     public function getInvoiceWithRoomInfo($invoiceId, $userId) {
         return $this->table('invoices')
-            ->select('invoices.*, rooms.room_name, houses.house_name')
+            ->select('invoices.*, rooms.room_name, houses.house_name, houses.owner_id as owner_id')
             ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->where('invoices.id', $invoiceId)

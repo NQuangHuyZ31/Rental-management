@@ -394,24 +394,22 @@ use Helpers\Format;
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<!-- Property Card 1 -->
 				<?php foreach ($rentalHotDeals as $rentalHotDeal) {?>
-					<a href="<?=BASE_URL?>/rental-post/<?=$rentalHotDeal['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-						<!-- Image Area -->
-						<div class="relative h-60 bg-gray-200">
+				<a href="<?=BASE_URL?>/rental-post/<?=$rentalHotDeal['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+					<!-- Image Area -->
+					<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-								<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-									<i class="fas fa-home text-gray-400 text-2xl"></i>
-								</div>
+								<img src="<?= json_decode($rentalHotDeal['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
 							</div>
 							<!-- Verified Badge -->
 							<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
 								<i class="fas fa-check text-white mr-1"></i>
 								Đã xác minh
 							</div>
-							<!-- Camera -->
-							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-								<i class="fas fa-camera text-gray-600"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
-							</div>
+						<!-- Camera -->
+						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
+							<i class="fas fa-camera text-gray-600"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
+						</div>
 						</div>
 
 						<!-- Content Area -->
@@ -430,7 +428,7 @@ use Helpers\Format;
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?=Format::forMatPrice($rentalHotDeal['price_discount'])?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalHotDeal['area']?></div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalHotDeal['area']?> m²</div>
 								</div>
 							</div>
 						</div>
@@ -463,13 +461,12 @@ use Helpers\Format;
 			<!-- Property Cards Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<?php foreach ($rentalStayNow as $rentalStayNow) {?>
-					<a href="<?=BASE_URL?>/rental-post/<?=$rentalStayNow['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-						<!-- Image Area -->
-						<div class="relative h-60 bg-gray-200">
+				<a href="<?=BASE_URL?>/rental-post/<?=$rentalStayNow['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+					<!-- Image Area -->
+					<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-								<div class="w-32 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
-									<i class="fas fa-building text-gray-400 text-2xl"></i>
-								</div>
+								<img src="<?= json_decode($rentalStayNow['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
+								</img>
 							</div>
 							<!-- Verified Badge -->
 							<div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
@@ -480,11 +477,11 @@ use Helpers\Format;
 							<div class="absolute bottom-2 right-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
 								NOW
 							</div>
-							<!-- Camera -->
-							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-								<i class="fas fa-camera text-gray-600"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center"><?=count(json_decode($rentalStayNow['images']))?></span>
-							</div>
+						<!-- Camera -->
+						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?=count(json_decode($rentalStayNow['images']))?></span>
+						</div>
 						</div>
 
 						<!-- Content Area -->
@@ -503,7 +500,7 @@ use Helpers\Format;
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?=Format::forMatPrice($rentalStayNow['price_discount'])?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalStayNow['area']?></div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalStayNow['area']?> m²</div>
 								</div>
 							</div>
 						</div>
@@ -531,24 +528,22 @@ use Helpers\Format;
 			<!-- Property Cards Grid - Horizontal Layout -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<?php foreach ($rentalNewPosts as $rentalNewPost) {?>
-					<a href="<?=BASE_URL?>/rental-post/<?=$rentalNewPost['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-hidden hover:shadow-lg transition-shadow flex">
-						<!-- Image Area -->
-						<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0">
+				<a href="<?=BASE_URL?>/rental-post/<?=$rentalNewPost['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow flex">
+					<!-- Image Area -->
+					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-								<div class="w-16 h-12 bg-white rounded-lg shadow-md flex items-center justify-center">
-									<i class="fas fa-bed text-gray-400 text-lg"></i>
-								</div>
+								<img src="<?= json_decode($rentalNewPost['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
 							</div>
 							<!-- Verified Badge -->
 							<div class="absolute bottom-1 left-1 bg-green-500 text-white px-1 py-0.5 rounded text-[10px] flex items-center">
 								<i class="fas fa-check text-white mr-1"></i>
 								Đã xác minh
 							</div>
-							<!-- Camera -->
-							<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
-								<i class="fas fa-camera text-gray-600 text-xs"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center"><?=count(json_decode($rentalNewPost['images']))?></span>
-							</div>
+						<!-- Camera -->
+						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+							<i class="fas fa-camera text-gray-600 text-xs"></i>
+							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center z-10"><?=count(json_decode($rentalNewPost['images']))?></span>
+						</div>
 						</div>
 
 						<!-- Content Area -->
@@ -568,7 +563,7 @@ use Helpers\Format;
 									</div>
 									<div class="text-base font-bold text-red-600"><?=Format::forMatPrice($rentalNewPost['price_discount'])?>đ/tháng</div>
 								</div>
-								<div class="text-xs text-gray-600 font-medium"><?=$rentalNewPost['area']?></div>
+								<div class="text-xs text-gray-600 font-medium"><?=$rentalNewPost['area']?> m²</div>
 							</div>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center text-xs text-gray-500">

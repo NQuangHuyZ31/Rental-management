@@ -392,7 +392,7 @@
 <!-- Payment Modal -->
 <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden payment-modal">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-5xl w-full max-h-[85vh] overflow-hidden modal-content">
+        <div class="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden modal-content">
             <!-- Modal Header -->
             <div class="p-6 border-b border-gray-200 bg-green-50">
                 <div class="flex items-center justify-between">
@@ -403,6 +403,10 @@
                         <div>
                             <h2 class="text-xl font-bold text-gray-900">Thanh toán hóa đơn</h2>
                             <p class="text-sm text-gray-600">Quét mã QR để thanh toán nhanh chóng</p>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-exclamation-triangle text-yellow-600 text-xs"></i>
+                                <p class="text-[10px] text-red-600">Vui lòng không đóng giao diện thanh toán này trước khi thanh toán thành công xuất hiện!</p>
+                            </div>
                         </div>
                     </div>
                     <button id="closePaymentModal" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -412,7 +416,7 @@
             </div>
 
             <!-- Modal Body -->
-            <div class="flex h-[65vh]">
+            <div class="flex h-[70vh]">
                 <!-- Left Side - Invoice Information -->
                 <div class="w-1/2 p-4 border-r border-gray-200 overflow-y-auto left-side">
                     <div class="space-y-3">
@@ -469,12 +473,27 @@
                                 <p class="font-semibold text-red-600 text-xs">Lưu ý: Thanh toán đúng số tiền</p>
                             </div>
                         </div>
+
+                        <!-- Payment Status -->
+                        <div id="paymentStatus" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="bg-yellow-100 border-2 border-yellow-300 rounded-lg p-1 shadow-sm">
+                                <div class="flex items-center justify-center">
+                                    <div class="animate-pulse">
+                                        <i class="fas fa-clock text-yellow-600 mr-1 text-xs"></i>
+                                    </div>
+                                    <span class="text-yellow-800 font-bold text-xs">Chờ thanh toán</span>
+                                </div>
+                                <p class="text-yellow-700 text-xs text-center mt-1">
+                                    Vui lòng quét mã QR để thanh toán
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Right Side - QR Code -->
-                <div class="w-1/2 p-4 flex flex-col justify-start bg-gradient-to-br from-green-50 to-blue-50 right-side">
-                    <div class="w-full">
+                <div class="w-1/2 p-4 flex flex-col justify-between bg-gradient-to-br from-green-50 to-blue-50 right-side">
+                    <div class="w-full flex-1 overflow-y-auto">
                         <!-- QR Code Container -->
                         <div class="text-center mb-4">
                             <div class="bg-white rounded-2xl p-4 shadow-lg">
@@ -492,23 +511,23 @@
                                 Làm mới mã QR
                             </button>
                         </div>
+                    </div>
 
-                        <!-- Bank Information -->
-                        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-200 mb-3">
-                            <h4 class="font-bold text-gray-900 mb-2 text-center text-xs">Thông tin ngân hàng</h4>
-                            <div class="space-y-1 text-xs">
-                                <div class="flex justify-between items-center py-1 border-b border-gray-100">
-                                    <span class="text-gray-600 font-medium">Ngân hàng:</span>
-                                    <span class="font-bold text-gray-900">Vietcombank</span>
-                                </div>
-                                <div class="flex justify-between items-center py-1 border-b border-gray-100">
-                                    <span class="text-gray-600 font-medium">Số tài khoản:</span>
-                                    <span class="font-bold text-blue-600 text-sm">1234567890</span>
-                                </div>
-                                <div class="flex justify-between items-center py-1">
-                                    <span class="text-gray-600 font-medium">Chủ tài khoản:</span>
-                                    <span class="font-bold text-gray-900">HOSTY COMPANY</span>
-                                </div>
+                    <!-- Bank Information - Fixed at bottom -->
+                    <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-200 mt-3">
+                        <h4 class="font-bold text-gray-900 mb-2 text-center text-xs">Thông tin ngân hàng</h4>
+                        <div class="space-y-1 text-xs">
+                            <div class="flex justify-between items-center py-1 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">Ngân hàng:</span>
+                                <span id="bank-name" class="font-bold text-gray-900"></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">Số tài khoản:</span>
+                                <span id="bank-number" class="font-bold text-blue-600 text-sm"></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-600 font-medium">Chủ tài khoản:</span>
+                                <span id="bank-user-name" class="font-bold text-gray-900"></span>
                             </div>
                         </div>
                     </div>

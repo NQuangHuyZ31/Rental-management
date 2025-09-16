@@ -26,7 +26,7 @@
     <!-- Bootstrap Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+    <!-- <style>
         .sidebar-transition {
             transition: all 0.3s ease-in-out;
         }
@@ -65,15 +65,15 @@
                 display: block;
             }
         }
-    </style>
+    </style> -->
 </head>
-<body class="bg-gray-50 h-screen overflow-hidden">
+<body class="bg-gray-50 h-screen">
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
     <!-- Header -->
     <?php require_once 'header.php'; ?>
 
     <!-- Main Container -->
-    <div class="main-content-wrapper" style="height: calc(100vh - 8rem);">
+    <div class="<?php echo isset($sidebar) && $sidebar ? 'main-content-wrapper' : 'main-content-wrapper-full'; ?>">
         <div class="flex h-full overflow-hidden">
             <!-- Sidebar -->
             <?php if (isset($sidebar) && $sidebar) { ?>
@@ -81,7 +81,7 @@
             <?php } ?>
 
             <!-- Main Content Area -->
-            <main class="content-area flex-1">
+            <main class="flex-1">
                 <!-- Mobile Sidebar Toggle Button -->
                 <?php if (isset($sidebar) && $sidebar) { ?>
                     <div class="lg:hidden p-4">
@@ -93,7 +93,7 @@
                 <?php } ?>
 
                 <!-- Content -->
-                <div class="h-full">
+                <div class="h-full <?php echo isset($sidebar) && $sidebar ? 'content-area' : ''; ?>">
                     <?= $content ?>
                 </div>
             </main>
@@ -101,12 +101,12 @@
     </div>
 
     <!-- Sidebar Overlay for Mobile -->
-    <?php if (isset($sidebar) && $sidebar) { ?>
-        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
-    <?php } ?>
+        <?php if (isset($sidebar) && $sidebar) { ?>
+            <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+        <?php } ?>
 
-    <!-- Footer -->
-    <?php require_once 'footer.php'; ?>
+        <!-- Footer -->
+        <?php require_once 'footer.php'; ?>
     
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>

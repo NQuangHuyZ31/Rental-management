@@ -12,18 +12,61 @@ $(document).ready(function () {
     const closePaymentModalBtn = $('#closePaymentModalBtn');
     const refreshQR = $('#refreshQR');
     const qrCodeContainer = $('#qrCodeContainer');
-    const paymentStatus = $('#paymentStatus');
+    const paymentStatusElement = $('#paymentStatus');
 
     let currentInvoiceId = null;
     let currentQRCode = null;
+    let paymentCheckInterval = null;
+    let isPaymentCompleted = false;
 
     // Open payment modal
     $('.btn-payment').click(function () {
+        isPaymentCompleted = false;
         const invoiceId = $(this).data('invoice-id');
+
         if (invoiceId) {
             openPaymentModal(invoiceId);
+            // Clear any existing interval before starting new one
+            if (paymentCheckInterval) {
+                clearInterval(paymentCheckInterval);
+            }
+            // Start checking payment status every 1 second
+            paymentCheckInterval = setInterval(() => checkPaymentStatus(invoiceId), 1000);
         }
     });
+
+    // check payment status
+    function checkPaymentStatus(invoiceId) {
+        if (isPaymentCompleted) return;
+        console.log('checkPaymentStatus', invoiceId);
+
+        // Make AJAX call to check payment status
+        $.ajax({
+            type: 'POST',
+            url: App.appURL + 'customer/payment/callback',
+            data: {
+                invoice_id: invoiceId,
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    if (response.payment_status === 'paid') {
+                        // Payment successful, stop checking
+                        isPaymentCompleted = true;
+                        clearInterval(paymentCheckInterval);
+                        paymentCheckInterval = null;
+                        updatePaymentStatus('success');
+                        showSuccess('Thanh toán thành công!');
+                    } else {
+                        updatePaymentStatus('pending');
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Error checking payment status:', xhr.responseJSON);
+            },
+        });
+    }
 
     // Close payment modal
     [closePaymentModal, closePaymentModalBtn].forEach(function (button) {
@@ -58,6 +101,11 @@ $(document).ready(function () {
         paymentModal.addClass('hidden');
         currentInvoiceId = null;
         currentQRCode = null;
+        // Clear the payment check interval when closing modal
+        if (paymentCheckInterval) {
+            clearInterval(paymentCheckInterval);
+            paymentCheckInterval = null;
+        }
     }
 
     // Function to load payment data
@@ -75,7 +123,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status === 'success') {
-                    updateInvoiceInfo(response.data, response.roomInfo);
+                    updateInvoiceInfo(response.data, response.roomInfo, response.bankingInfo);
                     displayQRCode(response.qrCode);
                     currentQRCode = response.qrCode;
                     App.setToken(response.token);
@@ -96,7 +144,7 @@ $(document).ready(function () {
     }
 
     // Function to update invoice information
-    function updateInvoiceInfo(invoice, roomInfo) {
+    function updateInvoiceInfo(invoice, roomInfo, bankingInfo) {
         // Update invoice header
         $('#invoiceNumber').text(`Hóa đơn #HD-${invoice.invoice_month}`);
         $('#roomInfo').text(`${roomInfo.room_name} - ${roomInfo.house_name}`);
@@ -108,6 +156,11 @@ $(document).ready(function () {
         $('#waterAmount').text(formatCurrency(toNumber(invoice.water_amount)));
         $('#serviceAmount').text(formatCurrency(toNumber(invoice.service_amount) + toNumber(invoice.parking_amount) + toNumber(invoice.other_amount)));
         $('#totalAmountDetail').text(formatCurrency(toNumber(invoice.total)));
+
+        // Update banking information
+        $('#bank-name').text(bankingInfo.bank_name);
+        $('#bank-number').text(bankingInfo.bank_number);
+        $('#bank-user-name').text(bankingInfo.user_name);
     }
 
     // Function to display QR code
@@ -133,7 +186,7 @@ $(document).ready(function () {
     // Function to update payment status
     function updatePaymentStatus(status) {
         if (status === 'success') {
-            paymentStatus.html(`
+            paymentStatusElement.html(`
                         <div class="bg-green-100 border-2 border-green-300 rounded-lg p-2 shadow-sm">
                             <div class="flex items-center justify-center">
                                 <i class="fas fa-check-circle text-green-600 mr-1 text-xs"></i>
@@ -145,7 +198,7 @@ $(document).ready(function () {
                         </div>
                     `);
         } else if (status === 'pending') {
-            paymentStatus.html(`
+            paymentStatusElement.html(`
                         <div class="bg-yellow-100 border-2 border-yellow-300 rounded-lg p-2 shadow-sm">
                             <div class="flex items-center justify-center">
                                 <div class="animate-pulse">

@@ -1,13 +1,14 @@
 /* Fix Double Scrollbar Issue */
 
 /* Reset default scrollbar behavior */
-html,
+/* html,
 body {
     height: 100% !important;
-    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
     margin: 0;
     padding: 0;
-}
+} */
 
 /* Ensure main container takes full height */
 .main-content-wrapper {
@@ -95,32 +96,62 @@ body > * {
     scroll-behavior: smooth;
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar styling - thinner scrollbar */
 .content-area::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 .content-area::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+    background: #f8f9fa;
+    border-radius: 2px;
 }
 
 .content-area::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
+    background: #dee2e6;
+    border-radius: 2px;
 }
 
 .content-area::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: #adb5bd;
 }
 
-/* Firefox scrollbar */
+/* Firefox scrollbar - thinner */
 .content-area {
     scrollbar-width: thin;
-    scrollbar-color: #c1c1c1 #f1f1f1;
+    scrollbar-color: #dee2e6 #f8f9fa;
 }
 
-/* Prevent horizontal scroll on mobile */
+/* Global scrollbar styling for all elements */
+*::-webkit-scrollbar {
+    width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Ensure camera number badges are always visible */
+.absolute.-top-1.-right-1 {
+    z-index: 10 !important;
+}
+
+/* Ensure parent containers of camera badges have visible overflow */
+.absolute.-top-1.-right-1,
+.absolute.-top-1.-right-1 * {
+    overflow: visible !important;
+}
+
+/* Prevent horizontal scroll on mobile but preserve camera badges */
 @media (max-width: 768px) {
     .content-area {
         overflow-x: hidden !important;
@@ -129,5 +160,11 @@ body > * {
     .content-area * {
         max-width: 100% !important;
         overflow-x: hidden !important;
+    }
+
+    /* Exception for camera badge containers */
+    .content-area .absolute.-top-1.-right-1,
+    .content-area .absolute.-top-1.-right-1 * {
+        overflow: visible !important;
     }
 }
