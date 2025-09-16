@@ -13,6 +13,7 @@ use App\Models\UserBanking;
 use Core\CSRF;
 use Core\Response;
 use Core\Session;
+use Helpers\Log;
 
 class PaymentController extends CustomerController {
     private $userBankingModel;
@@ -44,20 +45,15 @@ class PaymentController extends CustomerController {
 
         // Lấy thông tin tài khoản
         $userBanking = $this->userBankingModel->getUserBankingByUserId($roomInfo['owner_id']);
-        $this->saveSessionAccountBank($userBanking, $invoice);
 
         $qrCode = $this->generateQRCode($invoice, $userBanking);
         $bankingInfo = [
             'bank_name' => $userBanking['bank_account_name'],
             'bank_number' => $userBanking['bank_account_number'],
-            'user_name' => $userBanking['user_banking_name'],
+            'user_name' => $userBanking['user_bank_name'],
         ];
 
         Response::json(['status' => 'success', 'data' => $invoice, 'roomInfo' => $roomInfo, 'qrCode' => $qrCode, 'bankingInfo' => $bankingInfo, 'token' => CSRF::getTokenRefresh()], 200);
-    }
-
-    private function saveSessionAccountBank($bankingInfo, $invoice) {
-        Session::set('account_bank', $bankingInfo);
     }
 
     public function callback() {
@@ -79,7 +75,10 @@ class PaymentController extends CustomerController {
             $apiKey = $authHeader; // fallback
         }
 
-        if ($apiKey != Session::get('account_bank')['api_key'] && $data->accountNumber != Session::get('account_bank')['bank_account_number']) {
+        $userBanking = $this->userBankingModel->getUserBankingByBankAccountNumber($data->accountNumber);
+
+        if (!$userBanking || $apiKey != $userBanking['api_key'] || $data->accountNumber != $userBanking['bank_account_number']) {
+            Log::payment('API Key không hợp lệ: ' . $apiKey . ' - ' . $data->accountNumber, Log::LEVEL_ERROR);
             Response::json(['status' => 'error', 'message' => 'API Key không hợp lệ'], 400);
             exit;
         }
@@ -131,7 +130,7 @@ class PaymentController extends CustomerController {
 
     public function generateQRCode($invoice, $userBanking) {
         $bankNumber = $userBanking['bank_account_number'];
-        $bankCode = $userBanking['bank_account_code'];
+        $bankCode = $userBanking['bank_code'];
 
         $totalAmount = intval($invoice['total']);
         $des = 'Thanh toán hóa đơn: HD-' . $invoice['invoice_month'] . '-' . $invoice['id'];

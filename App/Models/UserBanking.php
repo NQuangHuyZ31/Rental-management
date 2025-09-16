@@ -23,5 +23,7 @@ class UserBanking extends Model {
 		join('users', 'user_bankings.user_id', '=', 'users.id')->where('user_bankings.user_id', $userId)->where('user_bankings.deleted', 0)->where('users.deleted', 0)->first();
 	}
 	
-	
+	public function getUserBankingByBankAccountNumber($bankAccountNumber) {
+		return $this->table($this->table)->where('bank_account_number', $bankAccountNumber)->where('deleted', 0)->first();
+	}
 }

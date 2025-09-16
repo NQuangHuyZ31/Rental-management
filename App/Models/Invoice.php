@@ -9,6 +9,7 @@ namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
+use Helpers\Log;
 
 class Invoice extends Model
 {
@@ -400,6 +401,7 @@ class Invoice extends Model
 
     // Added by Huy Nguyen on 2025-09-17 update invoice status
     public function updateInvoiceOnlyStatus($invoiceId, $status) {
+        Log::payment('Cập nhật trạng thái hóa đơn: ' . $invoiceId . ' - ' . $status, Log::LEVEL_INFO);
         return $this->table('invoices')->update(['invoice_status' => $status])->where('id', $invoiceId)->where('deleted', 0);
     }
 }
