@@ -50,7 +50,7 @@ class PaymentController extends CustomerController {
         $bankingInfo = [
             'bank_name' => $userBanking['bank_account_name'],
             'bank_number' => $userBanking['bank_account_number'],
-            'user_name' => $userBanking['user_name'],
+            'user_name' => $userBanking['user_banking_name'],
         ];
 
         Response::json(['status' => 'success', 'data' => $invoice, 'roomInfo' => $roomInfo, 'qrCode' => $qrCode, 'bankingInfo' => $bankingInfo, 'token' => CSRF::getTokenRefresh()], 200);
@@ -130,8 +130,8 @@ class PaymentController extends CustomerController {
     }
 
     public function generateQRCode($invoice, $userBanking) {
-        $bankNumber = $userBanking['bank_account_number'] ?? ACCOUNT_BANK_NUMBER;
-        $bankCode = $userBanking['bank_account_code'] ?? ACCOUNT_BANK_CODE;
+        $bankNumber = $userBanking['bank_account_number'];
+        $bankCode = $userBanking['bank_account_code'];
 
         $totalAmount = intval($invoice['total']);
         $des = 'Thanh toán hóa đơn: HD-' . $invoice['invoice_month'] . '-' . $invoice['id'];
