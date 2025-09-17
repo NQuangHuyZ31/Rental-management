@@ -5,18 +5,24 @@ Date: 2025-09-07
 Purpose: Build Tenant Model
  */
 namespace App\Models;
+use App\Models\Model;
+use Core\QueryBuilder;
 
 class Tenant extends Model {
+    protected $table = 'room_tenants';
+    private $queryBuilder;
 
     public function __construct() {
         parent::__construct();
+        $this->queryBuilder = new QueryBuilder();
     }
 
     /**
      * Lấy danh sách khách thuê theo house_id, nhóm theo phòng (chỉ khách chưa rời)
      */
     public function getTenantsByHouseId($houseId, $ownerId) {
-        return $this->table('room_tenants')
+        return $this->queryBuilder
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -52,7 +58,8 @@ class Tenant extends Model {
      * Lấy thông tin chi tiết khách thuê theo ID
      */
     public function getTenantById($tenantId, $ownerId) {
-        return $this->table('room_tenants')
+        return $this->queryBuilder
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -89,7 +96,8 @@ class Tenant extends Model {
      * Lấy danh sách khách thuê đang ở (chưa rời)
      */
     public function getActiveTenantsByHouseId($houseId, $ownerId) {
-        return $this->table('room_tenants')
+        return $this->queryBuilder
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -122,7 +130,8 @@ class Tenant extends Model {
      * Lấy danh sách khách thuê đã rời
      */
     public function getLeftTenantsByHouseId($houseId, $ownerId) {
-        return $this->table('room_tenants')
+        return $this->queryBuilder
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -199,7 +208,8 @@ class Tenant extends Model {
      * Tạo tenant mới
      */
     public function createTenant($tenantData) {
-        return $this->table('room_tenants')
+        return $this->queryBuilder
+            ->table($this->table)
             ->insert($tenantData);
     }
 

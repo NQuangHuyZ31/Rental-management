@@ -14,6 +14,10 @@ class RenTalPost extends Model
 {
 	protected $table = 'rental_posts';
 
+	public function __construct() {
+		parent::__construct();
+	}
+
 	public function getAllRentalPosts($limit = 10, $offset = 0)
 	{
 		return $this->table($this->table)

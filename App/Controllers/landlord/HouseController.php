@@ -10,6 +10,7 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
 use App\Models\Room;
+use App\Models\Tenant;
 use Core\Request;
 use Core\Session;
 use Core\ViewRender;
@@ -18,12 +19,14 @@ use Core\CSRF;
 class HouseController extends LandlordController
 {
     private $roomModel;
+    private $tenantModel;
     private $request;
 
     public function __construct()
     {
         parent::__construct();
         $this->roomModel = new Room();
+        $this->tenantModel = new Tenant();
         $this->request = new Request();
     }
 
@@ -49,19 +52,31 @@ class HouseController extends LandlordController
         }
 
         // Tính toán dữ liệu cho summary cards
-        $totalDebt = 0;
+        $totalTenants = 0;
         $totalDeposit = 0;
-        $totalReservationDeposit = 0;
+        $totalRooms = count($rooms);
         $maintenanceIssues = 0;
+        $occupiedRooms = 0;
+        $availableRooms = 0;
+
+        // Lấy số lượng khách thuê cho nhà trọ được chọn
+        if ($selectedHouse) {
+            $totalTenants = $this->tenantModel->countTenantsByHouseId($selectedHouse['id'], $ownerId);
+        }
+
+        // Tính số phòng theo trạng thái từ roomStats
+        foreach ($roomStats as $stat) {
+            if ($stat['room_status'] === 'occupied') {
+                $occupiedRooms = (int)$stat['count'];
+            } elseif ($stat['room_status'] === 'available') {
+                $availableRooms = (int)$stat['count'];
+            } elseif ($stat['room_status'] === 'maintenance') {
+                $maintenanceIssues = (int)$stat['count'];
+            }
+        }
 
         foreach ($rooms as $room) {
             $totalDeposit += $room['deposit'] ?? 0;
-            if ($room['room_status'] === 'occupied') {
-                $totalDebt += $room['room_price'] ?? 0;
-            }
-            if ($room['room_status'] === 'maintenance') {
-                $maintenanceIssues++;
-            }
         }
 
         // Render view
@@ -70,10 +85,12 @@ class HouseController extends LandlordController
             'selectedHouse' => $selectedHouse,
             'rooms' => $rooms,
             'roomStats' => $roomStats,
-            'totalDebt' => $totalDebt,
+            'totalTenants' => $totalTenants,
             'totalDeposit' => $totalDeposit,
-            'totalReservationDeposit' => $totalReservationDeposit,
-            'maintenanceIssues' => $maintenanceIssues
+            'totalRooms' => $totalRooms,
+            'maintenanceIssues' => $maintenanceIssues,
+            'occupiedRooms' => $occupiedRooms,
+            'availableRooms' => $availableRooms
         ]);
     }
 

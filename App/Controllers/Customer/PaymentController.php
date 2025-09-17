@@ -148,7 +148,7 @@ class PaymentController extends CustomerController {
 
         $invoice = $this->invoiceModel->getInvoiceByInvoiceId($data['invoice_id']);
 
-        if (!$invoice && $invoice['invoice_status'] != 'paid') {
+        if ($invoice && $invoice['invoice_status'] != 'paid') {
             Response::json(['status' => 'error', 'payment_status' => 'failed', 'message' => 'Hóa đơn không tồn tại hoặc đã thanh toán', 'token' => CSRF::getTokenRefresh()], 404);
             exit;
         }

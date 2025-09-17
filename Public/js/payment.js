@@ -69,12 +69,8 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 if (xhr.responseJSON.payment_status === 'failed') {
-                    isPaymentCompleted = true;
-                    clearInterval(paymentCheckInterval);
-                    paymentCheckInterval = null;
-                    updatePaymentStatus('failed');
+                    updatePaymentStatus('pending');
                     App.setToken(xhr.responseJSON.token);
-                    showError('Thanh toán thất bại!');
                 }
             },
         });

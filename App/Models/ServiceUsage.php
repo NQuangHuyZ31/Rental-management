@@ -1,32 +1,32 @@
 <?php
 /*
-    Author: Nguyen Xuan Duong
-    Date: 2025-08-31
-    Purpose: Build Service Usage Model
-*/
+Author: Nguyen Xuan Duong
+Date: 2025-08-31
+Purpose: Build Service Usage Model
+ */
 namespace App\Models;
 
 use App\Models\Model;
+use Core\QueryBuilder;
 
-class ServiceUsage extends Model
-{
+class ServiceUsage extends Model {
     protected $table = 'service_usages';
-    
-    public function __construct()
-    {
+    private $queryBuilder;
+
+    public function __construct() {
         parent::__construct();
+        $this->queryBuilder = new QueryBuilder();
     }
-    
+
     /**
      * Lấy dữ liệu sử dụng dịch vụ theo tháng và nhà
      */
-    public function getUsageByMonthAndHouse($houseId, $month, $year)
-    {
+    public function getUsageByMonthAndHouse($houseId, $month, $year) {
         // Format month_year theo format MM-YYYY
         $monthYear = sprintf('%02d-%d', $month, $year);
-        
+
         $sql = "
-            SELECT 
+            SELECT
                 r.id as room_id,
                 r.room_name as room_number,
                 s.id as service_id,
@@ -43,36 +43,26 @@ class ServiceUsage extends Model
             INNER JOIN room_services rs ON r.id = rs.room_id
             INNER JOIN services s ON rs.service_id = s.id
             INNER JOIN service_usages su ON (
-                r.id = su.room_id 
-                AND s.id = su.service_id 
+                r.id = su.room_id
+                AND s.id = su.service_id
                 AND su.month_year = ?
             )
             WHERE r.house_id = ? AND r.deleted = 0
             ORDER BY r.room_name, s.service_type
         ";
-        
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$monthYear, $houseId]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            
-            return $result;
-        } catch (\PDOException $e) {
-            error_log("Error in getUsageByMonthAndHouse: " . $e->getMessage());
-            return false;
-        }
+
+        return $this->queryBuilder->query($sql, [$monthYear, $houseId]);
     }
-    
+
     /**
      * Lấy dữ liệu sử dụng dịch vụ theo phòng và tháng
      */
-    public function getUsageByRoomAndMonth($roomId, $month, $year)
-    {
+    public function getUsageByRoomAndMonth($roomId, $month, $year) {
         // Format month_year theo format MM-YYYY
         $monthYear = sprintf('%02d-%d', $month, $year);
-        
+
         $sql = "
-            SELECT 
+            SELECT
                 s.id as service_id,
                 s.service_name,
                 s.service_type,
@@ -86,29 +76,21 @@ class ServiceUsage extends Model
             FROM services s
             LEFT JOIN room_services rs ON s.id = rs.service_id
             LEFT JOIN service_usages su ON (
-                s.id = su.service_id 
+                s.id = su.service_id
                 AND rs.room_id = su.room_id
                 AND su.month_year = ?
             )
             WHERE rs.room_id = ?
             ORDER BY s.service_type
         ";
-        
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$monthYear, $roomId]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            error_log("Error in getUsageByRoomAndMonth: " . $e->getMessage());
-            return false;
-        }
+
+        return $this->queryBuilder->query($sql, [$monthYear, $roomId]);
     }
-    
+
     /**
      * Tạo hoặc cập nhật dữ liệu sử dụng dịch vụ
      */
-    public function createOrUpdateUsage($data)
-    {
+    public function createOrUpdateUsage($data) {
         $sql = "
             INSERT INTO service_usages (room_id, service_id, old_value, new_value, usage_amount, total_amount, month_year, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
@@ -119,73 +101,50 @@ class ServiceUsage extends Model
             total_amount = VALUES(total_amount),
             updated_at = NOW()
         ";
-        
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $result = $stmt->execute([
-                $data['room_id'],
-                $data['service_id'],
-                $data['old_value'],
-                $data['new_value'],
-                $data['usage_amount'],
-                $data['total_amount'],
-                $data['month_year']
-            ]);
-            
-            return $result;
-        } catch (\PDOException $e) {
-            error_log("Error in createOrUpdateUsage: " . $e->getMessage());
-            return false;
-        }
+
+        return $this->queryBuilder->query($sql, [
+            $data['room_id'],
+            $data['service_id'],
+            $data['old_value'],
+            $data['new_value'],
+            $data['usage_amount'],
+            $data['total_amount'],
+            $data['month_year'],
+        ]);
     }
-    
+
     /**
      * Xóa dữ liệu sử dụng dịch vụ
      */
-    public function deleteUsage($roomId, $serviceId, $month, $year)
-    {
+    public function deleteUsage($roomId, $serviceId, $month, $year) {
         // Format month_year theo format MM-YYYY
         $monthYear = sprintf('%02d-%d', $month, $year);
-        
+
         $sql = "
-            DELETE FROM service_usages 
-            WHERE room_id = ? AND service_id = ? 
+            DELETE FROM service_usages
+            WHERE room_id = ? AND service_id = ?
             AND month_year = ?
         ";
-        
-        try {
-            $stmt = $this->connection->prepare($sql);
-            return $stmt->execute([$roomId, $serviceId, $monthYear]);
-        } catch (\PDOException $e) {
-            error_log("Error in deleteUsage: " . $e->getMessage());
-            return false;
-        }
+
+        return $this->queryBuilder->query($sql, [$roomId, $serviceId, $monthYear]);
     }
-    
+
     /**
      * Kiểm tra xem đã có dữ liệu sử dụng cho tháng này chưa
      */
-    public function hasUsageForMonth($houseId, $month, $year)
-    {
+    public function hasUsageForMonth($houseId, $month, $year) {
         // Format month_year theo format MM-YYYY
         $monthYear = sprintf('%02d-%d', $month, $year);
-        
+
         $sql = "
             SELECT COUNT(*) as count
             FROM service_usages su
             JOIN rooms r ON su.room_id = r.id
-            WHERE r.house_id = ? 
+            WHERE r.house_id = ?
             AND su.month_year = ?
         ";
-        
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$houseId, $monthYear]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $result['count'] > 0;
-        } catch (\PDOException $e) {
-            error_log("Error in hasUsageForMonth: " . $e->getMessage());
-            return false;
-        }
+
+        $result = $this->queryBuilder->query($sql, [$houseId, $monthYear]);
+        return $result && $result[0]['count'] > 0;
     }
 }
