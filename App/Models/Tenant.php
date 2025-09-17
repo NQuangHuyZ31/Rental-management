@@ -4,12 +4,13 @@
 	Date: 2025-09-07
 	Purpose: Build Tenant Model
 */
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use Core\QueryBuilder;
 
 class Tenant
 {
+    protected $table = 'room_tenants';
     private $queryBuilder;
     
     public function __construct()
@@ -23,7 +24,7 @@ class Tenant
     public function getTenantsByHouseId($houseId, $ownerId)
     {
         return $this->queryBuilder
-            ->table('room_tenants')
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -61,7 +62,7 @@ class Tenant
     public function getTenantById($tenantId, $ownerId)
     {
         return $this->queryBuilder
-            ->table('room_tenants')
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -100,7 +101,7 @@ class Tenant
     public function getActiveTenantsByHouseId($houseId, $ownerId)
     {
         return $this->queryBuilder
-            ->table('room_tenants')
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -135,7 +136,7 @@ class Tenant
     public function getLeftTenantsByHouseId($houseId, $ownerId)
     {
         return $this->queryBuilder
-            ->table('room_tenants')
+            ->table($this->table)
             ->select([
                 'users.id',
                 'users.username',
@@ -220,7 +221,7 @@ class Tenant
     public function createTenant($tenantData)
     {
         return $this->queryBuilder
-            ->table('room_tenants')
+            ->table($this->table)
             ->insert($tenantData);
     }
     

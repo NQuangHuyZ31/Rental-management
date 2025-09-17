@@ -4,17 +4,20 @@
     Date: 2025-08-31
     Purpose: Build Service Usage Model
 */
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
+use Core\QueryBuilder;
 
 class ServiceUsage extends Model
 {
     protected $table = 'service_usages';
+    private $queryBuilder;
     
     public function __construct()
     {
         parent::__construct();
+        $this->queryBuilder = new QueryBuilder();
     }
     
     /**
@@ -51,16 +54,7 @@ class ServiceUsage extends Model
             ORDER BY r.room_name, s.service_type
         ";
         
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$monthYear, $houseId]);
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            
-            return $result;
-        } catch (\PDOException $e) {
-            error_log("Error in getUsageByMonthAndHouse: " . $e->getMessage());
-            return false;
-        }
+        return $this->queryBuilder->query($sql, [$monthYear, $houseId]);
     }
     
     /**
@@ -94,14 +88,7 @@ class ServiceUsage extends Model
             ORDER BY s.service_type
         ";
         
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$monthYear, $roomId]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            error_log("Error in getUsageByRoomAndMonth: " . $e->getMessage());
-            return false;
-        }
+        return $this->queryBuilder->query($sql, [$monthYear, $roomId]);
     }
     
     /**
@@ -120,23 +107,15 @@ class ServiceUsage extends Model
             updated_at = NOW()
         ";
         
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $result = $stmt->execute([
-                $data['room_id'],
-                $data['service_id'],
-                $data['old_value'],
-                $data['new_value'],
-                $data['usage_amount'],
-                $data['total_amount'],
-                $data['month_year']
-            ]);
-            
-            return $result;
-        } catch (\PDOException $e) {
-            error_log("Error in createOrUpdateUsage: " . $e->getMessage());
-            return false;
-        }
+        return $this->queryBuilder->query($sql, [
+            $data['room_id'],
+            $data['service_id'],
+            $data['old_value'],
+            $data['new_value'],
+            $data['usage_amount'],
+            $data['total_amount'],
+            $data['month_year']
+        ]);
     }
     
     /**
@@ -153,13 +132,7 @@ class ServiceUsage extends Model
             AND month_year = ?
         ";
         
-        try {
-            $stmt = $this->connection->prepare($sql);
-            return $stmt->execute([$roomId, $serviceId, $monthYear]);
-        } catch (\PDOException $e) {
-            error_log("Error in deleteUsage: " . $e->getMessage());
-            return false;
-        }
+        return $this->queryBuilder->query($sql, [$roomId, $serviceId, $monthYear]);
     }
     
     /**
@@ -178,14 +151,7 @@ class ServiceUsage extends Model
             AND su.month_year = ?
         ";
         
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$houseId, $monthYear]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $result['count'] > 0;
-        } catch (\PDOException $e) {
-            error_log("Error in hasUsageForMonth: " . $e->getMessage());
-            return false;
-        }
+        $result = $this->queryBuilder->query($sql, [$houseId, $monthYear]);
+        return $result && $result[0]['count'] > 0;
     }
 }

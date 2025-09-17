@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
@@ -8,17 +8,23 @@ use Core\QueryBuilder;
 class Service extends Model
 {
     protected $table = 'services';
+    private $queryBuilder;
+    
+    public function __construct()
+    {
+        $this->queryBuilder = new QueryBuilder();
+    }
     
     /**
      * Lấy tất cả dịch vụ của một nhà
      */
     public function getServicesByHouseId($houseId)
     {
-        $query = new QueryBuilder();
-        return $query->table('services')
-                    ->where('house_id', $houseId)
-                    ->orderBy('service_name')
-                    ->get();
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('house_id', $houseId)
+            ->orderBy('service_name')
+            ->get();
     }
     
     /**
@@ -26,10 +32,10 @@ class Service extends Model
      */
     public function getServiceById($serviceId)
     {
-        $query = new QueryBuilder();
-        return $query->table('services')
-                    ->where('id', $serviceId)
-                    ->first();
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $serviceId)
+            ->first();
     }
     
     /**
@@ -37,8 +43,9 @@ class Service extends Model
      */
     public function createService($data)
     {
-        $query = new QueryBuilder();
-        return $query->table('services')->insert($data);
+        return $this->queryBuilder
+            ->table($this->table)
+            ->insert($data);
     }
     
     /**
@@ -46,10 +53,10 @@ class Service extends Model
      */
     public function updateService($serviceId, $data)
     {
-        $query = new QueryBuilder();
-        return $query->table('services')
-                    ->where('id', $serviceId)
-                    ->update($data);
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $serviceId)
+            ->update($data);
     }
     
     
@@ -58,12 +65,12 @@ class Service extends Model
      */
     public function getServicesByRoomId($roomId)
     {
-        $query = new QueryBuilder();
-        return $query->table('room_services')
-                    ->select('services.*')
-                    ->join('services', 'room_services.service_id', '=', 'services.id')
-                    ->where('room_services.room_id', $roomId)
-                    ->get();
+        return $this->queryBuilder
+            ->table('room_services')
+            ->select('services.*')
+            ->join('services', 'room_services.service_id', '=', 'services.id')
+            ->where('room_services.room_id', $roomId)
+            ->get();
     }
     
     /**
@@ -71,11 +78,11 @@ class Service extends Model
      */
     public function getRoomCountByServiceId($serviceId)
     {
-        $query = new QueryBuilder();
-        $result = $query->table('room_services')
-                        ->select('COUNT(*) as count')
-                        ->where('service_id', $serviceId)
-                        ->first();
+        $result = $this->queryBuilder
+            ->table('room_services')
+            ->select('COUNT(*) as count')
+            ->where('service_id', $serviceId)
+            ->first();
         
         return $result ? $result['count'] : 0;
     }
@@ -85,14 +92,14 @@ class Service extends Model
      */
     public function getRoomsByServiceId($serviceId, $ownerId)
     {
-        $query = new QueryBuilder();
-        $result = $query->table('room_services')
-                        ->select('room_services.room_id')
-                        ->join('rooms', 'room_services.room_id', '=', 'rooms.id')
-                        ->join('houses', 'rooms.house_id', '=', 'houses.id')
-                        ->where('room_services.service_id', $serviceId)
-                        ->where('houses.owner_id', $ownerId)
-                        ->get();
+        $result = $this->queryBuilder
+            ->table('room_services')
+            ->select('room_services.room_id')
+            ->join('rooms', 'room_services.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->where('room_services.service_id', $serviceId)
+            ->where('houses.owner_id', $ownerId)
+            ->get();
         
         if ($result) {
             return array_column($result, 'room_id');
@@ -106,11 +113,12 @@ class Service extends Model
      */
     public function assignServiceToRoom($roomId, $serviceId)
     {
-        $query = new QueryBuilder();
-        return $query->table('room_services')->insert([
-            'room_id' => $roomId,
-            'service_id' => $serviceId
-        ]);
+        return $this->queryBuilder
+            ->table('room_services')
+            ->insert([
+                'room_id' => $roomId,
+                'service_id' => $serviceId
+            ]);
     }
 
     /**
@@ -118,10 +126,10 @@ class Service extends Model
      */
     public function removeAllRoomsFromService($serviceId)
     {
-        $query = new QueryBuilder();
-        return $query->table('room_services')
-                    ->where('service_id', $serviceId)
-                    ->delete();
+        return $this->queryBuilder
+            ->table('room_services')
+            ->where('service_id', $serviceId)
+            ->delete();
     }
     
     /**
@@ -129,11 +137,11 @@ class Service extends Model
      */
     public function unassignServiceFromRoom($roomId, $serviceId)
     {
-        $query = new QueryBuilder();
-        return $query->table('room_services')
-                    ->where('room_id', $roomId)
-                    ->where('service_id', $serviceId)
-                    ->delete();
+        return $this->queryBuilder
+            ->table('room_services')
+            ->where('room_id', $roomId)
+            ->where('service_id', $serviceId)
+            ->delete();
     }
     
     /**
@@ -141,11 +149,11 @@ class Service extends Model
      */
     public function getServiceUsageByRoom($roomId, $monthYear = null)
     {
-        $query = new QueryBuilder();
-        $query->table('service_usages')
-              ->select('service_usages.*', 'services.service_name', 'services.unit')
-              ->join('services', 'service_usages.service_id', '=', 'services.id')
-              ->where('service_usages.room_id', $roomId);
+        $query = $this->queryBuilder
+            ->table('service_usages')
+            ->select('service_usages.*', 'services.service_name', 'services.unit')
+            ->join('services', 'service_usages.service_id', '=', 'services.id')
+            ->where('service_usages.room_id', $roomId);
         
         if ($monthYear) {
             $query->where('service_usages.month_year', $monthYear);
@@ -159,8 +167,9 @@ class Service extends Model
      */
     public function addServiceUsage($data)
     {
-        $query = new QueryBuilder();
-        return $query->table('service_usages')->insert($data);
+        return $this->queryBuilder
+            ->table('service_usages')
+            ->insert($data);
     }
     
     /**
@@ -168,8 +177,7 @@ class Service extends Model
      */
     public function beginTransaction()
     {
-        $query = new QueryBuilder();
-        return $query->beginTransaction();
+        return $this->queryBuilder->beginTransaction();
     }
     
     /**
@@ -177,8 +185,7 @@ class Service extends Model
      */
     public function commit()
     {
-        $query = new QueryBuilder();
-        return $query->commit();
+        return $this->queryBuilder->commit();
     }
     
     /**
@@ -186,8 +193,7 @@ class Service extends Model
      */
     public function rollback()
     {
-        $query = new QueryBuilder();
-        return $query->rollback();
+        return $this->queryBuilder->rollback();
     }
     
     /**
@@ -197,8 +203,8 @@ class Service extends Model
     {
         try {
             // Kiểm tra dịch vụ có tồn tại và thuộc về owner không
-            $query = new QueryBuilder();
-            $service = $query->table('services')
+            $service = $this->queryBuilder
+                ->table($this->table)
                 ->join('houses', 'services.house_id', '=', 'houses.id')
                 ->where('services.id', $serviceId)
                 ->where('houses.owner_id', $ownerId)
@@ -209,15 +215,15 @@ class Service extends Model
             }
             
             // Kiểm tra có phòng nào đang sử dụng dịch vụ này không
-            $query = new QueryBuilder();
-            $roomCount = $query->table('room_services')
+            $roomCount = $this->queryBuilder
+                ->table('room_services')
                 ->where('service_id', $serviceId)
                 ->count();
             
             if ($roomCount > 0) {
                 // Kiểm tra xem các phòng đang sử dụng dịch vụ có khách thuê không
-                $query = new QueryBuilder();
-                $result = $query->table('room_services rs')
+                $result = $this->queryBuilder
+                    ->table('room_services rs')
                     ->select('COUNT(DISTINCT rs.room_id) as count')
                     ->join('rooms r', 'rs.room_id', '=', 'r.id')
                     ->where('rs.service_id', $serviceId)
@@ -233,9 +239,9 @@ class Service extends Model
                 return ['can_delete' => true, 'reason' => 'Dịch vụ đang được sử dụng bởi ' . $roomCount . ' phòng trống. Xóa sẽ gỡ bỏ dịch vụ khỏi tất cả phòng.', 'has_rooms' => true];
             }
             
-            // Kiểm tra có dữ liệu sử dụng không bằng QueryBuilder
-            $query = new QueryBuilder();
-            $usageCount = $query->table('service_usages')
+            // Kiểm tra có dữ liệu sử dụng không
+            $usageCount = $this->queryBuilder
+                ->table('service_usages')
                 ->where('service_id', $serviceId)
                 ->count();
             
@@ -243,9 +249,9 @@ class Service extends Model
             // Chỉ kiểm tra nếu dịch vụ có dữ liệu sử dụng
             $invoiceCount = 0;
             if ($usageCount > 0) {
-                // Kiểm tra hóa đơn bằng QueryBuilder với JOIN
-                $query = new QueryBuilder();
-                $result = $query->table('invoices i')
+                // Kiểm tra hóa đơn với JOIN
+                $result = $this->queryBuilder
+                    ->table('invoices i')
                     ->select('COUNT(DISTINCT i.id) as count')
                     ->join('service_usages su', 'i.room_id', '=', 'su.room_id')
                     ->where('su.service_id', $serviceId)
@@ -287,34 +293,34 @@ class Service extends Model
             // Bắt đầu transaction
             $this->beginTransaction();
             
-            // Xóa dữ liệu sử dụng nếu có bằng QueryBuilder
+            // Xóa dữ liệu sử dụng nếu có
             if (isset($checkResult['has_usage']) && $checkResult['has_usage']) {
-                $query = new QueryBuilder();
-                $query->table('service_usages')
+                $this->queryBuilder
+                    ->table('service_usages')
                     ->where('service_id', $serviceId)
                     ->delete();
             }
             
             // Xóa liên kết phòng-dịch vụ nếu có phòng trống sử dụng
             if (isset($checkResult['has_rooms']) && $checkResult['has_rooms']) {
-                $query = new QueryBuilder();
-                $query->table('room_services')
+                $this->queryBuilder
+                    ->table('room_services')
                     ->where('service_id', $serviceId)
                     ->delete();
             }
             
             // Lấy danh sách house_id của owner trước
-            $query = new QueryBuilder();
-            $houseIds = $query->table('houses')
+            $houseIds = $this->queryBuilder
+                ->table('houses')
                 ->select('id')
                 ->where('owner_id', $ownerId)
                 ->get();
             
             $houseIdArray = array_column($houseIds, 'id');
             
-            // Xóa dịch vụ bằng QueryBuilder
-            $query = new QueryBuilder();
-            $result = $query->table('services')
+            // Xóa dịch vụ
+            $result = $this->queryBuilder
+                ->table($this->table)
                 ->where('id', $serviceId)
                 ->whereIn('house_id', $houseIdArray)
                 ->delete();

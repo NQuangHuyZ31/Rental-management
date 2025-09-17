@@ -14,7 +14,8 @@ use Core\Session;
 use Core\Request;
 use Core\CSRF;
 
-use App\Models\Landlord\Invoice;
+use App\Models\Invoice;
+use Helpers\Validate;
 
 class InvoiceController extends LandlordController{
     private $invoiceModel;
@@ -35,17 +36,11 @@ class InvoiceController extends LandlordController{
         // Sử dụng logic chung từ LandlordController
         [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($userId, $this->request->get('house_id'));
         
-        // Lấy tháng và năm hiện tại (mặc định là tháng trước)
+        // Lấy tháng và năm hiện tại (mặc định là tháng hiện tại)
         $currentMonth = date('n');
         $currentYear = date('Y');
-        $selectedMonth = $this->request->get('month', $currentMonth - 1);
+        $selectedMonth = $this->request->get('month', $currentMonth);
         $selectedYear = $this->request->get('year', $currentYear);
-        
-        // Xử lý tháng trước nếu tháng hiện tại là 1
-        if ($selectedMonth <= 0) {
-            $selectedMonth = 12;
-            $selectedYear = $currentYear - 1;
-        }
         
         // Lấy danh sách hóa đơn theo tháng/năm
         $invoices = $this->invoiceModel->getInvoicesForTable($userId, $selectedMonth, $selectedYear, $selectedHouseId);
@@ -67,66 +62,55 @@ class InvoiceController extends LandlordController{
     }
     
     /**
-     * API lấy hóa đơn theo tháng/năm (AJAX)
+     * Lấy chi tiết hóa đơn để hiển thị modal
      */
-    public function getInvoicesByMonth()
+    public function viewInvoice($invoiceId = null)
     {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
         try {
             $userId = Session::get('user')['id'];
             
-            // Get JSON input
-            $rawInput = file_get_contents('php://input');
-            error_log("InvoiceController::getInvoicesByMonth - Raw input: " . $rawInput);
-            
-            $input = json_decode($rawInput, true);
-            
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception('Dữ liệu JSON không hợp lệ: ' . json_last_error_msg());
+            // Nếu không có $invoiceId từ parameter, thử lấy từ request
+            if (!$invoiceId) {
+                $invoiceId = $this->request->get('id');
             }
             
-            $month = $input['month'] ?? null;
-            $year = $input['year'] ?? null;
-            $houseId = $input['house_id'] ?? null;
-            
-            // Sử dụng cùng logic như method index() để lấy selectedHouseId
-            // Nếu houseId từ request là null, sử dụng houseId từ session hoặc mặc định
-            if (!$houseId) {
-                $houseId = Session::get('selected_house_id');
-            }
-            [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($userId, $houseId);
-            
-            // Debug: Log the received data
-            error_log("InvoiceController::getInvoicesByMonth - User ID: $userId, Month: $month, Year: $year, House ID: $houseId, Selected House ID: $selectedHouseId");
-            error_log("InvoiceController::getInvoicesByMonth - Selected House: " . json_encode($selectedHouse));
-            
-            if (!$month || !$year) {
-                throw new \Exception('Tháng và năm không hợp lệ');
+            if (!$invoiceId || !is_numeric($invoiceId)) {
+                throw new \Exception('ID hóa đơn không hợp lệ');
             }
             
-            // Sử dụng selectedHouseId thay vì houseId để đảm bảo nhất quán
-            $invoices = $this->invoiceModel->getInvoicesForTable($userId, $month, $year, $selectedHouseId);
-            $stats = $this->invoiceModel->getMonthlyInvoiceSummary($userId, $month, $year, $selectedHouseId);
+            // Lấy chi tiết hóa đơn
+            $invoice = $this->invoiceModel->getInvoiceForDisplay($invoiceId, $userId);
             
-            // Debug: Log the query parameters
-            error_log("InvoiceController::getInvoicesByMonth - Query params: userId=$userId, month=$month, year=$year, selectedHouseId=$selectedHouseId");
+            if (!$invoice) {
+                throw new \Exception('Không tìm thấy hóa đơn');
+            }
             
-            // Debug: Log the results
-            error_log("InvoiceController::getInvoicesByMonth - Found " . count($invoices) . " invoices");
+            // Lấy danh sách dịch vụ chi tiết
+            $serviceDetails = $this->invoiceModel->getInvoiceServiceDetails($invoiceId, $userId);
             
             echo json_encode([
                 'success' => true,
-                'invoices' => $invoices,
-                'stats' => $stats,
+                'invoice' => $invoice,
+                'serviceDetails' => $serviceDetails ?: [],
                 'csrf_token' => CSRF::generateToken()
             ]);
         } catch (\Exception $e) {
-            error_log("InvoiceController::getInvoicesByMonth - Error: " . $e->getMessage());
             echo json_encode([
                 'success' => false,
                 'message' => $e->getMessage(),
                 'csrf_token' => CSRF::generateToken()
             ]);
         }
+        
+        exit; // Đảm bảo không có output nào khác
     }
     
     /**
@@ -169,24 +153,65 @@ class InvoiceController extends LandlordController{
     }
     
     /**
-     * Lấy danh sách phòng đang cho thuê
+     * Cập nhật thông tin hóa đơn
      */
-    public function getRentedRooms()
+    public function update()
     {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
         try {
             $userId = Session::get('user')['id'];
-            $houseId = $this->request->get('house_id');
+            $invoiceId = $this->request->post('invoice_id');
             
-            // Sử dụng logic chung từ LandlordController
-            [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($userId, $houseId);
+            if (!$invoiceId || !is_numeric($invoiceId)) {
+                throw new \Exception('ID hóa đơn không hợp lệ');
+            }
             
-            $rooms = $this->invoiceModel->getRentedRooms($userId, $selectedHouseId);
+            // Validate CSRF token
+            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
+                throw new \Exception('Dữ liệu không hợp lệ');
+            }
             
-            echo json_encode([
-                'success' => true,
-                'rooms' => $rooms,
-                'csrf_token' => CSRF::generateToken()
-            ]);
+            // Lấy dữ liệu từ form
+            $data = [
+                'invoice_name' => $this->request->post('invoice_name'),
+                'invoice_month' => $this->request->post('invoice_month'),
+                'invoice_day' => $this->request->post('invoice_day'),
+                'due_date' => $this->request->post('due_date'),
+                'note' => $this->request->post('note'),
+                'services' => $this->request->post('services') ?: []
+            ];
+            
+            // Validate dữ liệu sử dụng Helper Validate
+            $errors = Validate::validateInvoiceData($data);
+            if (!empty($errors)) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Dữ liệu không hợp lệ',
+                    'errors' => $errors,
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+                exit;
+            }
+            
+            // Cập nhật hóa đơn
+            $result = $this->invoiceModel->updateInvoice($invoiceId, $data, $userId);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Cập nhật hóa đơn thành công',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+            } else {
+                throw new \Exception('Không thể cập nhật hóa đơn');
+            }
         } catch (\Exception $e) {
             echo json_encode([
                 'success' => false,
@@ -194,26 +219,51 @@ class InvoiceController extends LandlordController{
                 'csrf_token' => CSRF::generateToken()
             ]);
         }
+        
+        exit; // Đảm bảo không có output nào khác
     }
     
     /**
-     * Lấy danh sách dịch vụ theo phòng
+     * Lấy form tạo hóa đơn với danh sách dịch vụ của phòng
      */
-    public function getRoomServices()
+    public function createForm($roomId = null)
     {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
         try {
             $userId = Session::get('user')['id'];
-            $roomId = $this->request->get('room_id');
             
+            // Nếu không có $roomId từ parameter, thử lấy từ request
             if (!$roomId) {
+                $roomId = $this->request->get('id');
+            }
+            
+            if (!$roomId || !is_numeric($roomId)) {
                 throw new \Exception('ID phòng không hợp lệ');
             }
             
-            $services = $this->invoiceModel->getRoomServices($roomId, $userId);
+            // Lấy thông tin phòng
+            $roomModel = new \App\Models\Room();
+            $room = $roomModel->getRoomById($roomId, $userId);
+            
+            if (!$room) {
+                throw new \Exception('Không tìm thấy phòng hoặc bạn không có quyền truy cập');
+            }
+            
+            // Lấy danh sách dịch vụ của phòng
+            $serviceModel = new \App\Models\Service();
+            $services = $serviceModel->getServicesByRoomId($roomId);
             
             echo json_encode([
                 'success' => true,
-                'services' => $services,
+                'room' => $room,
+                'services' => $services ?: [],
                 'csrf_token' => CSRF::generateToken()
             ]);
         } catch (\Exception $e) {
@@ -223,6 +273,77 @@ class InvoiceController extends LandlordController{
                 'csrf_token' => CSRF::generateToken()
             ]);
         }
+        
+        exit; // Đảm bảo không có output nào khác
     }
+    
+    /**
+     * Tạo hóa đơn mới
+     */
+    public function create()
+    {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
+        try {
+            $userId = Session::get('user')['id'];
+            
+            // Validate CSRF token
+            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
+                throw new \Exception('Dữ liệu không hợp lệ');
+            }
+            
+            // Lấy dữ liệu từ form
+            $data = [
+                'room_id' => $this->request->post('room_id'),
+                'invoice_name' => $this->request->post('invoice_name'),
+                'invoice_month' => $this->request->post('invoice_month'),
+                'invoice_day' => $this->request->post('invoice_day'),
+                'due_date' => $this->request->post('due_date'),
+                'rental_amount' => $this->request->post('rental_amount'),
+                'note' => $this->request->post('note'),
+                'services' => $this->request->post('services') ?: []
+            ];
+            
+            // Validate dữ liệu sử dụng Helper Validate
+            $errors = Validate::validateCreateInvoiceData($data);
+            if (!empty($errors)) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Dữ liệu không hợp lệ',
+                    'errors' => $errors,
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+                exit;
+            }
+            
+            // Tạo hóa đơn
+            $result = $this->invoiceModel->createInvoice($data, $userId);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Tạo hóa đơn thành công',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+            } else {
+                throw new \Exception('Không thể tạo hóa đơn');
+            }
+        } catch (\Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'csrf_token' => CSRF::generateToken()
+            ]);
+        }
+        
+        exit; // Đảm bảo không có output nào khác
+    }
+    
 }
 ?>

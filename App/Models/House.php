@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Landlord;
+namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
@@ -8,17 +8,29 @@ use Core\QueryBuilder;
 class House extends Model
 {
     protected $table = 'houses';
+    private $queryBuilder;
+    
+    public function __construct()
+    {
+        $this->queryBuilder = new QueryBuilder();
+    }
     
     public function getHousesByOwnerId($ownerId)
     {
-        $query = new QueryBuilder();
-        return $query->table('houses')->where('owner_id', $ownerId)->where('deleted', 0)->orderBy('house_name')->get();
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('owner_id', $ownerId)
+            ->where('deleted', 0)
+            ->orderBy('house_name')
+            ->get();
     }
     
     public function getHouseById($houseId, $ownerId = null)
     {
-        $query = new QueryBuilder();
-        $query->table('houses')->where('id', $houseId)->where('deleted', 0);
+        $query = $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $houseId)
+            ->where('deleted', 0);
         
         if ($ownerId) {
             $query->where('owner_id', $ownerId);
@@ -29,8 +41,11 @@ class House extends Model
     
     public function getRoomsByHouseId($houseId)
     {
-        $query = new QueryBuilder();
-        return $query->table('rooms')->where('house_id', $houseId)->orderBy('room_name')->get();
+        return $this->queryBuilder
+            ->table('rooms')
+            ->where('house_id', $houseId)
+            ->orderBy('room_name')
+            ->get();
     }
     
     public function getHouseWithRooms($houseId, $ownerId = null)
@@ -47,8 +62,9 @@ class House extends Model
      */
     public function createHouse($data)
     {
-        $query = new QueryBuilder();
-        return $query->table('houses')->insert($data);
+        return $this->queryBuilder
+            ->table($this->table)
+            ->insert($data);
     }
 
     /**
@@ -56,8 +72,6 @@ class House extends Model
      */
     public function updateHouse($houseId, $data)
     {
-        $query = new QueryBuilder();
-        
         // Sử dụng raw SQL với named parameters để tránh lỗi binding
         $sql = "UPDATE houses SET 
                 house_name = :house_name, 
@@ -71,7 +85,7 @@ class House extends Model
         
         $params = array_merge($data, ['id' => $houseId]);
         
-        return $query->query($sql, $params);
+        return $this->queryBuilder->query($sql, $params);
     }
 
     /**
@@ -79,8 +93,11 @@ class House extends Model
      */
     public function getAllHousesByOwnerId($ownerId)
     {
-        $query = new QueryBuilder();
-        return $query->table('houses')->where('owner_id', $ownerId)->orderBy('house_name')->get();
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('owner_id', $ownerId)
+            ->orderBy('house_name')
+            ->get();
     }
     
     /**
@@ -88,8 +105,9 @@ class House extends Model
      */
     public function getHouseByIdIncludeDeleted($houseId, $ownerId = null)
     {
-        $query = new QueryBuilder();
-        $query->table('houses')->where('id', $houseId);
+        $query = $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $houseId);
         
         if ($ownerId) {
             $query->where('owner_id', $ownerId);
@@ -103,8 +121,6 @@ class House extends Model
      */
     public function restoreHouse($houseId)
     {
-        $query = new QueryBuilder();
-        
         $sql = "UPDATE houses SET deleted = :deleted, updated_at = :updated_at WHERE id = :id";
         
         $params = [
@@ -113,7 +129,7 @@ class House extends Model
             'id' => $houseId
         ];
         
-        return $query->query($sql, $params);
+        return $this->queryBuilder->query($sql, $params);
     }
 
     /**
@@ -121,8 +137,6 @@ class House extends Model
      */
     public function deleteHouse($houseId)
     {
-        $query = new QueryBuilder();
-        
         $sql = "UPDATE houses SET deleted = :deleted, updated_at = :updated_at WHERE id = :id";
         
         $params = [
@@ -131,6 +145,6 @@ class House extends Model
             'id' => $houseId
         ];
         
-        return $query->query($sql, $params);
+        return $this->queryBuilder->query($sql, $params);
     }
 }

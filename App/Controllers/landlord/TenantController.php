@@ -8,8 +8,8 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
 use Core\ViewRender;
-use App\Models\Landlord\Tenant;
-use App\Models\Landlord\Room;
+use App\Models\Tenant;
+use App\Models\Room;
 use Core\Session;
 use Core\Request;
 use Core\CSRF;

@@ -320,7 +320,7 @@
                                 <?php foreach ($rooms as $room): ?>
                                     <div class="flex items-center p-3 border border-[#DBDBDB] rounded-lg hover:bg-gray-50">
                                         <input type="checkbox" id="room_<?= $room['id'] ?>" name="rooms[]" value="<?= $room['id'] ?>" class="mr-3">
-                                        <label for="room_<?= $room['id'] ?>" class="text-sm text-gray-700">Phòng <?= htmlspecialchars($room['room_number'] ?? $room['id']) ?></label>
+                                        <label for="room_<?= $room['id'] ?>" class="text-sm text-gray-700"><?= htmlspecialchars($room['room_name']) ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -729,6 +729,9 @@
                 return;
             }
 
+            // Clear bảng trước khi load dữ liệu mới
+            clearUsageTable();
+
             // Hiển thị loading
             showLoadingState();
 
@@ -760,6 +763,16 @@
                     console.error('Error loading usage data:', error);
                     showEmptyState('Có lỗi xảy ra khi tải dữ liệu');
                 });
+        }
+
+        /**
+         * Clear bảng dữ liệu sử dụng
+         */
+        function clearUsageTable() {
+            const tbody = document.getElementById('usageTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+            }
         }
 
         /**
@@ -844,6 +857,8 @@
          * Hiển thị loading state
          */
         function showLoadingState() {
+            // Clear bảng trước khi hiển thị loading
+            clearUsageTable();
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('usageTable').classList.add('hidden');
             hideEmptyState();
@@ -862,6 +877,8 @@
          */
         function showEmptyState(message) {
             hideLoadingState();
+            // Clear bảng trước khi hiển thị empty state
+            clearUsageTable();
             const emptyState = document.getElementById('emptyState');
             const emptyStateMessage = document.getElementById('emptyStateMessage');
             if (emptyState && emptyStateMessage) {
