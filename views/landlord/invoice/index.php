@@ -22,7 +22,7 @@ use Core\CSRF;
 
                 <!-- Calendar Widget (No JS, chỉ GET) -->
                 <div class="bg-gray-100 rounded-lg p-4 mb-6">
-                    <form method="get" action="/Rental-management/landlord/invoice" class="flex items-center justify-between">
+                    <form method="get" action="<?php echo BASE_URL; ?>/landlord/invoice" class="flex items-center justify-between">
                         <!-- Previous Year -->
                         <button type="submit" name="year" value="<?= $selectedYear - 1 ?>" class="flex items-center space-x-2 px-2 py-1 hover:bg-gray-200 rounded transition-colors">
                             <i class="fas fa-chevron-left text-gray-600"></i>
@@ -51,7 +51,7 @@ use Core\CSRF;
                                 12 => 'T12'
                             ];
                             foreach ($months as $monthNum => $monthName):
-                                $monthUrl = '/Rental-management/landlord/invoice?month=' . $monthNum . '&year=' . $selectedYear;
+                                $monthUrl = BASE_URL . '/landlord/invoice?month=' . $monthNum . '&year=' . $selectedYear;
                                 if ($selectedHouseId) $monthUrl .= '&house_id=' . $selectedHouseId;
                             ?>
                                 <a href="<?= $monthUrl ?>"
@@ -239,6 +239,7 @@ use Core\CSRF;
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
 
     <script>
+
         // Hàm mở modal xem hóa đơn
         function viewInvoice(invoiceId) {
             // Hiển thị loading
@@ -253,7 +254,7 @@ use Core\CSRF;
             document.getElementById('invoiceModal').classList.remove('hidden');
 
             // Gọi API lấy chi tiết hóa đơn
-            fetch(`/Rental-management/landlord/invoice/view/${invoiceId}`)
+            fetch(`${App.appURL}/landlord/invoice/view/${invoiceId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -743,7 +744,7 @@ use Core\CSRF;
             updateBtnLoading.classList.remove('hidden');
 
             // Gửi request
-            fetch('/Rental-management/landlord/invoice/update', {
+            fetch(`${App.appURL}/landlord/invoice/update`, {
                     method: 'POST',
                     body: formData
                 })

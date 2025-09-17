@@ -762,7 +762,7 @@ Purpose: Build Index house for Landlord
             document.body.style.overflow = 'hidden';
 
             // Fetch room services and display form
-            fetch(`/Rental-management/landlord/invoice/create-form/${roomId}`)
+            fetch(`${App.appURL}/landlord/invoice/create-form/${roomId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -1204,7 +1204,7 @@ Purpose: Build Index house for Landlord
             createBtnLoading.classList.remove('hidden');
 
             // Send request
-            fetch('/Rental-management/landlord/invoice/create', {
+            fetch(`${App.appURL}/landlord/invoice/create`, {
                     method: 'POST',
                     body: formData
                 })
