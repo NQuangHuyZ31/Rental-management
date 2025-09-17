@@ -79,6 +79,14 @@ Purpose: Build Nav for Landlord Layout
                 </div>
                 <div class="text-gray-700 font-semibold text-sm text-center">Quản lý khách thuê</div>
             </a>
+
+            <!-- Cài đặt -->
+            <a href="<?= BASE_URL ?>/landlord/settings" class="bg-white rounded-lg border border-green-200 p-3 flex flex-col items-center min-w-[140px] flex-shrink-0 hover:bg-gray-50 transition-colors">
+                <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mb-2">
+                    <i class="fas fa-cog text-white text-lg"></i>
+                </div>
+                <div class="text-gray-700 font-semibold text-sm text-center">Cài đặt</div>
+            </a>
         </div>
     </div>
 </nav>

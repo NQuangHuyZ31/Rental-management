@@ -12,7 +12,6 @@ use App\Models\PaymentHistory;
 use App\Models\UserBanking;
 use Core\CSRF;
 use Core\Response;
-use Core\Session;
 use Helpers\Log;
 
 class PaymentController extends CustomerController {
@@ -147,6 +146,7 @@ class PaymentController extends CustomerController {
         }
 
         $invoice = $this->invoiceModel->getInvoiceByInvoiceId($data['invoice_id']);
+        $paymentHistory = $this->paymentHistoryModel->getPaymentHistoryByInvoiceId($data['invoice_id']);
 
         if ($invoice && $invoice['invoice_status'] != 'paid') {
             Response::json(['status' => 'error', 'payment_status' => 'failed', 'message' => 'Hóa đơn không tồn tại hoặc đã thanh toán', 'token' => CSRF::getTokenRefresh()], 400);
@@ -154,6 +154,7 @@ class PaymentController extends CustomerController {
         }
 
         $this->invoiceModel->updateColumn($invoice['id'], 'user_id', $this->userID);
+        $this->paymentHistoryModel->updatePaymentHistory($paymentHistory['id'], ['payer_id' => $this->userID]);
         Response::json(['status' => 'success', 'payment_status' => 'paid', 'message' => 'Thanh toán thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 

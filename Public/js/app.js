@@ -171,4 +171,50 @@ document.addEventListener('DOMContentLoaded', function () {
             cleaveInstance.setRawValue($(this).val());
         }
     });
+
+    // Helper function to show message
+    // Configure SweetAlert
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+    });
+
+    // Function to show success message
+    window.showSuccessMessage = function (message) {
+        Toast.fire({
+            icon: 'success',
+            title: message,
+        });
+    };
+
+    // Function to show error message
+    window.showErrorMessage = function (message) {
+        Toast.fire({
+            icon: 'error',
+            title: message,
+        });
+    };
+
+    // Function to show warning message
+    window.showWarningMessage = function (message) {
+        Toast.fire({
+            icon: 'warning',
+            title: message,
+        });
+    };
+
+    // Function to show info message
+    window.showInfoMessage = function (message) {
+        Toast.fire({
+            icon: 'info',
+            title: message,
+        });
+    };
 });

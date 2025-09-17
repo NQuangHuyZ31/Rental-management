@@ -157,6 +157,9 @@ $message = $flashData['success'] ?? '';
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
 
     <!-- JavaScript for Role Selection -->
     <script>
@@ -194,27 +197,9 @@ $message = $flashData['success'] ?? '';
     <!-- Config Toastr -->
      <script>
         const message = "<?=$message?>" ?? '';
-        console.log(message);
         if (message) {
-            toastr.success(message);
+            showSuccessMessage(message);
         }
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-            }
      </script>
 </body>
 

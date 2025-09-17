@@ -24,6 +24,8 @@ use App\Controllers\Landlord\InvoiceController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Controllers\Customer\PaymentController;
+use App\Controllers\Landlord\SettingPaymentController;
+use App\Controllers\Landlord\SettingPostController;
 use App\Middleware\AuthAdminMiddleware;
 use App\Middleware\AuthLandlordMiddleware;
 use App\Middleware\AuthMiddleware;
@@ -117,6 +119,17 @@ $router->get('/landlord/posts/get', [RentalPostController::class, 'getPost'],[Au
 $router->post('/landlord/posts/update', [RentalPostController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/hide', [RentalPostController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/delete', [RentalPostController::class, 'delete'],[AuthLandlordMiddleware::class]);
+
+$router->get('/landlord/setting/payment', [SettingPaymentController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/payment/update', [SettingPaymentController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/setting/payment-api', [SettingPaymentController::class, 'paymentApi'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/payment/update-api-key', [SettingPaymentController::class, 'updateApiKey'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/setting/payment/guide', [SettingPaymentController::class, 'guide'],[AuthLandlordMiddleware::class]);
+
+$router->get('/landlord/setting/categories', [SettingPostController::class, 'categories'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/categories/create', [SettingPostController::class, 'createCategory'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/categories/delete', [SettingPostController::class, 'deleteCategory'],[AuthLandlordMiddleware::class]);
+
 
 // Route test
 $router->get('/test', [TestController::class, 'index']);

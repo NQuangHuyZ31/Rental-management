@@ -3,7 +3,10 @@
     Date: 2025-08-31
     Purpose: Default layout for customer
 -->
-
+<?php 
+$flashData = \Core\Session::get('flash_data');
+$message = $flashData['success'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -69,6 +72,7 @@
 </head>
 <body class="bg-gray-50 h-screen">
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
+
     <!-- Header -->
     <?php require_once 'header.php'; ?>
 
@@ -112,6 +116,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/lazysizes.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/lity.min.js"></script>
@@ -122,6 +128,14 @@
     <script src="<?=BASE_URL?>/Public/js/customer-profile.js"></script>
     <script src="<?=BASE_URL?>/Public/js/payment.js"></script>
     <script src="<?=BASE_URL?>/Public/js/fix-scrollbar.js"></script>
+
+    <!-- Config Toastr -->
+    <script>
+        const message = "<?=$message?>" ?? '';
+        if (message) {
+            showSuccessMessage(message);
+        }
+     </script>
 
 </body>
 </html>

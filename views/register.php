@@ -196,5 +196,16 @@ $old = $flashData['old'] ??[];
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
+
+    <!-- Config Toastr -->
+    <script>
+        const message = "<?=$message?>" ?? '';
+        if (message) {
+            showSuccessMessage(message);
+        }
+     </script>
 </body>
 </html>

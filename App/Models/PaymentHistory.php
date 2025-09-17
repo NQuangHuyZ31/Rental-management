@@ -20,4 +20,12 @@ class PaymentHistory extends Model {
         return $this->insert($data);
     }
 
+    public function updatePaymentHistory($id, $data) {
+        return $this->table($this->table)->where('id', $id)->update($data);
+    }
+
+    public function getPaymentHistoryByInvoiceId($invoiceId) {
+        return $this->table($this->table)->where('invoice_id', $invoiceId)->where('deleted', 0)->first();
+    }
+
 }

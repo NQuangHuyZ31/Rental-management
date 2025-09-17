@@ -123,7 +123,7 @@ class RentalPostController extends LandlordController {
 
             // Xử lý upload ảnh
             $this->uploadImageOnCloud->dispatch(['post_id' => $postId, 'images' => $savedFiles]);
-            Response::json(['status' => 'success', 'message' => 'Tạo tin đăng thành công!', 'token' => CSRF::getTokenRefresh()], 200);
+            Response::json(['status' => 'success', 'message' => 'Tạo tin đăng thành công! Đang upload ảnh...', 'token' => CSRF::getTokenRefresh()], 200);
         } catch (Exception $e) {
             Response::json(['status' => 'error', 'error' => 'Có lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 500);
         }
@@ -170,7 +170,7 @@ class RentalPostController extends LandlordController {
                 return;
             }
 
-            Response::json(['status' => 'success', 'message' => 'Cập nhật tin đăng thành công!' . (!empty($images) ? ' Ảnh đang được upload...' : ''), 'token' => CSRF::getTokenRefresh()], 200);
+            Response::json(['status' => 'success', 'message' => 'Cập nhật tin đăng thành công!' . (!empty($images) ? ' Đang upload ảnh...' : ''), 'token' => CSRF::getTokenRefresh()], 200);
         } catch (Exception $e) {
             Response::json(['status' => 'error', 'error' => 'Có lỗi xảy ra: ' . $e->getMessage(), 'token' => CSRF::getTokenRefresh()], 500);
         }
