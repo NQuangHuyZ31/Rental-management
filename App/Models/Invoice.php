@@ -383,18 +383,17 @@ class Invoice extends Model
 	}
 
     // Added by Huy Nguyen on 2025-09-14 get invoice by user id
-    public function getInvoiceByUserId($invoiceId, $userId) {
-        return $this->table('invoices')->where('id', $invoiceId)->where('user_id', $userId)->where('deleted', 0)->first();
+    public function getInvoiceByInvoiceId($invoiceId) {
+        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->first();
     }
 
     // Added by Huy Nguyen on 2025-09-14 get invoice with room and house info
-    public function getInvoiceWithRoomInfo($invoiceId, $userId) {
+    public function getInvoiceWithRoomInfo($invoiceId) {
         return $this->table('invoices')
             ->select('invoices.*, rooms.room_name, houses.house_name, houses.owner_id as owner_id')
             ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->where('invoices.id', $invoiceId)
-            ->where('invoices.user_id', $userId)
             ->where('invoices.deleted', 0)
             ->first();
     }

@@ -33,7 +33,8 @@ class PaymentController extends CustomerController {
             exit;
         }
 
-        $invoice = $this->invoiceModel->getInvoiceByUserId($data['invoice_id'], $this->userID);
+        // Lấy thông tin hóa đơn
+        $invoice = $this->invoiceModel->getInvoiceByInvoiceId($data['invoice_id']);
 
         if (!$invoice) {
             Response::json(['message' => 'Hóa đơn không tồn tại', 'token' => CSRF::getTokenRefresh()], 404);
@@ -41,7 +42,7 @@ class PaymentController extends CustomerController {
         }
 
         // Lấy thông tin phòng và nhà
-        $roomInfo = $this->invoiceModel->getInvoiceWithRoomInfo($data['invoice_id'], $this->userID);
+        $roomInfo = $this->invoiceModel->getInvoiceWithRoomInfo($data['invoice_id']);
 
         // Lấy thông tin tài khoản
         $userBanking = $this->userBankingModel->getUserBankingByUserId($roomInfo['owner_id']);
@@ -67,6 +68,7 @@ class PaymentController extends CustomerController {
 
         $headers = getallheaders();
         $authHeader = $headers['Authorization'] ?? null;
+        $userID = $this->userID;
 
         // Tách ra API Key (bỏ chữ "Apikey ")
         if (stripos($authHeader, 'Apikey ') === 0) {
@@ -86,15 +88,17 @@ class PaymentController extends CustomerController {
         try {
             $this->db->beginTransaction();
 
-            if (preg_match('/HD\d+/', $data->description, $matches)) {
-                $maHoaDon = $matches[0];
-                $invoiceID = substr($maHoaDon, -2);
+            if (preg_match('/HD(\d+)/', $data->description, $matches)) {
+                $invoiceID = $matches[1];
+            } else {
+                $invoiceID = null;
             }
+            
 
             $dataPayment = [
                 'invoice_id' => $invoiceID,
-                'payer_id' => Session::get('user')['id'],
-                'receiver_id' => Session::get('account_bank')['user_id'],
+                'payer_id' => $userID,
+                'receiver_id' => $userBanking['user_id'],
                 'order_id' => $data->id,
                 'transaction_id' => $data->referenceCode,
                 'amount' => $data->transferAmount,
@@ -112,17 +116,15 @@ class PaymentController extends CustomerController {
 
             // create payment history
             $this->paymentHistoryModel->create($dataPayment);
-
             // update invoice status
             $this->invoiceModel->updateInvoiceOnlyStatus($invoiceID, 'paid');
-            Session::delete('account_bank');
 
             Response::json(['status' => 'success', 'payment_status' => 'paid'], 200);
 
             $this->db->commit();
         } catch (\Throwable $th) {
             $this->db->rollback();
-            Response::json(['status' => 'error', 'payment_status' => 'failed'], 400);
+            Response::json(['status' => 'error', 'payment_status' => 'failed', 'message' => $th->getMessage()], 400);
             exit;
         }
 
@@ -133,7 +135,7 @@ class PaymentController extends CustomerController {
         $bankCode = $userBanking['bank_code'];
 
         $totalAmount = intval($invoice['total']);
-        $des = 'Thanh toán hóa đơn: HD-' . $invoice['invoice_month'] . '-' . $invoice['id'];
+        $des = 'Thanh toán hóa đơn phòng tháng ' . $invoice['invoice_month'] . ' : HD'. $invoice['id'];
         $template = 'compact';
 
         $qrCode = 'https://qr.sepay.vn/img?acc=' . $bankNumber . '&bank=' . $bankCode . '&amount=' . $totalAmount . '&des=' . $des . '&template=' . $template;
