@@ -42,9 +42,10 @@ $(document).ready(function () {
         // Make AJAX call to check payment status
         $.ajax({
             type: 'POST',
-            url: App.appURL + 'customer/payment/callback',
+            url: App.appURL + 'customer/payment/check-status',
             data: {
                 invoice_id: invoiceId,
+                csrf_token: App.getToken(),
             },
             dataType: 'json',
             success: function (response) {
@@ -55,6 +56,7 @@ $(document).ready(function () {
                         clearInterval(paymentCheckInterval);
                         paymentCheckInterval = null;
                         updatePaymentStatus('success');
+                        App.setToken(response.token);
                         showSuccess('Thanh toán thành công!');
                         setTimeout(() => {
                             closePaymentModalFunc();
@@ -71,6 +73,7 @@ $(document).ready(function () {
                     clearInterval(paymentCheckInterval);
                     paymentCheckInterval = null;
                     updatePaymentStatus('failed');
+                    App.setToken(xhr.responseJSON.token);
                     showError('Thanh toán thất bại!');
                 }
             },

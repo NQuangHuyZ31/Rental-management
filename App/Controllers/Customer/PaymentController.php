@@ -126,16 +126,35 @@ class PaymentController extends CustomerController {
             }
 
             $this->invoiceModel->updateInvoiceOnlyStatus($invoice['id'], 'paid');
-
-            Response::json(['status' => 'success', 'payment_status' => 'paid'], 200);
-
             $this->db->commit();
+
+            Response::json(['status' => 'success', 'payment_status' => 'paid', 'message' => 'Thanh toán thành công'], 200);
         } catch (\Throwable $th) {
             $this->db->rollback();
+            Log::payment('Lỗi thanh toán: ' . $th->getMessage(), Log::LEVEL_ERROR);
             Response::json(['status' => 'error', 'payment_status' => 'failed', 'message' => $th->getMessage()], 400);
             exit;
         }
 
+    }
+
+    public function checkPaymentStatus() {
+        $data = $this->request->post();
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'message' => 'Có lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        $invoice = $this->invoiceModel->getInvoiceByInvoiceId($data['invoice_id']);
+
+        if (!$invoice && $invoice['invoice_status'] != 'paid') {
+            Response::json(['status' => 'error', 'payment_status' => 'failed', 'message' => 'Hóa đơn không tồn tại hoặc đã thanh toán', 'token' => CSRF::getTokenRefresh()], 404);
+            exit;
+        }
+
+        $this->invoiceModel->updateColumn($invoice['id'], 'user_id', $this->userID);
+        Response::json(['status' => 'success', 'payment_status' => 'paid', 'message' => 'Thanh toán thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 
     public function generateQRCode($invoice, $userBanking) {

@@ -403,5 +403,9 @@ class Invoice extends Model
         Log::payment('Cập nhật trạng thái hóa đơn: ' . $invoiceId . ' - ' . $status, Log::LEVEL_INFO);
         return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update(['invoice_status' => $status]);
     }
+
+    public function updateColumn($invoiceId, $column, $value) {
+        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update([$column => $value]);
+    }
 }
 

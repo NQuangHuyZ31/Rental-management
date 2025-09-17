@@ -59,6 +59,7 @@ $router->get('/customer/notifications', [ProfileCustomerController::class, 'noti
 // API thanh toán 
 $router->post('/customer/payment', [PaymentController::class, 'payment'],[AuthMiddleware::class]);
 $router->post('/customer/payment/callback', [PaymentController::class, 'callback']);
+$router->post('/customer/payment/check-status', [PaymentController::class, 'checkPaymentStatus']);
 
 // =============================================================ROUTER ADMIN==================================================
 $router->get('/admin', [AuthAdminController::class, 'index'],[AuthAdminMiddleware::class]);
