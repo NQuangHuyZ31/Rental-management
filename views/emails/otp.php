@@ -27,5 +27,5 @@ $content = '
     <p>⚠️ <strong>Bảo mật:</strong> Không chia sẻ mã này với bất kỳ ai, kể cả nhân viên hỗ trợ. Chúng tôi sẽ không bao giờ yêu cầu mã OTP qua điện thoại hoặc email.</p>
 </div>';
 
-include 'views/emails/layout.php';
+include_once VIEW_PATH . 'emails/layout.php';
 ?>

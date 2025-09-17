@@ -9,6 +9,7 @@ namespace App\Models;
 
 use App\Models\Model;
 use Core\QueryBuilder;
+use Helpers\Log;
 
 class Invoice extends Model
 {
@@ -17,6 +18,7 @@ class Invoice extends Model
     
     public function __construct()
     {
+		parent::__construct();
         $this->queryBuilder = new QueryBuilder();
     }
     

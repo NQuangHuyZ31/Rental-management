@@ -12,6 +12,7 @@ class Controller
 
   protected $db;
   protected $auth;
+  protected $userID;
 
   public function __construct()
   {
@@ -27,6 +28,7 @@ class Controller
     }
 
     $this->auth = new Auth();
+    $this->userID = $this->auth->user()['id'] ?? '';
   }
 
   public function checkMethod($csrf_token)

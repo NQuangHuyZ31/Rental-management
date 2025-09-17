@@ -5,7 +5,7 @@
 -->
 
 <!-- Sidebar -->
-<aside id="sidebar" class="w-70 bg-white shadow-lg border-r border-gray-200 sidebar-transition sidebar-hidden lg:sidebar-visible z-30 flex-shrink-0 h-full overflow-y-auto mr-3">
+<aside id="sidebar" class="w-70 bg-white shadow-lg border-r border-gray-200 sidebar-transition sidebar-hidden lg:sidebar-visible z-30 flex-shrink-0 h-full overflow-y-auto overflow-x-hidden mr-3">
     <div class="p-4">
         <!-- Navigation Menu -->
         <nav class="space-y-2">
@@ -19,7 +19,7 @@
             <a href="<?= BASE_URL ?>/customer/rented-rooms" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors <?= (strpos($_SERVER['REQUEST_URI'], '/customer/rented-rooms') !== false) ? 'bg-green-50 text-green-600 border-r-2 border-green-500' : '' ?>">
                 <i class="fas fa-home text-lg"></i>
                 <span class="font-medium">Phòng đang thuê</span>
-                <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full <?= $sidebarData['room'] > 0 ? 'block' : 'hidden' ?>"><?= $sidebarData['room'] ?></span>
             </a>
 
             <!-- Bills -->

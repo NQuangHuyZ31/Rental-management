@@ -58,12 +58,6 @@
     background: #c82333;
 }
 
-/* Loading states */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
 /* Form improvements */
 .form-group {
     margin-bottom: 1rem;

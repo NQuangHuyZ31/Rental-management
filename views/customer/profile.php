@@ -1,3 +1,7 @@
+<?php
+
+use Core\CSRF;
+?>
 <!--
     Author: Huy Nguyen
     Date: 2025-01-01
@@ -21,32 +25,26 @@
 			</div>
 			<div class="p-6">
 				<form id="profileForm" class="space-y-6">
+					<?= CSRF::getTokenField() ?>
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<!-- Full Name -->
 						<div>
-							<label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
-							<input type="text" id="fullName" name="fullName" value="Nguyễn Văn A"
-								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
-						</div>
-
-						<!-- Email -->
-						<div>
-							<label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-							<input type="email" id="email" name="email" value="nguyenvana@email.com"
+							<label for="username" class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
+							<input type="text" id="username" name="username" value="<?= $user['username'] ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
 						<!-- Phone -->
 						<div>
 							<label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-							<input type="tel" id="phone" name="phone" value="0901234567"
+							<input type="tel" id="phone" name="phone" value="<?= $user['phone'] ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
 						<!-- Date of Birth -->
 						<div>
-							<label for="dateOfBirth" class="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
-							<input type="date" id="dateOfBirth" name="dateOfBirth" value="1995-05-15"
+							<label for="birthday" class="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
+							<input type="date" id="birthday" name="birthday" value="<?= $user['birthday'] ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
@@ -55,16 +53,15 @@
 							<label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Giới tính</label>
 							<select id="gender" name="gender"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
-								<option value="male" selected>Nam</option>
-								<option value="female">Nữ</option>
-								<option value="other">Khác</option>
+								<option value="male" <?= $user['gender'] == 'male' ? 'selected' : '' ?>>Nam</option>
+								<option value="female" <?= $user['gender'] == 'female' ? 'selected' : '' ?>>Nữ</option>
 							</select>
 						</div>
 
 						<!-- Occupation -->
 						<div>
-							<label for="occupation" class="block text-sm font-medium text-gray-700 mb-2">Nghề nghiệp</label>
-							<input type="text" id="occupation" name="occupation" value="Nhân viên văn phòng"
+							<label for="job" class="block text-sm font-medium text-gray-700 mb-2">Nghề nghiệp</label>
+							<input type="text" id="job" name="job" value="<?= $user['job'] ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 					</div>
@@ -79,6 +76,9 @@
 							<select id="province" name="province"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 								<option value="">Chọn tỉnh/thành phố</option>
+								<?php if ($user['province']): ?>
+									<option value="<?= $user['province'] ?>" selected><?= $user['province'] ?></option>
+								<?php endif; ?>
 							</select>
 						</div>
 						<!-- Ward -->
@@ -87,30 +87,23 @@
 							<select id="ward" name="ward"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 								<option value="">Chọn phường/xã</option>
-								<option value="phuong-tan-dinh" selected>Phường Tân Định</option>
-								<option value="phuong-da-kao">Phường Đa Kao</option>
-								<option value="phuong-ben-nghe">Phường Bến Nghé</option>
-								<option value="phuong-ben-thanh">Phường Bến Thành</option>
-								<option value="phuong-nguyen-thai-binh">Phường Nguyễn Thái Bình</option>
-								<option value="phuong-pham-ngu-lao">Phường Phạm Ngũ Lão</option>
-								<option value="phuong-cau-ong-lanh">Phường Cầu Ông Lãnh</option>
-								<option value="phuong-cau-kho">Phường Cầu Kho</option>
-								<option value="phuong-nguyen-cu-trhinh">Phường Nguyễn Cư Trinh</option>
-								<option value="phuong-co-giang">Phường Cô Giang</option>
+								<?php if ($user['ward']): ?>
+									<option value="<?= $user['ward'] ?>" selected><?= $user['ward'] ?></option>
+								<?php endif; ?>
 							</select>
 						</div>
 
 						<!-- Street Address -->
 						<div>
-							<label for="streetAddress" class="block text-sm font-medium text-gray-700 mb-2">Số nhà, tên đường</label>
-							<input type="text" id="streetAddress" name="streetAddress" value="123 Đường ABC"
+							<label for="address" class="block text-sm font-medium text-gray-700 mb-2">Số nhà, tên đường</label>
+							<input type="text" id="address" name="address" value="<?= $user['address'] ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
 								placeholder="Nhập số nhà và tên đường">
 						</div>
 					</div>
 					<!-- Save Button -->
 					<div class="flex justify-end">
-						<button type="submit"
+						<button type="button" id="updateProfile"
 							class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
 							<i class="fas fa-save mr-2"></i>
 							Lưu thay đổi
@@ -201,8 +194,8 @@
 
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-medium text-gray-700">Xác thực CCCD</span>
-						<span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
-							<i class="fas fa-clock mr-1"></i>Chưa cập nhật
+						<span class="inline-block bg-<?= $user['citizen_id'] ? 'green' : 'yellow' ?>-100 text-<?= $user['citizen_id'] ? 'green' : 'yellow' ?>-800 text-xs px-2 py-1 rounded-full">
+							<i class="fas fa-<?= $user['citizen_id'] ? 'check' : 'clock' ?> mr-1"></i><?= $user['citizen_id'] ? 'Đã xác thực' : 'Chưa cập nhật' ?>
 						</span>
 					</div>
 				</div>
@@ -218,7 +211,7 @@
 				<div class="space-y-4">
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-medium text-gray-700">Ngày tham gia</span>
-						<span class="text-sm text-gray-600">15/08/2024</span>
+						<span class="text-sm text-gray-600"><?= date('d/m/Y', strtotime($user['created_at'])) ?></span>
 					</div>
 
 					<div class="flex items-center justify-between">
@@ -254,61 +247,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-	// Profile form submission
-	document.getElementById("profileForm").addEventListener("submit", function(e) {
-		e.preventDefault();
-
-		// Show loading
-		const submitBtn = this.querySelector("button[type=submit]");
-		const originalText = submitBtn.innerHTML;
-		submitBtn.innerHTML = "<i class=\"fas fa-spinner fa-spin mr-2\"></i>Đang lưu...";
-		submitBtn.disabled = true;
-
-		// Simulate API call
-		setTimeout(() => {
-			submitBtn.innerHTML = originalText;
-			submitBtn.disabled = false;
-
-			// Show success message
-			toastr.success("Thông tin đã được cập nhật thành công!");
-		}, 2000);
-	});
-
-	// Change password form submission
-	document.getElementById("changePasswordForm").addEventListener("submit", function(e) {
-		e.preventDefault();
-
-		const newPassword = document.getElementById("newPassword").value;
-		const confirmPassword = document.getElementById("confirmPassword").value;
-
-		if (newPassword !== confirmPassword) {
-			toastr.error("Mật khẩu xác nhận không khớp!");
-			return;
-		}
-
-		if (newPassword.length < 6) {
-			toastr.error("Mật khẩu phải có ít nhất 6 ký tự!");
-			return;
-		}
-
-		// Show loading
-		const submitBtn = this.querySelector("button[type=submit]");
-		const originalText = submitBtn.innerHTML;
-		submitBtn.innerHTML = "<i class=\"fas fa-spinner fa-spin mr-2\"></i>Đang đổi...";
-		submitBtn.disabled = true;
-
-		// Simulate API call
-		setTimeout(() => {
-			submitBtn.innerHTML = originalText;
-			submitBtn.disabled = false;
-
-			// Clear form
-			this.reset();
-
-			// Show success message
-			toastr.success("Mật khẩu đã được thay đổi thành công!");
-		}, 2000);
-	});
-</script>

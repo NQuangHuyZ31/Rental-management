@@ -1,0 +1,170 @@
+/* Fix Double Scrollbar Issue */
+
+/* Reset default scrollbar behavior */
+/* html,
+body {
+    height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    margin: 0;
+    padding: 0;
+} */
+
+/* Ensure main container takes full height */
+.main-content-wrapper {
+    height: calc(100vh - 8rem) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Main content area should be the only scrollable element */
+.content-area {
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Sidebar should not cause overflow */
+#sidebar {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: 100% !important;
+}
+
+/* Prevent any nested elements from causing overflow */
+.content-area > * {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Fix for mobile devices */
+@media (max-width: 1023px) {
+    .main-content-wrapper {
+        height: calc(100vh - 8rem) !important;
+    }
+
+    #sidebar {
+        height: calc(100vh - 8rem) !important;
+        top: 8rem !important;
+    }
+}
+
+/* Ensure pagination and other components don't cause overflow */
+.pagination-container {
+    overflow: visible;
+}
+
+.empty-state {
+    overflow: visible;
+}
+
+/* Fix for any modals or overlays */
+.modal,
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+/* Ensure header stays fixed */
+header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+}
+
+/* Remove any margin/padding that might cause overflow */
+body > * {
+    box-sizing: border-box;
+}
+
+/* Fix for any absolute positioned elements */
+.absolute,
+.fixed {
+    box-sizing: border-box;
+}
+
+/* Ensure smooth scrolling */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling - thinner scrollbar */
+.content-area::-webkit-scrollbar {
+    width: 4px;
+}
+
+.content-area::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 2px;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 2px;
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Firefox scrollbar - thinner */
+.content-area {
+    scrollbar-width: thin;
+    scrollbar-color: #dee2e6 #f8f9fa;
+}
+
+/* Global scrollbar styling for all elements */
+*::-webkit-scrollbar {
+    width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Ensure camera number badges are always visible */
+.absolute.-top-1.-right-1 {
+    z-index: 10 !important;
+}
+
+/* Ensure parent containers of camera badges have visible overflow */
+.absolute.-top-1.-right-1,
+.absolute.-top-1.-right-1 * {
+    overflow: visible !important;
+}
+
+/* Prevent horizontal scroll on mobile but preserve camera badges */
+@media (max-width: 768px) {
+    .content-area {
+        overflow-x: hidden !important;
+    }
+
+    .content-area * {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Exception for camera badge containers */
+    .content-area .absolute.-top-1.-right-1,
+    .content-area .absolute.-top-1.-right-1 * {
+        overflow: visible !important;
+    }
+}

@@ -39,5 +39,5 @@ $content = '
     <a href="' . $appointmentUrl . '" class="button">Xem chi tiết lịch hẹn</a>
 </div>';
 
-include 'views/emails/layout.php';
+include_once VIEW_PATH . 'emails/layout.php';
 ?>

@@ -11,7 +11,7 @@ namespace App\Controllers\Customer;
 use Core\QueryBuilder;
 use App\Controllers\Controller;
 use Core\ViewRender;
-use App\models\RenTalPost;
+use App\Models\RenTalPost;
 
 class HomeController extends Controller {
 	protected $title = 'Trang chủ';
