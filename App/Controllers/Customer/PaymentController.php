@@ -117,7 +117,15 @@ class PaymentController extends CustomerController {
             // create payment history
             $this->paymentHistoryModel->create($dataPayment);
             // update invoice status
-            $this->invoiceModel->updateInvoiceOnlyStatus($invoiceID, 'paid');
+            $invoice = $this->invoiceModel->getInvoiceByInvoiceId($invoiceID);
+
+            if (!$invoice) {
+                Log::payment('Hóa đơn không tồn tại: ' . $invoiceID, Log::LEVEL_ERROR);
+                Response::json(['status' => 'error', 'message' => 'Hóa đơn không tồn tại'], 404);
+                exit;
+            }
+
+            $this->invoiceModel->updateInvoiceOnlyStatus($invoice['id'], 'paid');
 
             Response::json(['status' => 'success', 'payment_status' => 'paid'], 200);
 
