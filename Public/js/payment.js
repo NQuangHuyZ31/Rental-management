@@ -58,6 +58,7 @@ $(document).ready(function () {
                         updatePaymentStatus('success');
                         App.setToken(response.token);
                         showSuccess('Thanh toán thành công!');
+                        $('.invoice-item-status').text('Đã thanh toán');
                         setTimeout(() => {
                             closePaymentModalFunc();
                             $('.btn-payment').addClass('hidden pointer-events-none opacity-50');

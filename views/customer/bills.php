@@ -332,7 +332,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Trạng thái:</span>
-                                    <span class="<?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?> font-medium"><?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'Chưa thanh toán' : 'Đã thanh toán' ?></span>
+                                    <span class="invoice-item-status <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?> font-medium"><?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'Chưa thanh toán' : 'Đã thanh toán' ?></span>
                                 </div>
                                 <div class="flex justify-between <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'block' : 'hidden'; ?>">
                                     <span class="text-gray-600">Còn lại:</span>
