@@ -254,7 +254,7 @@ use Core\CSRF;
             document.getElementById('invoiceModal').classList.remove('hidden');
 
             // Gọi API lấy chi tiết hóa đơn
-            fetch(`${App.appURL}/landlord/invoice/view/${invoiceId}`)
+            fetch(`${App.appURL}landlord/invoice/view/${invoiceId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -744,7 +744,7 @@ use Core\CSRF;
             updateBtnLoading.classList.remove('hidden');
 
             // Gửi request
-            fetch(`${App.appURL}/landlord/invoice/update`, {
+            fetch(`${App.appURL}landlord/invoice/update`, {
                     method: 'POST',
                     body: formData
                 })

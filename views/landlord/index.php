@@ -473,7 +473,7 @@ Purpose: Build Index house for Landlord
 
         function resetRoomFormToCreate() {
             // Reset form action
-            document.getElementById('roomForm').action = '<?= BASE_URL ?>/landlord/room/create';
+            document.getElementById('roomForm').action = `${App.appURL}landlord/room/create`;
             
             // Reset modal title
             document.getElementById('roomModalTitle').textContent = 'Thêm phòng mới';
@@ -522,7 +522,7 @@ Purpose: Build Index house for Landlord
             document.getElementById('roomSubmitBtn').innerHTML = 'Cập nhật phòng';
 
             // Thay đổi form action
-            document.getElementById('roomForm').action = '<?= BASE_URL ?>/landlord/room/update';
+            document.getElementById('roomForm').action = `${App.appURL}landlord/room/update`;
         }
 
         function deleteRoom(roomId, roomName) {
@@ -541,7 +541,7 @@ Purpose: Build Index house for Landlord
                     // Tạo form ẩn để submit
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '<?= BASE_URL ?>/landlord/room/delete';
+                    form.action = `${App.appURL}landlord/room/delete`;
                     
                     // Thêm CSRF token
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -762,7 +762,7 @@ Purpose: Build Index house for Landlord
             document.body.style.overflow = 'hidden';
 
             // Fetch room services and display form
-            fetch(`${App.appURL}/landlord/invoice/create-form/${roomId}`)
+            fetch(`${App.appURL}landlord/invoice/create-form/${roomId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -1204,7 +1204,7 @@ Purpose: Build Index house for Landlord
             createBtnLoading.classList.remove('hidden');
 
             // Send request
-            fetch(`${App.appURL}/landlord/invoice/create`, {
+            fetch(`${App.appURL}landlord/invoice/create`, {
                     method: 'POST',
                     body: formData
                 })

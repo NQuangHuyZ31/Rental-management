@@ -9,14 +9,14 @@ Purpose: Build Header for Landlord Layout
             <!-- Logo Section -->
             <div class="flex items-center mr-8">
                 <div>
-                    <img src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.jpg" 
+                    <img src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.png" 
                          alt="HOSTY Logo" 
-                         class="w-35 h-35">
+                         class="h-20 w-35">
                 </div>
             </div>
 
             <!-- All Navigation Items -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4"></div>
                 <!-- Quản lý nhà (House Management) - Active -->
                 <a href="<?= BASE_URL ?>/landlord" class="nav-item active flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-home text-lg mb-1"></i>

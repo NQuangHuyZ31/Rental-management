@@ -52,7 +52,7 @@ $message = $flashData['success'] ?? '';
         <div class="text-center mb-8">
             <!-- Logo -->
             <div class="mb-4">
-                <img src=" <?=BASE_URL?>/Public/images/admin/hosty-removebg.jpg" onclick="window.location(<?= BASE_URL ?>)/"alt="HOSTY Logo" class="w-18 h-20 mx-auto">
+                <img src=" <?=BASE_URL?>/Public/images/admin/hosty-removebg.png" onclick="window.location(<?= BASE_URL ?>)/"alt="HOSTY Logo" class="w-18 h-20 mx-auto">
             </div>
             <!-- Title Text -->
             <h1 class="text-[#3C9E46] text-4xl font-bold text-center leading-tight whitespace-nowrap">

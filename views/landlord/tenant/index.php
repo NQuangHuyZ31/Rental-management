@@ -935,7 +935,7 @@
         modal.classList.remove('hidden');
         
         // Fetch tenant data
-        fetch(`<?= BASE_URL ?>/landlord/tenant/edit/${tenantId}`, {
+        fetch(`${App.appURL}landlord/tenant/edit/${tenantId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -1156,8 +1156,8 @@
         
         // Xác định URL dựa trên mode
         const url = currentMode === 'add' 
-            ? '<?= BASE_URL ?>/landlord/tenant/create'
-            : '<?= BASE_URL ?>/landlord/tenant/update';
+            ? `${App.appURL}landlord/tenant/create`
+            : `${App.appURL}landlord/tenant/update`;
         
         $.ajax({
             url: url,
@@ -1244,7 +1244,7 @@
         const formData = new FormData(this);
         
         $.ajax({
-            url: '<?= BASE_URL ?>/landlord/tenant/update',
+            url: `${App.appURL}landlord/tenant/update`,
             type: 'POST',
             data: formData,
             processData: false,

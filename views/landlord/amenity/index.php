@@ -275,7 +275,7 @@ function closeAmenityModal() {
 
 function resetAmenityFormToCreate() {
     // Reset form action
-    document.getElementById('amenityForm').action = '<?= BASE_URL ?>/landlord/amenity/create';
+    document.getElementById('amenityForm').action = `${App.appURL}landlord/amenity/create`;
     
     // Reset modal title
     document.getElementById('amenityModalTitle').textContent = 'Thêm tài sản mới';
@@ -315,7 +315,7 @@ function editAmenity(amenityId) {
     document.getElementById('unit').value = amenity.unit;
 
     // Lấy danh sách phòng đang áp dụng tài sản này
-    fetch('<?= BASE_URL ?>/landlord/amenity/get-rooms/' + amenityId)
+    fetch(`${App.appURL}landlord/amenity/get-rooms/` + amenityId)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -348,7 +348,7 @@ function editAmenity(amenityId) {
     document.getElementById('amenitySubmitBtn').innerHTML = 'Cập nhật tài sản';
 
     // Thay đổi form action
-    document.getElementById('amenityForm').action = '<?= BASE_URL ?>/landlord/amenity/update';
+    document.getElementById('amenityForm').action = `${App.appURL}landlord/amenity/update`;
 }
 
 function deleteAmenity(amenityId, amenityName, canDelete, deleteReason) {
@@ -378,7 +378,7 @@ function deleteAmenity(amenityId, amenityName, canDelete, deleteReason) {
             // Tạo form ẩn để submit
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '<?= BASE_URL ?>/landlord/amenity/delete';
+            form.action = `${App.appURL}landlord/amenity/delete`;
             
             // Thêm CSRF token
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
