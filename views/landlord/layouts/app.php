@@ -159,8 +159,10 @@ Purpose: Libraries and Dependencies for Landlord Layout
     document.addEventListener('DOMContentLoaded', function() {
         <?php
         $request = new \Core\Request();
-        $successMessage = $request->getFlashData('success');
-        $errorMessage = $request->getFlashData('error');
+        // Lấy tất cả flash data cùng lúc để tránh bị xóa
+        $flashData = $request->getFlashData();
+        $successMessage = $flashData['success'] ?? null;
+        $errorMessage = $flashData['error'] ?? null;
         ?>
         
         <?php if ($successMessage): ?>

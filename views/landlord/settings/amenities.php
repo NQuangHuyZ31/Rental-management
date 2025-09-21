@@ -231,7 +231,7 @@ function deleteAmenity(id) {
         formData.append('id', id);
         formData.append('csrf_token', App.getToken());
         
-        fetch('<?= BASE_URL ?>/landlord/settings/delete-amenity', {
+        fetch(`${App.appURL}landlord/settings/delete-amenity`, {
             method: 'POST',
             body: formData
         })
@@ -259,8 +259,8 @@ document.getElementById('amenityForm').addEventListener('submit', function(e) {
     formData.append('csrf_token', App.getToken());
     
     const url = isEditMode ? 
-        '<?= BASE_URL ?>/landlord/settings/update-amenity' : 
-        '<?= BASE_URL ?>/landlord/settings/create-amenity';
+        `${App.appURL}landlord/settings/update-amenity` : 
+        `${App.appURL}landlord/settings/create-amenity`;
     
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;

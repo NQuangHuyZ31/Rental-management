@@ -235,7 +235,7 @@ function deleteService(id) {
         formData.append('id', id);
         formData.append('csrf_token', App.getToken());
         
-        fetch('<?= BASE_URL ?>/landlord/settings/delete-service', {
+        fetch(`${App.appURL}landlord/settings/delete-service`, {
             method: 'POST',
             body: formData
         })
@@ -263,8 +263,8 @@ document.getElementById('serviceForm').addEventListener('submit', function(e) {
     formData.append('csrf_token', App.getToken());
     
     const url = isEditMode ? 
-        '<?= BASE_URL ?>/landlord/settings/update-service' : 
-        '<?= BASE_URL ?>/landlord/settings/create-service';
+        `${App.appURL}landlord/settings/update-service` : 
+        `${App.appURL}landlord/settings/create-service`;
     
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;

@@ -347,7 +347,7 @@ Purpose: Build Index house for Landlord
             </div>
 
             <!-- Form -->
-            <form id="roomForm" method="POST" action="<?= BASE_URL ?>/landlord/room/create" class="flex flex-col flex-1 min-h-0">
+            <form id="roomForm" method="POST" action="${App.appURL}landlord/room/create" class="flex flex-col flex-1 min-h-0">
                 <input type="hidden" id="room_id" name="room_id" value="">
                 <?= \Core\CSRF::getTokenField() ?>
                 <input type="hidden" name="house_id" value="<?= $selectedHouse['id'] ?? '' ?>">
