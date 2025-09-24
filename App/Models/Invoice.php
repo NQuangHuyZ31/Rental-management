@@ -684,6 +684,17 @@ class Invoice extends Model
         }
     }
 
+
+    /**
+     * Xóa hóa đơn
+     */
+    public function deleteInvoice($invoiceId) {
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $invoiceId)
+            ->update(['deleted' => 1]);
+    }
+    
     // Added by Huy Nguyen get all invoices
 	public function getAllInvoices($data = []) {
         $query = $this->table('invoices')->select('invoices.*, rooms.room_name, houses.house_name, room_tenants.user_id as tenant_id')

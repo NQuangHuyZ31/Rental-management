@@ -438,5 +438,82 @@ class TenantController extends LandlordController
         }
     }
 
+    /**
+     * Xóa khách thuê khỏi phòng
+     */
+    public function removeTenant()
+    {
+        // Kiểm tra request method
+        if (!$this->request->isPost()) {
+            http_response_code(405);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Phương thức không hợp lệ'
+            ]);
+            exit;
+        }
+
+        // Lấy thông tin user đã đăng nhập
+        $user = Session::get('user');
+        $ownerId = $user['id'];
+
+        // Lấy tenant_id từ request
+        $tenantId = $this->request->post('tenant_id');
+        
+        if (empty($tenantId)) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'ID khách thuê không hợp lệ'
+            ]);
+            exit;
+        }
+
+        // Validate CSRF token
+        if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ'
+            ]);
+            exit;
+        }
+
+        try {
+            // Xóa khách thuê khỏi phòng
+            $result = $this->tenantModel->removeTenantFromRoom($tenantId, $ownerId);
+            
+            if ($result) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Xóa khách thuê khỏi phòng thành công!',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+                exit;
+            } else {
+                http_response_code(500);
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi xóa khách thuê khỏi phòng',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+                exit;
+            }
+        } catch (\Exception $e) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
+                'csrf_token' => CSRF::generateToken()
+            ]);
+            exit;
+        }
+    }
 
 }

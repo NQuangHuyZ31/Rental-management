@@ -107,7 +107,7 @@ use Core\CSRF;
                                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền rác</th>
                                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tổng cộng</th>
                                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Trạng thái</th>
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200 w-20">Thao tác</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200 w-20"></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
@@ -165,18 +165,37 @@ use Core\CSRF;
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-center border border-gray-200">
-                                                <!-- Hai icon thao tác (Xem, Xóa) -->
-                                                <button onclick="viewInvoice(<?= $invoice['id'] ?>)"
-                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors text-blue-500"
-                                                    title="Xem hóa đơn">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <a href=""
-                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-100 transition-colors text-red-500"
-                                                    title="Xóa hóa đơn"
-                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
+                                                <div class="flex items-center justify-center">
+                                                    <!-- Dropdown Button -->
+                                                    <div class="relative">
+                                                        <button onclick="toggleInvoiceActions(<?= $invoice['id'] ?>)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors border border-gray-300" title="Thao tác">
+                                                            <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                                            </svg>
+                                                        </button>
+                                                        
+                                                        <!-- Dropdown Menu -->
+                                                        <div id="invoiceActions-<?= $invoice['id'] ?>" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                                                            <div class="py-1">
+                                                                <!-- View/Edit Option -->
+                                                                <button onclick="viewInvoice(<?= $invoice['id'] ?>); toggleInvoiceActions(<?= $invoice['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                                                    <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                                    </svg>
+                                                                    Xem/cập nhật
+                                                                </button>
+                                                                
+                                                                <!-- Delete Option -->
+                                                                <button onclick="deleteInvoice(<?= $invoice['id'] ?>); toggleInvoiceActions(<?= $invoice['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                                                    <svg class="w-4 h-4 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                                    </svg>
+                                                                    Xóa hóa đơn
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -254,7 +273,7 @@ use Core\CSRF;
             document.getElementById('invoiceModal').classList.remove('hidden');
 
             // Gọi API lấy chi tiết hóa đơn
-            fetch(`${App.appURL}/landlord/invoice/view/${invoiceId}`)
+            fetch(`${App.appURL}landlord/invoice/view/${invoiceId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -744,7 +763,7 @@ use Core\CSRF;
             updateBtnLoading.classList.remove('hidden');
 
             // Gửi request
-            fetch(`${App.appURL}/landlord/invoice/update`, {
+            fetch(`${App.appURL}landlord/invoice/update`, {
                     method: 'POST',
                     body: formData
                 })
@@ -903,6 +922,76 @@ use Core\CSRF;
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeInvoiceModal();
+            }
+        });
+
+        // Hàm xóa hóa đơn với SweetAlert xác nhận
+        function deleteInvoice(invoiceId) {
+            Swal.fire({
+                title: 'Xác nhận xóa hóa đơn',
+                html: 'Bạn có chắc chắn muốn xóa hóa đơn này?<br>Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gọi API xóa hóa đơn
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch(`${App.appURL}landlord/invoice/delete`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `invoice_id=${invoiceId}&csrf_token=${csrfToken}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showSuccessMessage(data.message);
+                            // Reload trang sau 1.5 giây để user thấy thông báo
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa hóa đơn');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showErrorMessage('Có lỗi xảy ra khi xóa hóa đơn');
+                    });
+                }
+            });
+        }
+
+        // Toggle invoice actions dropdown
+        function toggleInvoiceActions(invoiceId) {
+            // Close all other dropdowns first
+            const allDropdowns = document.querySelectorAll('[id^="invoiceActions-"]');
+            allDropdowns.forEach(dropdown => {
+                if (dropdown.id !== `invoiceActions-${invoiceId}`) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+            
+            // Toggle the current dropdown
+            const dropdown = document.getElementById(`invoiceActions-${invoiceId}`);
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        }
+
+        // Close all dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.relative')) {
+                const dropdowns = document.querySelectorAll('[id^="invoiceActions-"]');
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
             }
         });
     </script>

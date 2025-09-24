@@ -323,7 +323,7 @@ Purpose: Build Nav for Landlord Layout
         document.getElementById('submitButton').textContent = 'Tạo nhà trọ';
         
         // Reset form action
-        document.getElementById('houseForm').action = '<?= BASE_URL ?>/landlord/house/create';
+        document.getElementById('houseForm').action = `${App.appURL}landlord/house/create`;
         
         // Xóa input hidden nếu có
         const hiddenInput = document.getElementById('house_id');
@@ -536,7 +536,7 @@ Purpose: Build Nav for Landlord Layout
         document.getElementById('submitButton').textContent = 'Cập nhật nhà trọ';
         
         // Thay đổi form action
-        document.getElementById('houseForm').action = '<?= BASE_URL ?>/landlord/house/update';
+        document.getElementById('houseForm').action = `${App.appURL}landlord/house/update`;
         
         // Thêm input hidden để lưu house_id
         let hiddenInput = document.getElementById('house_id');
@@ -565,7 +565,7 @@ Purpose: Build Nav for Landlord Layout
                 // Tạo form ẩn và submit
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= BASE_URL ?>/landlord/house/delete';
+                form.action = `${App.appURL}landlord/house/delete`;
                 form.style.display = 'none';
 
                 // Thêm house_id vào form

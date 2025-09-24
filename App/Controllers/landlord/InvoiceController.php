@@ -345,5 +345,60 @@ class InvoiceController extends LandlordController{
         exit; // Đảm bảo không có output nào khác
     }
     
+    /**
+     * Xóa hóa đơn
+     */
+    public function delete()
+    {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
+        try {
+            $userId = Session::get('user')['id'];
+            $invoiceId = $this->request->post('invoice_id');
+            
+            if (!$invoiceId || !is_numeric($invoiceId)) {
+                throw new \Exception('ID hóa đơn không hợp lệ');
+            }
+            
+            // Validate CSRF token
+            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
+                throw new \Exception('Dữ liệu không hợp lệ');
+            }
+            
+            // Kiểm tra quyền sở hữu hóa đơn trước khi xóa
+            $invoice = $this->invoiceModel->getInvoiceById($invoiceId, $userId);
+            if (!$invoice) {
+                throw new \Exception('Không tìm thấy hóa đơn hoặc bạn không có quyền xóa');
+            }
+            
+            // Xóa hóa đơn (soft delete)
+            $result = $this->invoiceModel->deleteInvoice($invoiceId);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Xóa hóa đơn thành công',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+            } else {
+                throw new \Exception('Không thể xóa hóa đơn');
+            }
+        } catch (\Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'csrf_token' => CSRF::generateToken()
+            ]);
+        }
+        
+        exit; // Đảm bảo không có output nào khác
+    }
+    
 }
 ?>

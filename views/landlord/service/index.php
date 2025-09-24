@@ -469,7 +469,7 @@
 
         function resetServiceFormToCreate() {
             // Reset form action và title
-            document.getElementById('serviceForm').action = '<?= BASE_URL ?>/landlord/service/create';
+            document.getElementById('serviceForm').action = `${App.appURL}landlord/service/create`;
             document.getElementById('serviceModalTitle').textContent = 'Thêm dịch vụ mới';
             document.getElementById('serviceSubmitBtn').innerHTML = '<i class="fas fa-plus mr-2"></i>Tạo dịch vụ';
 
@@ -517,7 +517,7 @@
             document.getElementById('service_price').value = service.service_price;
 
             // Lấy danh sách phòng đang áp dụng dịch vụ này
-            fetch('<?= BASE_URL ?>/landlord/service/get-rooms/' + serviceId)
+            fetch(`${App.appURL}landlord/service/get-rooms/` + serviceId)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -550,7 +550,7 @@
             document.getElementById('serviceSubmitBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Cập nhật dịch vụ';
 
             // Thay đổi form action
-            document.getElementById('serviceForm').action = '<?= BASE_URL ?>/landlord/service/update';
+            document.getElementById('serviceForm').action = `${App.appURL}landlord/service/update`;
         }
 
         function deleteService(serviceId, serviceName, canDelete, deleteReason) {
@@ -582,7 +582,7 @@
                     // Tạo form để gửi request xóa
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '<?= BASE_URL ?>/landlord/service/delete';
+                    form.action = `${App.appURL}landlord/service/delete`;
 
                     // Thêm CSRF token
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -735,7 +735,7 @@
             // Hiển thị loading
             showLoadingState();
 
-            const apiUrl = `<?= BASE_URL ?>/landlord/service/usage?house_id=${houseId}&month=${month}&year=${year}`;
+            const apiUrl = `${App.appURL}landlord/service/usage?house_id=${houseId}&month=${month}&year=${year}`;
             console.log('Calling API:', apiUrl);
 
             // Gọi API để lấy dữ liệu

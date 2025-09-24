@@ -89,6 +89,7 @@ $router->get('/admin/posts/approved', [PostManagementController::class, 'approve
 $router->get('/admin/posts/rejected', [PostManagementController::class, 'rejectedPostPage'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
+// House Management Routes
 $router->get('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/house/create', [HouseController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/house/update', [HouseController::class, 'update'],[AuthLandlordMiddleware::class]);
@@ -101,6 +102,7 @@ $router->post('/landlord/room/update', [RoomController::class, 'update'],[AuthLa
 $router->post('/landlord/room/delete', [RoomController::class, 'delete'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/room/get/{id}', [RoomController::class, 'getRoom'],[AuthLandlordMiddleware::class]);
 
+// Service Management Routes
 $router->get('/landlord/service', [ServiceController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/service/create', [ServiceController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/service/update', [ServiceController::class, 'update'],[AuthLandlordMiddleware::class]);
@@ -108,24 +110,32 @@ $router->post('/landlord/service/delete', [ServiceController::class, 'delete'],[
 $router->get('/landlord/service/get-rooms/{id}', [ServiceController::class, 'getServiceRooms'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/service/usage', [ServiceController::class, 'getUsageByMonth'],[AuthLandlordMiddleware::class]);
 
+// Amenity Management Routes
 $router->get('/landlord/amenity', [AmenityController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/amenity/create', [AmenityController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/amenity/update', [AmenityController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/amenity/delete', [AmenityController::class, 'delete'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/amenity/get-rooms/{id}', [AmenityController::class, 'getAmenityRooms'],[AuthLandlordMiddleware::class]);
 
+// Tenant Management Routes
 $router->get('/landlord/tenant', [TenantController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/create', [TenantController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/tenant/edit/{id}', [TenantController::class, 'edit'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/update', [TenantController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/tenant/delete', [TenantController::class, 'delete'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/tenant/remove', [TenantController::class, 'removeTenant'],[AuthLandlordMiddleware::class]);
 
+// Invoice Management Routes
 $router->get('/landlord/invoice', [InvoiceController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/invoice/view/{id}', [InvoiceController::class, 'viewInvoice'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/update', [InvoiceController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/updateStatus', [InvoiceController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/invoice/create-form/{id}', [InvoiceController::class, 'createForm'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/create', [InvoiceController::class, 'create'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/invoice/delete', [InvoiceController::class, 'delete'],[AuthLandlordMiddleware::class]);
 
+
+// Rental Post Management Routes
 $router->get('/landlord/post-news', [RentalPostController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/create', [RentalPostController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/posts/get', [RentalPostController::class, 'getPost'],[AuthLandlordMiddleware::class]);
@@ -133,12 +143,14 @@ $router->post('/landlord/posts/update', [RentalPostController::class, 'update'],
 $router->post('/landlord/posts/hide', [RentalPostController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/posts/delete', [RentalPostController::class, 'delete'],[AuthLandlordMiddleware::class]);
 
+// Setting Payment Management Routes
 $router->get('/landlord/setting/payment', [SettingPaymentController::class, 'index'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/setting/payment/update', [SettingPaymentController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/setting/payment-api', [SettingPaymentController::class, 'paymentApi'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/setting/payment/update-api-key', [SettingPaymentController::class, 'updateApiKey'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/setting/payment/guide', [SettingPaymentController::class, 'guide'],[AuthLandlordMiddleware::class]);
 
+// Setting Post Management Routes
 $router->get('/landlord/setting/categories', [SettingPostController::class, 'categories'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/setting/categories/create', [SettingPostController::class, 'createCategory'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/setting/categories/delete', [SettingPostController::class, 'deleteCategory'],[AuthLandlordMiddleware::class]);
