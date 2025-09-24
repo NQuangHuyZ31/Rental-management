@@ -1,177 +1,167 @@
-<!-- 
+<!--
     Author: Huy Nguyen
     Date: 2025-01-15
     Purpose: Amenities management for landlord
 -->
-
 <div class="max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Quản lý tiện ích</h1>
-            <p class="text-gray-600 mt-2">Tạo và quản lý các tiện ích cho phòng thuê</p>
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Quản lý tiện ích phòng</h1>
+        <p class="text-gray-600 mt-2">Quản lý tiện ích phòng hệ thống và tiện ích cá nhân</p>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="mb-6">
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8">
+                <button onclick="switchTab('system')" class="tab-button py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap border-blue-500 text-blue-600"
+                    id="system-tab">
+                    <i class="fas fa-globe mr-2"></i>
+                    Tiện ích hệ thống
+                </button>
+                <button onclick="switchTab('user')" class="tab-button py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    id="user-tab">
+                    <i class="fas fa-user mr-2"></i>
+                    Tiện ích của tôi
+                </button>
+            </nav>
         </div>
-        <button onclick="openCreateModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            <i class="fas fa-plus mr-2"></i>
-            Thêm tiện ích
-        </button>
     </div>
 
-    <!-- Amenities Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <?php foreach ($amenities as $amenity) { ?>
-            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-3" style="background-color: <?= $amenity['color'] ?>20; color: <?= $amenity['color'] ?>">
-                            <i class="<?= $amenity['icon'] ?> text-xl"></i>
+    <!-- System Amenities Tab -->
+    <div id="system-amenities" class="tab-item">
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-2">Tiện ích hệ thống</h2>
+            <p class="text-gray-600">Các tiện ích phòng được cung cấp bởi hệ thống, chỉ có thể xem</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php if (count($systemAmenities) > 0) { ?>
+                <?php foreach ($systemAmenities as $amenity) { ?>
+                    <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900"><?= htmlspecialchars($amenity['rental_amenity_name']) ?></h3>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <i class="fas fa-globe mr-1"></i>
+                                    Hệ thống
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900"><?= htmlspecialchars($amenity['amenity_name']) ?></h3>
-                            <p class="text-sm text-gray-600"><?= htmlspecialchars($amenity['description']) ?></p>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $amenity['rental_amenity_status'] == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
+                                    <i class="fas <?= $amenity['rental_amenity_status'] == 'active' ? 'fa-check' : 'fa-times' ?> mr-1"></i>
+                                    <?= $amenity['rental_amenity_status'] == 'active' ? 'Hoạt động' : 'Tạm dừng' ?>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="openEditModal(<?= htmlspecialchars(json_encode($amenity)) ?>)" 
-                                class="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-colors">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteAmenity(<?= $amenity['id'] ?>)" 
-                                class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $amenity['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                            <i class="fas <?= $amenity['is_active'] ? 'fa-check' : 'fa-times' ?> mr-1"></i>
-                            <?= $amenity['is_active'] ? 'Hoạt động' : 'Tạm dừng' ?>
-                        </span>
-                    </div>
-                    <div class="text-sm text-gray-500">
-                        <?= date('d/m/Y', strtotime($amenity['created_at'])) ?>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
+                <?php } ?>
+            <?php } ?>
+        </div>
     </div>
 
-    <!-- Empty State -->
-    <?php if (empty($amenities)) { ?>
-        <div class="text-center py-12">
-            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-star text-gray-400 text-3xl"></i>
+    <!-- User Amenities Tab -->
+    <div id="user-amenities" class="tab-item hidden">
+        <div class="flex items-center justify-start gap-10">
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">Tiện ích của tôi</h2>
+                <p class="text-gray-600">Các tiện ích phòng do bạn tạo, có thể chỉnh sửa và xóa</p>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có tiện ích nào</h3>
-            <p class="text-gray-600 mb-6">Tạo tiện ích đầu tiên để quản lý các tiện ích phòng</p>
-            <button onclick="openCreateModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                <i class="fas fa-plus mr-2"></i>
-                Tạo tiện ích đầu tiên
+            <button onclick="openCreateAmenityModal()" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded text-xs transition-colors">
+                <i class="fas fa-plus mr-1"></i>
+                Thêm
             </button>
         </div>
-    <?php } ?>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php if (count($userAmenities) > 0) { ?>
+                <?php foreach ($userAmenities as $amenity) { ?>
+                    <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900"><?= htmlspecialchars($amenity['rental_amenity_name']) ?></h3>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openEditAmenityModal(<?= htmlspecialchars(json_encode($amenity)) ?>)"
+                                    class="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-colors"
+                                    title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteAmenity(<?= $amenity['id'] ?>)"
+                                    class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors"
+                                    title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $amenity['rental_amenity_status'] == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
+                                    <i class="fas <?= $amenity['rental_amenity_status'] == 'active' ? 'fa-check' : 'fa-times' ?> mr-1"></i>
+                                    <?= $amenity['rental_amenity_status'] == 'active' ? 'Hoạt động' : 'Tạm dừng' ?>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php } else { ?>
+                <div class="col-span-full">
+                    <div class="bg-white border border-dashed border-gray-300 rounded-xl p-10 flex flex-col items-center justify-center text-center hover:shadow-sm transition-shadow">
+                        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                            <i class="fas fa-star text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có tiện ích nào</h3>
+                        <p class="text-gray-600 mb-6 max-w-md">Hãy thêm tiện ích để mô tả rõ ràng các trang bị, dịch vụ đi kèm trong phòng.</p>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
 </div>
 
 <!-- Create/Edit Modal -->
-<div id="amenityModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-md w-full p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 id="modalTitle" class="text-xl font-semibold text-gray-900">Thêm tiện ích mới</h2>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
+<div id="amenityModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-40 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="modalTitle" class="text-lg font-medium text-gray-900">Thêm tiện ích mới</h3>
+                <button onclick="closeAmenityModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <form id="amenityForm" class="space-y-4">
                 <input type="hidden" id="amenityId" name="id">
-                
+                <?= \Core\CSRF::getTokenField() ?>
                 <!-- Amenity Name -->
                 <div>
-                    <label for="amenity_name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="rental_amenity_name" class="block text-sm font-medium text-gray-700 mb-2">
                         Tên tiện ích <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="amenity_name" name="amenity_name" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" 
-                           placeholder="VD: Máy lạnh, Wifi, Tủ lạnh" required>
+                    <input type="text" id="rental_amenity_name" name="rental_amenity_name"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="VD: Điều hòa, Tủ lạnh, Máy giặt" required>
                 </div>
-
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mô tả
-                    </label>
-                    <textarea id="description" name="description" rows="3"
-                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" 
-                              placeholder="Mô tả ngắn về tiện ích"></textarea>
-                </div>
-
-                <!-- Icon -->
-                <div>
-                    <label for="icon" class="block text-sm font-medium text-gray-700 mb-2">
-                        Icon
-                    </label>
-                    <div class="grid grid-cols-6 gap-2 mb-2">
-                        <button type="button" onclick="selectIcon('fas fa-wifi')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-wifi"></i>
-                        </button>
-                        <button type="button" onclick="selectIcon('fas fa-snowflake')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-snowflake"></i>
-                        </button>
-                        <button type="button" onclick="selectIcon('fas fa-tv')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-tv"></i>
-                        </button>
-                        <button type="button" onclick="selectIcon('fas fa-car')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-car"></i>
-                        </button>
-                        <button type="button" onclick="selectIcon('fas fa-swimming-pool')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-swimming-pool"></i>
-                        </button>
-                        <button type="button" onclick="selectIcon('fas fa-dumbbell')" class="icon-btn p-2 border border-gray-300 rounded hover:bg-purple-50">
-                            <i class="fas fa-dumbbell"></i>
-                        </button>
-                    </div>
-                    <input type="text" id="icon" name="icon" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" 
-                           placeholder="fas fa-wifi" value="fas fa-wifi">
-                </div>
-
-                <!-- Color -->
-                <div>
-                    <label for="color" class="block text-sm font-medium text-gray-700 mb-2">
-                        Màu sắc
-                    </label>
-                    <div class="grid grid-cols-8 gap-2 mb-2">
-                        <button type="button" onclick="selectColor('#10B981')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #10B981"></button>
-                        <button type="button" onclick="selectColor('#3B82F6')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #3B82F6"></button>
-                        <button type="button" onclick="selectColor('#8B5CF6')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #8B5CF6"></button>
-                        <button type="button" onclick="selectColor('#F59E0B')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #F59E0B"></button>
-                        <button type="button" onclick="selectColor('#EF4444')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #EF4444"></button>
-                        <button type="button" onclick="selectColor('#EC4899')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #EC4899"></button>
-                        <button type="button" onclick="selectColor('#06B6D4')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #06B6D4"></button>
-                        <button type="button" onclick="selectColor('#84CC16')" class="color-btn w-8 h-8 rounded border-2 border-gray-300" style="background-color: #84CC16"></button>
-                    </div>
-                    <input type="text" id="color" name="color" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" 
-                           placeholder="#10B981" value="#10B981">
-                </div>
-
                 <!-- Status -->
                 <div>
                     <label class="flex items-center">
-                        <input type="checkbox" id="is_active" name="is_active" checked class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                        <input type="checkbox" id="rental_amenity_status" name="rental_amenity_status" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <span class="ml-2 text-sm text-gray-700">Kích hoạt tiện ích</span>
                     </label>
                 </div>
 
                 <!-- Actions -->
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeAmenityModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
                         Hủy
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                    <button type="button" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors saveAmenityBtn">
                         <i class="fas fa-save mr-2"></i>
                         Lưu
                     </button>
@@ -180,114 +170,3 @@
         </div>
     </div>
 </div>
-
-<script>
-let isEditMode = false;
-
-function openCreateModal() {
-    isEditMode = false;
-    document.getElementById('modalTitle').textContent = 'Thêm tiện ích mới';
-    document.getElementById('amenityForm').reset();
-    document.getElementById('amenityId').value = '';
-    document.getElementById('icon').value = 'fas fa-wifi';
-    document.getElementById('color').value = '#10B981';
-    document.getElementById('is_active').checked = true;
-    document.getElementById('amenityModal').classList.remove('hidden');
-}
-
-function openEditModal(amenity) {
-    isEditMode = true;
-    document.getElementById('modalTitle').textContent = 'Chỉnh sửa tiện ích';
-    document.getElementById('amenityId').value = amenity.id;
-    document.getElementById('amenity_name').value = amenity.amenity_name;
-    document.getElementById('description').value = amenity.description || '';
-    document.getElementById('icon').value = amenity.icon;
-    document.getElementById('color').value = amenity.color;
-    document.getElementById('is_active').checked = amenity.is_active == 1;
-    document.getElementById('amenityModal').classList.remove('hidden');
-}
-
-function closeModal() {
-    document.getElementById('amenityModal').classList.add('hidden');
-}
-
-function selectIcon(icon) {
-    document.getElementById('icon').value = icon;
-    // Update visual selection
-    document.querySelectorAll('.icon-btn').forEach(btn => btn.classList.remove('bg-purple-100', 'border-purple-500'));
-    event.target.closest('.icon-btn').classList.add('bg-purple-100', 'border-purple-500');
-}
-
-function selectColor(color) {
-    document.getElementById('color').value = color;
-    // Update visual selection
-    document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('border-purple-500', 'border-4'));
-    event.target.classList.add('border-purple-500', 'border-4');
-}
-
-function deleteAmenity(id) {
-    if (confirm('Bạn có chắc chắn muốn xóa tiện ích này?')) {
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('csrf_token', App.getToken());
-        
-        fetch('<?= BASE_URL ?>/landlord/settings/delete-amenity', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                toastr.success(data.message);
-                window.location.reload();
-            } else {
-                toastr.error(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            toastr.error('Có lỗi xảy ra khi xóa tiện ích');
-        });
-    }
-}
-
-// Handle form submission
-document.getElementById('amenityForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    formData.append('csrf_token', App.getToken());
-    
-    const url = isEditMode ? 
-        '<?= BASE_URL ?>/landlord/settings/update-amenity' : 
-        '<?= BASE_URL ?>/landlord/settings/create-amenity';
-    
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang lưu...';
-    submitBtn.disabled = true;
-    
-    fetch(url, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            toastr.success(data.message);
-            closeModal();
-            window.location.reload();
-        } else {
-            toastr.error(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('Có lỗi xảy ra khi lưu tiện ích');
-    })
-    .finally(() => {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    });
-});
-</script>

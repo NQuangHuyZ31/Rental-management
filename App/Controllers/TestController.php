@@ -21,14 +21,10 @@ class TestController
     // } else {
     //   echo "Có lỗi";
     // }
-    $des = 'Thanh toán hóa đơn phòng tháng 9 : HD1';
-    if (preg_match('/HD(\d+)/', $des, $matches)) {
-      echo $matches[1];
-    } else {
-      echo "Không tìm thấy mã HD trong description";
-    }
     // echo Hash::decrypt('mYp0dHQomSrLLow76U6ej1pR8XhLGICGmLAs71bmigbYnxVaC67tdhUlv2NiI8OXXplm3tdKO0shye0/vwnnLg==');
     // $result = UploadClound::extractPublicId('https://res.cloudinary.com/whr-clound/image/upload/v1745473515/whr_images/feedback_images/1745473513_f8717c2c6f76beb7e07819c35ab6505437528c20.jpg');
     // UploadClound::delete('whr_images/feedback_images/' . $result);
+    $data = Hash::decrypt('Sz5eHv/6tWo5Sq06LSxId5JypqpjMHldQvNXYPGFAyljNTQ2cmopMs5CZx+nH3hoL15/UWLyjIYgJaGhs2ilHFIgMRgnwGEGSb+ySEhnfVGqO+71aaXKnZbKYFjKsyCvGaRXjXaVuJNj1kC3VWX6bXhynSoYwmA6nXFs94fqfto=');
+    var_dump(json_decode($data, true));
   }
 }

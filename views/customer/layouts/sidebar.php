@@ -29,17 +29,16 @@
                 <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full <?= $sidebarData['invoicePending'] > 0 ? 'block' : 'hidden' ?>"><?= $sidebarData['invoicePending'] ?></span>
             </a>
 
+            <!-- Notifications -->
+            <a href="<?= BASE_URL ?>/customer/payment-history" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors <?= (strpos($_SERVER['REQUEST_URI'], '/customer/payment-history') !== false) ? 'bg-green-50 text-green-600 border-r-2 border-green-500' : '' ?>">
+                <i class="fas fa-history text-lg"></i>
+                <span class="font-medium">Lịch sử thanh toán</span>
+            </a>
+
             <!-- Favorites -->
             <a href="<?= BASE_URL ?>/customer/interests" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors <?= (strpos($_SERVER['REQUEST_URI'], '/customer/interests') !== false) ? 'bg-green-50 text-green-600 border-r-2 border-green-500' : '' ?>">
                 <i class="fas fa-heart text-lg"></i>
                 <span class="font-medium">Quan tâm</span>
-            </a>
-
-            <!-- Notifications -->
-            <a href="<?= BASE_URL ?>/customer/notifications" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors <?= (strpos($_SERVER['REQUEST_URI'], '/customer/notifications') !== false) ? 'bg-green-50 text-green-600 border-r-2 border-green-500' : '' ?>">
-                <i class="fas fa-bell text-lg"></i>
-                <span class="font-medium">Thông báo</span>
-                <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">3</span>
             </a>
 
             <!-- Settings -->
@@ -56,40 +55,40 @@
         </nav>
     </div>
 </aside>
-    <!-- Sidebar JavaScript -->
-    <script>
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
+<!-- Sidebar JavaScript -->
+<script>
+    // Sidebar toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            if (sidebarToggle && sidebar && sidebarOverlay) {
-                // Toggle sidebar
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('sidebar-hidden');
-                    sidebar.classList.toggle('sidebar-visible');
-                    sidebarOverlay.classList.toggle('hidden');
-                });
+        if (sidebarToggle && sidebar && sidebarOverlay) {
+            // Toggle sidebar
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-hidden');
+                sidebar.classList.toggle('sidebar-visible');
+                sidebarOverlay.classList.toggle('hidden');
+            });
 
-                // Close sidebar when clicking overlay
-                sidebarOverlay.addEventListener('click', function() {
+            // Close sidebar when clicking overlay
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.add('sidebar-hidden');
+                sidebar.classList.remove('sidebar-visible');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 1024) {
+                    sidebar.classList.remove('sidebar-hidden');
+                    sidebar.classList.add('sidebar-visible');
+                    sidebarOverlay.classList.add('hidden');
+                } else {
                     sidebar.classList.add('sidebar-hidden');
                     sidebar.classList.remove('sidebar-visible');
-                    sidebarOverlay.classList.add('hidden');
-                });
-
-                // Handle window resize
-                window.addEventListener('resize', function() {
-                    if (window.innerWidth >= 1024) {
-                        sidebar.classList.remove('sidebar-hidden');
-                        sidebar.classList.add('sidebar-visible');
-                        sidebarOverlay.classList.add('hidden');
-                    } else {
-                        sidebar.classList.add('sidebar-hidden');
-                        sidebar.classList.remove('sidebar-visible');
-                    }
-                });
-            }
-        });
-    </script>
+                }
+            });
+        }
+    });
+</script>

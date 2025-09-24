@@ -48,7 +48,7 @@ Purpose: Build Header for Landlord Layout
                 </button>
 
                 <!-- Tài khoản (Account) -->
-                <a href="#" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <a href="<?= BASE_URL ?>/landlord/profile" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-user text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Tài khoản</span>
                 </a>

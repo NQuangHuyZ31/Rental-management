@@ -8,6 +8,7 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
 use App\Models\RentalCategory;
+use App\Models\RentalAmenity;
 use App\Models\UserBanking;
 use Core\ViewRender;
 use Core\Request;
@@ -19,6 +20,7 @@ class SettingController extends LandlordController {
 	protected $userID;
 	protected $userBanking;
 	protected $rentalCategory;
+	protected $rentalAmenity;
 
     public function __construct() {
         parent::__construct();
@@ -26,6 +28,7 @@ class SettingController extends LandlordController {
 		$this->userID = Session::get('user')['id'] ?? '';
 		$this->userBanking = new UserBanking();
 		$this->rentalCategory = new RentalCategory();
+		$this->rentalAmenity = new RentalAmenity();
     }
 
 	public function index() {

@@ -168,7 +168,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status === 'success') {
-                    toastr['success'](response.message);
+                    showSuccessMessage(response.message);
                     // Reset form nếu cần
                     $('.modalNewPost-button-close').trigger('click');
                     $('form#formNewPost')[0].reset();
@@ -305,7 +305,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status === 'success') {
-                    toastr['success'](response.message);
+                    showSuccessMessage(response.message);
                     $('.modalNewPost-button-close').trigger('click');
                     $('form#formNewPost')[0].reset();
                     if (typeof resetImageUpload === 'function') {
@@ -410,14 +410,14 @@ $(document).ready(function () {
                     },
                     success: (response) => {
                         if (response.status === 'success') {
-                            toastr['success'](response.message);
+                            showSuccessMessage(response.message);
                             setTimeout(() => {
                                 location.reload();
                             }, 1500);
                         }
                     },
                     error: (xhr, status, error) => {
-                        toastr['error'](xhr.responseJSON.error);
+                        showErrorMessage(xhr.responseJSON.error);
                         App.setToken(xhr.responseJSON.token);
                         return;
                     },
@@ -446,14 +446,14 @@ $(document).ready(function () {
                     },
                     success: (response) => {
                         if (response.status === 'success') {
-                            toastr['success'](response.message);
+                            showSuccessMessage(response.message);
                             setTimeout(() => {
                                 location.reload();
                             }, 1500);
                         }
                     },
                     error: (xhr, status, error) => {
-                        toastr['error'](xhr.responseJSON.error);
+                        showErrorMessage(xhr.responseJSON.error);
                         App.setToken(xhr.responseJSON.token);
                         return;
                     },

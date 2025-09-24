@@ -28,4 +28,11 @@ class OTPVerify extends Model {
 	public function updateColumn($id, $column, $value) {
 		return $this->table($this->table)->where('id', $id)->update([$column => $value]);
 	}
+
+	public function getOTPByUserIdAndType($userId, $type) {
+		return $this->table($this->table)->where('user_id', $userId)
+			->where('type', $type)
+			->where('is_verified', '0')
+			->orderBy('created_at', 'desc')->first();
+	}
 }

@@ -76,7 +76,7 @@
                 <i class="fas fa-wallet text-yellow-600 text-xl"></i>
             </div>
             <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Tổng chi phí trong năm</p>
+                <p class="text-sm font-medium text-gray-600">Tổng chi tiêu trong năm</p>
                 <p class="text-2xl font-bold text-gray-900"><?= $totalAmount; ?></p>
             </div>
         </div>

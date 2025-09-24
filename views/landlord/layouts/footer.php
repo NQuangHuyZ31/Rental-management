@@ -17,4 +17,5 @@ Purpose: Build Footer for Landlord Layout
 <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
 <script src="<?=BASE_URL?>/Public/js/app.js"></script>
 <script src="<?=BASE_URL?>/Public/js/index.js"></script>
-<script src="<?=BASE_URL?>/Public/js/posts.js"></script> 
+<script src="<?=BASE_URL?>/Public/js/posts.js"></script>
+<script src="<?=BASE_URL?>/Public/js/customer-profile.js"></script>

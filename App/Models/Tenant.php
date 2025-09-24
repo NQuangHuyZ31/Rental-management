@@ -557,4 +557,58 @@ class Tenant extends Model {
     public function getAllRoomByUserId() {
         return $this->table('room_tenants')->where('user_id', $this->userID)->get();
     }
+
+    // Added by Huy Nguyen get detailed rented rooms by user id
+    public function getDetailedRentedRoomsByUserId() {
+        return $this->table('room_tenants')
+            ->select([
+                'room_tenants.join_date',
+                'rooms.*',
+                'houses.house_name',
+                'houses.address',
+                'houses.province',
+                'houses.ward',
+                'houses.owner_id',
+                'users.username',
+                'users.phone',
+            ])
+            ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->join('users', 'houses.owner_id', '=', 'users.id')
+            ->where('room_tenants.user_id', $this->userID)
+            ->whereNull('room_tenants.left_date')
+            ->where('rooms.deleted', 0)
+            ->where('houses.deleted', 0)
+            ->orderBy('room_tenants.join_date', 'DESC')
+            ->get();
+    }
+
+    // Added by Huy Nguyen get room detail by id
+    public function getRoomDetailById($id) {
+        return $this->table('room_tenants')
+            ->select([
+                'rooms.*',
+                'houses.house_name',
+                'houses.province',
+                'houses.ward',
+                'houses.address',
+                'houses.owner_id',
+            ])
+            ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->join('users', 'room_tenants.user_id', '=', 'users.id')
+            ->where('room_tenants.id', $id)
+            ->where('room_tenants.user_id', $this->userID)
+            ->where('rooms.deleted', 0)
+            ->first();
+    }
+
+    // Added by Huy Nguyen get current tenants by room id
+    public function countCurrentTenantsByRoomId($roomId) {
+        return $this->table('room_tenants')
+        ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+            ->where('room_id', $roomId)
+            ->where('rooms.deleted', 0)
+            ->count();
+    }
 }

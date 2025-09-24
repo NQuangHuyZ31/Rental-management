@@ -125,4 +125,91 @@ $(document).ready(function () {
 
     // Focus first input on page load
     otpInputs.eq(0).focus();
+
+    // ====================== FORGOT PASSWORD =====================================
+    // Handle forgot password form submission
+    $('#sendLinkResetPassword').on('click', function (e) {
+        e.preventDefault();
+
+        const email = $('#email').val().trim();
+
+        if (!email) {
+            showErrorMessage('Vui lòng nhập email');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showErrorMessage('Email không hợp lệ');
+            return;
+        }
+
+        // Show loading state
+        const $btn = $(this);
+        const originalText = $btn.html();
+        $btn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang gửi...');
+        $btn.prop('disabled', true);
+
+        if (window.JsLoadingOverlay?.show) JsLoadingOverlay.show();
+
+        // Send AJAX request
+        $.ajax({
+            url: App.appURL + 'send-link-reset-password',
+            type: 'POST',
+            data: {
+                email: email,
+                csrf_token: App.getToken(),
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                showSuccessMessage(response.msg);
+                App.setToken(response.token);
+                $btn.html('<i class="fas fa-check fa-spin mr-2"></i>Gửi thành công');
+                $('#email').val('');
+            },
+            error: function (xhr, status, error) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                showErrorMessage(xhr.responseJSON?.msg || 'Có lỗi xảy ra. Vui lòng thử lại');
+                App.setToken(xhr.responseJSON?.token);
+                $btn.html(originalText);
+                $btn.prop('disabled', false);
+            },
+        });
+    });
+
+    // ====================== RESET PASSWORD =====================================
+    // Handle reset password form submission
+    $('#resetPasswordBtn').on('click', function (e) {
+        e.preventDefault();
+        const formData = new FormData($('#resetPasswordForm')[0]);
+        JsLoadingOverlay.show();
+
+        $.ajax({
+            type: 'POST',
+            url: App.appURL + 'reset-password',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (response) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                showSuccessMessage(response.msg);
+                App.setToken(response.token);
+                setTimeout(() => {
+                    window.location.href = App.appURL + 'login';
+                }, 3000);
+            },
+            error: function (xhr, status, error) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                showErrorMessage(xhr.responseJSON?.msg || 'Có lỗi xảy ra. Vui lòng thử lại');
+                App.setToken(xhr.responseJSON?.token);
+            },
+        });
+    });
+
+    // Email validation function
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 });

@@ -8,6 +8,7 @@ use App\Controllers\Admin\PostManagementController;
 use App\Controllers\AuthController;
 use App\Controllers\Customer\BillCustomerController;
 use App\Controllers\Customer\HomeController;
+use App\Controllers\Customer\InterestCustomerController;
 use App\Controllers\Customer\ProfileCustomerController;
 use App\Controllers\Customer\RentalRoomCustomerController;
 use Core\Router;
@@ -24,6 +25,8 @@ use App\Controllers\Landlord\InvoiceController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Controllers\Customer\PaymentController;
+use App\Controllers\Customer\SettingCustomerController;
+use App\Controllers\Landlord\ProfileLandlordController;
 use App\Controllers\Landlord\SettingPaymentController;
 use App\Controllers\Landlord\SettingPostController;
 use App\Middleware\AuthAdminMiddleware;
@@ -46,17 +49,24 @@ $router->get('/verify-account', [AuthController::class, 'verifyAccount']);
 $router->post('/verify-account', [AuthController::class, 'handleVerifyAccount']);
 $router->post('/resend-otp', [AuthController::class, 'handleResendOTP']);
 
+$router->get('/forgot-password', [AuthController::class, 'showForgotPasswordPage']);
+$router->post('/send-link-reset-password', [AuthController::class, 'sendLinkResetPassword']);
+$router->get('/reset-password', [AuthController::class, 'showResetPasswordPage']);
+$router->post('/reset-password', [AuthController::class, 'handleResetPassword']);
+
 
 // PROFILE
 $router->get('/customer/profile', [ProfileCustomerController::class, 'profile'],[AuthMiddleware::class]);
 $router->post('/customer/profile/update', [ProfileCustomerController::class, 'update'],[AuthMiddleware::class]);
+$router->post('/customer/profile/update-profile-picture', [ProfileCustomerController::class, 'updateProfilePicture'],[AuthMiddleware::class]);
+$router->post('/customer/profile/change-password', [ProfileCustomerController::class, 'changePassword'],[AuthMiddleware::class]);
 $router->get('/customer/bills', [BillCustomerController::class, 'bills'],[AuthMiddleware::class]);
-$router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
-$router->get('/customer/settings', [ProfileCustomerController::class, 'settings'],[AuthMiddleware::class]);
+$router->get('/customer/payment-history', [BillCustomerController::class, 'paymentHistory'],[AuthMiddleware::class]);
+$router->get('/customer/interests', [InterestCustomerController::class, 'interests'],[AuthMiddleware::class]);
+$router->get('/customer/settings', [SettingCustomerController::class, 'settings'],[AuthMiddleware::class]);
 $router->get('/customer/rented-rooms', [RentalRoomCustomerController::class, 'rentedRooms'],[AuthMiddleware::class]);
 $router->get('/customer/room-detail/{id}', [RentalRoomCustomerController::class, 'roomDetail'],[AuthMiddleware::class]);
-$router->get('/customer/favorites', [ProfileCustomerController::class, 'favorites'],[AuthMiddleware::class]);
-$router->get('/customer/notifications', [ProfileCustomerController::class, 'notifications'],[AuthMiddleware::class]);
+$router->get('/customer/support', [ProfileCustomerController::class, 'support'],[AuthMiddleware::class]);
 
 // =============================================================ROUTER API PAYMENT==================================================
 // API thanh toán 
@@ -74,6 +84,9 @@ $router->get('/admin/dashboard', [DashboardAdminController::class, 'dashboard'],
 
 // POST MANAGEMENT
 $router->get('/admin/posts', [PostManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->get('/admin/posts/pending', [PostManagementController::class, 'pendingPostPage'],[AuthAdminMiddleware::class]);
+$router->get('/admin/posts/approved', [PostManagementController::class, 'approvedPostPage'],[AuthAdminMiddleware::class]);
+$router->get('/admin/posts/rejected', [PostManagementController::class, 'rejectedPostPage'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
 $router->get('/landlord', [HouseController::class, 'index'],[AuthLandlordMiddleware::class]);
@@ -130,7 +143,14 @@ $router->get('/landlord/setting/categories', [SettingPostController::class, 'cat
 $router->post('/landlord/setting/categories/create', [SettingPostController::class, 'createCategory'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/setting/categories/delete', [SettingPostController::class, 'deleteCategory'],[AuthLandlordMiddleware::class]);
 
+$router->get('/landlord/setting/amenities', [SettingPostController::class, 'amenities'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/amenities/create', [SettingPostController::class, 'createAmenity'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/setting/amenities/delete', [SettingPostController::class, 'deleteAmenity'],[AuthLandlordMiddleware::class]);
 
+$router->get('/landlord/profile', [ProfileLandlordController::class, 'profile'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/profile/update', [ProfileLandlordController::class, 'update'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/profile/change-password', [ProfileLandlordController::class, 'changePassword'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/profile/update-profile-picture', [ProfileLandlordController::class, 'updateProfilePicture'],[AuthLandlordMiddleware::class]);
 // Route test
 $router->get('/test', [TestController::class, 'index']);
 // Xử lý request

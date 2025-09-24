@@ -158,15 +158,20 @@
         .button {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
+            color: white !important;
+            padding: 15px 40px;
             text-decoration: none;
             border-radius: 25px;
             font-weight: 600;
+            font-size: 16px;
             margin: 15px 0;
             transition: all 0.3s ease;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            min-width: 200px;
+            text-align: center;
+            line-height: 1.4;
         }
         
         .button:hover {

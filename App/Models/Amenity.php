@@ -293,5 +293,17 @@ class Amenity
     {
         return $this->queryBuilder->rollback();
     }
+
+    // Added by Huy Nguyen get amenities by room id
+    public function getAmenitiesByRoomId($roomId) {
+        return $this->queryBuilder
+            ->table('room_amenities')
+            ->select('amenities.*')
+            ->join('amenities', 'room_amenities.amenity_id', '=', 'amenities.id')
+            ->join('rooms', 'room_amenities.room_id', '=', 'rooms.id')
+            ->where('rooms.id', $roomId)
+            ->where('amenities.deleted', 0)
+            ->get();
+    }
 }
 

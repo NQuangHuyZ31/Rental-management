@@ -4,37 +4,41 @@
 Author: Huy Nguyen
 Date: 2025-09-13
 Purpose: Customer Controller
-*/
+ */
 namespace App\Controllers\Customer;
 
-use App\Controllers\Controller;
+use App\Controllers\ProfileController;
 use App\Models\Invoice;
 use App\Models\Tenant;
-use Core\Request;
-use Core\Session;
+use App\Models\Amenity;
+use App\Models\Service;
+use App\Models\PaymentHistory;
 
-class CustomerController extends Controller {
-	protected $invoiceModel;
-	protected $tenantModel;
-	protected $userID;
-	protected $request;
+class CustomerController extends ProfileController {
 
-	public function __construct() {
-		parent::__construct();
-		$this->invoiceModel = new Invoice();
-		$this->tenantModel = new Tenant();
-		$this->userID = Session::get('user')['id'] ?? '';
-		$this->request = new Request();
-	}
+    protected $invoiceModel;
+    protected $tenantModel;
+    protected $amenityModel;
+    protected $serviceModel;
+    protected $paymentHistoryModel;
 
-	public function sidebarData() {
-		$invoicePending = $this->invoiceModel->getAllInvoicesByStatus('pending');
-		$room = $this->tenantModel->getAllRoomByUserId();
+    public function __construct() {
+        parent::__construct();
+        $this->invoiceModel = new Invoice();
+        $this->tenantModel = new Tenant();
+        $this->amenityModel = new Amenity();
+        $this->serviceModel = new Service();
+        $this->paymentHistoryModel = new PaymentHistory();
+    }
 
-		return [
-			'invoicePending' => count($invoicePending),
-			'room' => count($room),
-		];
-	}
-	
+    public function sidebarData() {
+        $invoicePending = $this->invoiceModel->getAllInvoicesByStatus('pending');
+        $room = $this->tenantModel->getAllRoomByUserId();
+
+        return [
+            'invoicePending' => count($invoicePending),
+            'room' => count($room),
+        ];
+    }
+
 }

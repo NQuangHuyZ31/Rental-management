@@ -18,8 +18,7 @@ class User extends Model {
 
 	public function getAllUsers() {
 		try {
-			$users = $this->table($this->table)->get();
-			return $users;
+			return $this->table($this->table)->where('deleted', 0)->get();
 		} catch (\Exception $e) {
 			error_log("Error getting all users: " . $e->getMessage());
 			return [];

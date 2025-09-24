@@ -32,7 +32,7 @@
     <div id="system-categories" class="tab-item">
         <div class="mb-4">
             <h2 class="text-xl font-semibold text-gray-900 mb-2">Danh mục hệ thống</h2>
-            <p class="text-gray-600">Các danh mục phòng được cung cấp bởi hệ thống, chỉ có thể xem</p>
+            <p class="text-gray-600">Các danh mục nhà thuê được cung cấp bởi hệ thống, chỉ có thể xem</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -73,7 +73,7 @@
         <div class="flex items-center justify-start gap-10">
             <div class="mb-4">
                 <h2 class="text-xl font-semibold text-gray-900 mb-2">Danh mục của tôi</h2>
-                <p class="text-gray-600">Các danh mục phòng do bạn tạo, có thể chỉnh sửa và xóa</p>
+                <p class="text-gray-600">Các danh mục nhà thuê do bạn tạo, có thể chỉnh sửa và xóa</p>
             </div>
             <button onclick="openCreateModal()" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded text-xs transition-colors">
                 <i class="fas fa-plus mr-1"></i>
@@ -117,9 +117,14 @@
                     </div>
                 <?php } ?>
             <?php } else { ?>
-                <div class="text-center py-12">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có danh mục nào</h3>
-                    <p class="text-gray-600 mb-6">Tạo danh mục đầu tiên để quản lý các loại phòng</p>
+                <div class="col-span-full">
+                    <div class="bg-white border border-dashed border-gray-300 rounded-xl p-10 flex flex-col items-center justify-center text-center hover:shadow-sm transition-shadow">
+                        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                            <i class="fas fa-folder-plus text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có danh mục nào</h3>
+                        <p class="text-gray-600 mb-6 max-w-md">Hãy tạo danh mục đầu tiên để sắp xếp và quản lý các loại nhà thuê của bạn hiệu quả hơn.</p>
+                    </div>
                 </div>
             <?php } ?>
         </div>
@@ -127,16 +132,14 @@
 
     <!-- Empty State -->
     <?php if (empty($systemCategories) && empty($userCategories)) { ?>
-        <div class="text-center py-12">
-            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-tags text-gray-400 text-3xl"></i>
+        <div class="max-w-3xl mx-auto">
+            <div class="bg-white border border-dashed border-gray-300 rounded-2xl p-12 text-center">
+                <div class="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-5">
+                    <i class="fas fa-tags text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Bắt đầu với danh mục đầu tiên</h3>
+                <p class="text-gray-600 mb-6">Hiện chưa có danh mục nào. Tạo danh mục để phân loại các bài đăng của bạn rõ ràng và dễ quản lý.</p>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có danh mục nào</h3>
-            <p class="text-gray-600 mb-6">Tạo danh mục đầu tiên để quản lý các loại phòng</p>
-            <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                <i class="fas fa-plus mr-2"></i>
-                Tạo danh mục đầu tiên
-            </button>
         </div>
     <?php } ?>
 </div>
@@ -146,7 +149,7 @@
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-lg max-w-md w-full p-6">
             <div class="flex items-center justify-between mb-6">
-                <h2 id="modalTitle" class="text-xl font-semibold text-gray-900">Thêm danh mục mới</h2>
+                <h2 id="modalTitle" class="text-xl font-semibold text-gray-900">Thêm danh mục nhà thuê mới</h2>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times text-xl"></i>
                 </button>
@@ -158,17 +161,17 @@
                 <!-- Category Name -->
                 <div>
                     <label for="category_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Tên danh mục <span class="text-red-500">*</span>
+                        Tên danh mục nhà thuê <span class="text-red-500">*</span>
                     </label>
                     <input type="text" id="rental_category_name" name="rental_category_name"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="VD: Phòng trọ, Căn hộ, Nhà nguyên căn" required>
+                        placeholder="VD: Nhà trọ, Căn hộ, Nhà nguyên căn" required>
                 </div>
                 <!-- Status -->
                 <div>
                     <label class="flex items-center">
                         <input type="checkbox" id="rental_category_status" name="rental_category_status" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                        <span class="ml-2 text-sm text-gray-700">Kích hoạt danh mục</span>
+                        <span class="ml-2 text-sm text-gray-700">Kích hoạt danh mục nhà thuê</span>
                     </label>
                 </div>
 
@@ -186,47 +189,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    let isEditMode = false;
-
-    // Tab switching functionality
-    function switchTab(tabName) {
-        // Hide all tab contents
-        document.querySelectorAll('.tab-item').forEach(content => {
-            content.classList.add('hidden');
-        });
-
-        // Remove active class from all tabs
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.classList.remove('border-blue-500', 'text-blue-600');
-            button.classList.add('border-transparent', 'text-gray-500');
-        });
-
-        // Show selected tab content
-        document.getElementById(tabName + '-categories').classList.remove('hidden');
-
-        // Add active class to selected tab
-        const activeTab = document.getElementById(tabName + '-tab');
-        activeTab.classList.remove('border-transparent', 'text-gray-500');
-        activeTab.classList.add('border-blue-500', 'text-blue-600');
-
-        // Save current tab to localStorage
-        localStorage.setItem('categories_active_tab', tabName);
-    }
-
-    // Load saved tab on page load
-    function loadSavedTab() {
-        const savedTab = localStorage.getItem('categories_active_tab');
-        if (savedTab && (savedTab === 'system' || savedTab === 'user')) {
-            switchTab(savedTab);
-        } else {
-            // Default to system tab
-            switchTab('system');
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        loadSavedTab();
-    });
-</script>

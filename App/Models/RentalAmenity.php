@@ -33,4 +33,20 @@ class RentalAmenity extends Model {
 
 		return $this->queryAll($sql, $params);
 	}
+	
+	public function getRentalAmenityById($id, $ownerId) {
+		return $this->table($this->table)->where('id', $id)->where('deleted', 0)->where('owner_id', $ownerId)->first();
+	}
+
+	public function createRentalAmenity($data) {
+		return $this->table($this->table)->insert($data);
+	}
+
+	public function updateRentalAmenity($id, $data) {
+		return $this->table($this->table)->where('id', $id)->update($data);
+	}
+
+	public function deleteRentalAmenity($id) {
+		return $this->table($this->table)->where('id', $id)->update(['deleted' => 1, 'updated_at' => date('Y-m-d H:i:s')]);
+	}
 }

@@ -3,29 +3,42 @@
     Date: 2025-08-31
     Purpose: Default layout for customer
 -->
-<?php 
-$flashData = \Core\Session::get('flash_data');
-$message = $flashData['success'] ?? '';
+<?php
+use Core\Request;
+$request = new Request();
+$flashData = $request->getFlashData();
+$success = $flashData['success'] ?? '';
+$error = $flashData['errors'] ?? '';
+$status = '';
+if ($success) {
+    $status = 'success';
+}
+
+if ($error) {
+    $status = 'error';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=isset($title) ? 'HOSTY - ' . htmlspecialchars($title) : 'HOSTY'?></title>
-    <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+    <title><?= isset($title) ? 'HOSTY - ' . htmlspecialchars($title) : 'HOSTY' ?></title>
+    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Toastr -->
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <!-- Empty States CSS -->
-    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/empty-states.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/empty-states.css">
     <!-- Pagination CSS -->
-    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/pagination.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/pagination.css">
     <!-- Fix Scrollbar CSS -->
-    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/fix-scrollbar.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/fix-scrollbar.css">
     <!-- Payment Modal CSS -->
-    <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/payment-modal.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/payment-modal.css">
     <!-- Bootstrap Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,8 +83,9 @@ $message = $flashData['success'] ?? '';
         }
     </style> -->
 </head>
+
 <body class="bg-gray-50 h-screen">
-<?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
+    <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
 
     <!-- Header -->
     <?php require_once 'header.php'; ?>
@@ -105,37 +119,47 @@ $message = $flashData['success'] ?? '';
     </div>
 
     <!-- Sidebar Overlay for Mobile -->
-        <?php if (isset($sidebar) && $sidebar) { ?>
-            <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
-        <?php } ?>
+    <?php if (isset($sidebar) && $sidebar) { ?>
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+    <?php } ?>
 
-        <!-- Footer -->
-        <?php require_once 'footer.php'; ?>
-    
+    <!-- Footer -->
+    <?php require_once 'footer.php'; ?>
+
     <!-- Library js -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/lazysizes.min.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/lity.min.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/auth.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/index.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/customer-layout.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/customer-profile.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/payment.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/fix-scrollbar.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/lazysizes.min.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/lity.min.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/app.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/auth.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/index.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/customer-layout.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/profile.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/customer-profile.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/payment.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/fix-scrollbar.js"></script>
 
-    <!-- Config Toastr -->
     <script>
-        const message = "<?=$message?>" ?? '';
-        if (message) {
-            showSuccessMessage(message);
-        }
-     </script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let error = "<?= $error ?>" ?? '';
+            let success = "<?= $success ?>" ?? '';
+            let status = "<?= $status ?>" ?? '';
+            if (status === 'error') {
+                showErrorMessage(error);
+                error = '';
+            }
+            if (status === 'success') {
+                showSuccessMessage(success);
+                success = '';
+            }
+        });
+    </script>
 
 </body>
+
 </html>

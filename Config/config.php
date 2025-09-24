@@ -6,6 +6,7 @@ $rootPath = $_ENV['ROOT_SITE_URL'];
 $basePath = isset($parsedUrl['path']) ? rtrim($parsedUrl['path'], '/') : '';
 
 // BASE_URL giờ chỉ còn /Rental-management
+define('APP_URL', $_ENV['APP_URL']);
 define('BASE_URL', $basePath);
 define('ROOT_PATH', $rootPath);
 // Các define khác

@@ -1,27 +1,28 @@
 <?php
 
 /*
-    Author: Huy Nguyen
-    Date: 2025-08-31
-    Purpose: Handle login and register
-*/
+Author: Huy Nguyen
+Date: 2025-08-31
+Purpose: Handle login and register
+ */
 namespace App\Controllers;
 
-use Core\ViewRender;
+use App\Models\OTPVerify;
 use App\Models\Role;
 use App\Models\User;
 use App\Requests\LoginValidate;
+use App\Requests\PasswordValidate;
 use App\Requests\RegisterValidate;
+use App\Requests\VerifyOtpValidate;
 use Core\CSRF;
 use Core\Request;
-use Core\Session;
-use App\Models\OTPVerify;
-use App\Requests\VerifyOtpValidate;
 use Core\Response;
+use Core\Session;
+use Core\ViewRender;
 use Helpers\Hash;
-use Queue\SendEmailOTPJob;
 use Helpers\Log;
-use Stringable;
+use Queue\SendEmailOTPJob;
+use Queue\SendEmailResetPassword;
 
 class AuthController extends Controller {
     protected $role;
@@ -29,7 +30,8 @@ class AuthController extends Controller {
     protected $user;
     protected $otp;
     protected $sendEmailOTPJob;
-    
+    protected $sendEmailResetPasswordJob;
+
     public function __construct() {
         parent::__construct();
         $this->role = new Role();
@@ -37,10 +39,11 @@ class AuthController extends Controller {
         $this->user = new User();
         $this->otp = new OTPVerify();
         $this->sendEmailOTPJob = new SendEmailOTPJob();
+        $this->sendEmailResetPasswordJob = new SendEmailResetPassword();
     }
 
     public function showLoginPage() {
-        ViewRender::render('login',['request' => $this->request]);
+        ViewRender::render('login', ['request' => $this->request]);
     }
 
     public function handleLogin() {
@@ -66,10 +69,10 @@ class AuthController extends Controller {
         }
 
         // Check if user session exists and role matches
-        if (Session::has('user') && Session::get('user')['role'] == $role) { 
+        if (Session::has('user') && Session::get('user')['role'] == $role) {
             // Update last login time only if user session exists
             $this->user->updateColumn(Session::get('user')['id'], 'last_login', date('Y-m-d H:i:s'));
-            
+
             Log::write(json_encode(['redirect' => $redirect, 'message' => 'success', 'user_id' => Session::get('user')['id']]), Log::LEVEL_ERROR);
             $this->request->redirect($redirect);
             exit;
@@ -82,7 +85,7 @@ class AuthController extends Controller {
         ViewRender::render('register',
             [
                 'roles' => $roles,
-                'request' => $this->request
+                'request' => $this->request,
             ]
         );
     }
@@ -102,7 +105,7 @@ class AuthController extends Controller {
             $this->request->redirectWithErrors('/register', 'Lỗi xảy ra. Vui lòng thử lại');
             exit;
         }
-        
+
         // Xóa user nếu email tồn tại và chưa active
         $user = $this->user->getUserByEmail($request['email'], 'inactive');
         if ($user) {
@@ -139,7 +142,7 @@ class AuthController extends Controller {
     public function handleVerifyAccount() {
         $otpRequest = $this->request->post('otp');
         $errors = VerifyOtpValidate::validate($otpRequest);
-        
+
         if (!empty($errors)) {
             $this->request->redirectWithError('/verify-account', $errors);
             exit;
@@ -198,7 +201,7 @@ class AuthController extends Controller {
             'purpose' => 'Xác minh tài khoản',
         ]);
         Session::set('email', $email);
-        Session::set('verify',true);
+        Session::set('verify', true);
         return true;
     }
 
@@ -207,24 +210,140 @@ class AuthController extends Controller {
             CSRF::refreshToken();
             Response::json([
                 'error' => [
-                    'msg' => 'Lỗi xảy ra. Vui lòng thử lại'
+                    'msg' => 'Lỗi xảy ra. Vui lòng thử lại',
                 ],
-                'token' => CSRF::getToken()
+                'token' => CSRF::getToken(),
             ], 400);
             exit;
         }
-        
+
         $user = $this->user->getUserByEmail(Session::get('email'), 'inactive');
-        
+
         if ($this->sendOTP($user['id'], Session::get('email'), $user['username'])) {
             Response::json([
                 'success' => [
-                    'msg' => 'Mã OTP đã được gửi lại. Vui lòng kiểm tra email.'
+                    'msg' => 'Mã OTP đã được gửi lại. Vui lòng kiểm tra email.',
                 ],
-                'token' => CSRF::getToken()
+                'token' => CSRF::getToken(),
             ], 200);
             exit;
         }
+    }
+
+    // =============================== FORGOT PASSWORD ======================================
+
+    // show forgot password page
+    public function showForgotPasswordPage() {
+        ViewRender::render('forgot-password', ['request' => $this->request]);
+    }
+
+    // Send link reset password
+    public function sendLinkResetPassword() {
+        $data = $this->request->post();
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        if (empty($data['email'])) {
+            Response::json(['status' => 'error', 'msg' => 'Vui lòng nhập email', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        if (!preg_match('/^[\w\.-]+@[\w\.-]+\.com$/', $data['email'])) {
+            Response::json(['status' => 'error', 'msg' => 'Email không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        $user = $this->user->getUserByEmail($data['email']);
+        if (!$user) {
+            Response::json(['status' => 'error', 'msg' => 'Email không tồn tại trong hệ thống', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        $dataUser = ['email' => $user['email'], 'username' => $user['username'], 'time' => time()];
+
+        $dataEncrypted = Hash::encrypt(json_encode($dataUser));
+        $dataResetPassword = [
+            'user_id' => $user['id'],
+            'otp_code' => $dataEncrypted,
+            'expired' => time() + 300,
+            'type' => 'forgot_password',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        $this->otp->insertOTP($dataResetPassword);
+
+        $resetUrl = APP_URL . '/reset-password?token=' . $dataEncrypted;
+        $this->sendEmailResetPasswordJob->dispatchHigh([
+            'to' => $user['email'],
+            'customer' => $user['username'],
+            'resetUrl' => $resetUrl,
+        ]);
+
+        Response::json(['status' => 'success', 'msg' => 'Link đặt lại mật khẩu đã được gửi đến email của bạn', 'token' => CSRF::getTokenRefresh()], 200);
+        exit;
+    }
+
+    public function showResetPasswordPage() {
+        $token = $this->request->get('token');
+        $token = str_replace(' ', '+', $token);
+
+        if (empty($token)) {
+            $this->request->redirectWithError('/forgot-password', 'Token không hợp lệ');
+            return;
+        }
+
+        ViewRender::render('reset-password', ['request' => $this->request, 'token' => $token]);
+    }
+
+    // Handle reset password
+    public function handleResetPassword() {
+        $request = $this->request->post();
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        if (empty($request['token'])) {
+            Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+        $errors = PasswordValidate::validate($request);
+        if (!empty($errors)) {
+            Response::json(['status' => 'error', 'msg' => $errors, 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+        $data = Hash::decrypt($request['token']);
+        $data = json_decode($data, true);
+        $user = $this->user->getUserByEmail($data['email']);
+
+        if (!$user) {
+            Response::json(['status' => 'error', 'msg' => 'Email không tồn tại trong hệ thống', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        $otp = $this->otp->getOTPByUserIdAndType($user['id'], 'forgot_password');
+        if ($request['token'] !== $otp['otp_code']) {
+            Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+
+        if ($otp['expired'] < time()) {
+            Response::json(['status' => 'error', 'msg' => 'Token đã hết hạn', 'token' => CSRF::getTokenRefresh()], 400);
+            exit;
+        }
+        
+        $hashed = password_hash($request['password'], PASSWORD_DEFAULT);
+        $this->user->updateColumn($user['id'], 'password', $hashed);
+        $this->user->updateColumn($user['id'], 'updated_at', date('Y-m-d H:i:s'));
+        $this->otp->updateColumn($otp['id'], 'is_verified', '1');
+        $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'));
+
+        Response::json(['status' => 'success', 'msg' => 'Đặt lại mật khẩu thành công', 'token' => CSRF::getTokenRefresh()], 200);
+        exit;
     }
 
     public function logout() {

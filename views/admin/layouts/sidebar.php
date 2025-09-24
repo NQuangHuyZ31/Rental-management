@@ -1,3 +1,8 @@
+<?php
+
+use Helpers\DataModelHelper;
+$dataModelHelper = new DataModelHelper();
+?>
 <!-- 
     Author: Huy Nguyen
     Date: 2025-09-09
@@ -59,7 +64,7 @@
                     <a href="<?= BASE_URL ?>/admin/posts/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-clock mr-3 flex-shrink-0 h-4 w-4"></i>
                         Chờ duyệt
-                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= $pendingPost ?></span>
+                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= $dataModelHelper->getRentalPostStatus('pending') ?></span>
                     </a>
                     <a href="<?= BASE_URL ?>/admin/posts/approved" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-check mr-3 flex-shrink-0 h-4 w-4"></i>

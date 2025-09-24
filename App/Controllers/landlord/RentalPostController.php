@@ -45,27 +45,13 @@ class RentalPostController extends LandlordController {
         $page = (int) ($this->request->get('page') ?? 1);
         $limit = 3; // 3 rows x 3 columns
         $offset = ($page - 1) * $limit;
-        $search = $this->request->get('search') ?? '';
-        $category = $this->request->get('category') ?? '';
-        $status = $this->request->get('status') ?? '';
 
         // Build filters array
         $filters = [];
-        if (!empty($search)) {
-            $filters['search'] = $search;
-        }
-
-        if (!empty($category)) {
-            $filters['category_id'] = $category;
-        }
-
-        if (!empty($status)) {
-            $filters['status'] = $status;
-        }
 
         // Get posts and categories
         $rentalPosts = $this->getRentalPosts($filters, $limit, $offset);
-        $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters);
+        $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters, true);
         $rentalCategories = $this->rentalCategoryModel->getAllRentalCategories();
         $rentalAmenities = $this->rentalAmenityModel->getAllRentalAmenities();
 
@@ -225,15 +211,7 @@ class RentalPostController extends LandlordController {
     }
 
     private function getRentalPosts($filters = [], $limit = 10, $offset = 0) {
-        if (!empty($filters['search'])) {
-            return $this->rentalPostModel->searchRentalPosts($filters['search'], $limit, $offset);
-        } elseif (!empty($filters['category_id'])) {
-            return $this->rentalPostModel->getRentalPostsByCategory($filters['category_id'], $limit, $offset);
-        } elseif (!empty($filters['status'])) {
-            return $this->rentalPostModel->getRentalPostsByStatus($filters['status'], $limit, $offset);
-        } else {
-            return $this->rentalPostModel->getAllRentalPosts($limit, $offset);
-        }
+        return $this->rentalPostModel->searchRentalPosts($filters, $limit, $offset, true);
     }
 
     /**

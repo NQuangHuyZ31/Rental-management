@@ -7,7 +7,6 @@ use Core\CSRF;
 use Core\Session;
 use Helpers\Log;
 // Session::destroy();
-Log::write(json_encode(['redirect' => Session::get('current_url'), 'message' => 'success']), Log::LEVEL_ERROR);
 if (Session::has('user')) {
     header('location: ' . Session::get('current_url'));
     exit();
@@ -16,7 +15,7 @@ if (Session::has('user')) {
 $flashData = $request->getFlashData();
 $errors = $flashData['errors'] ?? [];
 $old = $flashData['old'] ?? [];
-$message = $flashData['success'] ?? '';
+$success = $flashData['success'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -157,6 +156,7 @@ $message = $flashData['success'] ?? '';
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/app.js"></script>
@@ -196,10 +196,12 @@ $message = $flashData['success'] ?? '';
 
     <!-- Config Toastr -->
      <script>
-        const message = "<?=$message?>" ?? '';
-        if (message) {
-            showSuccessMessage(message);
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const success = "<?=$success?>" ?? '';
+            if (success) {
+                showSuccessMessage(success);
+            }
+        });
      </script>
 </body>
 

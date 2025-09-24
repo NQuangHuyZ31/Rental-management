@@ -145,6 +145,12 @@ class Request
             $this->redirect('/', $statusCode);
         }
     }
+
+    // Redirect back with error message
+    public function redirectBackWithError($message)
+    {
+        $this->redirectWithErrors($this->backRoute(), $message);
+    }
     
     /**
      * Redirect với success message
@@ -182,6 +188,14 @@ class Request
     public function getReferer()
     {
         return $_SERVER['HTTP_REFERER'] ?? null;
+    }
+
+    // Back route
+    public function backRoute()
+    {
+        $currentUrl = Session::get('current_url');
+        $currentUrl = str_replace(BASE_URL, '', $currentUrl);
+        return $currentUrl;
     }
     
     /**

@@ -53,28 +53,14 @@
                     <a href="<?= BASE_URL ?>/landlord/setting/categories" 
                        class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors <?= $currentPage === 'categories' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' ?>">
                         <i class="fas fa-tags mr-2"></i>
-                        Danh mục phòng
+                        Danh mục thuê
                     </a>
                 </li>
                 <li>
                     <a href="<?= BASE_URL ?>/landlord/setting/amenities" 
                        class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors <?= $currentPage === 'amenities' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' ?>">
                         <i class="fas fa-star mr-2"></i>
-                        Tiện ích
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= BASE_URL ?>/landlord/setting/services" 
-                       class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors <?= $currentPage === 'services' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' ?>">
-                        <i class="fas fa-concierge-bell mr-2"></i>
-                        Dịch vụ
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= BASE_URL ?>/landlord/setting/rental-types" 
-                       class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors <?= $currentPage === 'rental-types' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' ?>">
-                        <i class="fas fa-home mr-2"></i>
-                        Loại hình thuê
+                        Tiện ích phòng
                     </a>
                 </li>
             </ul>

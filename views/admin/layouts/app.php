@@ -10,16 +10,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard'?></title>
-    <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+    <title><?= isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard' ?></title>
+    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Custom CSS -->
     <style>
@@ -50,7 +47,7 @@
                 z-index: 50;
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.sidebar-visible {
                 transform: translateX(0);
             }
@@ -83,7 +80,6 @@
     <!-- Mobile Sidebar Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
 
-    <!-- JavaScript -->
     <script>
         // Toggle sidebar on mobile
         function toggleSidebar() {
@@ -108,6 +104,15 @@
             });
         }, 5000);
     </script>
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/customer-chart.js"></script>
 </body>
 
 </html>
