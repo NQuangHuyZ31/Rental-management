@@ -409,20 +409,6 @@ class Tenant extends Model {
         return $roomsWithCount;
     }
 
-    /**
-     * Transaction methods
-     */
-    public function beginTransaction() {
-        return $this->beginTransaction();
-    }
-
-    public function commit() {
-        return $this->commit();
-    }
-
-    public function rollback() {
-        return $this->rollback();
-    }
 
     /**
      * Cập nhật thông tin khách thuê
@@ -547,10 +533,84 @@ class Tenant extends Model {
     }
 
     /**
+     * Xóa khách thuê khỏi phòng (cập nhật left_date)
+     */
+    public function removeTenantFromRoom($tenantId, $ownerId) {
+        try {
+            // Bắt đầu transaction
+            $this->beginTransaction();
+            
+            // Kiểm tra khách thuê có tồn tại và thuộc về owner không
+            $tenant = $this->queryBuilder
+                ->table($this->table)
+                ->select(['room_tenants.id', 'room_tenants.user_id', 'room_tenants.room_id'])
+                ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+                ->join('houses', 'rooms.house_id', '=', 'houses.id')
+                ->where('room_tenants.user_id', $tenantId)
+                ->where('houses.owner_id', $ownerId)
+                ->whereNull('room_tenants.left_date')
+                ->first();
+                
+            if (!$tenant) {
+                throw new \Exception('Không tìm thấy khách thuê hoặc bạn không có quyền xóa');
+            }
+            
+            $roomId = $tenant['room_id'];
+            
+            // Cập nhật left_date = ngày hiện tại
+            $result = $this->queryBuilder
+                ->table($this->table)
+                ->where('user_id', $tenantId)
+                ->where('room_id', $roomId)
+                ->whereNull('left_date')
+                ->update([
+                    'left_date' => date('Y-m-d'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                
+            if ($result) {
+                // Kiểm tra xem phòng còn khách thuê nào đang ở không
+                $remainingTenants = $this->queryBuilder
+                    ->table($this->table)
+                    ->select('COUNT(*) as count')
+                    ->where('room_id', $roomId)
+                    ->whereNull('left_date')
+                    ->first();
+                
+                $tenantCount = $remainingTenants ? (int) $remainingTenants['count'] : 0;
+                
+                // Nếu không còn khách thuê nào, cập nhật room_status thành available
+                if ($tenantCount == 0) {
+                    $this->queryBuilder
+                        ->table('rooms')
+                        ->where('id', $roomId)
+                        ->update([
+                            'room_status' => 'available',
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ]);
+                }
+                
+                // Commit transaction
+                $this->commit();
+                return true;
+            } else {
+                // Rollback nếu có lỗi
+                $this->rollback();
+                return false;
+            }
+            
+        } catch (\Exception $e) {
+            // Rollback nếu có exception
+            $this->rollback();
+            throw $e;
+        }
+    }
+     
+    /**
      * Execute raw SQL query
      */
     public function query($sql, $params = []) {
-        return $this->query($sql, $params);
+        return parent::query($sql, $params);
     }
 
     // Added by Huy Nguyen get room by user id
