@@ -12,7 +12,7 @@ ob_start(); // Bắt đầu output buffering
 
 // Ẩn các lỗi Deprecated, Notice, Warning
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 
 // Nếu cần log lỗi, bật log riêng (tùy chọn)
 ini_set('log_errors', 1);

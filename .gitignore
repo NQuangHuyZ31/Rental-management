@@ -9,3 +9,4 @@ vendor/
 .vscode/
 Logs/
 rental_management.sql
+temp_uploads/

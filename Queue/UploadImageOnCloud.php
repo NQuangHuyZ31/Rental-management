@@ -106,7 +106,7 @@ class UploadImageOnCloud extends Job {
      */
     private function cleanupTempFiles($postId) {
         // Use __DIR__ to get the correct path in CLI mode
-        $rootPath = dirname(__DIR__);
+        $rootPath = ROOT_PATH;
         $tempDir = $rootPath . '/temp_uploads/' . $postId;
 
         if (is_dir($tempDir)) {

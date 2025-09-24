@@ -92,6 +92,7 @@ $(document).ready(function () {
                                     const json = xhr.responseJSON || {};
                                     showErrorMessage(json.message || 'Có lỗi xảy ra');
                                     if (json.token) App.setToken(json.token);
+                                    $changePasswordForm[0].reset();
                                     setTimeout(() => button.prop('disabled', false), 1500);
                                 },
                             });
