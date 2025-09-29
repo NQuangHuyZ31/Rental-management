@@ -123,6 +123,7 @@ $router->post('/landlord/tenant/create', [TenantController::class, 'create'],[Au
 $router->get('/landlord/tenant/edit/{id}', [TenantController::class, 'edit'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/update', [TenantController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/delete', [TenantController::class, 'delete'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/tenant/check-before-remove', [TenantController::class, 'checkTenantBeforeRemove'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/remove', [TenantController::class, 'removeTenant'],[AuthLandlordMiddleware::class]);
 
 // Invoice Management Routes

@@ -377,6 +377,11 @@ class InvoiceController extends LandlordController{
                 throw new \Exception('Không tìm thấy hóa đơn hoặc bạn không có quyền xóa');
             }
             
+            // Kiểm tra trạng thái thanh toán - chỉ cho phép xóa hóa đơn chưa thanh toán
+            if ($invoice['invoice_status'] === 'paid') {
+                throw new \Exception('Không thể xóa hóa đơn đã thanh toán');
+            }
+            
             // Xóa hóa đơn (soft delete)
             $result = $this->invoiceModel->deleteInvoice($invoiceId);
             

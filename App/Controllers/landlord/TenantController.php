@@ -439,6 +439,62 @@ class TenantController extends LandlordController
     }
 
     /**
+     * Kiểm tra thông tin khách thuê trước khi xóa
+     */
+    public function checkTenantBeforeRemove()
+    {
+        // Kiểm tra request method
+        if (!$this->request->isGet()) {
+            http_response_code(405);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Phương thức không hợp lệ'
+            ]);
+            exit;
+        }
+
+        // Lấy thông tin user đã đăng nhập
+        $user = Session::get('user');
+        $ownerId = $user['id'];
+
+        // Lấy tenant_id từ request
+        $tenantId = $this->request->get('tenant_id');
+        
+        if (empty($tenantId)) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'ID khách thuê không hợp lệ'
+            ]);
+            exit;
+        }
+
+        try {
+            // Kiểm tra xem khách thuê có phải là người cuối cùng trong phòng không
+            $isLastTenant = $this->tenantModel->isLastTenantInRoom($tenantId, $ownerId);
+            
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'is_last_tenant' => $isLastTenant,
+                'csrf_token' => CSRF::generateToken()
+            ]);
+            exit;
+        } catch (\Exception $e) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
+                'csrf_token' => CSRF::generateToken()
+            ]);
+            exit;
+        }
+    }
+
+    /**
      * Xóa khách thuê khỏi phòng
      */
     public function removeTenant()
