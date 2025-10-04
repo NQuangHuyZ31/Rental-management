@@ -131,6 +131,7 @@ $router->get('/landlord/invoice', [InvoiceController::class, 'index'],[AuthLandl
 $router->get('/landlord/invoice/view/{id}', [InvoiceController::class, 'viewInvoice'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/update', [InvoiceController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/updateStatus', [InvoiceController::class, 'updateStatus'],[AuthLandlordMiddleware::class]);
+$router->post('/landlord/invoice/mark-as-paid', [InvoiceController::class, 'markAsPaid'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/invoice/create-form/{id}', [InvoiceController::class, 'createForm'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/create', [InvoiceController::class, 'create'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/invoice/delete', [InvoiceController::class, 'delete'],[AuthLandlordMiddleware::class]);

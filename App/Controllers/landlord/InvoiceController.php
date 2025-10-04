@@ -346,6 +346,69 @@ class InvoiceController extends LandlordController{
     }
     
     /**
+     * Đánh dấu hóa đơn đã thanh toán
+     */
+    public function markAsPaid()
+    {
+        // Đảm bảo không có output trước JSON
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
+        // Set header để đảm bảo trả về JSON
+        header('Content-Type: application/json');
+        
+        try {
+            $userId = Session::get('user')['id'];
+            $invoiceId = $this->request->post('invoice_id');
+            
+            if (!$invoiceId || !is_numeric($invoiceId)) {
+                throw new \Exception('ID hóa đơn không hợp lệ');
+            }
+            
+            // Validate CSRF token
+            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
+                throw new \Exception('Dữ liệu không hợp lệ');
+            }
+            
+            // Kiểm tra quyền sở hữu hóa đơn trước khi cập nhật
+            $invoice = $this->invoiceModel->getInvoiceById($invoiceId, $userId);
+            if (!$invoice) {
+                throw new \Exception('Không tìm thấy hóa đơn hoặc bạn không có quyền cập nhật');
+            }
+            
+            // Kiểm tra trạng thái hiện tại - chỉ cho phép cập nhật hóa đơn chưa thanh toán
+            if ($invoice['invoice_status'] === 'paid') {
+                throw new \Exception('Hóa đơn đã được đánh dấu thanh toán rồi');
+            }
+            
+            // Cập nhật trạng thái hóa đơn thành "paid" và cập nhật pay_at
+            $result = $this->invoiceModel->updateInvoiceStatus($invoiceId, 'paid', $userId);
+            
+            if ($result) {
+                // Cập nhật pay_at field với thời gian hiện tại
+                $this->invoiceModel->updateColumn($invoiceId, 'pay_at', date('Y-m-d H:i:s'));
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Đánh dấu hóa đơn đã thanh toán thành công',
+                    'csrf_token' => CSRF::generateToken()
+                ]);
+            } else {
+                throw new \Exception('Không thể cập nhật trạng thái hóa đơn');
+            }
+        } catch (\Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'csrf_token' => CSRF::generateToken()
+            ]);
+        }
+        
+        exit; // Đảm bảo không có output nào khác
+    }
+    
+    /**
      * Xóa hóa đơn
      */
     public function delete()

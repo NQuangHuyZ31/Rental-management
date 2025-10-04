@@ -163,13 +163,26 @@ class Invoice extends Model
      */
     public function updateInvoiceStatus($invoiceId, $status, $ownerId)
     {
-        return $this->queryBuilder
+        // First verify ownership by checking if the invoice belongs to the owner
+        $invoice = $this->queryBuilder
             ->table('invoices')
             ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->where('invoices.id', $invoiceId)
             ->where('houses.owner_id', $ownerId)
             ->where('invoices.deleted', 0)
+            ->select('invoices.id')
+            ->first();
+            
+        if (!$invoice) {
+            return false;
+        }
+        
+        // If ownership is verified, update the invoice status
+        return $this->queryBuilder
+            ->table('invoices')
+            ->where('id', $invoiceId)
+            ->where('deleted', 0)
             ->update([
                 'invoice_status' => $status,
                 'updated_at' => date('Y-m-d H:i:s')
