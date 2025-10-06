@@ -185,6 +185,16 @@ use Core\CSRF;
                                                                     Xem/cập nhật
                                                                 </button>
                                                                 
+                                                                <?php if ($invoice['invoice_status'] !== 'paid'): ?>
+                                                                <!-- Mark as Paid Option -->
+                                                                <button onclick="markAsPaid(<?= $invoice['id'] ?>); toggleInvoiceActions(<?= $invoice['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-green-600 hover:bg-green-50 transition-colors">
+                                                                    <svg class="w-4 h-4 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                    </svg>
+                                                                    Đã thanh toán
+                                                                </button>
+                                                                <?php endif; ?>
+                                                                
                                                                 <!-- Delete Option -->
                                                                 <button onclick="deleteInvoice(<?= $invoice['id'] ?>); toggleInvoiceActions(<?= $invoice['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                                                     <svg class="w-4 h-4 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -924,6 +934,49 @@ use Core\CSRF;
                 closeInvoiceModal();
             }
         });
+
+        // Hàm đánh dấu hóa đơn đã thanh toán với SweetAlert xác nhận
+        function markAsPaid(invoiceId) {
+            Swal.fire({
+                title: 'Xác nhận đánh dấu đã thanh toán',
+                html: 'Bạn có chắc chắn muốn đánh dấu hóa đơn này là đã thanh toán?<br>Hành động này sẽ cập nhật trạng thái hóa đơn thành "Đã thanh toán".',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Đánh dấu đã thanh toán',
+                cancelButtonText: 'Hủy',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gọi API đánh dấu đã thanh toán
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch(`${App.appURL}landlord/invoice/mark-as-paid`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `invoice_id=${invoiceId}&csrf_token=${csrfToken}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showSuccessMessage(data.message);
+                            // Reload trang sau 1.5 giây để user thấy thông báo
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            showErrorMessage(data.message || 'Có lỗi xảy ra khi đánh dấu hóa đơn');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showErrorMessage('Có lỗi xảy ra khi đánh dấu hóa đơn');
+                    });
+                }
+            });
+        }
 
         // Hàm xóa hóa đơn với SweetAlert xác nhận
         function deleteInvoice(invoiceId) {

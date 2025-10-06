@@ -1348,44 +1348,94 @@
 
     // Hàm xóa khách thuê khỏi phòng với SweetAlert xác nhận
     function deleteTenant(tenantId) {
-        Swal.fire({
-            title: 'Xác nhận xóa khách thuê',
-            html: 'Bạn có chắc chắn muốn xóa khách thuê khỏi phòng?<br>Hành động này sẽ đánh dấu khách thuê đã rời phòng!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Gọi API xóa khách thuê
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                fetch(`${App.appURL}landlord/tenant/remove`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `tenant_id=${tenantId}&csrf_token=${csrfToken}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showSuccessMessage(data.message);
-                        // Reload trang sau 1.5 giây để user thấy thông báo
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa khách thuê');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showErrorMessage('Có lỗi xảy ra khi xóa khách thuê');
-                });
+        // Kiểm tra xem khách thuê có phải là người cuối cùng trong phòng không
+        fetch(`${App.appURL}landlord/tenant/check-before-remove?tenant_id=${tenantId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật CSRF token từ response
+                if (data.csrf_token) {
+                    updateCsrfToken(data.csrf_token);
+                }
+                
+                // Hiển thị thông báo xác nhận khác nhau dựa trên việc có phải người cuối cùng không
+                if (data.is_last_tenant) {
+                    // Thông báo đặc biệt cho khách thuê cuối cùng
+                    Swal.fire({
+                        title: 'Xác nhận xóa khách thuê',
+                        html: 'Đây là khách cuối cùng của phòng.<br>Hãy đảm bảo bạn đã thu tiền lần cuối cùng!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Xóa',
+                        cancelButtonText: 'Hủy',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            performTenantRemoval(tenantId);
+                        }
+                    });
+                } else {
+                    // Thông báo thông thường
+                    Swal.fire({
+                        title: 'Xác nhận xóa khách thuê',
+                        html: 'Bạn có chắc chắn muốn xóa khách thuê khỏi phòng?<br>Hành động này sẽ đánh dấu khách thuê đã rời phòng!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Xóa',
+                        cancelButtonText: 'Hủy',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            performTenantRemoval(tenantId);
+                        }
+                    });
+                }
+            } else {
+                showErrorMessage(data.message || 'Có lỗi xảy ra khi kiểm tra thông tin khách thuê');
+            }
+        })
+        .catch(error => {
+            console.error('Error checking tenant:', error);
+            showErrorMessage('Có lỗi xảy ra khi kiểm tra thông tin khách thuê');
+        });
+    }
+
+    // Hàm thực hiện xóa khách thuê
+    function performTenantRemoval(tenantId) {
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+        
+        fetch(`${App.appURL}landlord/tenant/remove`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `tenant_id=${tenantId}&csrf_token=${csrfToken}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showSuccessMessage(data.message);
+                // Reload trang sau 1.5 giây để user thấy thông báo
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa khách thuê');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorMessage('Có lỗi xảy ra khi xóa khách thuê');
         });
     }
 
