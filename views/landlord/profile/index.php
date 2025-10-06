@@ -84,22 +84,18 @@ use Core\CSRF;
 								<div>
 									<label for="province" class="block text-sm font-medium text-gray-700 mb-2">Tỉnh/Thành phố</label>
 									<select id="province" name="province"
-										class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+										class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+										data-default="<?= htmlspecialchars($user['province'] ?? '', ENT_QUOTES) ?>">
 										<option value="">Chọn tỉnh/thành phố</option>
-										<?php if ($user['province']): ?>
-											<option value="<?= $user['province'] ?>" selected><?= $user['province'] ?></option>
-										<?php endif; ?>
 									</select>
 								</div>
 								<!-- Ward -->
 								<div>
 									<label for="ward" class="block text-sm font-medium text-gray-700 mb-2">Phường/Xã</label>
 									<select id="ward" name="ward"
-										class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+										class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+										data-default="<?= htmlspecialchars($user['ward'] ?? '', ENT_QUOTES) ?>">
 										<option value="">Chọn phường/xã</option>
-										<?php if ($user['ward']): ?>
-											<option value="<?= $user['ward'] ?>" selected><?= $user['ward'] ?></option>
-										<?php endif; ?>
 									</select>
 								</div>
 

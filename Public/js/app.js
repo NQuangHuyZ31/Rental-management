@@ -63,7 +63,7 @@ window.App = {
         return fetch(`https://provinces.open-api.vn/api/v2/p/${provinceCode}?depth=2`).then((response) => response.json());
     },
 
-    setProvinceData: function (Element) {
+    setProvinceData: function (Element, provinceName = '') {
         return this.getProvinceData().then(function (data) {
             if (!data || !Array.isArray(data)) {
                 console.error('Không lấy được dữ liệu tỉnh', data);
@@ -72,7 +72,7 @@ window.App = {
 
             $.each(data, function (index, province) {
                 $(Element).append(
-                    `<option value="${province.name}" data-code="${province.code}">
+                    `<option value="${province.name}" ${province.name == provinceName ? 'selected' : ''} data-code="${province.code}">
                         ${province.name}
                     </option>`
                 );
@@ -80,10 +80,10 @@ window.App = {
         });
     },
 
-    setWardData: function (provinceCode, Element) {
+    setWardData: function (provinceCode, Element, wardName = '') {
         return this.getWardData(provinceCode).then(function (data) {
-            $.each(data.wards, function (index, district) {
-                $(Element).append(`<option value="${district.name}" data-code="${district.code}">${district.name}</option>`);
+            $.each(data.wards, function (index, ward) {
+                $(Element).append(`<option value="${ward.name}" ${ward.name == wardName ? 'selected' : ''} data-code="${ward.code}">${ward.name}</option>`);
             });
         });
     },

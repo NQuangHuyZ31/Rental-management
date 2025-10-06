@@ -6,7 +6,6 @@ use Cloudinary\Cloudinary;
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 
-require 'vendor/autoload.php';
 class UploadClound
 {
   public static function upload($file, $folder, $path)

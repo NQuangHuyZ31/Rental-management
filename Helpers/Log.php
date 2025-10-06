@@ -12,11 +12,7 @@ class Log
 {
     private static function getLogDir()
     {
-        if (defined('ROOT_PATH')) {
-            return ROOT_PATH . '/Logs';
-        } else {
-            return __DIR__ . '/../Logs';
-        }
+        return ROOT_PATH . '/Logs';
     }
 
     protected static $maxFileSize = 10 * 1024 * 1024; // 10MB

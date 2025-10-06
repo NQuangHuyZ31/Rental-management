@@ -141,3 +141,14 @@ $(document).ready(function () {
         }
     };
 });
+
+// Load province and ward when on page
+window.loadProvince = function (province) {
+    return App.setProvinceData('#province', province);
+};
+
+window.loadWard = function (ward) {
+    const code = $('#province').find(':selected').data('code');
+    if (!code) return;
+    App.setWardData(code, '#ward', ward);
+};
