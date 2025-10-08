@@ -390,7 +390,10 @@ class TenantController extends LandlordController
 
         // Validate dữ liệu sử dụng Validate helper (không validate email)
         $validationData = array_merge($userData, $tenantData);
-        $validationErrors = Validate::validateTenantDataForUpdate($validationData, $this->tenantModel, $tenantId);
+        // Xóa phone và citizen_id khỏi validation để không bắt buộc nhập
+        unset($validationData['phone']);
+        unset($validationData['citizen_id']);
+        $validationErrors = Validate::validateTenantDataForUpdate($validationData, $this->tenantModel, $existingTenant['user_id']);
         
         if (!empty($validationErrors)) {
             // Trả về JSON response với lỗi

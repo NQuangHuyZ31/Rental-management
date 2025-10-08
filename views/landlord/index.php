@@ -178,7 +178,7 @@ Purpose: Build Index house for Landlord
                             </thead>
                             <tbody>
                                 <?php $stt = 0; foreach ($rooms as $room): ?>
-                                <tr data-room-status="<?= $room['room_status'] ?>" class="<?= ($stt % 2 == 0) ? 'bg-[#E2F2E3]' : 'bg-[#FFF5F2]' ?>">
+                                <tr data-room-status="<?= $room['room_status'] ?>" class="bg-white">
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
                                         <span class="text-sm font-medium text-gray-900"><?= htmlspecialchars($room['room_name']) ?></span>
                                     </td>
@@ -223,51 +223,36 @@ Purpose: Build Index house for Landlord
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border border-gray-200">
-                                        <div class="flex items-center justify-center">
-                                            <!-- Dropdown Button -->
-                                            <div class="relative">
-                                                <button onclick="toggleRoomActions(<?= $room['id'] ?>)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors border border-gray-300" title="Thao tác">
-                                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        <div class="flex items-center justify-center space-x-4">
+                                            <!-- Edit Icon -->
+                                            <button onclick="editRoom(<?= $room['id'] ?>)" class="hover:scale-110 transition-transform" title="Chỉnh sửa phòng">
+                                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+
+                                            <!-- Invoice Icon -->
+                                            <?php if ($room['room_status'] === 'occupied'): ?>
+                                                <button onclick="openCreateInvoiceModal(<?= $room['id'] ?>, '<?= htmlspecialchars($room['room_name']) ?>')" class="hover:scale-110 transition-transform" title="Tạo hóa đơn">
+                                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                     </svg>
                                                 </button>
-                                                
-                                                <!-- Dropdown Menu -->
-                                                <div id="roomActions-<?= $room['id'] ?>" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-                                                    <div class="py-1">
-                                                        <!-- Edit Option -->
-                                                        <button onclick="editRoom(<?= $room['id'] ?>); toggleRoomActions(<?= $room['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                                                            <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                            </svg>
-                                                            Chỉnh sửa phòng
-                                                        </button>
-                                                        
-                                                        <!-- Invoice Option -->
-                                                        <?php if ($room['room_status'] === 'occupied'): ?>
-                                                            <button onclick="openCreateInvoiceModal(<?= $room['id'] ?>, '<?= htmlspecialchars($room['room_name']) ?>'); toggleRoomActions(<?= $room['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                                                                <svg class="w-4 h-4 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                                                </svg>
-                                                                Tạo hóa đơn
-                                                            </button>
-                                                        <?php else: ?>
-                                                            <button class="flex items-center w-full px-4 py-2 text-sm text-gray-400 cursor-not-allowed" disabled>
-                                                                <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                                                </svg>
-                                                                Tạo hóa đơn
-                                                            </button>
-                                                        <?php endif; ?>
-                                                        
-                                                        <!-- Delete Option -->
-                                                        <button onclick="deleteRoom(<?= $room['id'] ?>, '<?= htmlspecialchars($room['room_name']) ?>'); toggleRoomActions(<?= $room['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                                            <svg class="w-4 h-4 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                            </svg>
-                                                            Xóa phòng
-                                                        </button>
-                                                    </div>
+                                            <?php else: ?>
+                                                <button class="cursor-not-allowed" disabled title="Phòng chưa có người thuê">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                    </svg>
+                                                </button>
+                                            <?php endif; ?>
+
+                                            <!-- Delete Icon -->
+                                            <button onclick="deleteRoom(<?= $room['id'] ?>, '<?= htmlspecialchars($room['room_name']) ?>')" class="hover:scale-110 transition-transform" title="Xóa phòng">
+                                                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -594,33 +579,6 @@ Purpose: Build Index house for Landlord
                 }
             });
         }
-
-        // Toggle room actions dropdown
-        function toggleRoomActions(roomId) {
-            // Close all other dropdowns first
-            const allDropdowns = document.querySelectorAll('[id^="roomActions-"]');
-            allDropdowns.forEach(dropdown => {
-                if (dropdown.id !== `roomActions-${roomId}`) {
-                    dropdown.classList.add('hidden');
-                }
-            });
-            
-            // Toggle the current dropdown
-            const dropdown = document.getElementById(`roomActions-${roomId}`);
-            if (dropdown) {
-                dropdown.classList.toggle('hidden');
-            }
-        }
-
-        // Close all dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.relative')) {
-                const dropdowns = document.querySelectorAll('[id^="roomActions-"]');
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.add('hidden');
-                });
-            }
-        });
 
 
         // Close modal when clicking outside
