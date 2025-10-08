@@ -52,4 +52,34 @@ class PaymentHistory extends Model {
     public function getTotalPaymentHistoryByUserId($userId) {
         return $this->table($this->table)->select('SUM(amount) as total')->where('payer_id', $userId)->where('deleted', 0)->first();
     }
+
+    public function getPaymentHistoryDetail($id) {
+        return $this->table($this->table)
+            ->select([
+                'payment_histories.*',
+                'invoices.invoice_name',
+                'invoices.invoice_month', 
+                'invoices.ref_code',
+                'invoices.invoice_status',
+                'invoices.due_date',
+                'invoices.total as invoice_total',
+                'rooms.room_name',
+                'houses.house_name',
+                'houses.address as house_address',
+                'houses.owner_id',
+                'users.username as payer_name',
+                'users.email as payer_email',
+                'users.phone as payer_phone'
+            ])
+            ->join('invoices', 'payment_histories.invoice_id', '=', 'invoices.id')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->leftJoin('users', 'payment_histories.payer_id', '=', 'users.id')
+            ->where('payment_histories.id', $id)
+            ->where('payment_histories.deleted', 0)
+            ->where('invoices.deleted', 0)
+            ->where('rooms.deleted', 0)
+            ->where('houses.deleted', 0)
+            ->first();
+    }
 }

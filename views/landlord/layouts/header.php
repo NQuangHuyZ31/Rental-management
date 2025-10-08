@@ -30,7 +30,7 @@ Purpose: Build Header for Landlord Layout
                 </a>
 
                 <!-- Khách chuyển khoản (Customer Transfer) -->
-                <a href="#" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <a href="<?= BASE_URL ?>/landlord/banking" class="nav-item flex flex-col items-center px-6 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-dollar-sign text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Khách chuyển khoản</span>
                 </a>

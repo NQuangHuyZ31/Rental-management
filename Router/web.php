@@ -22,6 +22,7 @@ use App\Controllers\Landlord\ServiceController;
 use App\Controllers\Landlord\AmenityController;
 use App\Controllers\Landlord\TenantController;
 use App\Controllers\Landlord\InvoiceController;
+use App\Controllers\Landlord\BankingController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Controllers\Customer\PaymentController;
@@ -116,6 +117,10 @@ $router->post('/landlord/amenity/create', [AmenityController::class, 'create'],[
 $router->post('/landlord/amenity/update', [AmenityController::class, 'update'],[AuthLandlordMiddleware::class]);
 $router->post('/landlord/amenity/delete', [AmenityController::class, 'delete'],[AuthLandlordMiddleware::class]);
 $router->get('/landlord/amenity/get-rooms/{id}', [AmenityController::class, 'getAmenityRooms'],[AuthLandlordMiddleware::class]);
+
+// Banking (Payment History) Routes
+$router->get('/landlord/banking', [BankingController::class, 'index'],[AuthLandlordMiddleware::class]);
+$router->get('/landlord/banking/detail', [BankingController::class, 'detail'],[AuthLandlordMiddleware::class]);
 
 // Tenant Management Routes
 $router->get('/landlord/tenant', [TenantController::class, 'index'],[AuthLandlordMiddleware::class]);
