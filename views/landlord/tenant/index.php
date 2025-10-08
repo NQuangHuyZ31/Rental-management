@@ -1200,7 +1200,7 @@
                     closeAddTenantModal();
                     setTimeout(() => {
                         location.reload();
-                    }, 3000);
+                    }, 1500);
                 } else {
                     // Xử lý lỗi từ success response
                     if (response.errors) {
@@ -1284,7 +1284,7 @@
                     closeEditTenantModal();
                     setTimeout(() => {
                         location.reload();
-                    }, 3000);
+                    }, 1500);
                 } else {
                     // Xử lý lỗi từ success response
                     if (response.errors) {

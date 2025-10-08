@@ -477,7 +477,7 @@ class Tenant extends Model {
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('users.id', $tenantId)
+            ->where('room_tenants.id', $tenantId)
             ->where('houses.owner_id', $ownerId)
             ->where('users.deleted', 0)
             ->where('rooms.deleted', 0)
