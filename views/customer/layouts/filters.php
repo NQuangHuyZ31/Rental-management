@@ -26,7 +26,7 @@
 			<div class="relative">
 				<div class="flex items-center bg-white border border-gray-300 rounded-lg px-3 py-3 hover:border-green-500 focus-within:border-green-500 focus-within:ring-1 focus-within:ring-green-500 transition-all shadow-sm">
 					<i class="fas fa-search text-gray-400 text-sm mr-3"></i>
-					<input type="text" name="keyword" placeholder="Nhập tiêu chí muốn tìm kiếm..." value="<?= $currentFilters['keyword'] ?? '' ?>" class="flex-1 outline-none text-gray-900 placeholder-gray-500 text-sm">
+					<input type="text" name="search" placeholder="Nhập tiêu chí muốn tìm kiếm..." value="<?= $currentFilters['search'] ?? '' ?>" class="flex-1 outline-none text-gray-900 placeholder-gray-500 text-sm">
 				</div>
 			</div>
 		</div>
