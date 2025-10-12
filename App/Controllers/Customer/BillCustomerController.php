@@ -11,24 +11,21 @@ namespace App\Controllers\Customer;
 use Core\ViewRender;
 use Helpers\Format;
 
-class BillCustomerController extends CustomerController
-{
+class BillCustomerController extends CustomerController {
     protected $sidebar = true;
     protected $noFooter = true;
     protected $title = 'Hóa đơn';
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
-    public function bills()
-    {
+    public function bills() {
         $data = $this->request->get();
 
         // Phân trang
-        $page = isset($data['page']) ? (int)$data['page'] : 1;
-        $limit = isset($data['per_page']) ? (int)$data['per_page'] : 10; // Số hóa đơn mỗi trang
+        $page = isset($data['page']) ? (int) $data['page'] : 1;
+        $limit = isset($data['per_page']) ? (int) $data['per_page'] : 10; // Số hóa đơn mỗi trang
         $offset = ($page - 1) * $limit;
 
         // Xây dựng điều kiện filter
@@ -88,13 +85,13 @@ class BillCustomerController extends CustomerController
 
     public function paymentHistory() {
         $data = $this->request->get();
-        $page = isset($data['page']) ? (int)$data['page'] : 1;
-        $limit = isset($data['per_page']) ? (int)$data['per_page'] : 5;
+        $page = isset($data['page']) ? (int) $data['page'] : 1;
+        $limit = isset($data['per_page']) ? (int) $data['per_page'] : 5;
         $offset = ($page - 1) * $limit;
         $paymentHistory = $this->paymentHistoryModel->getPaymentHistoryByUserIdWithPagination($this->userID, $limit, $offset);
         $totalPaymentHistory = $this->paymentHistoryModel->getPaymentHistoryCountByUserId($this->userID);
         $totalPages = ceil($totalPaymentHistory / $limit);
-    
+
         $pagination = [
             'current_page' => $page,
             'total_pages' => $totalPages,

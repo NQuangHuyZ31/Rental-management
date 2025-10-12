@@ -19,7 +19,7 @@ $(document).ready(function () {
     // Add click event listeners to all navigation items
     navItems.each((index, item) => {
         $(item).on('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
+            // e.preventDefault(); // Prevent default link behavior
 
             // Remove active class from all items
             removeActiveClass();
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
     subNavItems.each((index, item) => {
         $(item).on('click', function (e) {
-            e.preventDefault();
+            // e.preventDefault();
             removeSubActiveClass();
             addSubActiveClass($(this));
 

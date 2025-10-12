@@ -8,7 +8,7 @@
 use Helpers\Format;
 ?>
 <!-- Hero Section with Full Background -->
-<section class="relative min-h-screen bg-gradient-to-br from-teal-400 via-blue-500 to-teal-600 overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/backgroud_plaform.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<section class="relative min-h-screen bg-gradient-to-br from-teal-400 via-blue-500 to-teal-600 overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/backgroud_plaform.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 	<!-- Main Content -->
 	<div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
 		<!-- Main Heading -->
@@ -23,71 +23,11 @@ use Helpers\Format;
 		</div>
 
 		<!-- Search Bar -->
-		<div class="max-w-screen-lg mx-auto mb-16">
+		<form action="<?= BASE_URL ?>/phong-tro-nha-tro" method="GET" class="max-w-screen-lg mx-auto mb-16">
 			<div class="bg-inherit rounded-2xl shadow-2xl p-2">
-				<form action="" method='GET'>
-					<div class="flex flex-col lg:flex-row gap-4 items-center">
-						<!-- Location Input -->
-						<div class="min-w-0 cursor-pointer">
-							<div class="relative">
-								<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors shadow-sm">
-									<i class="fas fa-map-marker-alt text-gray-500 text-sm mr-3 flex-shrink-0"></i>
-									<select id="province" name="province" class="w-full bg-transparent border-none outline-none text-gray-900 text-sm cursor-pointer">
-										<option value="">Chọn tỉnh/thành phố</option>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<!-- Text Search Input -->
-						<div class="flex-1 w-auto overflow-hidden">
-							<div class="relative cursor-pointer">
-								<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors">
-									<i class="fas fa-search text-gray-500 text-sm mr-3"></i>
-									<input type="text" name="keyword" placeholder="Nhập tiêu chí muốn tìm kiếm..." class="flex-1 outline-none text-gray-900 placeholder-gray-500 text-sm">
-								</div>
-							</div>
-						</div>
-
-						<!-- Price Input -->
-						<div class="max-w-32 overflow-hidden">
-							<div class="relative cursor-pointer">
-								<select name="price" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors outline-none text-gray-900 placeholder-gray-500 text-sm">
-									<option value="0-1">Dưới 1 triệu</option>
-									<option value="1-2">1 - 2 triệu</option>
-									<option value="2-3">2 - 3 triệu</option>
-									<option value="3-4">3 - 4 triệu</option>
-									<option value="4-5">4 - 5 triệu</option>
-									<option value="5-100"> Trên 5 triệu</option>
-								</select>
-							</div>
-						</div>
-
-						<!-- Area Input -->
-						<div class="flex-1 max-w-32 overflow-hidden">
-							<div class="relative cursor-pointer">
-								<select name="area" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2 hover:border-green-500 transition-colors outline-none text-gray-900 placeholder-gray-500 text-sm">
-									<option value="0-10">Dưới 10m²</option>
-									<option value="10-20">10 - 20 m²</option>
-									<option value="20-30">20 - 30 m²</option>
-									<option value="30-40">30 - 40 m²</option>
-									<option value="40-50">40 - 50 m²</option>
-									<option value="50-100"> Trên 50 m²</option>
-								</select>
-							</div>
-						</div>
-
-						<!-- Search Button -->
-						<div class="flex-shrink-0">
-							<button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-xl font-semibold transition-colors flex items-center text-sm">
-								<i class="fas fa-search mr-2 text-sm"></i>
-								Tìm kiếm
-							</button>
-						</div>
-					</div>
-				</form>
+				<?php require_once ROOT_PATH . '/views/customer/layouts/filters.php' ?>
 			</div>
-		</div>
+		</form>
 
 		<!-- Bottom Content -->
 		<div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -286,7 +226,7 @@ use Helpers\Format;
 			<div class="grid md:grid-cols-2 lg:grid-cols-6 gap-6">
 				<!-- Hồ Chí Minh -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/ho-chi-minh.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/ho-chi-minh.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute top-4 left-4 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
 						<div class="absolute top-4 left-8 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
 						<div class="absolute top-4 left-12 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
@@ -299,7 +239,7 @@ use Helpers\Format;
 
 				<!-- Hà Nội -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/ha-noi.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/ha-noi.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-8 h-8 bg-white bg-opacity-20 rounded-full"></div>
 						<div class="absolute bottom-8 left-4 w-6 h-6 bg-white bg-opacity-20 rounded-full"></div>
@@ -312,7 +252,7 @@ use Helpers\Format;
 
 				<!-- Cần Thơ -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/can-tho.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/can-tho.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-4 h-4 bg-white bg-opacity-30 rounded-full"></div>
 						<div class="absolute top-8 left-8 w-3 h-3 bg-white bg-opacity-30 rounded-full"></div>
@@ -326,7 +266,7 @@ use Helpers\Format;
 
 				<!-- Bình Dương -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/binh-duong.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/binh-duong.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-6 h-6 bg-white bg-opacity-20 rounded"></div>
 						<div class="absolute top-8 right-8 w-4 h-4 bg-white bg-opacity-20 rounded"></div>
@@ -339,7 +279,7 @@ use Helpers\Format;
 
 				<!-- Đà Nẵng -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/da-nang.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/da-nang.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-3 h-3 bg-yellow-300 rounded-full"></div>
 						<div class="absolute top-6 left-6 w-2 h-2 bg-yellow-300 rounded-full"></div>
@@ -353,7 +293,7 @@ use Helpers\Format;
 
 				<!-- Đồng Nai -->
 				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
-					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?=BASE_URL?>/Public/images/dong-nai.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/dong-nai.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-30"></div>
 						<div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full"></div>
 						<div class="absolute top-8 right-8 w-3 h-3 bg-blue-400 rounded-full"></div>
@@ -393,10 +333,10 @@ use Helpers\Format;
 			<!-- Property Cards Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<!-- Property Card 1 -->
-				<?php foreach ($rentalHotDeals as $rentalHotDeal) {?>
-				<a href="<?=BASE_URL?>/rental-post/<?=$rentalHotDeal['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200 overflow-visible">
+				<?php foreach ($rentalHotDeals as $rentalHotDeal) { ?>
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalHotDeal['rental_post_title']) .'-'. $rentalHotDeal['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+						<!-- Image Area -->
+						<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
 								<img src="<?= json_decode($rentalHotDeal['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
 							</div>
@@ -405,35 +345,35 @@ use Helpers\Format;
 								<i class="fas fa-check text-white mr-1"></i>
 								Đã xác minh
 							</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
-						</div>
+							<!-- Camera -->
+							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
+								<i class="fas fa-camera text-gray-600"></i>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
+							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-4">
 							<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-								<?=$rentalHotDeal['rental_post_title']?>
+								<?= $rentalHotDeal['rental_post_title'] ?>
 							</h3>
 							<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
 								<i class="fas fa-user text-gray-400 mr-2"></i>
-								<span><?=$rentalHotDeal['contact']?> - <?=$rentalHotDeal['province']?> . <?=$rentalHotDeal['ward']?></span>
+								<span><?= $rentalHotDeal['contact'] ?> - <?= $rentalHotDeal['province'] ?> . <?= $rentalHotDeal['ward'] ?></span>
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
-									<span class="text-gray-400 line-through text-sm mr-2"><?=Format::forMatPrice($rentalHotDeal['price'])?>₫</span>
-									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded"><?=round(($rentalHotDeal['price'] - $rentalHotDeal['price_discount']) / $rentalHotDeal['price'] * 100)?>% OFF</span>
+									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden'?>"><?=  Format::forMatPrice($rentalHotDeal['price']) ?>₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden'?>"><?= round(($rentalHotDeal['price'] - $rentalHotDeal['price_discount']) / $rentalHotDeal['price'] * 100) ?>% OFF</span>
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
-									<div class="text-[16px] font-bold text-red-600"><?=Format::forMatPrice($rentalHotDeal['price_discount'])?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalHotDeal['area']?> m²</div>
+									<div class="text-[16px] font-bold text-red-600"><?= $rentalHotDeal['price_discount'] > 0 ? Format::forMatPrice($rentalHotDeal['price_discount']) :  Format::forMatPrice($rentalHotDeal['price']) ?>đ/tháng</div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?= $rentalHotDeal['area'] ?> m²</div>
 								</div>
 							</div>
 						</div>
 					</a>
-				<?php }?>
+				<?php } ?>
 			</div>
 		</div>
 	</section>
@@ -460,10 +400,10 @@ use Helpers\Format;
 
 			<!-- Property Cards Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-				<?php foreach ($rentalStayNow as $rentalStayNow) {?>
-				<a href="<?=BASE_URL?>/rental-post/<?=$rentalStayNow['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
-					<!-- Image Area -->
-					<div class="relative h-60 bg-gray-200 overflow-visible">
+				<?php foreach ($rentalStayNow as $rentalStayNow) { ?>
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalStayNow['rental_post_title']) .'-'. $rentalStayNow['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+						<!-- Image Area -->
+						<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
 								<img src="<?= json_decode($rentalStayNow['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
 								</img>
@@ -477,35 +417,35 @@ use Helpers\Format;
 							<div class="absolute bottom-2 right-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
 								NOW
 							</div>
-						<!-- Camera -->
-						<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?=count(json_decode($rentalStayNow['images']))?></span>
-						</div>
+							<!-- Camera -->
+							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
+								<i class="fas fa-camera text-gray-600"></i>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?= count(json_decode($rentalStayNow['images'])) ?></span>
+							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-4">
 							<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-								<?=$rentalStayNow['rental_post_title']?>
+								<?= $rentalStayNow['rental_post_title'] ?>
 							</h3>
 							<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
 								<i class="fas fa-user text-gray-400 mr-2"></i>
-								<span><?=$rentalStayNow['contact']?> - <?=$rentalStayNow['province']?> . <?=$rentalStayNow['ward']?></span>
+								<span><?= $rentalStayNow['contact'] ?> - <?= $rentalStayNow['province'] ?> . <?= $rentalStayNow['ward'] ?></span>
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
-									<span class="text-gray-400 line-through text-sm mr-2"><?=Format::forMatPrice($rentalStayNow['price'])?>₫</span>
-									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded"><?=round(($rentalStayNow['price'] - $rentalStayNow['price_discount']) / $rentalStayNow['price'] * 100)?>% OFF</span>
+									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden'?>"><?=  Format::forMatPrice($rentalStayNow['price']) ?>₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden'?>"><?= round(($rentalStayNow['price'] - $rentalStayNow['price_discount']) / $rentalStayNow['price'] * 100) ?>% OFF</span>
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
-									<div class="text-[16px] font-bold text-red-600"><?=Format::forMatPrice($rentalStayNow['price_discount'])?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?=$rentalStayNow['area']?> m²</div>
+									<div class="text-[16px] font-bold text-red-600"><?= $rentalStayNow['price_discount'] > 0 ? Format::forMatPrice($rentalStayNow['price_discount']) :  Format::forMatPrice($rentalStayNow['price']) ?>đ/tháng</div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?= $rentalStayNow['area'] ?> m²</div>
 								</div>
 							</div>
 						</div>
 					</a>
-				<?php }?>
+				<?php } ?>
 			</div>
 		</div>
 	</section>
@@ -527,10 +467,10 @@ use Helpers\Format;
 
 			<!-- Property Cards Grid - Horizontal Layout -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<?php foreach ($rentalNewPosts as $rentalNewPost) {?>
-				<a href="<?=BASE_URL?>/rental-post/<?=$rentalNewPost['id']?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow flex">
-					<!-- Image Area -->
-					<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0 overflow-visible">
+				<?php foreach ($rentalNewPosts as $rentalNewPost) { ?>
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalNewPost['rental_post_title']) .'-'. $rentalNewPost['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow flex">
+						<!-- Image Area -->
+						<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
 								<img src="<?= json_decode($rentalNewPost['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
 							</div>
@@ -539,44 +479,44 @@ use Helpers\Format;
 								<i class="fas fa-check text-white mr-1"></i>
 								Đã xác minh
 							</div>
-						<!-- Camera -->
-						<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
-							<i class="fas fa-camera text-gray-600 text-xs"></i>
-							<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center z-10"><?=count(json_decode($rentalNewPost['images']))?></span>
-						</div>
+							<!-- Camera -->
+							<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
+								<i class="fas fa-camera text-gray-600 text-xs"></i>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center z-10"><?= count(json_decode($rentalNewPost['images'])) ?></span>
+							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-3 flex-1">
 							<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
-								<?=$rentalNewPost['rental_post_title']?>
+								<?= $rentalNewPost['rental_post_title'] ?>
 							</h3>
 							<div class="flex items-center text-xs text-gray-600 mb-2">
 								<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
-								<span class="truncate"><?=$rentalNewPost['contact']?> - <?=$rentalNewPost['province']?> . <?=$rentalNewPost['ward']?></span>
+								<span class="truncate"><?= $rentalNewPost['contact'] ?> - <?= $rentalNewPost['province'] ?> . <?= $rentalNewPost['ward'] ?></span>
 							</div>
 							<div class="flex items-center justify-between mb-2">
 								<div class="h-11">
 									<div class="flex items-center gap-1 mb-1">
-										<span class="text-gray-400 line-through text-xs"><?=Format::forMatPrice($rentalNewPost['price'])?>₫</span>
-										<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded"><?=round(($rentalNewPost['price'] - $rentalNewPost['price_discount']) / $rentalNewPost['price'] * 100)?>% OFF</span>
+										<span class="text-gray-400 line-through text-xs"><?= Format::forMatPrice($rentalNewPost['price']) ?>₫</span>
+										<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded"><?= round(($rentalNewPost['price'] - $rentalNewPost['price_discount']) / $rentalNewPost['price'] * 100) ?>% OFF</span>
 									</div>
-									<div class="text-base font-bold text-red-600"><?=Format::forMatPrice($rentalNewPost['price_discount'])?>đ/tháng</div>
+									<div class="text-base font-bold text-red-600"><?= Format::forMatPrice($rentalNewPost['price_discount']) ?>đ/tháng</div>
 								</div>
-								<div class="text-xs text-gray-600 font-medium"><?=$rentalNewPost['area']?> m²</div>
+								<div class="text-xs text-gray-600 font-medium"><?= $rentalNewPost['area'] ?> m²</div>
 							</div>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center text-xs text-gray-500">
 									<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
 										<i class="fas fa-user text-gray-600 text-[8px]"></i>
 									</div>
-									<span><?=$rentalNewPost['contact']?></span>
+									<span><?= $rentalNewPost['contact'] ?></span>
 									<span class="ml-1"></span>
 								</div>
 							</div>
 						</div>
 					</a>
-				<?php }?>
+				<?php } ?>
 			</div>
 		</div>
 	</section>

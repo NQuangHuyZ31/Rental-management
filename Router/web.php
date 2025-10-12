@@ -25,6 +25,7 @@ use App\Controllers\Landlord\InvoiceController;
 // Customer Controller
 use App\Controllers\TestController;
 use App\Controllers\Customer\PaymentController;
+use App\Controllers\Customer\RentalPostHouseController;
 use App\Controllers\Customer\SettingCustomerController;
 use App\Controllers\Landlord\ProfileLandlordController;
 use App\Controllers\Landlord\SettingPaymentController;
@@ -53,6 +54,9 @@ $router->get('/forgot-password', [AuthController::class, 'showForgotPasswordPage
 $router->post('/send-link-reset-password', [AuthController::class, 'sendLinkResetPassword']);
 $router->get('/reset-password', [AuthController::class, 'showResetPasswordPage']);
 $router->post('/reset-password', [AuthController::class, 'handleResetPassword']);
+
+// Search page
+$router->get('/phong-tro-nha-tro', [RentalPostHouseController::class, 'searchByFilter']);
 
 
 // PROFILE

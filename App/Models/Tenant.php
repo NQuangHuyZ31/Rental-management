@@ -657,7 +657,7 @@ class Tenant extends Model {
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
-            ->where('room_tenants.room_id', $id)
+            ->where('room_tenants.room_id   ', $id)
             ->where('room_tenants.user_id', $this->userID)
             ->where('rooms.deleted', 0)
             ->first();

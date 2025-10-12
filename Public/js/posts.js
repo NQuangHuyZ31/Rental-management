@@ -507,4 +507,11 @@ $(document).ready(function () {
 
         imageUpload.get(0).dispatchEvent(new Event('change', { bubbles: true }));
     }
+
+    // Rental post listing page lightweight hooks
+    try {
+        $('select').on('change', function () {
+            /* wire filters later */
+        });
+    } catch (e) {}
 });

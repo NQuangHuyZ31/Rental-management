@@ -57,7 +57,7 @@ class RenTalPost extends Model {
             ->get();
     }
 
-    public function searchRentalPosts($filters = [], $limit = 10, $offset = 0, $ownerId = false, $orderBy = 'created_at') {
+    public function searchRentalPosts($filters = [], $limit = 10, $offset = 0, $ownerId = false, $customerPage = false, $orderBy = 'created_at', $sort = 'DESC') {
         $query = $this->table($this->table)
             ->select([
                 'rental_posts.*',
@@ -76,8 +76,29 @@ class RenTalPost extends Model {
             $query->where('rental_posts.approval_status', $filters['approval_status']);
         }
 
+        if ($customerPage) {
+            $query->where('rental_posts.approval_status', 'approved');
+            $query->where('rental_posts.status', 'active');
+        }
+
         if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
             $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
+        }
+
+        if (isset($filters['province']) && !empty($filters['province'])) {
+            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
+        }
+
+        if (isset($filters['price']) && !empty($filters['price'])) {
+            [$fromPrice, $toPrice] = explode('-', $filters['price']);
+            $query->where('rental_posts.price', '>=', $fromPrice*1000000);
+            $query->where('rental_posts.price', '<=', $toPrice*1000000);
+        }
+
+        if (isset($filters['area']) && !empty($filters['area'])) {
+            [$fromArea, $toArea] = explode('-', $filters['area']);
+            $query->where('rental_posts.area', '>=', "{$fromArea}");
+            $query->where('rental_posts.area', '<=', "{$toArea}");
         }
 
         if (isset($filters['search']) && !empty($filters['search'])) {
@@ -88,7 +109,7 @@ class RenTalPost extends Model {
                 ->whereOr('rental_posts.ward', 'LIKE', "%{$filters['search']}%");
         }
 
-        return $query->orderBy('rental_posts.' . $orderBy, 'DESC')
+        return $query->orderBy('rental_posts.' . $orderBy, $sort)
             ->limit($limit)
             ->offset($offset)
             ->get();
@@ -110,6 +131,26 @@ class RenTalPost extends Model {
 		if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
 			$query->where('rental_category_id', $filters['rental_category_id']);
 		}
+
+        if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
+            $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
+        }
+
+        if (isset($filters['province']) && !empty($filters['province'])) {
+            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
+        }
+
+        if (isset($filters['price']) && !empty($filters['price'])) {
+            [$fromPrice, $toPrice] = explode('-', $filters['price']);
+            $query->where('rental_posts.price', '>=', $fromPrice*1000000);
+            $query->where('rental_posts.price', '<=', $toPrice*1000000);
+        }
+
+        if (isset($filters['area']) && !empty($filters['area'])) {
+            [$fromArea, $toArea] = explode('-', $filters['area']);
+            $query->where('rental_posts.area', '>=', "{$fromArea}");
+            $query->where('rental_posts.area', '<=', "{$toArea}");
+        }
 
 		if (isset($filters['search']) && !empty($filters['search'])) {
 			$query->whereOr('rental_post_title', 'LIKE', "%{$filters['search']}%")

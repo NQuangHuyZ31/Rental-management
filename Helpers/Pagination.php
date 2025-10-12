@@ -16,7 +16,7 @@ class Pagination
         $currentPage = $pagination['current_page'];
         $totalPages = $pagination['total_pages'];
         $totalItems = $pagination['total_items'];
-        $itemsPerPage = $pagination['items_per_page'];
+        $itemsPerPage = $pagination['per_page'];
 
         // Tính toán range hiển thị
         $startPage = max(1, $currentPage - 2);
@@ -35,7 +35,7 @@ class Pagination
         // Thông tin hiển thị
         $startItem = ($currentPage - 1) * $itemsPerPage + 1;
         $endItem = min($currentPage * $itemsPerPage, $totalItems);
-        
+
         $html .= '<div class="flex-1 flex justify-between sm:hidden">';
         $html .= '<div class="text-sm text-gray-700">';
         $html .= "Hiển thị <span class=\"font-medium\">{$startItem}</span> đến <span class=\"font-medium\">{$endItem}</span> của <span class=\"font-medium\">{$totalItems}</span> kết quả";
