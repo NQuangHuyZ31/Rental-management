@@ -349,21 +349,9 @@ class Validate
             $errors['username'] = 'Tên khách hàng không được để trống';
         }
         
-        if (empty($data['phone'])) {
-            $errors['phone'] = 'Số điện thoại không được để trống';
-        } elseif (!self::phone($data['phone'])) {
+        // Phone validation - chỉ validate format nếu có nhập, không bắt buộc và không check duplicate
+        if (!empty($data['phone']) && !self::phone($data['phone'])) {
             $errors['phone'] = 'Số điện thoại không hợp lệ';
-        } else {
-            // Check if phone is duplicate (exclude current user)
-            if ($excludeUserId) {
-                if ($tenantModel->checkPhoneExistsForOtherUser($data['phone'], $excludeUserId)) {
-                    $errors['phone'] = 'Số điện thoại đã được sử dụng';
-                }
-            } else {
-                if ($tenantModel->checkPhoneExists($data['phone'])) {
-                    $errors['phone'] = 'Số điện thoại đã được sử dụng';
-                }
-            }
         }
         
         if (empty($data['room_id'])) {
@@ -374,22 +362,9 @@ class Validate
             $errors['join_date'] = 'Ngày vào ở không được để trống';
         }
         
-        // Validate citizen_id (required)
-        if (empty($data['citizen_id'])) {
-            $errors['citizen_id'] = 'Số CCCD không được để trống';
-        } elseif (!self::citizenId($data['citizen_id'])) {
+        // Citizen ID validation - chỉ validate format nếu có nhập, không bắt buộc và không check duplicate
+        if (!empty($data['citizen_id']) && !self::citizenId($data['citizen_id'])) {
             $errors['citizen_id'] = 'Số CCCD không hợp lệ. Vui lòng nhập đúng 12 chữ số';
-        } else {
-            // Check if citizen_id is duplicate (exclude current user)
-            if ($excludeUserId) {
-                if ($tenantModel->checkCitizenIdExistsForOtherUser($data['citizen_id'], $excludeUserId)) {
-                    $errors['citizen_id'] = 'Số CCCD đã được sử dụng';
-                }
-            } else {
-                if ($tenantModel->checkCitizenIdExists($data['citizen_id'])) {
-                    $errors['citizen_id'] = 'Số CCCD đã được sử dụng';
-                }
-            }
         }
         
         // Validate address fields (required)

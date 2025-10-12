@@ -419,11 +419,17 @@ class Tenant extends Model {
             // Bắt đầu transaction
             $this->beginTransaction();
 
+            // Lấy thông tin tenant để có user_id
+            $tenant = $this->getTenantForEdit($tenantId, $ownerId);
+            if (!$tenant) {
+                throw new \Exception('Tenant not found');
+            }
+
             // Cập nhật thông tin user
             if (!empty($userData)) {
                 $userData['updated_at'] = date('Y-m-d H:i:s');
                 $this->table('users')
-                    ->where('id', $tenantId)
+                    ->where('id', $tenant['user_id'])  // Sử dụng user_id từ tenant
                     ->where('deleted', 0)
                     ->update($userData);
             }
@@ -432,7 +438,7 @@ class Tenant extends Model {
             if (!empty($tenantData)) {
                 $tenantData['updated_at'] = date('Y-m-d H:i:s');
                 $this->table('room_tenants')
-                    ->where('user_id', $tenantId)
+                    ->where('id', $tenantId)  // Sử dụng room_tenants.id
                     ->whereNull('left_date')
                     ->update($tenantData);
             }
@@ -454,7 +460,8 @@ class Tenant extends Model {
     public function getTenantForEdit($tenantId, $ownerId) {
         $result = $this->table('room_tenants')
             ->select([
-                'users.id',
+                'room_tenants.id as tenant_id',  // ID của room_tenants (đây là ID cần dùng)
+                'users.id as user_id',           // ID của users
                 'users.username',
                 'users.email',
                 'users.phone',
@@ -477,7 +484,7 @@ class Tenant extends Model {
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('users.id', $tenantId)
+            ->where('room_tenants.id', $tenantId)
             ->where('houses.owner_id', $ownerId)
             ->where('users.deleted', 0)
             ->where('rooms.deleted', 0)

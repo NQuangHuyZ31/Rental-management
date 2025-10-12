@@ -91,36 +91,20 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium border border-gray-300">
-                                                <div class="flex items-center justify-center">
-                                                    <!-- Dropdown Button -->
-                                                    <div class="relative">
-                                                        <button onclick="toggleAmenityActions(<?= $amenity['id'] ?>)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors border border-gray-300" title="Thao tác">
-                                                            <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        
-                                                        <!-- Dropdown Menu -->
-                                                        <div id="amenityActions-<?= $amenity['id'] ?>" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-                                                            <div class="py-1">
-                                                                <!-- Edit Option -->
-                                                                <button onclick="editAmenity(<?= $amenity['id'] ?>); toggleAmenityActions(<?= $amenity['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                                                                    <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                                    </svg>
-                                                                    Chỉnh sửa
-                                                                </button>
-                                                                
-                                                                <!-- Delete Option -->
-                                                                <button onclick="deleteAmenity(<?= $amenity['id'] ?>, '<?= htmlspecialchars($amenity['amenity_name']) ?>', <?= $amenity['can_delete'] ? 'true' : 'false' ?>, '<?= htmlspecialchars($amenity['delete_reason']) ?>'); toggleAmenityActions(<?= $amenity['id'] ?>)" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                                                    <svg class="w-4 h-4 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                                    </svg>
-                                                                    Xóa
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="flex items-center justify-center space-x-4">
+                                                    <!-- Edit Icon -->
+                                                    <button onclick="editAmenity(<?= $amenity['id'] ?>)" class="hover:scale-110 transition-transform" title="Chỉnh sửa">
+                                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        </svg>
+                                                    </button>
+                                                    
+                                                    <!-- Delete Icon -->
+                                                    <button onclick="deleteAmenity(<?= $amenity['id'] ?>, '<?= htmlspecialchars($amenity['amenity_name']) ?>', <?= $amenity['can_delete'] ? 'true' : 'false' ?>, '<?= htmlspecialchars($amenity['delete_reason']) ?>')" class="hover:scale-110 transition-transform" title="Xóa">
+                                                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -521,33 +505,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('amenityModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeAmenityModal();
-    }
-});
-
-// Toggle amenity actions dropdown
-function toggleAmenityActions(amenityId) {
-    // Close all other dropdowns first
-    const allDropdowns = document.querySelectorAll('[id^="amenityActions-"]');
-    allDropdowns.forEach(dropdown => {
-        if (dropdown.id !== `amenityActions-${amenityId}`) {
-            dropdown.classList.add('hidden');
-        }
-    });
-    
-    // Toggle the current dropdown
-    const dropdown = document.getElementById(`amenityActions-${amenityId}`);
-    if (dropdown) {
-        dropdown.classList.toggle('hidden');
-    }
-}
-
-// Close all dropdowns when clicking outside
-document.addEventListener('click', function(event) {
-    if (!event.target.closest('.relative')) {
-        const dropdowns = document.querySelectorAll('[id^="amenityActions-"]');
-        dropdowns.forEach(dropdown => {
-            dropdown.classList.add('hidden');
-        });
     }
 });
 </script>
