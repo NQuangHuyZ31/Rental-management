@@ -32,43 +32,61 @@
                     </div>
                 </div>
 
-                <!-- Filters -->
-                <form method="GET" action="<?= BASE_URL ?>/landlord/banking" class="mb-4">
-                    <input type="hidden" name="house_id" value="<?= isset($selectedHouse['id']) ? intval($selectedHouse['id']) : '' ?>">
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Nhà trọ</label>
-                            <select name="house_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                                <?php foreach (($houses ?? []) as $house): ?>
-                                    <option value="<?= $house['id'] ?>" <?= (isset($selectedHouse['id']) && $selectedHouse['id'] == $house['id']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($house['house_name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                <!-- Month/Year Filter -->
+                <div class="mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" id="bankingMonthYearInput" readonly class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none cursor-pointer bg-white min-w-[200px] h-10" placeholder="Chọn tháng/năm" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>">
+                            <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5 cursor-pointer" id="bankingCalendarIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+
+                            <!-- Month/Year Picker Overlay -->
+                            <div id="bankingMonthYearPicker" class="hidden absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-64">
+                                <!-- Year Navigation -->
+                                <div class="flex items-center justify-between p-3 border-b border-gray-200">
+                                    <button type="button" id="bankingPrevYear" class="text-gray-600 hover:text-gray-800 p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <span id="bankingCurrentYear" class="font-medium text-gray-900">2025</span>
+                                    <button type="button" id="bankingNextYear" class="text-gray-600 hover:text-gray-800 p-1">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Months Grid -->
+                                <div class="p-3">
+                                    <div class="grid grid-cols-4 gap-2">
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="01">Th1</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="02">Th2</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="03">Th3</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="04">Th4</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="05">Th5</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="06">Th6</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="07">Th7</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="08">Th8</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="09">Th9</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="10">Th10</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="11">Th11</button>
+                                        <button type="button" class="banking-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="12">Th12</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Tháng (mm-YYYY)</label>
-                            <input type="text" name="month" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>" placeholder="09-2025" class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Mã tham chiếu</label>
-                            <input type="text" name="reference_code" value="<?= htmlspecialchars($_GET['reference_code'] ?? '') ?>" placeholder="901V602..." class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Trạng thái</label>
-                            <select name="invoice_status" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                                <?php $curInvoiceStatus = $_GET['invoice_status'] ?? ''; ?>
-                                <option value="" <?= $curInvoiceStatus === '' ? 'selected' : '' ?>>Tất cả</option>
-                                <option value="paid" <?= $curInvoiceStatus === 'paid' ? 'selected' : '' ?>>Đã thanh toán</option>
-                                <option value="pending" <?= $curInvoiceStatus === 'pending' ? 'selected' : '' ?>>Đang chờ</option>
-                                <option value="overdue" <?= $curInvoiceStatus === 'overdue' ? 'selected' : '' ?>>Quá hạn</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors w-full">Lọc</button>
-                        </div>
+                        
+                        <?php if (!empty($_GET['month'])): ?>
+                            <div>
+                                <a href="<?= BASE_URL ?>/landlord/banking<?= isset($_GET['house_id']) ? '?house_id=' . urlencode($_GET['house_id']) : '' ?>" class="inline-flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors h-10">
+                                    <i class="fas fa-times mr-2"></i>Xóa bộ lọc
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
-                </form>
+                </div>
 
                 <!-- Table -->
                 <div class="bg-white overflow-hidden rounded-none">
@@ -97,7 +115,7 @@
                                                 <div class="text-gray-900"><?= htmlspecialchars($ph['invoice_name'] ?? '') ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700 text-center">
-                                                <span class="font-mono text-sm"><?= htmlspecialchars($ph['ref_code'] ?? '') ?></span>
+                                                <span class="text-sm"><?= htmlspecialchars($ph['ref_code'] ?? '') ?></span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700 text-center">
                                                 <?= htmlspecialchars($ph['room_name'] ?? '') ?>
@@ -151,12 +169,16 @@
                                 Hiển thị <?= count($paymentHistories) ?> / <?= $total ?> giao dịch
                             </div>
                             <div class="flex gap-2">
+                                <?php 
+                                $houseParam = isset($_GET['house_id']) ? '&house_id=' . urlencode($_GET['house_id']) : '';
+                                $monthParam = isset($_GET['month']) ? '&month=' . urlencode($_GET['month']) : '';
+                                ?>
                                 <?php if ($page > 1): ?>
-                                    <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<?= BASE_URL ?>/landlord/banking?house_id=<?= isset($selectedHouse['id']) ? intval($selectedHouse['id']) : '' ?>&page=<?= $page - 1 ?>&limit=<?= $limit ?>&month=<?= urlencode($_GET['month'] ?? '') ?>&reference_code=<?= urlencode($_GET['reference_code'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">Trước</a>
+                                    <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<?= BASE_URL ?>/landlord/banking?page=<?= $page - 1 ?>&limit=<?= $limit ?><?= $houseParam ?><?= $monthParam ?>">Trước</a>
                                 <?php endif; ?>
                                 <span class="px-3 py-1 text-sm text-gray-700">Trang <?= $page ?>/<?= $totalPages ?></span>
                                 <?php if ($page < $totalPages): ?>
-                                    <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<?= BASE_URL ?>/landlord/banking?house_id=<?= isset($selectedHouse['id']) ? intval($selectedHouse['id']) : '' ?>&page=<?= $page + 1 ?>&limit=<?= $limit ?>&month=<?= urlencode($_GET['month'] ?? '') ?>&reference_code=<?= urlencode($_GET['reference_code'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">Sau</a>
+                                    <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<?= BASE_URL ?>/landlord/banking?page=<?= $page + 1 ?>&limit=<?= $limit ?><?= $houseParam ?><?= $monthParam ?>">Sau</a>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -336,6 +358,113 @@
     document.getElementById('paymentDetailModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeModal();
+        }
+    });
+
+    // Banking Month/Year Picker functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('bankingMonthYearInput');
+        const icon = document.getElementById('bankingCalendarIcon');
+        const picker = document.getElementById('bankingMonthYearPicker');
+        const currentYearSpan = document.getElementById('bankingCurrentYear');
+        const prevYearBtn = document.getElementById('bankingPrevYear');
+        const nextYearBtn = document.getElementById('bankingNextYear');
+        const monthBtns = document.querySelectorAll('.banking-month-btn');
+
+        // Get current date
+        const now = new Date();
+        let currentYear = now.getFullYear();
+        let selectedMonth = '';
+
+        // Parse existing value if any
+        const existingValue = input.value;
+        if (existingValue) {
+            const parts = existingValue.split('-');
+            if (parts.length === 2) {
+                selectedMonth = parts[0];
+                currentYear = parseInt(parts[1]);
+            }
+        }
+
+        // Toggle picker visibility
+        function togglePicker() {
+            picker.classList.toggle('hidden');
+        }
+
+        // Update input value
+        function updateInput() {
+            if (selectedMonth) {
+                input.value = `${selectedMonth}-${currentYear}`;
+            }
+        }
+
+        // Update year display
+        function updateYearDisplay() {
+            currentYearSpan.textContent = currentYear;
+        }
+
+        // Highlight selected month
+        function highlightSelectedMonth() {
+            monthBtns.forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('hover:bg-gray-100');
+
+                if (btn.dataset.month === selectedMonth) {
+                    btn.classList.remove('hover:bg-gray-100');
+                    btn.classList.add('bg-blue-500', 'text-white');
+                }
+            });
+        }
+
+        // Event listeners
+        input.addEventListener('click', togglePicker);
+        icon.addEventListener('click', togglePicker);
+
+        prevYearBtn.addEventListener('click', function() {
+            currentYear--;
+            updateYearDisplay();
+            updateInput();
+        });
+
+        nextYearBtn.addEventListener('click', function() {
+            currentYear++;
+            updateYearDisplay();
+            updateInput();
+        });
+
+        monthBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedMonth = btn.dataset.month;
+                updateInput();
+                highlightSelectedMonth();
+                togglePicker();
+                
+                // Auto filter - redirect to page with month filter
+                const currentUrl = new URL(window.location.href);
+                const params = new URLSearchParams(currentUrl.search);
+                
+                // Set month parameter
+                params.set('month', `${selectedMonth}-${currentYear}`);
+                
+                // Remove page parameter to start from page 1
+                params.delete('page');
+                
+                // Redirect with new parameters
+                window.location.href = `${currentUrl.pathname}?${params.toString()}`;
+            });
+        });
+
+        // Close picker when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !picker.contains(e.target) && !icon.contains(e.target)) {
+                picker.classList.add('hidden');
+            }
+        });
+
+        // Initialize
+        updateYearDisplay();
+        if (selectedMonth) {
+            highlightSelectedMonth();
         }
     });
 </script>

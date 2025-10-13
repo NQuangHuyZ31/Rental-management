@@ -27,18 +27,16 @@ class BankingController extends LandlordController {
         $user = Session::get('user');
         $ownerId = $user['id'] ?? null;
 
+        // Lấy selectedHouse từ URL hoặc parent controller
         [$selectedHouse, $houses] = $this->getSelectedHouse($ownerId, $this->request->get('house_id'));
 
         $page = max(1, intval($this->request->get('page') ?? 1));
         $limit = max(1, intval($this->request->get('limit') ?? 10));
         $offset = ($page - 1) * $limit;
 
-        $month = $this->request->get('month'); // format: mm-YYYY or YYYY-mm
-        $referenceCode = $this->request->get('reference_code');
-        $invoiceStatus = $this->request->get('invoice_status'); // paid, pending, overdue ... if any
+        $month = $this->request->get('month'); // format: mm-YYYY
 
-
-        // Clone for count
+        // Count query
         $countQuery = $this->paymentHistoryModel
             ->table('payment_histories')
             ->select('COUNT(*) as total')
@@ -51,23 +49,19 @@ class BankingController extends LandlordController {
             ->where('houses.deleted', 0)
             ->where('houses.owner_id', $ownerId);
 
+        // Chỉ lọc theo selectedHouse nếu có
         if ($selectedHouse) {
             $countQuery->where('houses.id', $selectedHouse['id']);
         }
+        
         if (!empty($month)) {
             $countQuery->where('invoices.invoice_month', $month);
-        }
-        if (!empty($referenceCode)) {
-            $countQuery->where('payment_histories.referenceCode', $referenceCode);
-        }
-        if (!empty($invoiceStatus)) {
-            $countQuery->where('invoices.invoice_status', $invoiceStatus);
         }
 
         $totalCountRow = $countQuery->first();
         $totalCount = $totalCountRow['total'] ?? 0;
 
-        // Clone the main query for data retrieval
+        // Data query
         $dataQuery = $this->paymentHistoryModel
             ->table('payment_histories')
             ->select([
@@ -90,6 +84,7 @@ class BankingController extends LandlordController {
             ->where('houses.deleted', 0)
             ->where('houses.owner_id', $ownerId);
 
+        // Chỉ lọc theo selectedHouse nếu có
         if ($selectedHouse) {
             $dataQuery->where('houses.id', $selectedHouse['id']);
         }
@@ -98,19 +93,10 @@ class BankingController extends LandlordController {
             $dataQuery->where('invoices.invoice_month', $month);
         }
 
-        if (!empty($referenceCode)) {
-            $dataQuery->where('payment_histories.referenceCode', $referenceCode);
-        }
-
-        if (!empty($invoiceStatus)) {
-            $dataQuery->where('invoices.invoice_status', $invoiceStatus);
-        }
-
         $histories = $dataQuery->orderBy('payment_histories.created_at', 'DESC')
             ->limit($limit)
             ->offset($offset)
             ->get();
-
 
         ViewRender::render('landlord/banking/index', [
             'houses' => $houses,
