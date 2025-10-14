@@ -110,6 +110,29 @@ class QueryBuilder {
     }
 
     /**
+     * whereOrGroup: Nhóm nhiều điều kiện OR trong dấu ngoặc (dùng cho search nâng cao)
+     * $columns: mảng các cột, $operator: toán tử (LIKE, =, ...), $value: giá trị so sánh
+     * Ví dụ: whereOrGroup(['col1','col2'],'LIKE','abc')
+     */
+    public function whereOrGroup(array $columns, $operator, $value)
+    {
+        $orParts = [];
+        $params = [];
+        foreach ($columns as $col) {
+            $orParts[] = "$col $operator ?";
+            $params[] = $value;
+        }
+        $this->where[] = [
+            'column' => '(' . implode(' OR ', $orParts) . ')',
+            'operator' => '',
+            'value' => $params,
+            'logic' => 'AND',
+            'custom_group_or' => true
+        ];
+        return $this;
+    }
+
+    /**
      * Where IN clause
      */
     public function whereIn($column, $values)
@@ -526,11 +549,15 @@ class QueryBuilder {
         
         // Add AND conditions
         foreach ($this->where as $condition) {
+            // Nếu là custom_group_or thì $column đã chứa đủ biểu thức (vd: (col1 LIKE ? OR col2 LIKE ? ...))
+            if (isset($condition['custom_group_or']) && $condition['custom_group_or']) {
+                $allConditions[] = $condition['column'];
+                continue;
+            }
             $column = $condition['column'];
             $this->columns[] = $column;
             $operator = $condition['operator'];
             $value = $condition['value'];
-            
             if ($operator === 'IN' || $operator === 'NOT IN') {
                 if (is_array($value)) {
                     $placeholders = str_repeat('?,', count($value) - 1) . '?';
@@ -581,10 +608,13 @@ class QueryBuilder {
         
         // Add AND condition parameters
         foreach ($this->where as $condition) {
+            if (isset($condition['custom_group_or']) && $condition['custom_group_or']) {
+                $params = array_merge($params, $condition['value']);
+                continue;
+            }
             $operator = $condition['operator'];
             $value = $condition['value'];
             $this->values[] = $value;
-            
             if ($operator === 'IN' || $operator === 'NOT IN') {
                 if (is_array($value)) {
                     $params = array_merge($params, $value);
