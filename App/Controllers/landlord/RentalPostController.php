@@ -66,7 +66,7 @@ class RentalPostController extends LandlordController {
             'showing_to' => min($offset + $limit, $totalPosts),
         ];
 
-        ViewRender::render('landlord/Posts/index', [
+        ViewRender::render('landlord/posts/index', [
             'rentalPosts' => $rentalPosts,
             'rentalCategories' => $rentalCategories,
             'rentalAmenities' => $rentalAmenities,

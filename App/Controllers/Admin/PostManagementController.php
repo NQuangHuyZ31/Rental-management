@@ -12,24 +12,24 @@ namespace App\Controllers\Admin;
 use Core\ViewRender;
 
 class PostManagementController extends AdminController {
+    protected $title = "Quản lí bài đăng";
 
     public function index() {
         // Get pagination parameters
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $limit = 10; // Items per page
+        $page = $this->request->get('page') != '' ? (int)$this->request->get('page') : 1;
+        $limit = $this->limit; // Items per page
         $offset = ($page - 1) * $limit;
 
         // Get filter parameters
-        $search = $_GET['search'] ?? '';
-        $approval_status = $_GET['approval_status'] ?? '';
-        $rental_category_id = $_GET['rental_category_id'] ?? '';
+        $search = $this->request->get('search') ?? '';
+        $approval_status = $this->request->get('approval_status') ?? '';
+        $rental_category_id = $this->request->get('rental_category_id') ?? '';
 
         // Get counts for stats
         $allPost = $this->rentalPostModel->getCountRentalPostsByStatus(['pending', 'approved', 'rejected']);
         $pendingPost = $this->rentalPostModel->getCountRentalPostsByStatus(['pending']);
         $approvedPost = $this->rentalPostModel->getCountRentalPostsByStatus(['approved']);
         $rejectedPost = $this->rentalPostModel->getCountRentalPostsByStatus(['rejected']);
-		$allCategory = $this->rentalCategoryModel->getAllRentalCategories();
 
 		$filters = [];
         // Get posts with pagination using existing model methods
@@ -59,34 +59,21 @@ class PostManagementController extends AdminController {
             'approvedPost' => $approvedPost,
             'rejectedPost' => $rejectedPost,
             'posts' => $posts,
-            'allCategory' => $allCategory,
+            'allCategory' => $this->getAllRentalPostCategory(),
             'pagination' => $pagination,
             'queryParams' => $queryParams,
             'currentFilters' => [
                 'search' => $search,
                 'approval_status' => $approval_status,
                 'rental_category_id' => $rental_category_id
-            ]
+            ],
+            'title' => $this->title
         ], 'admin/layouts/app');
-    }
-
-    private function calculatePagination($totalItems, $currentPage, $itemsPerPage) {
-        $totalPages = ceil($totalItems / $itemsPerPage);
-        
-        return [
-            'current_page' => $currentPage,
-            'total_pages' => $totalPages,
-            'total_items' => $totalItems,
-            'items_per_page' => $itemsPerPage,
-            'has_prev' => $currentPage > 1,
-            'has_next' => $currentPage < $totalPages,
-            'prev_page' => $currentPage > 1 ? $currentPage - 1 : 1,
-            'next_page' => $currentPage < $totalPages ? $currentPage + 1 : $totalPages
-        ];
     }
 
 	public function pendingPostPage() {
 		$pendingPost = $this->rentalPostModel->getCountRentalPostsByStatus(['pending']);
+
 		ViewRender::renderWithLayout('admin/posts/pending',[
 			'pendingPost' => $pendingPost,
 		],'admin/layouts/app');
@@ -105,6 +92,10 @@ class PostManagementController extends AdminController {
 			'rejectedPost' => $rejectedPost,
 		],'admin/layouts/app');
 	}
+
+    private function getAllRentalPostCategory() {
+        return $this->rentalCategoryModel->getAllRentalCategories();
+    }
 	
 }
 
