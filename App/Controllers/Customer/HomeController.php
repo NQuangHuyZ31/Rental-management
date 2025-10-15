@@ -8,20 +8,17 @@
 
 namespace App\Controllers\Customer;
 
+use App\Controllers\BaseCustomerController;
 use Core\QueryBuilder;
-use App\Controllers\Controller;
 use Core\ViewRender;
-use App\Models\RenTalPost;
 
-class HomeController extends Controller {
+class HomeController extends BaseCustomerController {
 	protected $title = 'Trang chủ';
 	protected $subNav = true;
-	protected $rentalPost;
 	protected $queryBuilder;
 
 	public function __construct() {
 		parent::__construct();
-		$this->rentalPost = new RenTalPost();
 		$this->queryBuilder = new QueryBuilder();
 	}
 	

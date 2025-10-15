@@ -9,15 +9,38 @@ Purpose: Base Controller for Landlord Controllers
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Controller;
+use App\Models\Amenity;
 use App\Models\House;
+use App\Models\RentalAmenity;
+use App\Models\RentalCategory;
+use App\Models\RenTalPost;
+use App\Models\Room;
+use App\Models\Tenant;
+use Core\Request;
 use Core\Session;
 
 abstract class LandlordController extends Controller {
+    protected $user;
     protected $houseModel;
+    protected $amenityModel;
+    protected $roomModel;
+    protected $request;
+    protected $tenantModel;
+    protected $rentalCategoryModel;
+    protected $rentalAmenityModel;
+    protected $rentalPostModel;
 
     public function __construct() {
         parent::__construct();
+        $this->user = Session::get('user');
         $this->houseModel = new House();
+        $this->request = new Request();
+        $this->amenityModel = new Amenity();
+        $this->roomModel = new Room();
+        $this->tenantModel = new Tenant();
+        $this->rentalCategoryModel = new RentalCategory();
+        $this->rentalAmenityModel = new RentalAmenity();
+        $this->rentalPostModel = new RenTalPost();
     }
 
     /**
@@ -68,4 +91,21 @@ abstract class LandlordController extends Controller {
 
         return [$selectedHouse, $houses, $selectedHouse['id']];
     }
+
+    // Added by Huy Nguyen on 2025-10-15 to add function get pagination
+    public function getPagination($page, $totalData, $limit, $offset) {
+		$totalPages = ceil($totalData / $limit);
+		return [
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_items' => $totalData,
+            'items_per_page' => $limit,
+            'has_prev' => $page > 1,
+            'has_next' => $page < $totalPages,
+            'prev_page' => $page > 1 ? $page - 1 : null,
+            'next_page' => $page < $totalPages ? $page + 1 : null,
+			'showing_from' => $offset + 1,
+            'showing_to' => min($offset + $limit, $totalData)
+        ];  
+	}
 }

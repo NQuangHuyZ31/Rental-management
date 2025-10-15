@@ -10,6 +10,7 @@
 namespace Helpers;
 
 use App\Models\RenTalPost;
+use App\Models\Tenant;
 
 class DataModelHelper {
 	protected $rentalPostModel;

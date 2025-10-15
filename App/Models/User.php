@@ -80,13 +80,4 @@ class User extends Model {
 		}
 	}
 
-	public function deleteUser($id) {
-		try {
-			$result = $this->table($this->table)->where('id', $id)->update(['deleted' => 1]);
-			return $result;
-		} catch (\Exception $e) {
-			error_log("Error deleting user: " . $e->getMessage());
-			return false;
-		}
-	}
  }

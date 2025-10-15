@@ -1,46 +1,29 @@
 <?php
 
 /*
-	Author: Nguyen Xuan Duong
-	Date: 2025-08-29
-	Purpose: Build House Controller
-*/
+Author: Nguyen Xuan Duong
+Date: 2025-08-29
+Purpose: Build House Controller
+ */
 
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
-use App\Models\Room;
-use App\Models\Tenant;
-use Core\Request;
+use Core\CSRF;
 use Core\Session;
 use Core\ViewRender;
-use Core\CSRF;
 
-class HouseController extends LandlordController
-{
-    private $roomModel;
-    private $tenantModel;
-    private $request;
-
-    public function __construct()
-    {
+class HouseController extends LandlordController {
+    public function __construct() {
         parent::__construct();
-        $this->roomModel = new Room();
-        $this->tenantModel = new Tenant();
-        $this->request = new Request();
     }
 
     /**
      * Hiển thị trang chủ landlord
      */
-    public function index()
-    {
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
+    public function index() {
         // Sử dụng logic chung từ BaseLandlordController
-        [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($ownerId, $this->request->get('house_id'));
+        [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($this->user['id'], $this->request->get('house_id'));
 
         $rooms = [];
         $roomStats = [];
@@ -61,17 +44,17 @@ class HouseController extends LandlordController
 
         // Lấy số lượng khách thuê cho nhà trọ được chọn
         if ($selectedHouse) {
-            $totalTenants = $this->tenantModel->countTenantsByHouseId($selectedHouse['id'], $ownerId);
+            $totalTenants = $this->tenantModel->countTenantsByHouseId($selectedHouse['id'], $this->user['id']);
         }
 
         // Tính số phòng theo trạng thái từ roomStats
         foreach ($roomStats as $stat) {
             if ($stat['room_status'] === 'occupied') {
-                $occupiedRooms = (int)$stat['count'];
+                $occupiedRooms = (int) $stat['count'];
             } elseif ($stat['room_status'] === 'available') {
-                $availableRooms = (int)$stat['count'];
+                $availableRooms = (int) $stat['count'];
             } elseif ($stat['room_status'] === 'maintenance') {
-                $maintenanceIssues = (int)$stat['count'];
+                $maintenanceIssues = (int) $stat['count'];
             }
         }
 
@@ -90,15 +73,14 @@ class HouseController extends LandlordController
             'totalRooms' => $totalRooms,
             'maintenanceIssues' => $maintenanceIssues,
             'occupiedRooms' => $occupiedRooms,
-            'availableRooms' => $availableRooms
+            'availableRooms' => $availableRooms,
         ]);
     }
 
     /**
      * Tạo mới nhà trọ
      */
-    public function create()
-    {
+    public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -111,13 +93,9 @@ class HouseController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
         // Lấy dữ liệu từ request
         $houseData = [
-            'owner_id' => $ownerId,
+            'owner_id' => $this->user['id'],
             'house_name' => $this->request->post('house_name'),
             'province' => $this->request->post('province'),
             'ward' => $this->request->post('ward'),
@@ -125,7 +103,7 @@ class HouseController extends LandlordController
             'payment_date' => $this->request->post('payment_date'),
             'due_date' => $this->request->post('due_date'),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Validate dữ liệu
@@ -155,8 +133,7 @@ class HouseController extends LandlordController
     /**
      * Cập nhật nhà trọ
      */
-    public function update()
-    {
+    public function update() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -169,10 +146,6 @@ class HouseController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
         // Lấy house_id từ request
         $houseId = $this->request->post('house_id');
 
@@ -182,7 +155,7 @@ class HouseController extends LandlordController
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
-        $existingHouse = $this->houseModel->getHouseById($houseId, $ownerId);
+        $existingHouse = $this->houseModel->getHouseById($houseId, $this->user['id']);
         if (!$existingHouse) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền chỉnh sửa');
             return;
@@ -196,7 +169,7 @@ class HouseController extends LandlordController
             'address' => $this->request->post('address'),
             'payment_date' => $this->request->post('payment_date'),
             'due_date' => $this->request->post('due_date'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Validate dữ liệu
@@ -226,8 +199,7 @@ class HouseController extends LandlordController
     /**
      * Lấy thông tin nhà trọ theo ID
      */
-    public function getHouse($houseId)
-    {
+    public function getHouse($houseId) {
         // Lấy owner_id từ session
         $ownerId = Session::get('user_id');
 
@@ -245,20 +217,20 @@ class HouseController extends LandlordController
                 header('Content-Type: application/json');
                 echo json_encode([
                     'success' => true,
-                    'house' => $house
+                    'house' => $house,
                 ]);
             } else {
                 header('Content-Type: application/json');
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Không tìm thấy nhà trọ'
+                    'message' => 'Không tìm thấy nhà trọ',
                 ]);
             }
         } catch (\Exception $e) {
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
             ]);
         }
     }
@@ -266,8 +238,7 @@ class HouseController extends LandlordController
     /**
      * Xóa nhà trọ (soft delete)
      */
-    public function delete()
-    {
+    public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -280,10 +251,6 @@ class HouseController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
         // Lấy house_id từ request
         $houseId = $this->request->post('house_id');
 
@@ -293,16 +260,15 @@ class HouseController extends LandlordController
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
-        $existingHouse = $this->houseModel->getHouseById($houseId, $ownerId);
+        $existingHouse = $this->houseModel->getHouseById($houseId, $this->user['id']);
         if (!$existingHouse) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền xóa');
             return;
         }
 
         // Kiểm tra xem nhà trọ có phòng nào không
-        $roomModel = new Room();
-        $rooms = $roomModel->getRoomsByHouseId($houseId);
-        
+        $rooms = $this->roomModel->getRoomsByHouseId($houseId);
+
         if (!empty($rooms)) {
             $this->request->redirectWithError('/landlord', 'Không thể xóa nhà trọ này vì đang có ' . count($rooms) . ' phòng. Vui lòng xóa tất cả phòng trước khi xóa nhà trọ.');
             return;

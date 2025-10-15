@@ -20,7 +20,7 @@ class SettingPaymentController extends SettingController {
 	}
 
 	public function index() {
-		$userBanking = $this->userBanking->getUserBankingByUserId($this->userID);
+		$userBanking = $this->userBanking->getUserBankingByUserId($this->user['id']);
 		return ViewRender::renderWithLayout('landlord/settings/payment',['userBanking' => $userBanking], 'landlord/settings/index');
 	}
 
@@ -36,7 +36,7 @@ class SettingPaymentController extends SettingController {
 			exit;
 		}
 
-		$userBanking = $this->userBanking->getUserBankingByUserId($this->userID);
+		$userBanking = $this->userBanking->getUserBankingByUserId($this->user['id']);
 
 		$error = SettingPaymentValidate::validate($request);
 
@@ -46,7 +46,7 @@ class SettingPaymentController extends SettingController {
 		}
 
 		$dataUserBanking = [
-			'user_id' => $this->userID ?? $userBanking['user_id'],
+			'user_id' => $this->user['id'] ?? $userBanking['user_id'],
 			'user_bank_name' => $request['user_bank_name'],
 			'bank_code' => $request['bank_code'],
 			'bank_account_number' => $request['bank_account_number'],
@@ -68,13 +68,13 @@ class SettingPaymentController extends SettingController {
 	}
 
 	public function paymentApi() {
-		$userBanking = $this->userBanking->getUserBankingByUserId($this->userID);
+		$userBanking = $this->userBanking->getUserBankingByUserId($this->user['id']);
 		return ViewRender::renderWithLayout('landlord/settings/payment-api',['userBanking' => $userBanking], 'landlord/settings/index');
 	}
 
 	public function updateApiKey() {
 		$request = $this->request->post();
-		$userBanking = $this->userBanking->getUserBankingByUserId($this->userID);
+		$userBanking = $this->userBanking->getUserBankingByUserId($this->user['id']);
 
 		if (empty($request['api_key']) || empty($request['confirm_api_key'])) {
 			$this->request->redirectWithErrors('landlord/setting/payment-api', 'API Key không được để trống');

@@ -9,13 +9,9 @@ Purpose: Build Rental Post Controller
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
-use App\Models\RentalAmenity;
-use App\Models\RentalCategory;
-use App\Models\RenTalPost;
 use App\Requests\RentalPostValidate;
 use Core\CSRF;
 use Core\QueryBuilder;
-use Core\Request;
 use Core\Response;
 use Core\ViewRender;
 use Exception;
@@ -23,19 +19,11 @@ use Queue\UploadImageOnCloud;
 
 class RentalPostController extends LandlordController {
 
-    protected $rentalCategoryModel;
-    protected $rentalAmenityModel;
-    protected $rentalPostModel;
-    protected $request;
     protected $queryBuilder;
     protected $uploadImageOnCloud;
 
     public function __construct() {
         parent::__construct();
-        $this->rentalCategoryModel = new RentalCategory();
-        $this->rentalAmenityModel = new RentalAmenity();
-        $this->rentalPostModel = new RenTalPost();
-        $this->request = new Request();
         $this->queryBuilder = new QueryBuilder();
         $this->uploadImageOnCloud = new UploadImageOnCloud();
     }
@@ -54,17 +42,7 @@ class RentalPostController extends LandlordController {
         $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters, true);
         $rentalCategories = $this->rentalCategoryModel->getAllRentalCategories();
         $rentalAmenities = $this->rentalAmenityModel->getAllRentalAmenities();
-
-        // Calculate pagination data
-        $totalPages = ceil($totalPosts / $limit);
-        $pagination = [
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'total_posts' => $totalPosts,
-            'per_page' => $limit,
-            'showing_from' => $offset + 1,
-            'showing_to' => min($offset + $limit, $totalPosts),
-        ];
+        $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
 
         ViewRender::render('landlord/posts/index', [
             'rentalPosts' => $rentalPosts,

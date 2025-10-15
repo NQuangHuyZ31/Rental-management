@@ -16,12 +16,10 @@ use Helpers\Log;
 
 class PaymentController extends CustomerController {
     private $userBankingModel;
-    private $paymentHistoryModel;
 
     public function __construct() {
         parent::__construct();
         $this->userBankingModel = new UserBanking();
-        $this->paymentHistoryModel = new PaymentHistory();
     }
 
     public function payment() {

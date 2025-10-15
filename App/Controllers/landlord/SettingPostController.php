@@ -20,8 +20,8 @@ class SettingPostController extends SettingController {
 	}
 
 	public function categories() {
-		$systemCategories = $this->rentalCategory->getAllRentalCategories(false, true, '');
-		$userCategories = $this->rentalCategory->getAllRentalCategories(true, false, '');
+		$systemCategories = $this->rentalCategoryModel->getAllRentalCategories(false, true, '');
+		$userCategories = $this->rentalCategoryModel->getAllRentalCategories(true, false, '');
 		
 		return ViewRender::renderWithLayout('landlord/settings/categories', [
 			'systemCategories' => $systemCategories,
@@ -42,23 +42,23 @@ class SettingPostController extends SettingController {
 			exit;
 		}
 
-		$rentalCategory = $this->rentalCategory->getRentalCategoryById($request['categoryId'], $this->userID);
+		$rentalCategory = $this->rentalCategoryModel->getRentalCategoryById($request['categoryId'], $this->user['id']);
 
 		$dataRentalCategory = [
 			'rental_category_name' => $request['rental_category_name'],
 			'rental_category_status' => $request['rental_category_status'],
-			'owner_id' => $this->userID ?? $rentalCategory['owner_id'],
+			'owner_id' => $this->user['id'] ?? $rentalCategory['owner_id'],
 			'created_at' => $rentalCategory['created_at'] ?? date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
 
 		if (!$rentalCategory) {
-			$this->rentalCategory->createRentalCategory($dataRentalCategory);
+			$this->rentalCategoryModel->createRentalCategory($dataRentalCategory);
 			Response::json(['status' => 'success', 'message' => 'Tạo danh mục thành công', 'token' => CSRF::getTokenRefresh()], 200);
 			exit;
 		}
 
-		$this->rentalCategory->updateRentalCategory($rentalCategory['id'], $dataRentalCategory);
+		$this->rentalCategoryModel->updateRentalCategory($rentalCategory['id'], $dataRentalCategory);
 		Response::json(['status' => 'success', 'message' => 'Cập nhật danh mục thành công', 'token' => CSRF::getTokenRefresh()], 200);
 		exit;
 	}
@@ -71,14 +71,14 @@ class SettingPostController extends SettingController {
 			exit;
 		}
 
-		$rentalCategory = $this->rentalCategory->getRentalCategoryById($request['categoryId'], $this->userID);
+		$rentalCategory = $this->rentalCategoryModel->getRentalCategoryById($request['categoryId'], $this->user['id']);
 
 		if (!$rentalCategory) {
 			Response::json(['status' => 'error', 'message' => 'Danh mục không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
 			exit;
 		}
 
-		$deleted = $this->rentalCategory->deleteRentalCategory($request['categoryId']);
+		$deleted = $this->rentalCategoryModel->deleteRentalCategory($request['categoryId']);
 
 		if ($deleted) {
 			Response::json(['status' => 'success', 'message' => 'Xóa danh mục thành công', 'token' => CSRF::getTokenRefresh()], 200);
@@ -91,8 +91,8 @@ class SettingPostController extends SettingController {
 
 	// ====================Amenities=====================
 	public function amenities() {
-		$systemAmenities = $this->rentalAmenity->getAllRentalAmenities(false, true, '');
-		$userAmenities = $this->rentalAmenity->getAllRentalAmenities(true, false, '');
+		$systemAmenities = $this->rentalAmenityModel->getAllRentalAmenities(false, true, '');
+		$userAmenities = $this->rentalAmenityModel->getAllRentalAmenities(true, false, '');
 		
 		return ViewRender::renderWithLayout('landlord/settings/amenities', [
 			'systemAmenities' => $systemAmenities,
@@ -113,23 +113,23 @@ class SettingPostController extends SettingController {
 			exit;
 		}
 
-		$rentalAmenity = $this->rentalAmenity->getRentalAmenityById($request['amenityId'], $this->userID);
+		$rentalAmenity = $this->rentalAmenityModel->getRentalAmenityById($request['amenityId'], $this->user['id']);
 
 		$dataRentalAmenity = [
 			'rental_amenity_name' => $request['rental_amenity_name'],
 			'rental_amenity_status' => $request['rental_amenity_status'],
-			'owner_id' => $this->userID ?? $rentalAmenity['owner_id'],
+			'owner_id' => $this->user['id'] ?? $rentalAmenity['owner_id'],
 			'created_at' => $rentalAmenity['created_at'] ?? date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
 
 		if (!$rentalAmenity) {
-			$this->rentalAmenity->createRentalAmenity($dataRentalAmenity);
+			$this->rentalAmenityModel->createRentalAmenity($dataRentalAmenity);
 			Response::json(['status' => 'success', 'message' => 'Tạo tiện ích thành công', 'token' => CSRF::getTokenRefresh()], 200);
 			exit;
 		}
 
-		$this->rentalAmenity->updateRentalAmenity($rentalAmenity['id'], $dataRentalAmenity);
+		$this->rentalAmenityModel->updateRentalAmenity($rentalAmenity['id'], $dataRentalAmenity);
 		Response::json(['status' => 'success', 'message' => 'Cập nhật tiện ích thành công', 'token' => CSRF::getTokenRefresh()], 200);
 		exit;
 	}
@@ -142,14 +142,14 @@ class SettingPostController extends SettingController {
 			exit;
 		}
 
-		$rentalAmenity = $this->rentalAmenity->getRentalAmenityById($request['amenityId'], $this->userID);
+		$rentalAmenity = $this->rentalAmenityModel->getRentalAmenityById($request['amenityId'], $this->user['id']);
 
 		if (!$rentalAmenity) {
 			Response::json(['status' => 'error', 'message' => 'Tiện ích không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
 			exit;
 		}
 
-		$deleted = $this->rentalAmenity->deleteRentalAmenity($request['amenityId']);
+		$deleted = $this->rentalAmenityModel->deleteRentalAmenity($request['amenityId']);
 
 		if ($deleted) {
 			Response::json(['status' => 'success', 'message' => 'Xóa tiện ích thành công', 'token' => CSRF::getTokenRefresh()], 200);

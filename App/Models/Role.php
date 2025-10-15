@@ -18,4 +18,9 @@ class Role extends Model {
     public function getAllRoles() {
         return $this->table($this->table)->where('role_name', '<>', 'admin')->get();
     }
+
+    // Lấy tất cả role không phân biệt loại
+    public function getAllRolesAnyType() {
+        return $this->table($this->table)->get();
+    }
 }

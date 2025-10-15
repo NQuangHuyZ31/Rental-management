@@ -43,19 +43,7 @@ class BillCustomerController extends CustomerController {
         // Lấy dữ liệu với phân trang
         $allInvoices = $this->invoiceModel->getAllInvoicesWithPagination($filterData, $limit, $offset);
         $totalInvoices = $this->invoiceModel->getTotalInvoicesCount($filterData);
-
-        // Tính toán phân trang
-        $totalPages = ceil($totalInvoices / $limit);
-        $pagination = [
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'total_items' => $totalInvoices,
-            'items_per_page' => $limit,
-            'has_prev' => $page > 1,
-            'has_next' => $page < $totalPages,
-            'prev_page' => $page > 1 ? $page - 1 : null,
-            'next_page' => $page < $totalPages ? $page + 1 : null,
-        ];
+        $pagination = $this->getPagination($page, $totalInvoices, $limit, $offset);
 
         // Lấy thống kê (không phân trang)
         $countAllInvoices = $this->invoiceModel->getAllInvoices();

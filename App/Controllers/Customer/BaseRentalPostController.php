@@ -7,28 +7,23 @@
  */
 
 namespace App\Controllers\Customer;
-use App\Controllers\Controller;
-use App\Models\RenTalPost;
-use Core\Request;
+
+use App\Controllers\BaseCustomerController;
 use Core\ViewRender;
 
-class BaseRentalPostController extends Controller {
+class BaseRentalPostController extends BaseCustomerController {
 	protected $titlePage = '';
     protected $subNav = true;
     protected $returnPage = '';
     protected $primaryFilter = '';
-    protected $request;
-    protected $rentalPostModel;
 
     public function __construct() {
         parent::__construct();
-        $this->request = new Request();
-        $this->rentalPostModel = new RenTalPost();
     }
 
     public function searchByFilter() {
         $page = (int) ($this->request->get('page') ?? 1);
-        $limit = 10; // 3 rows x 3 columns
+        $limit = 10;
         $offset = ($page - 1) * $limit;
 
         // Build filters array
@@ -68,21 +63,9 @@ class BaseRentalPostController extends Controller {
             $rentalPosts = $this->rentalPostModel->searchRentalPosts($filters, $limit, $offset, false, true);
         }
 
-        $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters);
-
-        // Calculate pagination data
-        $totalPages = ceil($totalPosts / $limit);
-
+        $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters, true);
         $queryParams = array_filter($this->request->get());
-
-        $pagination = [
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'total_items' => $totalPosts,
-            'per_page' => $limit,
-            'showing_from' => $offset + 1,
-            'showing_to' => min($offset + $limit, $totalPosts)
-        ];
+        $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
 
         ViewRender::renderWithLayout('customer/rental-post/' . $this->returnPage, [
 			'titlePage' => $this->titlePage,

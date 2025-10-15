@@ -1,47 +1,32 @@
 <?php
 
 /*
-	Author: Nguyen Xuan Duong
-	Date: 2025-08-29
-	Purpose: Build Room Controller
-*/
+Author: Nguyen Xuan Duong
+Date: 2025-08-29
+Purpose: Build Room Controller
+ */
 
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
-use App\Models\Room;
-use App\Models\House;
-use Core\Request;
+use Core\CSRF;
 use Core\Session;
 use Core\ViewRender;
-use Core\CSRF;
 use Helpers\Validate;
 
-class RoomController extends LandlordController
-{
-    private $roomModel;
-    protected $houseModel;
-    private $request;
+class RoomController extends LandlordController {
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
-        $this->roomModel = new Room();
-        $this->houseModel = new House();
-        $this->request = new Request();
     }
 
     /**
      * Hiển thị trang chủ landlord với danh sách phòng
      */
-    public function index()
-    {
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
+    public function index() {
 
         // Sử dụng logic chung từ BaseLandlordController
-        [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($ownerId, $this->request->get('house_id'));
+        [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($this->user['id'], $this->request->get('house_id'));
 
         $rooms = [];
         $roomStats = [];
@@ -71,7 +56,7 @@ class RoomController extends LandlordController
         // Get validation errors and old input from session
         $validationErrors = Session::get('validation_errors', []);
         $oldInput = Session::get('old_input', []);
-        
+
         // Clear validation data from session after retrieving
         Session::delete('validation_errors');
         Session::delete('old_input');
@@ -87,15 +72,14 @@ class RoomController extends LandlordController
             'totalReservationDeposit' => $totalReservationDeposit,
             'maintenanceIssues' => $maintenanceIssues,
             'validationErrors' => $validationErrors,
-            'oldInput' => $oldInput
+            'oldInput' => $oldInput,
         ]);
     }
 
     /**
      * Tạo mới phòng
      */
-    public function create()
-    {
+    public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -108,9 +92,6 @@ class RoomController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
 
         // Lấy dữ liệu từ request
         $roomData = [
@@ -123,7 +104,7 @@ class RoomController extends LandlordController
             'max_people' => $this->request->post('max_people'),
             'room_status' => $this->request->post('room_status'),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Validate dữ liệu using Helper Validate
@@ -137,7 +118,7 @@ class RoomController extends LandlordController
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
-        $existingHouse = $this->houseModel->getHouseById($roomData['house_id'], $ownerId);
+        $existingHouse = $this->houseModel->getHouseById($roomData['house_id'], $this->user['id']);
         if (!$existingHouse) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền thêm phòng');
             return;
@@ -160,8 +141,7 @@ class RoomController extends LandlordController
     /**
      * Cập nhật phòng
      */
-    public function update()
-    {
+    public function update() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -174,9 +154,6 @@ class RoomController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
 
         // Lấy room_id từ request
         $roomId = $this->request->post('room_id');
@@ -187,7 +164,7 @@ class RoomController extends LandlordController
         }
 
         // Kiểm tra phòng có tồn tại và thuộc về landlord này không
-        $existingRoom = $this->roomModel->getRoomById($roomId, $ownerId);
+        $existingRoom = $this->roomModel->getRoomById($roomId, $this->user['id']);
         if (!$existingRoom) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền chỉnh sửa');
             return;
@@ -202,7 +179,7 @@ class RoomController extends LandlordController
             'deposit' => $this->request->post('deposit'),
             'max_people' => $this->request->post('max_people'),
             'room_status' => $this->request->post('room_status'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Validate dữ liệu using Helper Validate
@@ -232,39 +209,38 @@ class RoomController extends LandlordController
     /**
      * Lấy thông tin phòng theo ID
      */
-    public function getRoom($roomId)
-    {
+    public function getRoom($roomId) {
         // Lấy owner_id từ session
-        $ownerId = Session::get('user')['id'];
+        $this->user['id'] = Session::get('user')['id'];
 
-        if (!$ownerId) {
+        if (!$this->user['id']) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng');
             return;
         }
 
         try {
             // Lấy thông tin phòng
-            $room = $this->roomModel->getRoomById($roomId, $ownerId);
+            $room = $this->roomModel->getRoomById($roomId, $this->user['id']);
 
             if ($room) {
                 // Trả về JSON response
                 header('Content-Type: application/json');
                 echo json_encode([
                     'success' => true,
-                    'room' => $room
+                    'room' => $room,
                 ]);
             } else {
                 header('Content-Type: application/json');
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Không tìm thấy phòng'
+                    'message' => 'Không tìm thấy phòng',
                 ]);
             }
         } catch (\Exception $e) {
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
             ]);
         }
     }
@@ -272,8 +248,7 @@ class RoomController extends LandlordController
     /**
      * Xóa phòng (soft delete)
      */
-    public function delete()
-    {
+    public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
@@ -286,9 +261,6 @@ class RoomController extends LandlordController
             return;
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
 
         // Lấy room_id từ request
         $roomId = $this->request->post('room_id');
@@ -299,7 +271,7 @@ class RoomController extends LandlordController
         }
 
         // Kiểm tra phòng có tồn tại và thuộc về landlord này không
-        $existingRoom = $this->roomModel->getRoomById($roomId, $ownerId);
+        $existingRoom = $this->roomModel->getRoomById($roomId, $this->user['id']);
         if (!$existingRoom) {
             $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền xóa');
             return;

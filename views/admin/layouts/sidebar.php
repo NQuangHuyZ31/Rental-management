@@ -23,31 +23,10 @@ $dataModelHelper = new DataModelHelper();
             </a>
             
             <!-- Quản lý tài khoản -->
-            <div class="space-y-1">
-                <button onclick="toggleSubmenu('users-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                    <i class="fas fa-users mr-3 flex-shrink-0 h-6 w-6"></i>
-                    Quản lý tài khoản
-                    <i class="fas fa-chevron-down ml-auto flex-shrink-0 h-4 w-4" id="users-chevron"></i>
-                </button>
-                <div id="users-menu" class="hidden space-y-1 ml-8">
-                    <a href="<?= BASE_URL ?>/admin/users" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-list mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Danh sách người dùng
-                    </a>
-                    <a href="<?= BASE_URL ?>/admin/users/landlords" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-home mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Chủ nhà
-                    </a>
-                    <a href="<?= BASE_URL ?>/admin/users/tenants" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-user mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Người thuê
-                    </a>
-                    <a href="<?= BASE_URL ?>/admin/users/admins" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-user-shield mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Quản trị viên
-                    </a>
-                </div>
-            </div>
+            <a href="<?= BASE_URL ?>/admin/users" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                <i class="fas fa-users mr-3 flex-shrink-0 h-6 w-6"></i>
+                Quản lý tài khoản
+            </a>
             
             <!-- Quản lý bài đăng -->
             <div class="space-y-1">

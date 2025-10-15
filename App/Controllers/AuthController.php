@@ -109,7 +109,7 @@ class AuthController extends Controller {
         // Xóa user nếu email tồn tại và chưa active
         $user = $this->user->getUserByEmail($request['email'], 'inactive');
         if ($user) {
-            $this->user->deleteUser($user['id']);
+            $this->user->updateColumn($user['id'], 'deleted', '1');
         }
 
         // Lưu thông tin đăng ký

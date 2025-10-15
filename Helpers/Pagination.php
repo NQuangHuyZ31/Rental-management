@@ -16,7 +16,7 @@ class Pagination
         $currentPage = $pagination['current_page'];
         $totalPages = $pagination['total_pages'];
         $totalItems = $pagination['total_items'];
-        $itemsPerPage = $pagination['per_page'];
+        $itemsPerPage = $pagination['items_per_page'];
 
         // Tính toán range hiển thị
         $startPage = max(1, $currentPage - 2);
@@ -56,12 +56,12 @@ class Pagination
             $prevUrl = self::buildUrl($baseUrl, $queryParams, $pagination['prev_page']);
             $html .= '<a href="' . $prevUrl . '" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">';
             $html .= '<span class="sr-only">Trang trước</span>';
-            $html .= '<i class="fas fa-chevron-left h-5 w-5"></i>';
+            $html .= '<i class="fas fa-chevron-left h-5 w-5" style="padding-top:4px;text-align:center;"></i>';
             $html .= '</a>';
         } else {
             $html .= '<span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">';
             $html .= '<span class="sr-only">Trang trước</span>';
-            $html .= '<i class="fas fa-chevron-left h-5 w-5"></i>';
+            $html .= '<i class="fas fa-chevron-left h-5 w-5" style="padding-top:4px;text-align:center;"></i>';
             $html .= '</span>';
         }
 
@@ -100,12 +100,12 @@ class Pagination
             $nextUrl = self::buildUrl($baseUrl, $queryParams, $pagination['next_page']);
             $html .= '<a href="' . $nextUrl . '" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">';
             $html .= '<span class="sr-only">Trang sau</span>';
-            $html .= '<i class="fas fa-chevron-right h-5 w-5"></i>';
+            $html .= '<i class="fas fa-chevron-right h-5 w-5" style="padding-top:4px;text-align:center;"></i>';
             $html .= '</a>';
         } else {
             $html .= '<span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">';
             $html .= '<span class="sr-only">Trang sau</span>';
-            $html .= '<i class="fas fa-chevron-right h-5 w-5"></i>';
+            $html .= '<i class="fas fa-chevron-right h-5 w-5" style="padding-top:4px;text-align:center;"></i>';
             $html .= '</span>';
         }
 

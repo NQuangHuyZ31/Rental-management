@@ -9,7 +9,6 @@
 namespace App\Controllers\Customer;
 
 use App\Controllers\Customer\CustomerController;
-use Core\Session;
 use Core\ViewRender;
 
 class RentalRoomCustomerController extends CustomerController {

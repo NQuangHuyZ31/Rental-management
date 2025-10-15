@@ -72,13 +72,13 @@ class RenTalPost extends Model {
             $query->where('rental_posts.owner_id', $this->getCurrentUserId());
         }
 
-        if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
-            $query->where('rental_posts.approval_status', $filters['approval_status']);
-        }
-
         if ($customerPage) {
             $query->where('rental_posts.approval_status', 'approved');
             $query->where('rental_posts.status', 'active');
+        }
+
+        if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
+            $query->where('rental_posts.approval_status', $filters['approval_status']);
         }
 
         if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
@@ -116,13 +116,18 @@ class RenTalPost extends Model {
     }
 
 	// get total rental posts count
-	public function getTotalRentalPostsCount($filters = [], $ownerId = false) {
+	public function getTotalRentalPostsCount($filters = [], $customerPage = false, $ownerId = false) {
 		$query = $this->table($this->table)
 			->where('deleted', 0);
 
 		if ($ownerId) {
 			$query->where('owner_id', $this->getCurrentUserId());
 		}
+
+        if ($customerPage) {
+            $query->where('rental_posts.approval_status', 'approved');
+            $query->where('rental_posts.status', 'active');
+        }
 
 		if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
 			$query->where('approval_status', $filters['approval_status']);

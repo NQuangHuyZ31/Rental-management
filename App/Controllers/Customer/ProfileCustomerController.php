@@ -9,10 +9,10 @@
 
 namespace App\Controllers\Customer;
 
-use App\Controllers\Customer\CustomerController;
+use App\Controllers\ProfileController;
 use Core\ViewRender;
 
-class ProfileCustomerController extends CustomerController {
+class ProfileCustomerController extends ProfileController {
     protected $sidebar = true;
     protected $noFooter = true;
     protected $title = 'Thông tin cá nhân';

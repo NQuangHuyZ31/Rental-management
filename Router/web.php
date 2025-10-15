@@ -5,6 +5,7 @@
 use App\Controllers\Admin\AuthAdminController;
 use App\Controllers\Admin\DashboardAdminController;
 use App\Controllers\Admin\PostManagementController;
+use App\Controllers\Admin\UserManagementController;
 use App\Controllers\AuthController;
 use App\Controllers\Customer\BillCustomerController;
 use App\Controllers\Customer\HomeController;
@@ -92,6 +93,14 @@ $router->get('/admin/posts', [PostManagementController::class, 'index'],[AuthAdm
 $router->get('/admin/posts/pending', [PostManagementController::class, 'pendingPostPage'],[AuthAdminMiddleware::class]);
 $router->get('/admin/posts/approved', [PostManagementController::class, 'approvedPostPage'],[AuthAdminMiddleware::class]);
 $router->get('/admin/posts/rejected', [PostManagementController::class, 'rejectedPostPage'],[AuthAdminMiddleware::class]);
+
+// USER MANAGEMENT
+$router->get('/admin/users', [UserManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/store', [UserManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->get('/admin/users/edit/{id}', [UserManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/update/{id}', [UserManagementController::class, 'update'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/toggle-status/{id}', [UserManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/delete/{id}', [UserManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes

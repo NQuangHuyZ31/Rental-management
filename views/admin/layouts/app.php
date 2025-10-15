@@ -103,6 +103,8 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
+
+
     </script>
     
     <!-- JavaScript -->
@@ -113,6 +115,53 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="<?=BASE_URL?>/Public/js/app.js"></script>
     <script src="<?=BASE_URL?>/Public/js/customer-chart.js"></script>
+
+    <script>
+        // Configure SweetAlert Toast (after SweetAlert2 is loaded)
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // Function to show success message
+        function showSuccessMessage(message) {
+            Toast.fire({
+                icon: 'success',
+                title: message
+            });
+        }
+
+        // Function to show error message
+        function showErrorMessage(message) {
+            Toast.fire({
+                icon: 'error',
+                title: message
+            });
+        }
+
+        // Check for flash messages on page load
+        <?php
+        $request = new \Core\Request();
+        $flashData = $request->getFlashData();
+        $successMessage = $flashData['success'] ?? null;
+        $errorMessage = $flashData['error'] ?? null;
+        ?>
+        
+        <?php if ($successMessage): ?>
+            showSuccessMessage('<?= addslashes($successMessage) ?>');
+        <?php endif; ?>
+        
+        <?php if ($errorMessage): ?>
+            showErrorMessage('<?= addslashes($errorMessage) ?>');
+        <?php endif; ?>
+    </script>
 </body>
 
 </html>

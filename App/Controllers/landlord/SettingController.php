@@ -16,19 +16,11 @@ use Core\Session;
 
 class SettingController extends LandlordController {
 	
-    protected $request;
-	protected $userID;
 	protected $userBanking;
-	protected $rentalCategory;
-	protected $rentalAmenity;
 
     public function __construct() {
         parent::__construct();
-		$this->request = new Request();
-		$this->userID = Session::get('user')['id'] ?? '';
 		$this->userBanking = new UserBanking();
-		$this->rentalCategory = new RentalCategory();
-		$this->rentalAmenity = new RentalAmenity();
     }
 
 	public function index() {

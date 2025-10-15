@@ -9,6 +9,7 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Customer\CustomerController;
 use App\Models\User;
 use App\Requests\FileValidate;
 use App\Requests\PasswordValidate;
@@ -16,10 +17,9 @@ use App\Requests\UpdateProfileValidate;
 use Core\CSRF;
 use Core\Request;
 use Core\Response;
-use Helpers\Log;
 use Helpers\UploadClound;
 
-class ProfileController extends Controller {
+class ProfileController extends CustomerController {
     protected $userModel;
     protected $request;
 

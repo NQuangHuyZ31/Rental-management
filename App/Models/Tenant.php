@@ -410,7 +410,6 @@ class Tenant extends Model {
         return $roomsWithCount;
     }
 
-
     /**
      * Cập nhật thông tin khách thuê
      */
@@ -429,7 +428,7 @@ class Tenant extends Model {
             if (!empty($userData)) {
                 $userData['updated_at'] = date('Y-m-d H:i:s');
                 $this->table('users')
-                    ->where('id', $tenant['user_id'])  // Sử dụng user_id từ tenant
+                    ->where('id', $tenant['user_id']) // Sử dụng user_id từ tenant
                     ->where('deleted', 0)
                     ->update($userData);
             }
@@ -438,7 +437,7 @@ class Tenant extends Model {
             if (!empty($tenantData)) {
                 $tenantData['updated_at'] = date('Y-m-d H:i:s');
                 $this->table('room_tenants')
-                    ->where('id', $tenantId)  // Sử dụng room_tenants.id
+                    ->where('id', $tenantId) // Sử dụng room_tenants.id
                     ->whereNull('left_date')
                     ->update($tenantData);
             }
@@ -460,8 +459,8 @@ class Tenant extends Model {
     public function getTenantForEdit($tenantId, $ownerId) {
         $result = $this->table('room_tenants')
             ->select([
-                'room_tenants.id as tenant_id',  // ID của room_tenants (đây là ID cần dùng)
-                'users.id as user_id',           // ID của users
+                'room_tenants.id as tenant_id', // ID của room_tenants (đây là ID cần dùng)
+                'users.id as user_id', // ID của users
                 'users.username',
                 'users.email',
                 'users.phone',
@@ -547,7 +546,7 @@ class Tenant extends Model {
         try {
             // Bắt đầu transaction
             $this->beginTransaction();
-            
+
             // Kiểm tra khách thuê có tồn tại và thuộc về owner không
             $tenant = $this->queryBuilder
                 ->table($this->table)
@@ -558,13 +557,13 @@ class Tenant extends Model {
                 ->where('houses.owner_id', $ownerId)
                 ->whereNull('room_tenants.left_date')
                 ->first();
-                
+
             if (!$tenant) {
                 throw new \Exception('Không tìm thấy khách thuê hoặc bạn không có quyền xóa');
             }
-            
+
             $roomId = $tenant['room_id'];
-            
+
             // Cập nhật left_date = ngày hiện tại
             $result = $this->queryBuilder
                 ->table($this->table)
@@ -572,9 +571,9 @@ class Tenant extends Model {
                 ->whereNull('left_date')
                 ->update([
                     'left_date' => date('Y-m-d'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
-                
+
             if ($result) {
                 // Kiểm tra xem phòng còn khách thuê nào đang ở không
                 $remainingTenants = $this->queryBuilder
@@ -583,9 +582,9 @@ class Tenant extends Model {
                     ->where('room_id', $roomId)
                     ->whereNull('left_date')
                     ->first();
-                
+
                 $tenantCount = $remainingTenants ? (int) $remainingTenants['count'] : 0;
-                
+
                 // Nếu không còn khách thuê nào, cập nhật room_status thành available
                 if ($tenantCount == 0) {
                     $this->queryBuilder
@@ -593,10 +592,10 @@ class Tenant extends Model {
                         ->where('id', $roomId)
                         ->update([
                             'room_status' => 'available',
-                            'updated_at' => date('Y-m-d H:i:s')
+                            'updated_at' => date('Y-m-d H:i:s'),
                         ]);
                 }
-                
+
                 // Commit transaction
                 $this->commit();
                 return true;
@@ -605,14 +604,14 @@ class Tenant extends Model {
                 $this->rollback();
                 return false;
             }
-            
+
         } catch (\Exception $e) {
             // Rollback nếu có exception
             $this->rollback();
             throw $e;
         }
     }
-     
+
     /**
      * Execute raw SQL query
      */
@@ -622,7 +621,8 @@ class Tenant extends Model {
 
     // Added by Huy Nguyen get room by user id
     public function getAllRoomByUserId() {
-        return $this->table('room_tenants')->where('user_id', $this->userID)->get();
+        return $this->table('room_tenants')->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+                            ->where('room_tenants.user_id', $this->userID)->where('rooms.deleted', 0)->get();
     }
 
     // Added by Huy Nguyen get detailed rented rooms by user id
@@ -643,7 +643,6 @@ class Tenant extends Model {
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->join('users', 'houses.owner_id', '=', 'users.id')
             ->where('room_tenants.user_id', $this->userID)
-            ->whereNull('room_tenants.left_date')
             ->where('rooms.deleted', 0)
             ->where('houses.deleted', 0)
             ->orderBy('room_tenants.join_date', 'DESC')
@@ -673,7 +672,7 @@ class Tenant extends Model {
     // Added by Huy Nguyen get current tenants by room id
     public function countCurrentTenantsByRoomId($roomId) {
         return $this->table('room_tenants')
-        ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
+            ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->where('room_id', $roomId)
             ->where('rooms.deleted', 0)
             ->count();
@@ -694,14 +693,14 @@ class Tenant extends Model {
                 ->where('houses.owner_id', $ownerId)
                 ->whereNull('room_tenants.left_date')
                 ->first();
-                
+
             if (!$tenant) {
                 return false;
             }
-            
+
             $roomId = $tenant['room_id'];
             $userId = $tenant['user_id'];
-            
+
             // Đếm số khách thuê còn lại trong phòng (không tính người đang xóa)
             $remainingTenants = $this->queryBuilder
                 ->table($this->table)
@@ -710,12 +709,12 @@ class Tenant extends Model {
                 ->whereNull('left_date')
                 ->where('user_id', '!=', $userId) // Loại trừ người đang xóa
                 ->first();
-            
+
             $tenantCount = $remainingTenants ? (int) $remainingTenants['count'] : 0;
-            
+
             // Nếu không còn khách thuê nào khác, đây là người cuối cùng
             return $tenantCount == 0;
-            
+
         } catch (\Exception $e) {
             return false;
         }
