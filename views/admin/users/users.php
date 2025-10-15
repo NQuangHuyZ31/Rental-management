@@ -8,8 +8,6 @@ $breadcrumbs = [
 ob_start();
 ?>
 
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Page Header -->
 <div class="mb-8">
@@ -61,10 +59,14 @@ ob_start();
             </select>
         </div>
         <div class="flex items-end">
-            <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+            <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center">
                 <i class="fas fa-search mr-2"></i>
                 Lọc
             </button>
+            <a href="<?= BASE_URL ?>/admin/users" class="w-full flex items-center justify-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-200 ml-2">
+                <i class="fas fa-times mr-2"></i>
+                Xóa
+            </a>
         </div>
     </div>
 </form>
@@ -490,7 +492,7 @@ ob_start();
                         Vai trò <span class="text-red-500">*</span>
                     </label>
                     <select id="role_id" name="role_id" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 <?php if (isset($validationErrors['role_id'])) echo 'border-red-500'; ?>">
                         <option value="">Chọn vai trò</option>
                         <?php if (!empty($roles)): ?>
                             <?php foreach ($roles as $roleItem): ?>
@@ -498,7 +500,11 @@ ob_start();
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="role_id-error"></div>
+                    <?php if (isset($validationErrors['role_id'])): ?>
+                        <div class="error-message text-red-500 text-sm mt-1" id="role_id-error"><?= htmlspecialchars($validationErrors['role_id']) ?></div>
+                    <?php else: ?>
+                        <div class="error-message text-red-500 text-sm mt-1 hidden" id="role_id-error"></div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Account Status -->
@@ -572,6 +578,19 @@ ob_start();
 </div>
 
 <script>
+    // Xóa toàn bộ lỗi hiển thị trên form
+    function clearAllFieldErrors() {
+        const errorFields = document.querySelectorAll('.error-message');
+        errorFields.forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+        // Xóa border đỏ ở các input
+        const errorInputs = document.querySelectorAll('.border-red-500');
+        errorInputs.forEach(el => {
+            el.classList.remove('border-red-500');
+        });
+    }
     // User Modal functions
     function openUserModal(resetForm = true) {
         document.getElementById('userModal').classList.remove('hidden');
@@ -620,6 +639,7 @@ ob_start();
     }
 
     function openEditUserModal(userId) {
+    clearAllFieldErrors();
         console.log('Opening edit modal for user:', userId);
         console.log('App.appURL:', App.appURL);
         console.log('Full URL:', `${App.appURL}admin/users/edit/${userId}`);
