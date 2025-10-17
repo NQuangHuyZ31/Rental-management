@@ -50,4 +50,20 @@ class RentalCategory extends Model {
     public function deleteRentalCategory($id) {
         return $this->table($this->table)->where('id', $id)->update(['deleted' => 1, 'updated_at' => date('Y-m-d H:i:s')]);
     }
+
+    /**
+     * Author: Nguyen Xuan Duong
+     * Date: 2025-10-17
+     * Purpose: Get admin user IDs
+     * Return array of admin user ids
+     * Used by controllers to classify system-owned categories
+     */
+    public function getAdminUserIds() {
+        $admins = $this->table('users')
+            ->select('users.id')
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->where('roles.role_name', '=', 'admin')
+            ->get();
+        return array_map(function($u) { return (int)$u['id']; }, $admins);
+    }
 }

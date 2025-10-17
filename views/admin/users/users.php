@@ -52,6 +52,10 @@
                     <i class="fas fa-search mr-2"></i>
                     Lọc
                 </button>
+                <a href="<?= BASE_URL ?>/admin/users" class="w-full flex items-center justify-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-200 ml-2">
+                    <i class="fas fa-times mr-2"></i>
+                    Xóa
+                </a>
             </div>
         </div>
     </form>

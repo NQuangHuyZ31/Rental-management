@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Author: Dương Nguyen
+ * Author: Nguyen Xuan Duong
  * Date: 2025-10-14
  * Purpose: User Management Controller - Admin
  */
@@ -9,6 +9,7 @@
 namespace App\Controllers\Admin;
 
 use Core\CSRF;
+use Core\Response;
 use Core\Session;
 use Core\ViewRender;
 use Helpers\Validate;
@@ -139,19 +140,19 @@ class UserManagementController extends AdminController {
                 ->first();
 
             if (!$user) {
-                return \Core\Response::json([
+                return Response::json([
                     'success' => false,
                     'message' => 'Không tìm thấy người dùng',
                 ], 404);
             }
 
-            return \Core\Response::json([
+            return Response::json([
                 'success' => true,
                 'user' => $user,
             ], 200);
         } catch (\Exception $e) {
             error_log('Error in UserManagementController@edit: ' . $e->getMessage());
-            return \Core\Response::json([
+            return Response::json([
                 'success' => false,
                 'message' => 'Có lỗi xảy ra',
             ], 500);
@@ -263,7 +264,7 @@ class UserManagementController extends AdminController {
                 ->first();
 
             if (!$user) {
-                return \Core\Response::json([
+                return Response::json([
                     'success' => false,
                     'message' => 'Không tìm thấy người dùng',
                 ], 404);
@@ -277,19 +278,19 @@ class UserManagementController extends AdminController {
                 ]);
 
             if ($updated !== false) {
-                return \Core\Response::json([
+                return Response::json([
                     'success' => true,
                     'message' => 'Cập nhật trạng thái thành công',
                 ], 200);
             } else {
-                return \Core\Response::json([
+                return Response::json([
                     'success' => false,
                     'message' => 'Có lỗi xảy ra khi cập nhật trạng thái',
                 ], 500);
             }
         } catch (\Exception $e) {
             error_log('Error in UserManagementController@toggleStatus: ' . $e->getMessage());
-            return \Core\Response::json([
+            return Response::json([
                 'success' => false,
                 'message' => 'Có lỗi xảy ra',
             ], 500);
@@ -305,8 +306,7 @@ class UserManagementController extends AdminController {
             return;
         }
         if (!CSRF::validatePostRequest()) {
-            echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra. Vui lòng thử lại']);
-            return;
+            return Response::json(['success' => false, 'message' => 'Có lỗi xảy ra. Vui lòng thử lại'], 403);
         }
         $user = $this->userModel->getUserById($id);
         if (!$user || $user['deleted'] == 1) {
@@ -316,9 +316,9 @@ class UserManagementController extends AdminController {
         $result1 = $this->userModel->updateColumn($id, 'deleted', 1);
         $result2 = $this->userModel->updateColumn($id, 'updated_at', date('Y-m-d H:i:s'));
         if ($result1 && $result2) {
-            echo json_encode(['success' => true, 'message' => 'Đã xoá tài khoản thành công!']);
+            return Response::json(['success' => true, 'message' => 'Đã xoá tài khoản thành công!'], 200);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Không thể xoá tài khoản. Vui lòng thử lại']);
+            return Response::json(['success' => false, 'message' => 'Không thể xoá tài khoản. Vui lòng thử lại'], 500);
         }
     }
 }

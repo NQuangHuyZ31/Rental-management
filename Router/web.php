@@ -5,7 +5,6 @@
 use App\Controllers\Admin\AuthAdminController;
 use App\Controllers\Admin\DashboardAdminController;
 use App\Controllers\Admin\PostManagementController;
-use App\Controllers\Admin\UserManagementController;
 use App\Controllers\AuthController;
 use App\Controllers\Customer\BillCustomerController;
 use App\Controllers\Customer\HomeController;
@@ -15,6 +14,9 @@ use App\Controllers\Customer\RentalRoomCustomerController;
 use Core\Router;
 
 // Admin Controller
+use App\Controllers\Admin\UserManagementController;
+use App\Controllers\Admin\CategoryManagementController;
+
 // Landlord Controller
 use App\Controllers\Landlord\HouseController;
 use App\Controllers\Landlord\RoomController;
@@ -101,6 +103,17 @@ $router->get('/admin/users/edit/{id}', [UserManagementController::class, 'edit']
 $router->post('/admin/users/update/{id}', [UserManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 $router->post('/admin/users/toggle-status/{id}', [UserManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
 $router->post('/admin/users/delete/{id}', [UserManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+
+// CATEGORY MANAGEMENT
+$router->get('/admin/categories', [CategoryManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/store', [CategoryManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/delete/{id}', [CategoryManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/toggle-status/{id}', [CategoryManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->get('/admin/categories/edit/{id}', [CategoryManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/update/{id}', [CategoryManagementController::class, 'update'],[AuthAdminMiddleware::class]);
+
+// AMENITY MANAGEMENT
+
 
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes
