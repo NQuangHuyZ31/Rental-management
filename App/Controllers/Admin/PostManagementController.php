@@ -45,7 +45,7 @@ class PostManagementController extends AdminController {
 		}
 
         // Calculate pagination
-        $pagination = $this->calculatePagination($totalPosts, $page, $limit);
+        $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
         // Build query parameters for pagination links
         $queryParams = array_filter([
             'search' => $search,

@@ -1,91 +1,44 @@
 <?php
 
 /*
- * Author: Huy Nguyen
+ * Author: Dương Nguyen
  * Date: 2025-10-14
  * Purpose: User Management Controller - Admin
  */
 
 namespace App\Controllers\Admin;
 
+use Core\CSRF;
+use Core\Session;
+use Core\ViewRender;
 use Helpers\Validate;
 
-use Core\ViewRender;
-use Core\Request;
-use Core\Session;
-use Core\CSRF;
+class UserManagementController extends AdminController {
+    protected $title = 'Quản lí người dùng';
 
-class UserManagementController extends AdminController
-{
-    /**
-     * Hiển thị trang quản lý người dùng
-     */
-    public function index()
-    {
+    public function index() {
         // Lấy thông số phân trang và lọc từ request
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $limit = 10;
+        $page = $this->request->get('page') != '' ? (int) $this->request->get('page') : 1;
+        $limit = $this->limit;
         $offset = ($page - 1) * $limit;
+        $filters = [];
+        $requests = $this->request->get();
 
-        // Lọc
-        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-        $role = isset($_GET['role']) ? trim($_GET['role']) : '';
-        $status = isset($_GET['status']) ? trim($_GET['status']) : '';
-
-        $query = $this->queryBuilder->table('users')
-            ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
-            ->where('users.deleted', '=', 0);
-
-        if ($search !== '') {
-            $query = $query->whereOrGroup([
-                'users.username',
-                'users.email',
-                'users.phone'
-            ], 'LIKE', "%$search%");
+        foreach ($requests as $key => $filter) {
+            if (!isset($filter[$key]) && $filter != '') {
+                $filters [$key] = $filter;
+            }
         }
-        if ($role !== '') {
-            $query = $query->where('roles.role_name', '=', $role);
-        }
-        if ($status !== '') {
-            $query = $query->where('users.account_status', '=', $status);
-        }
+        
+        $totalUsers = count($this->userModel->getUserByFilter($filters, $limit, $offset, true, 'roles', 'role_id', 2));
+        $users = $this->userModel->getUserByFilter($filters, $limit, $offset, false, 'roles', 'role_id', 2);
 
-        // Đếm tổng số users sau khi lọc
-        $totalUsers = $query->count();
+        // Pagination
+        $pagination = $this->getPagination($page, $totalUsers, $limit, $offset);
+        $queryParmas = $filters;
 
-        // Lấy dữ liệu users với phân trang
-        $users = $query->select([
-                'users.id',
-                'users.username',
-                'users.email',
-                'users.phone',
-                'users.gender',
-                'users.birthday',
-                'users.job',
-                'users.province',
-                'users.ward',
-                'users.address',
-                'users.citizen_id',
-                'users.account_status',
-                'users.email_verified_at',
-                'users.avatar',
-                'users.last_login',
-                'users.created_at',
-                'roles.vn_name as role_name',
-                'roles.role_name as role_code'
-            ])
-            ->orderBy('users.created_at', 'DESC')
-            ->limit($limit)
-            ->offset($offset)
-            ->get();
-
-        // Tính toán thông tin phân trang
-        $totalPages = ceil($totalUsers / $limit);
-        $startRecord = $totalUsers > 0 ? $offset + 1 : 0;
-        $endRecord = min($offset + $limit, $totalUsers);
-
-		// Lấy danh sách role từ database qua thuộc tính của AdminController
-		$roles = $this->roleModel->getAllRolesAnyType();
+        // Lấy danh sách role từ database qua thuộc tính của AdminController
+        $roles = $this->roleModel->getAllRolesAnyType();
 
         // Get validation errors and old input from session
         $validationErrors = Session::get('validation_errors', []);
@@ -95,32 +48,22 @@ class UserManagementController extends AdminController
         Session::delete('old_input');
 
         // Truyền dữ liệu vào view
-        ViewRender::render('admin/users/users', [
+        ViewRender::renderWithLayout('admin/users/users', [
             'users' => $users,
             'roles' => $roles,
-            'pagination' => [
-                'current_page' => $page,
-                'total_pages' => $totalPages,
-                'total_users' => $totalUsers,
-                'start_record' => $startRecord,
-                'end_record' => $endRecord,
-                'per_page' => $limit
-            ],
-            'filter' => [
-                'search' => $search,
-                'role' => $role,
-                'status' => $status
-            ],
+            'pagination' => $pagination,
+            'queryParams' => $queryParmas,
+            'filter' => $filters,
             'validationErrors' => $validationErrors,
-            'oldInput' => $oldInput
-        ]);
+            'oldInput' => $oldInput,
+            'title' => $this->title
+        ], 'admin/layouts/app');
     }
 
     /**
      * Tạo người dùng mới
      */
-    public function store()
-    {
+    public function store() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/admin/users', 'Phương thức không hợp lệ');
@@ -149,7 +92,7 @@ class UserManagementController extends AdminController
             'role_id' => $this->request->post('role_id'),
             'account_status' => $this->request->post('account_status', 'active'),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Validate dữ liệu
@@ -188,8 +131,7 @@ class UserManagementController extends AdminController
     /**
      * Validate user data
      */
-    private function validateUserData($data)
-    {
+    private function validateUserData($data) {
         $errors = [];
 
         // Validate username
@@ -239,7 +181,7 @@ class UserManagementController extends AdminController
         } elseif (strlen($data['password']) < 6) {
             $errors['password'] = 'Mật khẩu phải có ít nhất 6 ký tự';
         }
-        
+
         // Check password confirmation
         $passwordConfirmation = $this->request->post('password_confirmation');
         if ($data['password'] !== $passwordConfirmation) {
@@ -248,8 +190,8 @@ class UserManagementController extends AdminController
 
         // Validate province (optional)
         // Province không bắt buộc
-        
-        // Validate ward (optional) 
+
+        // Validate ward (optional)
         // Ward không bắt buộc
 
         // Validate citizen_id (optional field)
@@ -298,8 +240,7 @@ class UserManagementController extends AdminController
     /**
      * Lấy thông tin người dùng để edit
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         try {
             $user = $this->queryBuilder->table('users')
                 ->where('id', '=', $id)
@@ -309,20 +250,19 @@ class UserManagementController extends AdminController
             if (!$user) {
                 return \Core\Response::json([
                     'success' => false,
-                    'message' => 'Không tìm thấy người dùng'
+                    'message' => 'Không tìm thấy người dùng',
                 ], 404);
             }
 
             return \Core\Response::json([
                 'success' => true,
-                'user' => $user
+                'user' => $user,
             ], 200);
-
         } catch (\Exception $e) {
             error_log('Error in UserManagementController@edit: ' . $e->getMessage());
             return \Core\Response::json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra'
+                'message' => 'Có lỗi xảy ra',
             ], 500);
         }
     }
@@ -330,8 +270,7 @@ class UserManagementController extends AdminController
     /**
      * Cập nhật thông tin người dùng
      */
-    public function update($id)
-    {
+    public function update($id) {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
             $this->request->redirectWithError('/admin/users', 'Phương thức không hợp lệ');
@@ -370,16 +309,16 @@ class UserManagementController extends AdminController
                 'citizen_id' => $this->request->post('citizen_id'),
                 'role_id' => $this->request->post('role_id'),
                 'account_status' => $this->request->post('account_status', 'active'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'updated_at' => date('Y-m-d H:i:s'),
             ];
 
             // Validate dữ liệu (exclude password validation for update)
             $validationErrors = $this->validateUserDataForUpdate($userData, $id);
-            
+
             // Validate password if provided
             $password = $this->request->post('password');
             $passwordConfirmation = $this->request->post('password_confirmation');
-            
+
             if (!empty($password)) {
                 if (strlen($password) < 6) {
                     $validationErrors['password'] = 'Mật khẩu phải có ít nhất 6 ký tự';
@@ -414,7 +353,6 @@ class UserManagementController extends AdminController
             } else {
                 $this->request->redirectWithError('/admin/users', 'Có lỗi xảy ra khi cập nhật người dùng');
             }
-            
         } catch (\Exception $e) {
             error_log('Error in UserManagementController@update: ' . $e->getMessage());
             $this->request->redirectWithError('/admin/users', 'Có lỗi xảy ra: ' . $e->getMessage());
@@ -424,11 +362,10 @@ class UserManagementController extends AdminController
     /**
      * Toggle user status (active/banned)
      */
-    public function toggleStatus($id)
-    {
+    public function toggleStatus($id) {
         try {
             $status = $this->request->post('status', 'active');
-            
+
             $user = $this->queryBuilder->table('users')
                 ->where('id', '=', $id)
                 ->where('deleted', '=', 0)
@@ -437,7 +374,7 @@ class UserManagementController extends AdminController
             if (!$user) {
                 return \Core\Response::json([
                     'success' => false,
-                    'message' => 'Không tìm thấy người dùng'
+                    'message' => 'Không tìm thấy người dùng',
                 ], 404);
             }
 
@@ -445,26 +382,25 @@ class UserManagementController extends AdminController
                 ->where('id', '=', $id)
                 ->update([
                     'account_status' => $status,
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
             if ($updated !== false) {
                 return \Core\Response::json([
                     'success' => true,
-                    'message' => 'Cập nhật trạng thái thành công'
+                    'message' => 'Cập nhật trạng thái thành công',
                 ], 200);
             } else {
                 return \Core\Response::json([
                     'success' => false,
-                    'message' => 'Có lỗi xảy ra khi cập nhật trạng thái'
+                    'message' => 'Có lỗi xảy ra khi cập nhật trạng thái',
                 ], 500);
             }
-
         } catch (\Exception $e) {
             error_log('Error in UserManagementController@toggleStatus: ' . $e->getMessage());
             return \Core\Response::json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra'
+                'message' => 'Có lỗi xảy ra',
             ], 500);
         }
     }
@@ -472,8 +408,7 @@ class UserManagementController extends AdminController
     /**
      * Validate user data for update (exclude current user from uniqueness check)
      */
-    private function validateUserDataForUpdate($data, $currentUserId)
-    {
+    private function validateUserDataForUpdate($data, $currentUserId) {
         $errors = [];
 
         // Validate username
@@ -531,7 +466,7 @@ class UserManagementController extends AdminController
 
         // Validate province (optional)
         // Province không bắt buộc khi update
-        
+
         // Validate ward (optional)
         // Ward không bắt buộc khi update
 
@@ -576,8 +511,7 @@ class UserManagementController extends AdminController
     /**
      * Xoá mềm tài khoản (deleted = 1)
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         if (!$this->request->isPost()) {
             echo json_encode(['success' => false, 'message' => 'Phương thức không hợp lệ']);
             return;

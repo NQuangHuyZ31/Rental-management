@@ -740,7 +740,7 @@ class Invoice extends Model
 	}
 
 	// Added by Huy Nguyen - Phân trang hóa đơn
-	public function getAllInvoicesWithPagination($data = [], $limit = 10, $offset = 0) {
+	public function getAllInvoicesWithPagination($data = [], $limit = 10, $offset = 0, $orderBy = 'created_at', $sort = 'DESC') {
         $query = $this->queryBuilder
             ->table('invoices')
             ->select('invoices.*, rooms.room_name, houses.house_name, room_tenants.user_id as tenant_id')
@@ -758,7 +758,7 @@ class Invoice extends Model
             }
         }
 
-        return $query->orderBy('invoices.invoice_month', 'DESC')
+        return $query->orderBy('invoices.' .$orderBy, $sort)
                     ->limit($limit)
                     ->offset($offset)
                     ->get();

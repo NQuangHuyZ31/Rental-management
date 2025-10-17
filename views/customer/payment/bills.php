@@ -114,13 +114,6 @@
                             <option value="<?php echo $i; ?>" <?php echo $request->get('year') == $i ? 'selected' : ''; ?>><?php echo 'Năm ' . $i; ?></option>
                         <?php } ?>
                     </select>
-                    <select name="per_page" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 w-32">
-                        <option value="10" <?= $request->get('per_page') == '10' ? 'selected' : ''; ?>>10/trang</option>
-                        <option value="20" <?= $request->get('per_page') == '20' ? 'selected' : ''; ?>>20/trang</option>
-                        <option value="50" <?= $request->get('per_page') == '50' ? 'selected' : ''; ?>>50/trang</option>
-                        <option value="100" <?= $request->get('per_page') == '100' ? 'selected' : ''; ?>>100/trang</option>
-                    </select>
-
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                         <i class="fas fa-search mr-2"></i>Tìm kiếm
                     </button>
@@ -359,33 +352,14 @@
                     </div>
                 </div>
             </div>
-
         <?php } ?>
 
         <!-- Pagination -->
-        <?php if (isset($pagination) && $pagination['total_pages'] > 1) { ?>
-            <div class="mt-8 pagination-container">
-                <?php
-                $queryParams = [
-                    'status' => $request->get('status'),
-                    'month' => $request->get('month'),
-                    'year' => $request->get('year'),
-                    'per_page' => $request->get('per_page'),
-                ];
-                echo \Helpers\Pagination::render($pagination, BASE_URL . '/customer/bills', $queryParams);
-                ?>
+        <?php if (!empty($pagination) && $pagination['total_pages'] > 1): ?>
+            <div class="mt-8">
+                <?= \Helpers\Pagination::render($pagination, '', $queryParams) ?>
             </div>
-        <?php } ?>
-
-        <!-- Pagination Summary -->
-        <?php if (isset($pagination) && $pagination['total_items'] > 0) { ?>
-            <div class="mt-4 text-center text-sm text-gray-600 pagination-summary p-3 rounded-lg">
-                <i class="fas fa-chart-bar mr-2"></i>
-                Tổng cộng <span class="font-semibold text-gray-800"><?= $pagination['total_items'] ?></span> hóa đơn
-                trong <span class="font-semibold text-gray-800"><?= $pagination['total_pages'] ?></span> trang
-            </div>
-        <?php } ?>
-
+        <?php endif; ?>
     <?php } ?>
 </div>
 

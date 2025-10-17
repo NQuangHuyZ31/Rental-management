@@ -13,7 +13,6 @@ use App\Controllers\Controller;
 use App\Models\RentalCategory;
 use App\Models\RenTalPost;
 use App\Models\User;
-use App\Models\Role;
 use Core\QueryBuilder;
 use Core\Request;
 use Core\Session;
@@ -40,18 +39,19 @@ class AdminController extends Controller {
 		$this->queryBuilder = new QueryBuilder();
 	}
 
-	public function calculatePagination($totalItems, $currentPage, $itemsPerPage) {
-        $totalPages = ceil($totalItems / $itemsPerPage);
-        
-        return [
-            'current_page' => $currentPage,
+	public function getPagination($page, $totalData, $limit, $offset) {
+		$totalPages = ceil($totalData / $limit);
+		return [
+            'current_page' => $page,
             'total_pages' => $totalPages,
-            'total_items' => $totalItems,
-            'items_per_page' => $itemsPerPage,
-            'has_prev' => $currentPage > 1,
-            'has_next' => $currentPage < $totalPages,
-            'prev_page' => $currentPage > 1 ? $currentPage - 1 : 1,
-            'next_page' => $currentPage < $totalPages ? $currentPage + 1 : $totalPages
-        ];
-    }
+            'total_items' => $totalData,
+            'items_per_page' => $limit,
+            'has_prev' => $page > 1,
+            'has_next' => $page < $totalPages,
+            'prev_page' => $page > 1 ? $page - 1 : null,
+            'next_page' => $page < $totalPages ? $page + 1 : null,
+			'showing_from' => $offset + 1,
+            'showing_to' => min($offset + $limit, $totalData)
+        ];  
+	}
 }

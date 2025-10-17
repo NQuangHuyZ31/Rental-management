@@ -43,6 +43,7 @@ class RentalPostController extends LandlordController {
         $rentalCategories = $this->rentalCategoryModel->getAllRentalCategories();
         $rentalAmenities = $this->rentalAmenityModel->getAllRentalAmenities();
         $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
+        $queryParams = [];
 
         ViewRender::render('landlord/posts/index', [
             'rentalPosts' => $rentalPosts,
@@ -50,6 +51,7 @@ class RentalPostController extends LandlordController {
             'rentalAmenities' => $rentalAmenities,
             'pagination' => $pagination,
             'filters' => $filters,
+            'queryParams' => $queryParams
         ]);
     }
 

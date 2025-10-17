@@ -1,318 +1,188 @@
-<?php
-$title = 'Quản lý người dùng';
-$breadcrumbs = [
-    ['title' => 'Dashboard', 'url' => '/admin'],
-    ['title' => 'Quản lý người dùng']
-];
-
-ob_start();
-?>
-
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <!-- Page Header -->
-<div class="mb-8">
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Quản lý người dùng</h1>
-            <p class="mt-2 text-gray-600">Quản lý tất cả người dùng trong hệ thống</p>
-        </div>
-        <div class="flex space-x-3">
-            <button onclick="openUserModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center">
-                <i class="fas fa-plus mr-2"></i>
-                Thêm người dùng
-            </button>
-            <button class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center">
-                <i class="fas fa-download mr-2"></i>
-                Xuất Excel
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Filters -->
-<form method="get" class="bg-white shadow rounded-lg p-6 mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
-            <input type="text" name="search" placeholder="Tên, email, số điện thoại..."
-                value="<?= htmlspecialchars($filter['search'] ?? '') ?>"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Vai trò</label>
-            <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Tất cả</option>
-                <?php if (!empty($roles)): ?>
-                    <?php foreach ($roles as $roleItem): ?>
-                        <option value="<?= htmlspecialchars($roleItem['role_name']) ?>" <?= ($filter['role'] ?? '') === $roleItem['role_name'] ? 'selected' : '' ?>><?= htmlspecialchars($roleItem['vn_name']) ?></option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
-            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Tất cả</option>
-                <option value="active" <?= ($filter['status'] ?? '') === 'active' ? 'selected' : '' ?>>Hoạt động</option>
-                <option value="inactive" <?= ($filter['status'] ?? '') === 'inactive' ? 'selected' : '' ?>>Không hoạt động</option>
-                <option value="banned" <?= ($filter['status'] ?? '') === 'banned' ? 'selected' : '' ?>>Bị cấm</option>
-            </select>
-        </div>
-        <div class="flex items-end">
-            <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                <i class="fas fa-search mr-2"></i>
-                Lọc
-            </button>
+<div class="p-3">
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Quản lý người dùng</h1>
+                <p class="mt-2 text-gray-600">Quản lý tất cả người dùng trong hệ thống</p>
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="openUserModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Thêm người dùng
+                </button>
+                <button class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Xuất Excel
+                </button>
+            </div>
         </div>
     </div>
-</form>
+    <!-- Filters -->
+    <form method="get" class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
+                <input type="text" name="search" placeholder="Tên, email, số điện thoại..."
+                    value="<?= htmlspecialchars($filter['search'] ?? '') ?>"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Vai trò</label>
+                <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Tất cả</option>
+                    <?php if (!empty($roles)): ?>
+                        <?php foreach ($roles as $roleItem): ?>
+                            <option value="<?= htmlspecialchars($roleItem['role_name']) ?>" <?= ($filter['role'] ?? '') === $roleItem['role_name'] ? 'selected' : '' ?>><?= htmlspecialchars($roleItem['vn_name']) ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
+                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Tất cả</option>
+                    <option value="active" <?= ($filter['status'] ?? '') === 'active' ? 'selected' : '' ?>>Hoạt động</option>
+                    <option value="inactive" <?= ($filter['status'] ?? '') === 'inactive' ? 'selected' : '' ?>>Không hoạt động</option>
+                    <option value="banned" <?= ($filter['status'] ?? '') === 'banned' ? 'selected' : '' ?>>Bị cấm</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    <i class="fas fa-search mr-2"></i>
+                    Lọc
+                </button>
+            </div>
+        </div>
+    </form>
 
-<!-- Users Table -->
-<div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900">Danh sách người dùng</h3>
-    </div>
+    <!-- Users Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Danh sách người dùng</h3>
+        </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <input type="checkbox" class="rounded border-gray-300">
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Người dùng
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Loại
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Trạng thái
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Ngày đăng ký
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Hành động
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                <?php if (!empty($users)): ?>
-                    <?php foreach ($users as $user): ?>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <input type="checkbox" class="rounded border-gray-300" value="<?= $user['id'] ?>">
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <?php if ($user['avatar']): ?>
-                                            <img class="h-10 w-10 rounded-full" src="<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['username']) ?>">
-                                        <?php else: ?>
-                                            <div class="h-10 w-10 rounded-full <?= $user['role_code'] === 'admin' ? 'bg-red-500' : ($user['role_code'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
-                                                <span class="text-sm font-medium text-white">
-                                                    <?= strtoupper(substr($user['username'], 0, 2)) ?>
-                                                </span>
-                                            </div>
-                                        <?php endif; ?>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <input type="checkbox" class="rounded border-gray-300">
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Người dùng
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Loại
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Trạng thái
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Ngày đăng ký
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Hành động
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $user): ?>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300" value="<?= $user['id'] ?>">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <?php if ($user['avatar']): ?>
+                                                <img class="h-10 w-10 rounded-full" src="<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['username']) ?>">
+                                            <?php else: ?>
+                                                <div class="h-10 w-10 rounded-full <?= $user['role_code'] === 'admin' ? 'bg-red-500' : ($user['role_code'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
+                                                    <span class="text-sm font-medium text-white">
+                                                        <?= strtoupper(substr($user['username'], 0, 2)) ?>
+                                                    </span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($user['username']) ?></div>
+                                            <div class="text-sm text-gray-500"><?= htmlspecialchars($user['email']) ?></div>
+                                        </div>
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($user['username']) ?></div>
-                                        <div class="text-sm text-gray-500"><?= htmlspecialchars($user['email']) ?></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                     <?= $user['role_code'] === 'admin' ? 'bg-red-100 text-red-800' : ($user['role_code'] === 'landlord' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') ?>">
-                                    <?= htmlspecialchars($user['role_name']) ?>
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                        <?= htmlspecialchars($user['role_name']) ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                     <?= $user['account_status'] === 'active' ? 'bg-green-100 text-green-800' : ($user['account_status'] === 'banned' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') ?>">
-                                    <?php
-                                    switch ($user['account_status']) {
-                                        case 'active':
-                                            echo 'Hoạt động';
-                                            break;
-                                        case 'banned':
-                                            echo 'Bị cấm';
-                                            break;
-                                        case 'inactive':
-                                            echo 'Không hoạt động';
-                                            break;
-                                        default:
-                                            echo 'Không xác định';
-                                    }
-                                    ?>
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <?= date('d/m/Y', strtotime($user['created_at'])) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <button onclick="openViewUserModal(<?= $user['id'] ?>)" class="text-blue-600 hover:text-blue-900" title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button onclick="openEditUserModal(<?= $user['id'] ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <?php if ($user['account_status'] === 'banned'): ?>
-                                        <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'active')" class="text-green-600 hover:text-green-900" title="Bỏ cấm">
-                                            <i class="fas fa-check"></i>
+                                        <?php
+                                        switch ($user['account_status']) {
+                                            case 'active':
+                                                echo 'Hoạt động';
+                                                break;
+                                            case 'banned':
+                                                echo 'Bị cấm';
+                                                break;
+                                            case 'inactive':
+                                                echo 'Không hoạt động';
+                                                break;
+                                            default:
+                                                echo 'Không xác định';
+                                        }
+                                        ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= date('d/m/Y', strtotime($user['created_at'])) ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex space-x-2">
+                                        <button onclick="openViewUserModal(<?= $user['id'] ?>)" class="text-blue-600 hover:text-blue-900" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
                                         </button>
-                                    <?php else: ?>
-                                        <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'banned')" class="text-red-600 hover:text-red-900" title="Cấm tài khoản">
-                                            <i class="fas fa-ban"></i>
+                                        <button onclick="openEditUserModal(<?= $user['id'] ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
                                         </button>
-                                    <?php endif; ?>
-                                    <button onclick="deleteUser(<?= $user['id'] ?>)" class="text-gray-400 hover:text-red-700" title="Xoá tài khoản">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                                        <?php if ($user['account_status'] === 'banned'): ?>
+                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'active')" class="text-green-600 hover:text-green-900" title="Bỏ cấm">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        <?php else: ?>
+                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'banned')" class="text-red-600 hover:text-red-900" title="Cấm tài khoản">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                        <button onclick="deleteUser(<?= $user['id'] ?>)" class="text-gray-400 hover:text-red-700" title="Xoá tài khoản">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                Không có dữ liệu người dùng
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                            Không có dữ liệu người dùng
-                        </td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pagination -->
-    <?php
-    // Helper để giữ filter khi chuyển trang
-    function buildPageUrl($page, $filter)
-    {
-        $params = array_merge($filter, ['page' => $page]);
-        return BASE_URL . '/admin/users?' . http_build_query($params);
-    }
-    ?>
-    <?php if (isset($pagination) && $pagination['total_pages'] > 1): ?>
-        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-            <!-- Mobile pagination -->
-            <div class="flex-1 flex justify-between sm:hidden">
-                <?php if ($pagination['current_page'] > 1): ?>
-                    <a href="<?= buildPageUrl($pagination['current_page'] - 1, $filter) ?>"
-                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Trước
-                    </a>
-                <?php else: ?>
-                    <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">
-                        Trước
-                    </span>
-                <?php endif; ?>
-
-                <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
-                    <a href="<?= buildPageUrl($pagination['current_page'] + 1, $filter) ?>"
-                        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Sau
-                    </a>
-                <?php else: ?>
-                    <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">
-                        Sau
-                    </span>
-                <?php endif; ?>
-            </div>
-
-            <!-- Desktop pagination -->
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700">
-                        Hiển thị
-                        <span class="font-medium"><?= $pagination['start_record'] ?></span>
-                        đến
-                        <span class="font-medium"><?= $pagination['end_record'] ?></span>
-                        của
-                        <span class="font-medium"><?= $pagination['total_users'] ?></span>
-                        kết quả
-                    </p>
-                </div>
-                <div>
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <!-- Previous page button -->
-                        <?php if ($pagination['current_page'] > 1): ?>
-                            <a href="<?= buildPageUrl($pagination['current_page'] - 1, $filter) ?>"
-                                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        <?php else: ?>
-                            <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
-                                <i class="fas fa-chevron-left"></i>
-                            </span>
-                        <?php endif; ?>
-
-                        <!-- Page numbers -->
-                        <?php
-                        $startPage = max(1, $pagination['current_page'] - 2);
-                        $endPage = min($pagination['total_pages'], $pagination['current_page'] + 2);
-
-                        // Hiển thị trang đầu nếu cần
-                        if ($startPage > 1): ?>
-                            <a href="<?= buildPageUrl(1, $filter) ?>"
-                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                1
-                            </a>
-                            <?php if ($startPage > 2): ?>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500">
-                                    ...
-                                </span>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <!-- Các trang xung quanh trang hiện tại -->
-                        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
-                            <?php if ($i == $pagination['current_page']): ?>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">
-                                    <?= $i ?>
-                                </span>
-                            <?php else: ?>
-                                <a href="<?= buildPageUrl($i, $filter) ?>"
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                    <?= $i ?>
-                                </a>
-                            <?php endif; ?>
-                        <?php endfor; ?>
-
-                        <!-- Hiển thị trang cuối nếu cần -->
-                        <?php if ($endPage < $pagination['total_pages']): ?>
-                            <?php if ($endPage < $pagination['total_pages'] - 1): ?>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500">
-                                    ...
-                                </span>
-                            <?php endif; ?>
-                            <a href="<?= buildPageUrl($pagination['total_pages'], $filter) ?>"
-                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                <?= $pagination['total_pages'] ?>
-                            </a>
-                        <?php endif; ?>
-
-                        <!-- Next page button -->
-                        <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
-                            <a href="<?= buildPageUrl($pagination['current_page'] + 1, $filter) ?>"
-                                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        <?php else: ?>
-                            <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
-                                <i class="fas fa-chevron-right"></i>
-                            </span>
-                        <?php endif; ?>
-                    </nav>
-                </div>
-            </div>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
-    <?php endif; ?>
+
+        <!-- Pagination -->
+        <?php if (!empty($pagination) && $pagination['total_pages'] > 1) : ?>
+            <div class="mt-8">
+                <?= \Helpers\Pagination::render($pagination, '', $queryParams) ?>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <!-- User Modal -->
@@ -526,7 +396,8 @@ ob_start();
                     <div class="relative">
                         <input type="password" id="password" name="password" required
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 <?php if (isset(
-                                $validationErrors['password'])) echo 'border-red-500'; ?>"
+                                                                                                                                                $validationErrors['password']
+                                                                                                                                            )) echo 'border-red-500'; ?>"
                             placeholder="Nhập mật khẩu"
                             value="<?= htmlspecialchars($oldInput['password'] ?? '') ?>">
                     </div>
@@ -866,26 +737,26 @@ ob_start();
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
                     document.querySelector('input[name="csrf_token"]')?.value;
                 fetch(`${App.appURL}admin/users/delete/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `csrf_token=${csrfToken}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        App.showSuccessMessage(data.message, 'success');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
-                    } else {
-                        App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
-                    }
-                })
-                .catch(error => {
-                    App.showSuccessMessage('Có lỗi xảy ra khi xoá tài khoản', 'error');
-                });
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `csrf_token=${csrfToken}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            App.showSuccessMessage(data.message, 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        App.showSuccessMessage('Có lỗi xảy ra khi xoá tài khoản', 'error');
+                    });
             }
         });
     }

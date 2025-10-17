@@ -25,7 +25,7 @@ class BillCustomerController extends CustomerController {
 
         // Phân trang
         $page = isset($data['page']) ? (int) $data['page'] : 1;
-        $limit = isset($data['per_page']) ? (int) $data['per_page'] : 10; // Số hóa đơn mỗi trang
+        $limit = 5; // Số hóa đơn mỗi trang
         $offset = ($page - 1) * $limit;
 
         // Xây dựng điều kiện filter
@@ -41,9 +41,14 @@ class BillCustomerController extends CustomerController {
         }
 
         // Lấy dữ liệu với phân trang
-        $allInvoices = $this->invoiceModel->getAllInvoicesWithPagination($filterData, $limit, $offset);
+        $allInvoices = $this->invoiceModel->getAllInvoicesWithPagination($filterData, $limit, $offset, 'invoice_status', 'ASC');
         $totalInvoices = $this->invoiceModel->getTotalInvoicesCount($filterData);
         $pagination = $this->getPagination($page, $totalInvoices, $limit, $offset);
+        $queryParams = [
+            'status' => $this->request->get('status'),
+            'month' => $this->request->get('month'),
+            'year' => $this->request->get('year')
+        ];
 
         // Lấy thống kê (không phân trang)
         $countAllInvoices = $this->invoiceModel->getAllInvoices();
@@ -62,10 +67,10 @@ class BillCustomerController extends CustomerController {
                 'countInvoicesPending' => count($countInvoicesPending),
                 'countInvoicesPaid' => count($countInvoicesPaid),
                 'totalAmount' => Format::formatUnit($totalAmount['total'] ?? 0),
-                'sidebarData' => $this->sidebarData(),
                 'request' => $this->request,
                 'pagination' => $pagination,
                 'sidebarData' => $this->sidebarData(),
+                'queryParams' => $queryParams
             ],
             'customer/layouts/app'
         );
@@ -78,18 +83,10 @@ class BillCustomerController extends CustomerController {
         $offset = ($page - 1) * $limit;
         $paymentHistory = $this->paymentHistoryModel->getPaymentHistoryByUserIdWithPagination($this->userID, $limit, $offset);
         $totalPaymentHistory = $this->paymentHistoryModel->getPaymentHistoryCountByUserId($this->userID);
-        $totalPages = ceil($totalPaymentHistory / $limit);
 
-        $pagination = [
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'total_items' => $totalPaymentHistory,
-            'items_per_page' => $limit,
-            'has_prev' => $page > 1,
-            'has_next' => $page < $totalPages,
-            'prev_page' => $page > 1 ? $page - 1 : null,
-            'next_page' => $page < $totalPages ? $page + 1 : null,
-        ];
+        $pagination = $this->getPagination($page, $totalPaymentHistory, $limit, $offset);
+        $queryParams = [];
+
         ViewRender::renderWithLayout(
             'customer/payment/payment-history',
             [
@@ -100,6 +97,7 @@ class BillCustomerController extends CustomerController {
                 'pagination' => $pagination,
                 'request' => $this->request,
                 'sidebarData' => $this->sidebarData(),
+                'queryParams' => $queryParams
             ],
             'customer/layouts/app'
         );
