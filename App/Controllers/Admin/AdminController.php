@@ -23,6 +23,7 @@ class AdminController extends Controller {
 	protected $userModel;
 	protected $rentalPostModel;
 	protected $rentalCategoryModel;
+	protected $rentalAmenityModel;
 	protected $roleModel;
 	protected $request;
 	protected $userID;
@@ -33,6 +34,7 @@ class AdminController extends Controller {
 		$this->userModel = new User();
 		$this->rentalPostModel = new RenTalPost();
 		$this->rentalCategoryModel = new RentalCategory();
+		$this->rentalAmenityModel = new \App\Models\RentalAmenity();
 		$this->roleModel = new \App\Models\Role();
 		$this->request = new Request();
 		$this->userID = Session::get('user')['id'] ?? '';

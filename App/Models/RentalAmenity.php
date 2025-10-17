@@ -49,4 +49,16 @@ class RentalAmenity extends Model {
 	public function deleteRentalAmenity($id) {
 		return $this->table($this->table)->where('id', $id)->update(['deleted' => 1, 'updated_at' => date('Y-m-d H:i:s')]);
 	}
+
+	/**
+	 * Return array of admin user ids
+	 */
+	public function getAdminUserIds() {
+		$admins = $this->table('users')
+			->select('users.id')
+			->join('roles', 'users.role_id', '=', 'roles.id')
+			->where('roles.role_name', '=', 'admin')
+			->get();
+		return array_map(function($u) { return (int)$u['id']; }, $admins);
+	}
 }

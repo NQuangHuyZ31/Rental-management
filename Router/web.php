@@ -16,6 +16,7 @@ use Core\Router;
 // Admin Controller
 use App\Controllers\Admin\UserManagementController;
 use App\Controllers\Admin\CategoryManagementController;
+use App\Controllers\Admin\AmenityManagementController;
 
 // Landlord Controller
 use App\Controllers\Landlord\HouseController;
@@ -113,7 +114,12 @@ $router->get('/admin/categories/edit/{id}', [CategoryManagementController::class
 $router->post('/admin/categories/update/{id}', [CategoryManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 
 // AMENITY MANAGEMENT
-
+$router->get('/admin/amenities', [AmenityManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/store', [AmenityManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/delete/{id}', [AmenityManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/toggle-status/{id}', [AmenityManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->get('/admin/amenities/edit/{id}', [AmenityManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/update/{id}', [AmenityManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes
