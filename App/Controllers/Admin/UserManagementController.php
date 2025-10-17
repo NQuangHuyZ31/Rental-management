@@ -96,7 +96,7 @@ class UserManagementController extends AdminController {
         ];
 
         // Validate dữ liệu
-        $validationErrors = $this->validateUserData($userData);
+        $validationErrors = Validate::validateUserData($userData, $this->queryBuilder);
         if (!empty($validationErrors)) {
             // Store validation errors in session to display under fields
             Session::set('validation_errors', $validationErrors);
@@ -127,116 +127,7 @@ class UserManagementController extends AdminController {
             $this->request->redirectWithError('/admin/users', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
-
-    /**
-     * Validate user data
-     */
-    private function validateUserData($data) {
-        $errors = [];
-
-        // Validate username
-        if (empty($data['username'])) {
-            $errors['username'] = 'Tên người dùng không được để trống';
-        } elseif (strlen($data['username']) < 3) {
-            $errors['username'] = 'Tên người dùng phải có ít nhất 3 ký tự';
-        } elseif (strlen($data['username']) > 50) {
-            $errors['username'] = 'Tên người dùng không được vượt quá 50 ký tự';
-        }
-
-        // Validate email
-        if (empty($data['email'])) {
-            $errors['email'] = 'Email không được để trống';
-        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Email không hợp lệ';
-        } else {
-            // Check if email already exists
-            $existingUser = $this->queryBuilder->table('users')
-                ->where('email', '=', $data['email'])
-                ->where('deleted', '=', 0)
-                ->first();
-            if ($existingUser) {
-                $errors['email'] = 'Email đã được sử dụng';
-            }
-        }
-
-        // Validate phone
-        if (empty($data['phone'])) {
-            $errors['phone'] = 'Số điện thoại không được để trống';
-        } elseif (!Validate::phone($data['phone'])) {
-            $errors['phone'] = 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam (10 chữ số, bắt đầu bằng 0)';
-        } else {
-            // Check if phone already exists
-            $existingPhone = $this->queryBuilder->table('users')
-                ->where('phone', '=', $data['phone'])
-                ->where('deleted', '=', 0)
-                ->first();
-            if ($existingPhone) {
-                $errors['phone'] = 'Số điện thoại đã được sử dụng';
-            }
-        }
-
-        // Validate password
-        if (empty($data['password'])) {
-            $errors['password'] = 'Mật khẩu không được để trống';
-        } elseif (strlen($data['password']) < 6) {
-            $errors['password'] = 'Mật khẩu phải có ít nhất 6 ký tự';
-        }
-
-        // Check password confirmation
-        $passwordConfirmation = $this->request->post('password_confirmation');
-        if ($data['password'] !== $passwordConfirmation) {
-            $errors['password_confirmation'] = 'Mật khẩu xác nhận không khớp';
-        }
-
-        // Validate province (optional)
-        // Province không bắt buộc
-
-        // Validate ward (optional)
-        // Ward không bắt buộc
-
-        // Validate citizen_id (optional field)
-        if (!empty($data['citizen_id'])) {
-            if (!Validate::citizenId($data['citizen_id'])) {
-                $errors['citizen_id'] = 'Số CCCD không hợp lệ. Vui lòng nhập đúng 12 chữ số';
-            } else {
-                // Check if citizen_id already exists
-                $existingCitizenId = $this->queryBuilder->table('users')
-                    ->where('citizen_id', '=', $data['citizen_id'])
-                    ->where('deleted', '=', 0)
-                    ->first();
-                if ($existingCitizenId) {
-                    $errors['citizen_id'] = 'Số CCCD đã được sử dụng';
-                }
-            }
-        }
-
-        // Validate role_id
-        if (empty($data['role_id'])) {
-            $errors['role_id'] = 'Vui lòng chọn vai trò';
-        } else {
-            // Check if role exists and is not admin
-            $role = $this->queryBuilder->table('roles')
-                ->where('id', '=', $data['role_id'])
-                ->where('role_name', '<>', 'admin')
-                ->first();
-            if (!$role) {
-                $errors['role_id'] = 'Vai trò không hợp lệ';
-            }
-        }
-
-        // Validate account_status
-        if (!in_array($data['account_status'], ['active', 'inactive', 'banned'])) {
-            $data['account_status'] = 'active';
-        }
-
-        // Validate gender
-        if (empty($data['gender'])) {
-            $errors['gender'] = 'Vui lòng chọn giới tính';
-        }
-
-        return $errors;
-    }
-
+    
     /**
      * Lấy thông tin người dùng để edit
      */
@@ -313,8 +204,8 @@ class UserManagementController extends AdminController {
             ];
 
             // Validate dữ liệu (exclude password validation for update)
-            $validationErrors = $this->validateUserDataForUpdate($userData, $id);
-
+            $validationErrors = Validate::validateUserDataForUpdate($userData, $id, $this->queryBuilder);
+            
             // Validate password if provided
             $password = $this->request->post('password');
             $passwordConfirmation = $this->request->post('password_confirmation');
@@ -403,109 +294,6 @@ class UserManagementController extends AdminController {
                 'message' => 'Có lỗi xảy ra',
             ], 500);
         }
-    }
-
-    /**
-     * Validate user data for update (exclude current user from uniqueness check)
-     */
-    private function validateUserDataForUpdate($data, $currentUserId) {
-        $errors = [];
-
-        // Validate username
-        if (empty($data['username'])) {
-            $errors['username'] = 'Tên người dùng không được để trống';
-        } elseif (strlen($data['username']) < 3) {
-            $errors['username'] = 'Tên người dùng phải có ít nhất 3 ký tự';
-        } elseif (strlen($data['username']) > 50) {
-            $errors['username'] = 'Tên người dùng không được vượt quá 50 ký tự';
-        } else {
-            // Check if username already exists (exclude current user)
-            $existingUser = $this->queryBuilder->table('users')
-                ->where('username', '=', $data['username'])
-                ->where('id', '!=', $currentUserId)
-                ->where('deleted', '=', 0)
-                ->first();
-            if ($existingUser) {
-                $errors['username'] = 'Tên người dùng đã được sử dụng';
-            }
-        }
-
-        // Validate email
-        if (empty($data['email'])) {
-            $errors['email'] = 'Email không được để trống';
-        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Email không hợp lệ';
-        } else {
-            // Check if email already exists (exclude current user)
-            $existingUser = $this->queryBuilder->table('users')
-                ->where('email', '=', $data['email'])
-                ->where('id', '!=', $currentUserId)
-                ->where('deleted', '=', 0)
-                ->first();
-            if ($existingUser) {
-                $errors['email'] = 'Email đã được sử dụng';
-            }
-        }
-
-        // Validate phone
-        if (!empty($data['phone'])) {
-            if (!Validate::phone($data['phone'])) {
-                $errors['phone'] = 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam (10 chữ số, bắt đầu bằng 0)';
-            } else {
-                // Check if phone already exists (exclude current user)
-                $existingPhone = $this->queryBuilder->table('users')
-                    ->where('phone', '=', $data['phone'])
-                    ->where('id', '!=', $currentUserId)
-                    ->where('deleted', '=', 0)
-                    ->first();
-                if ($existingPhone) {
-                    $errors['phone'] = 'Số điện thoại đã được sử dụng';
-                }
-            }
-        }
-
-        // Validate province (optional)
-        // Province không bắt buộc khi update
-
-        // Validate ward (optional)
-        // Ward không bắt buộc khi update
-
-        // Validate citizen_id (optional field)
-        if (!empty($data['citizen_id'])) {
-            if (!Validate::citizenId($data['citizen_id'])) {
-                $errors['citizen_id'] = 'Số CCCD không hợp lệ. Vui lòng nhập đúng 12 chữ số';
-            } else {
-                // Check if citizen_id already exists (exclude current user)
-                $existingCitizenId = $this->queryBuilder->table('users')
-                    ->where('citizen_id', '=', $data['citizen_id'])
-                    ->where('id', '!=', $currentUserId)
-                    ->where('deleted', '=', 0)
-                    ->first();
-                if ($existingCitizenId) {
-                    $errors['citizen_id'] = 'Số CCCD đã được sử dụng';
-                }
-            }
-        }
-
-        // Validate role_id
-        if (empty($data['role_id'])) {
-            $errors['role_id'] = 'Vui lòng chọn vai trò';
-        } else {
-            // Check if role exists
-            $role = $this->queryBuilder->table('roles')
-                ->where('id', '=', $data['role_id'])
-                ->first();
-            if (!$role) {
-                $errors['role_id'] = 'Vai trò không hợp lệ';
-            }
-        }
-
-        // Validate account_status
-        if (!in_array($data['account_status'], ['active', 'inactive', 'banned'])) {
-            $data['account_status'] = 'active';
-        }
-
-        return $errors;
     }
 
     /**
