@@ -13,6 +13,7 @@ define('ROOT_PATH', $rootPath);
 define('VIEW_PATH', ROOT_PATH . '/views/');
 define('VIEW_PATH_USER_LAYOUT', ROOT_PATH . '/views/user/layout/');
 define('UPLOAD_DIR', ROOT_PATH . '/Public/upload/');
+define('URL_IMAGE', ROOT_PATH . '/Public/images/');
 
 define('CLOUD_NAME', $_ENV['CLOUD_NAME']);
 define('CLOUD_API_KEY', $_ENV['CLOUD_API_KEY']);

@@ -32,7 +32,8 @@ class User extends Model {
 
     // Added by Huy Nguyen on 2025-10-14 to get user by filter
     public function getUserByFilter($filter, $limit = 10, $offset = 0, $total = false, $tableJoin = '', $fieldJoin = '', $possition = 1, $type = 'INNER') {
-        $query = $this->table($this->table);
+        $query = $this->table($this->table)->select([$this->table . '.*', 'roles.role_name AS role_name'])
+                        ->join('roles', 'users.role_id', '=', 'roles.id');
 
         if (!empty($tableJoin) && !empty($fieldJoin)) {
             if ($possition == 1) {
@@ -47,7 +48,7 @@ class User extends Model {
         }
 
         if (isset($filter['role']) && !empty($filter['role'])) {
-            $query->where($tableJoin . '.role_name', $filter['role']);
+            $query->where('roles.role_name', $filter['role']);
         }
 
         if (isset($filter['status']) && !empty($filter['status'])) {

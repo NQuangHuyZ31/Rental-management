@@ -30,9 +30,9 @@ class UserManagementController extends AdminController {
             }
         }
         
-        $totalUsers = count($this->userModel->getUserByFilter($filters, $limit, $offset, true, 'roles', 'role_id', 2));
-        $users = $this->userModel->getUserByFilter($filters, $limit, $offset, false, 'roles', 'role_id', 2);
-
+        $totalUsers = count($this->userModel->getUserByFilter($filters, $limit, $offset, true));
+        $users = $this->userModel->getUserByFilter($filters, $limit, $offset, false);
+        
         // Pagination
         $pagination = $this->getPagination($page, $totalUsers, $limit, $offset);
         $queryParmas = $filters;

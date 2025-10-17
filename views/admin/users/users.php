@@ -55,88 +55,51 @@
             </div>
         </div>
     </form>
-
     <!-- Users Table -->
     <div class="bg-white shadow rounded-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-medium text-gray-900">Danh sách người dùng</h3>
         </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Vai trò</label>
-            <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Tất cả</option>
-                <?php if (!empty($roles)): ?>
-                    <?php foreach ($roles as $roleItem): ?>
-                        <option value="<?= htmlspecialchars($roleItem['role_name']) ?>" <?= ($filter['role'] ?? '') === $roleItem['role_name'] ? 'selected' : '' ?>><?= htmlspecialchars($roleItem['vn_name']) ?></option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
-            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Tất cả</option>
-                <option value="active" <?= ($filter['status'] ?? '') === 'active' ? 'selected' : '' ?>>Hoạt động</option>
-                <option value="inactive" <?= ($filter['status'] ?? '') === 'inactive' ? 'selected' : '' ?>>Không hoạt động</option>
-                <option value="banned" <?= ($filter['status'] ?? '') === 'banned' ? 'selected' : '' ?>>Bị cấm</option>
-            </select>
-        </div>
-        <div class="flex items-end">
-            <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center">
-                <i class="fas fa-search mr-2"></i>
-                Lọc
-            </button>
-            <a href="<?= BASE_URL ?>/admin/users" class="w-full flex items-center justify-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-200 ml-2">
-                <i class="fas fa-times mr-2"></i>
-                Xóa
-            </a>
-        </div>
-    </div>
-</form>
 
-<!-- Users Table -->
-<div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900">Danh sách người dùng</h3>
-    </div>
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Người dùng
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Loại
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Trạng thái
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Ngày đăng ký
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Hành động
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                <?php if (!empty($users)): ?>
-                    <?php foreach ($users as $user): ?>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <?php if ($user['avatar']): ?>
-                                            <img class="h-10 w-10 rounded-full" src="<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['username']) ?>">
-                                        <?php else: ?>
-                                            <div class="h-10 w-10 rounded-full <?= $user['role_code'] === 'admin' ? 'bg-red-500' : ($user['role_code'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
-                                                <span class="text-sm font-medium text-white">
-                                                    <?= strtoupper(substr($user['username'], 0, 2)) ?>
-                                                </span>
-                                            </div>
-                                        <?php endif; ?>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Người dùng
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Loại
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Trạng thái
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Ngày đăng ký
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Hành động
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $user): ?>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <?php if ($user['avatar']): ?>
+                                                <img class="h-10 w-10 rounded-full" src="<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['username']) ?>">
+                                            <?php else: ?>
+                                                <div class="h-10 w-10 rounded-full <?= $user['role_code'] === 'admin' ? 'bg-red-500' : ($user['role_code'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
+                                                    <span class="text-sm font-medium text-white">
+                                                        <?= strtoupper(substr($user['username'], 0, 2)) ?>
+                                                    </span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <p><?= htmlspecialchars($user['username']) ?></p>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -535,7 +498,7 @@
     }
 
     function openEditUserModal(userId) {
-    clearAllFieldErrors();
+        clearAllFieldErrors();
         console.log('Opening edit modal for user:', userId);
         console.log('App.appURL:', App.appURL);
         console.log('Full URL:', `${App.appURL}admin/users/edit/${userId}`);
