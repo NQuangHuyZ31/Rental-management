@@ -278,6 +278,15 @@ class UserManagementController extends AdminController {
                 ]);
 
             if ($updated !== false) {
+                // If unbanning, revoke active bans using the Banned model
+                if ($status === 'active' && isset($this->bannedModel)) {
+                    try {
+                        $this->bannedModel->revokeActiveBansByUser($id);
+                    } catch (\Exception $e) {
+                        error_log('Failed to revoke bans for user ' . $id . ': ' . $e->getMessage());
+                    }
+                }
+
                 return Response::json([
                     'success' => true,
                     'message' => 'Cập nhật trạng thái thành công',
@@ -294,6 +303,68 @@ class UserManagementController extends AdminController {
                 'success' => false,
                 'message' => 'Có lỗi xảy ra',
             ], 500);
+        }
+    }
+
+    /**
+     * Ban a user with reason
+     */
+    public function ban($id) {
+        if (!$this->request->isPost()) {
+            return Response::json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
+        }
+        if (!CSRF::validatePostRequest()) {
+            return Response::json(['success' => false, 'message' => 'Có lỗi xảy ra. Vui lòng thử lại'], 403);
+        }
+
+        try {
+            $user = $this->queryBuilder->table('users')
+                ->where('id', '=', $id)
+                ->where('deleted', '=', 0)
+                ->first();
+
+            if (!$user) {
+                return Response::json(['success' => false, 'message' => 'Không tìm thấy người dùng'], 404);
+            }
+
+            $reason = trim($this->request->post('reason', ''));
+            $now = date('Y-m-d H:i:s');
+
+            // Insert ban record via model if available
+            if (isset($this->bannedModel)) {
+                $inserted = $this->bannedModel->insertBan([
+                    'user_id' => $id,
+                    'reason' => $reason,
+                    'banned_at' => $now,
+                    'banned_status' => 'active',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]);
+            } else {
+                // fallback to direct query
+                $inserted = $this->queryBuilder->table('banned')->insert([
+                    'user_id' => $id,
+                    'reason' => $reason,
+                    'banned_at' => $now,
+                    'banned_status' => 'active',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]);
+            }
+
+            if ($inserted) {
+                $this->queryBuilder->table('users')->where('id', '=', $id)->update([
+                    'account_status' => 'banned',
+                    'updated_at' => $now,
+                ]);
+
+                return Response::json(['success' => true, 'message' => 'Cấm người dùng thành công'], 200);
+            }
+
+            return Response::json(['success' => false, 'message' => 'Không thể cấm người dùng'], 500);
+        } catch (\Exception $e) {
+            error_log('Error in UserManagementController@ban: ' . $e->getMessage());
+            return Response::json(['success' => false, 'message' => 'Có lỗi xảy ra'], 500);
         }
     }
 

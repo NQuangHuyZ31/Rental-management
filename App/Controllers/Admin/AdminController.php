@@ -12,7 +12,10 @@ namespace App\Controllers\Admin;
 use App\Controllers\Controller;
 use App\Models\RentalCategory;
 use App\Models\RenTalPost;
+use App\Models\RentalAmenity;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Banned;
 use Core\QueryBuilder;
 use Core\Request;
 use Core\Session;
@@ -25,6 +28,7 @@ class AdminController extends Controller {
 	protected $rentalCategoryModel;
 	protected $rentalAmenityModel;
 	protected $roleModel;
+	protected $bannedModel;
 	protected $request;
 	protected $userID;
 	protected $queryBuilder;
@@ -32,10 +36,11 @@ class AdminController extends Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->userModel = new User();
-		$this->rentalPostModel = new RenTalPost();
+		$this->rentalPostModel = new RentalPost();
 		$this->rentalCategoryModel = new RentalCategory();
-		$this->rentalAmenityModel = new \App\Models\RentalAmenity();
-		$this->roleModel = new \App\Models\Role();
+		$this->rentalAmenityModel = new RentalAmenity();
+		$this->roleModel = new Role();
+		$this->bannedModel = new Banned();
 		$this->request = new Request();
 		$this->userID = Session::get('user')['id'] ?? '';
 		$this->queryBuilder = new QueryBuilder();

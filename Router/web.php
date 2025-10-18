@@ -103,6 +103,7 @@ $router->post('/admin/users/store', [UserManagementController::class, 'store'],[
 $router->get('/admin/users/edit/{id}', [UserManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
 $router->post('/admin/users/update/{id}', [UserManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 $router->post('/admin/users/toggle-status/{id}', [UserManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/ban/{id}', [UserManagementController::class, 'ban'],[AuthAdminMiddleware::class]);
 $router->post('/admin/users/delete/{id}', [UserManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
 
 // CATEGORY MANAGEMENT
