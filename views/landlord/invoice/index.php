@@ -1,6 +1,7 @@
 <?php
 
 use Core\CSRF;
+use Helpers\Format;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,25 +119,25 @@ use Core\CSRF;
                                                 <?= htmlspecialchars($invoice['room_name']) ?>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['rental_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['rental_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['electric_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['electric_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['water_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['water_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['internet_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['internet_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['parking_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['parking_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['garbage_amount']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['garbage_amount']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200">
-                                                <?= number_format($invoice['total']) ?> ₫
+                                                <?= Format::forMatPrice($invoice['total']) ?> ₫
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
                                                 <?php
@@ -257,6 +258,36 @@ use Core\CSRF;
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
 
     <script>
+
+        // Ensure App.showSuccessMessage / App.showErrorMessage exist as fallbacks
+        if (typeof window.App === 'undefined') window.App = {};
+        if (typeof window.App.showSuccessMessage !== 'function') {
+            window.App.showSuccessMessage = function (message, status) {
+                // Use Swal if available, otherwise alert
+                if (typeof Swal !== 'undefined' && typeof Swal.fire === 'function') {
+                    Swal.fire({
+                        icon: status || 'success',
+                        title: 'Thông báo',
+                        text: message,
+                    });
+                } else {
+                    alert(message);
+                }
+            };
+        }
+        if (typeof window.App.showErrorMessage !== 'function') {
+            window.App.showErrorMessage = function (message) {
+                if (typeof Swal !== 'undefined' && typeof Swal.fire === 'function') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: message,
+                    });
+                } else {
+                    alert(message);
+                }
+            };
+        }
 
         // Hàm mở modal xem hóa đơn
         function viewInvoice(invoiceId) {
@@ -747,7 +778,7 @@ use Core\CSRF;
         function updateInvoice() {
             const form = document.getElementById('updateInvoiceForm');
             if (!form) {
-                showErrorMessage('Không tìm thấy form cập nhật');
+                App.showErrorMessage('Không tìm thấy form cập nhật');
                 return;
             }
 
@@ -769,7 +800,7 @@ use Core\CSRF;
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showSuccessMessage('Cập nhật hóa đơn thành công!');
+                        App.showSuccessMessage('Cập nhật hóa đơn thành công!', 'success');
                         closeInvoiceModal();
                         // Delay 1.5 giây trước khi reload trang để user thấy thông báo
                         setTimeout(() => {
@@ -780,13 +811,13 @@ use Core\CSRF;
                         if (data.errors && Array.isArray(data.errors)) {
                             displayValidationErrors(data.errors);
                         } else {
-                            showErrorMessage(data.message || 'Có lỗi xảy ra khi cập nhật hóa đơn');
+                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi cập nhật hóa đơn');
                         }
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showErrorMessage('Có lỗi xảy ra khi cập nhật hóa đơn');
+                    App.showErrorMessage('Có lỗi xảy ra khi cập nhật hóa đơn');
                 })
                 .finally(() => {
                     // Ẩn loading
@@ -950,18 +981,18 @@ use Core\CSRF;
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            showSuccessMessage(data.message);
+                            App.showSuccessMessage(data.message, 'success');
                             // Reload trang sau 1.5 giây để user thấy thông báo
                             setTimeout(() => {
                                 window.location.reload();
                             }, 1500);
                         } else {
-                            showErrorMessage(data.message || 'Có lỗi xảy ra khi đánh dấu hóa đơn');
+                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi đánh dấu hóa đơn');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showErrorMessage('Có lỗi xảy ra khi đánh dấu hóa đơn');
+                        App.showErrorMessage('Có lỗi xảy ra khi đánh dấu hóa đơn');
                     });
                 }
             });
@@ -993,18 +1024,18 @@ use Core\CSRF;
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            showSuccessMessage(data.message);
+                            App.showSuccessMessage(data.message, 'success');
                             // Reload trang sau 1.5 giây để user thấy thông báo
                             setTimeout(() => {
                                 window.location.reload();
                             }, 1500);
                         } else {
-                            showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa hóa đơn');
+                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa hóa đơn');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showErrorMessage('Có lỗi xảy ra khi xóa hóa đơn');
+                        App.showErrorMessage('Có lỗi xảy ra khi xóa hóa đơn');
                     });
                 }
             });

@@ -10,6 +10,7 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Controller;
 use App\Models\Amenity;
+use App\Models\Service;
 use App\Models\House;
 use App\Models\RentalAmenity;
 use App\Models\RentalCategory;
@@ -29,6 +30,7 @@ abstract class LandlordController extends Controller {
     protected $rentalCategoryModel;
     protected $rentalAmenityModel;
     protected $rentalPostModel;
+    protected $serviceModel;
 
     public function __construct() {
         parent::__construct();
@@ -41,6 +43,7 @@ abstract class LandlordController extends Controller {
         $this->rentalCategoryModel = new RentalCategory();
         $this->rentalAmenityModel = new RentalAmenity();
         $this->rentalPostModel = new RenTalPost();
+        $this->serviceModel = new Service();
     }
 
     /**

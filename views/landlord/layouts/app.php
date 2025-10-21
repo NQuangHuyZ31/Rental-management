@@ -14,6 +14,7 @@ Purpose: Libraries and Dependencies for Landlord Layout
 <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/app.css">
 <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+<script src="<?=BASE_URL?>/Public/js/app.js"></script>
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
 <?= \Core\CSRF::getTokenMeta() ?>
 <!-- Custom Tailwind Config -->
@@ -110,67 +111,29 @@ Purpose: Libraries and Dependencies for Landlord Layout
 </style>
 
 <script>
-    // Configure SweetAlert
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
-
-    // Function to show success message
-    function showSuccessMessage(message) {
-        Toast.fire({
-            icon: 'success',
-            title: message
-        });
-    }
-
-    // Function to show error message
-    function showErrorMessage(message) {
-        Toast.fire({
-            icon: 'error',
-            title: message
-        });
-    }
-
-    // Function to show warning message
-    function showWarningMessage(message) {
-        Toast.fire({
-            icon: 'warning',
-            title: message
-        });
-    }
-
-    // Function to show info message
-    function showInfoMessage(message) {
-        Toast.fire({
-            icon: 'info',
-            title: message
-        });
-    }
-
-    // Check for flash messages on page load
+    // Forward flash messages to centralized App.showSuccessMessage (defined in Public/js/app.js)
     document.addEventListener('DOMContentLoaded', function() {
         <?php
         $request = new \Core\Request();
-        // Lấy tất cả flash data cùng lúc để tránh bị xóa
         $flashData = $request->getFlashData();
         $successMessage = $flashData['success'] ?? null;
         $errorMessage = $flashData['error'] ?? null;
         ?>
-        
+
         <?php if ($successMessage): ?>
-            showSuccessMessage('<?= addslashes($successMessage) ?>');
+            if (window.App && typeof window.App.showSuccessMessage === 'function') {
+                App.showSuccessMessage('<?= addslashes($successMessage) ?>', 'success');
+            } else {
+                console.log('Flash:', '<?= addslashes($successMessage) ?>');
+            }
         <?php endif; ?>
-        
+
         <?php if ($errorMessage): ?>
-            showErrorMessage('<?= addslashes($errorMessage) ?>');
+            if (window.App && typeof window.App.showSuccessMessage === 'function') {
+                App.showSuccessMessage('<?= addslashes($errorMessage) ?>', 'error');
+            } else {
+                console.error('Flash:', '<?= addslashes($errorMessage) ?>');
+            }
         <?php endif; ?>
     });
 </script>

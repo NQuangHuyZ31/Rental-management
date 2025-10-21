@@ -177,7 +177,7 @@
 
                         <!-- Giá tài sản -->
                         <div class="relative">
-                            <input type="number" id="amenity_price" name="amenity_price" min="0" step="1000" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                            <input type="number" id="amenity_price" name="amenity_price" min="0" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
                             <label for="amenity_price" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Giá tài sản (VNĐ) <span class="text-red-500">*</span></label>
                         </div>
 
@@ -296,13 +296,7 @@ function editAmenity(amenityId) {
     const amenity = amenities.find(a => a.id == amenityId);
 
     if (!amenity) {
-        Swal.fire({
-            title: 'Lỗi',
-            text: 'Không tìm thấy thông tin tài sản!',
-            icon: 'error',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Đóng'
-        });
+        App.showErrorMessage('Không tìm thấy thông tin tài sản!');
         return;
     }
 
@@ -356,28 +350,12 @@ function editAmenity(amenityId) {
 
 function deleteAmenity(amenityId, amenityName, canDelete, deleteReason) {
     if (!canDelete) {
-        Swal.fire({
-            title: 'Không thể xóa tài sản',
-            text: deleteReason,
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Đóng'
-        });
+        App.showErrorMessage(deleteReason || 'Không thể xóa tài sản');
         return;
     }
     
-    Swal.fire({
-        title: 'Xác nhận xóa tài sản',
-        html: `Bạn có chắc chắn muốn xóa tài sản "<strong>${amenityName}</strong>"?<br>Tài sản sẽ được gỡ bỏ khỏi tất cả phòng trống.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Xóa tài sản',
-        cancelButtonText: 'Hủy bỏ',
-        focusCancel: true
-    }).then((result) => {
-        if (result.isConfirmed) {
+        App.showModalConfirm(`Bạn có chắc chắn muốn xóa tài sản "${amenityName}"?`).then((result) => {
+        if (result && result.isConfirmed) {
             // Tạo form ẩn để submit
             const form = document.createElement('form');
             form.method = 'POST';

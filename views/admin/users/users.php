@@ -756,7 +756,7 @@
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
-                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
                     App.showSuccessMessage(result.value.message || 'Cấm thành công', 'success');
                     setTimeout(() => location.reload(), 1200);
                 }
@@ -780,7 +780,7 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
+                            App.showSuccessMessage(data.message || 'Thao tác thành công', 'success');
                             setTimeout(() => { location.reload(); }, 1500);
                         } else {
                             App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
@@ -807,8 +807,8 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
+                            if (data.success) {
+                            App.showSuccessMessage(data.message || 'Thành công', 'success');
                             setTimeout(() => {
                                 location.reload();
                             }, 1500);

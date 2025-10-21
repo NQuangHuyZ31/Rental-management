@@ -22,6 +22,8 @@ class HouseController extends LandlordController {
      * Hiển thị trang chủ landlord
      */
     public function index() {
+        $totalAmenities = 0;
+        $totalServices = 0;
         // Sử dụng logic chung từ BaseLandlordController
         [$selectedHouse, $houses, $selectedHouseId] = $this->getSelectedHouse($this->user['id'], $this->request->get('house_id'));
 
@@ -32,6 +34,10 @@ class HouseController extends LandlordController {
         if ($selectedHouse) {
             $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
             $roomStats = $this->roomModel->getRoomStatistics($selectedHouse['id']);
+
+            // Lấy tổng số tiện ích và dịch vụ
+            $totalAmenities = count($this->amenityModel->getAmenitiesByHouseId($selectedHouse['id']));
+            $totalServices = count($this->serviceModel->getServicesByHouseId($selectedHouse['id']));
         }
 
         // Tính toán dữ liệu cho summary cards
@@ -74,6 +80,8 @@ class HouseController extends LandlordController {
             'maintenanceIssues' => $maintenanceIssues,
             'occupiedRooms' => $occupiedRooms,
             'availableRooms' => $availableRooms,
+            'totalAmenities' => $totalAmenities,
+            'totalServices' => $totalServices,
         ]);
     }
 
