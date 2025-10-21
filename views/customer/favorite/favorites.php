@@ -4,342 +4,172 @@
     Purpose: Customer favorites page
 -->
 
-<!-- Favorites Header -->
+<!-- Navigation Tabs -->
+<?= \Core\CSRF::getTokenField() ?>
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">Phòng yêu thích</h1>
-    <p class="text-gray-600">Danh sách các phòng bạn đã lưu và quan tâm</p>
-</div>
-
-<!-- Filter and Search -->
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
-    <div class="p-6">
-        <div class="flex flex-col md:flex-row gap-4">
-            <div class="flex-1">
-                <input type="text" placeholder="Tìm kiếm theo tên phòng, địa chỉ..." 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-            </div>
-            <div class="flex gap-2">
-                <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    <option value="">Tất cả khu vực</option>
-                    <option value="quan-1">Quận 1</option>
-                    <option value="quan-3">Quận 3</option>
-                    <option value="quan-7">Quận 7</option>
-                </select>
-                <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    <option value="">Tất cả giá</option>
-                    <option value="0-2">Dưới 2 triệu</option>
-                    <option value="2-3">2-3 triệu</option>
-                    <option value="3-5">3-5 triệu</option>
-                    <option value="5+">Trên 5 triệu</option>
-                </select>
-                <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-search mr-2"></i>Tìm kiếm
-                </button>
-            </div>
-        </div>
+    <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
+        <button class="tab-button active px-6 py-3 rounded-md font-semibold text-sm transition-all duration-200 bg-white text-gray-900 shadow-sm" data-tab="posts">
+            Tin đăng
+        </button>
+        <button class="tab-button px-6 py-3 rounded-md font-semibold text-sm transition-all duration-200 text-gray-600 hover:text-gray-900" data-tab="recruitment">
+            Tin tuyển dụng
+        </button>
     </div>
 </div>
 
-<!-- Favorites Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Favorite Room 1 -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Phòng trọ giá rẻ - Quận 7</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                789 Đường GHI, Phường JKL, Quận 7, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>1 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>1 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>18m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">1.5M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">2 ngày trước</p>
-                </div>
-            </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
-            </div>
-        </div>
-    </div>
+<!-- Bookmarks Content -->
+<div id="posts-tab" class="tab-content">
+    <!-- Bookmark Card -->
+    <?php
 
-    <!-- Favorite Room 2 -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Căn hộ mini - Quận 3</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                456 Đường MNO, Phường PQR, Quận 3, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>1 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>1 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>22m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">2.2M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">1 tuần trước</p>
-                </div>
-            </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
-            </div>
-        </div>
-    </div>
+    use Helpers\Format;
 
-    <!-- Favorite Room 3 -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Phòng trọ có ban công - Quận 1</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                321 Đường STU, Phường VWX, Quận 1, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>1 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>1 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>28m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">3.5M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">3 ngày trước</p>
-                </div>
-            </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
-            </div>
-        </div>
-    </div>
+    if (count($posts) > 0) {
+        foreach ($posts as $post) { ?>
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
+                <div class="flex">
+                    <!-- Left Section - Image -->
+                    <div class="w-80 h-64 relative flex-shrink-0">
+                        <img src="<?= json_decode($post['images'])[0] ?>"
+                            alt="Room Image" class="w-full h-full object-cover">
 
-    <!-- More rooms... -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Nhà trọ gần trường - Quận 10</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                654 Đường YZA, Phường BCD, Quận 10, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>1 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>1 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>20m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">1.8M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">5 ngày trước</p>
-                </div>
-            </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
-            </div>
-        </div>
-    </div>
+                        <!-- Verified Badge -->
+                        <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
+                            <i class="fas fa-check text-white mr-1"></i>
+                            Đã xác minh
+                        </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Căn hộ cao cấp - Quận 2</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                987 Đường EFG, Phường HIJ, Quận 2, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>2 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>2 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>45m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">5.5M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">1 tuần trước</p>
-                </div>
-            </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
-            </div>
-        </div>
-    </div>
+                        <!-- Photo Count Badge -->
+                        <div class="absolute top-3 right-3 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
+                            <i class="fas fa-camera text-gray-600 text-sm"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"><?= count(json_decode($post['images'])) ?></span>
+                        </div>
+                    </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="relative">
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-home text-gray-400 text-4xl"></i>
-            </div>
-            <button class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                <i class="fas fa-heart text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                <i class="fas fa-check mr-1"></i>Đã xác minh
-            </div>
-        </div>
-        
-        <div class="p-4">
-            <h3 class="font-bold text-gray-900 mb-2">Phòng trọ sinh viên - Quận 5</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                147 Đường KLM, Phường NOP, Quận 5, TP.HCM
-            </p>
-            
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span><i class="fas fa-bed mr-1"></i>1 phòng ngủ</span>
-                <span><i class="fas fa-bath mr-1"></i>1 phòng tắm</span>
-                <span><i class="fas fa-ruler-combined mr-1"></i>16m²</span>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-2xl font-bold text-green-600">1.2M VNĐ</p>
-                    <p class="text-sm text-gray-600">/tháng</p>
+                    <!-- Right Section - Details -->
+                    <div class="flex-1 p-6">
+                        <!-- Title -->
+                        <h3 class="text-lg font-bold text-blue-600 hover:text-blue-800 mb-2 cursor-pointer">
+                            <a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($post['rental_post_title']) . '-' . $post['id'] ?>"><?= $post['rental_post_title'] ?></a>
+                        </h3>
+
+                        <!-- Address -->
+                        <p class="text-sm text-gray-600 mb-2 flex items-center">
+                            <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                            <?= $post['address'] ?>, <?= $post['ward'] ?>, <?= $post['province'] ?>
+                        </p>
+
+                        <!-- Price Section -->
+                        <div class="flex items-center gap-2">
+                            <?php if ($post['price_discount'] > 0) { ?>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-gray-400 line-through text-sm"><?= Format::forMatPrice($post['price']) ?>₫</span>
+                                    <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full"><?= round(($post['price'] - $post['price_discount']) / $post['price'] * 100) ?>% OFF</span>
+                                </div>
+                            <?php } ?>
+                            <div class="text-lg font-bold text-red-600">
+                                <?= $post['price_discount'] > 0 ? Format::forMatPrice($post['price_discount']) : Format::forMatPrice($post['price']) ?> đ/tháng
+                            </div>
+                        </div>
+
+                        <!-- Poster Info -->
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-gray-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900"><?= $post['contact'] ?></p>
+                                <?php
+                                $date = new DateTime($post['created_at']);
+                                $now = new DateTime();
+                                $interval = $date->diff($now);
+                                $dateDiff = '';
+
+                                if ($interval->y > 0) {
+                                    $dateDiff .= $interval->y . ' ' . 'năm';
+                                } elseif ($interval->m > 0) {
+                                    $dateDiff .= $interval->m . ' ' . 'tháng';
+                                } elseif ($interval->d > 0) {
+                                    $dateDiff .= $interval->d . ' ' . 'ngày';
+                                } else {
+                                    $dateDiff .= '1 ngày';
+                                }
+                                ?>
+                                <p class="text-xs text-gray-500"><?= $dateDiff . ' trước' ?></p>
+                            </div>
+                        </div>
+
+                        <!-- Specifications -->
+                        <div class="flex items-center gap-6 text-sm text-gray-600 mb-6">
+                            <span class="flex items-center">
+                                <i class="fas fa-expand-arrows-alt mr-1"></i>
+                                <?= $post['area'] ?> m²
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-tint mr-1"></i>
+                                <?= Format::formatNumber($post['water_fee']) ?>₫/Khối
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-bolt mr-1"></i>
+                                <?= Format::formatNumber($post['electric_fee']) ?>₫/Kw
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <button onclick="deleteInterestPost('<?= $post['id'] ?>')" class="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                <i class="fas fa-trash mr-2"></i>
+                                Bỏ lưu trữ
+                            </button>
+                            <button onclick="window.open('https://zalo.me/<?= $post['phone'] ?>', '_blank')" class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                <i class="fab fa-zalo mr-2"></i>
+                                Zalo
+                            </button>
+                            <button onclick="this.innerText = '<?= $post['phone'] ?>'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                <i class="fas fa-phone mr-2"></i>
+                                Xem SĐT
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Đã lưu</p>
-                    <p class="text-xs text-gray-500">2 tuần trước</p>
-                </div>
             </div>
-            
-            <div class="flex gap-2">
-                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ
-                </button>
-                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-eye mr-2"></i>Xem chi tiết
-                </button>
+        <?php }
+    } else { ?>
+        <!-- Recruitment Tab Content -->
+        <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-house text-gray-400 text-3xl"></i>
             </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Chưa có bài đăng nào</h3>
+            <p class="text-gray-600 mb-6">Bạn chưa lưu tin đăng nào. Hãy tìm kiếm và lưu những bài đăng bạn quan tâm.</p>
+            <a href="<?= BASE_URL ?>/phong-tro-nha-tro" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                <i class="fas fa-search mr-2"></i>
+                Tìm phòng ngay
+            </a>
         </div>
-    </div>
+    <?php } ?>
+
+    <!-- Pagination -->
+    <?php if (!empty($pagination) && $pagination['total_pages'] > 1) : ?>
+        <div class="mt-8">
+            <?= \Helpers\Pagination::render($pagination, '', []) ?>
+        </div>
+    <?php endif; ?>
 </div>
 
-<!-- Load More Button -->
-<div class="text-center mt-8">
-    <button class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
-        <i class="fas fa-plus mr-2"></i>Tải thêm
-    </button>
+<!-- Recruitment Tab Content -->
+<div id="recruitment-tab" class="tab-content hidden">
+    <div class="text-center py-12">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-briefcase text-gray-400 text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Chưa có tin tuyển dụng</h3>
+        <p class="text-gray-600 mb-6">Bạn chưa lưu tin tuyển dụng nào. Hãy tìm kiếm và lưu những công việc bạn quan tâm.</p>
+        <a href="<?= BASE_URL ?>/" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+            <i class="fas fa-search mr-2"></i>
+            Tìm việc ngay
+        </a>
+    </div>
 </div>
 
 <!-- Empty State (when no favorites) -->
@@ -356,43 +186,36 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Remove from favorites functionality
-    document.querySelectorAll(".fa-heart").forEach(heart => {
-        heart.addEventListener("click", function() {
-            const roomCard = this.closest(".bg-white");
-            
-            // Show confirmation
-            if (confirm("Bạn có chắc chắn muốn xóa phòng này khỏi danh sách yêu thích?")) {
-                // Add animation
-                roomCard.style.transition = "all 0.3s ease";
-                roomCard.style.transform = "scale(0.95)";
-                roomCard.style.opacity = "0.5";
-                
-                setTimeout(() => {
-                    roomCard.remove();
-                    toastr.success("Đã xóa khỏi danh sách yêu thích!");
-                }, 300);
-            }
-        });
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-    // Contact landlord functionality
-    document.querySelectorAll("[data-action=\'contact\']").forEach(button => {
-        button.addEventListener("click", function() {
-            const phoneNumber = this.dataset.phone;
-            if (confirm(`Bạn có muốn gọi cho chủ nhà: ${phoneNumber}?`)) {
-                window.location.href = `tel:${phoneNumber}`;
-            }
-        });
-    });
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
 
-    // View details functionality
-    document.querySelectorAll("[data-action=\'view-details\']").forEach(button => {
-        button.addEventListener("click", function() {
-            const roomId = this.dataset.roomId;
-            window.location.href = `${BASE_URL}/rental-post/${roomId}`;
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-white', 'text-gray-900', 'shadow-sm');
+                    btn.classList.add('text-gray-600');
+                });
+
+                // Add active class to clicked button
+                this.classList.add('active', 'bg-white', 'text-gray-900', 'shadow-sm');
+                this.classList.remove('text-gray-600');
+
+                // Hide all tab contents
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+
+                // Show target tab content
+                const targetContent = document.getElementById(targetTab + '-tab');
+                if (targetContent) {
+                    targetContent.classList.remove('hidden');
+                }
+            });
         });
     });
-});
 </script>

@@ -8,17 +8,20 @@
 
 namespace App\Controllers\Customer;
 
-use App\Controllers\BaseCustomerController;
+use App\Controllers\BaseRentalPostController;
+use App\Models\User;
 use Core\ViewRender;
 
-class BaseRentalPostController extends BaseCustomerController {
-	protected $titlePage = '';
+class RentalPostCustomerController extends BaseRentalPostController {
+    protected $titlePage = '';
     protected $subNav = true;
     protected $returnPage = '';
     protected $primaryFilter = '';
+    protected $userModel;
 
     public function __construct() {
         parent::__construct();
+        $this->userModel = new User();
     }
 
     public function searchByFilter() {
@@ -52,9 +55,11 @@ class BaseRentalPostController extends BaseCustomerController {
 
         foreach ($requests as $key => $filter) {
             if (!isset($filter[$key]) && $filter != '') {
-                $filters [$key] = $filter;
+                $filters[$key] = $filter;
             }
-         }
+        }
+
+        $filters['category_name'] = $this->primaryFilter;
 
         // Get posts and categories
         if (!empty($sortFilters)) {
@@ -66,9 +71,9 @@ class BaseRentalPostController extends BaseCustomerController {
         $totalPosts = $this->rentalPostModel->getTotalRentalPostsCount($filters, true);
         $queryParams = array_filter($this->request->get());
         $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
-
+    
         ViewRender::renderWithLayout('customer/rental-post/' . $this->returnPage, [
-			'titlePage' => $this->titlePage,
+            'titlePage' => $this->titlePage,
             'posts' => $rentalPosts,
             'pagination' => $pagination,
             'queryParams' => $queryParams,
@@ -77,9 +82,36 @@ class BaseRentalPostController extends BaseCustomerController {
                 'keyword' => $this->request->get('keyword'),
                 'price' => $this->request->get('price'),
                 'area' => $this->request->get('area'),
-                'sort' => $this->request->get('sort')
+                'sort' => $this->request->get('sort'),
             ],
             'subNav' => $this->subNav,
-		], 'customer/layouts/app');
+        ], 'customer/layouts/app');
+    }
+
+    public function getRentalPostDetail($slug, $id) {
+
+        $rentalPost = $this->rentalPostModel->getRentalPostById($id);
+        $rentalCategory = $this->rentalCategoryModel->getRentalCategoryById($rentalPost['rental_category_id'], '');
+        $rentalAmentity = $this->rentalAmenityModel->getRentalAmenityById(json_decode($rentalPost['rental_amenities']), '');
+        $sameAddressPosts = $this->rentalPostModel->searchRentalPosts(['search' => $rentalPost['province'], 'category_name' => $this->primaryFilter], 3, 0, false, true);
+        $samePosts = [];
+
+        foreach ($sameAddressPosts as $item) {
+            if ($item['id'] != $rentalPost['id']) {
+                $samePosts[] = $item;
+            }
+        }
+
+        ViewRender::renderWithLayout('customer/rental-post/detail',
+            [
+                'post' => $rentalPost,
+                'category' => $rentalCategory['rental_category_name'],
+                'amentity' => $rentalAmentity,
+                'sameAddressPosts' => $samePosts,
+                'subNav' => $this->subNav,
+                'title' => $slug,
+            ],
+            'customer/layouts/app'
+        );
     }
 }

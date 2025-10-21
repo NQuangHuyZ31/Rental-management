@@ -10,6 +10,7 @@ $(document).ready(function () {
     const imageCounter = $('#imageCounter');
     let selectedFiles = [];
     const maxFiles = 5;
+    const role = $('input[name="role"]').val() ?? 'landlord';
 
     // Define functions first
     function updateCounter() {
@@ -160,7 +161,7 @@ $(document).ready(function () {
         const formData = new FormData($('form#formNewPost')[0]);
 
         $.ajax({
-            url: App.appURL + 'landlord/posts/create',
+            url: App.appURL + role + '/posts/create',
             type: 'POST',
             data: formData, // Gửi trực tiếp FormData
             contentType: false,
@@ -175,7 +176,7 @@ $(document).ready(function () {
                     App.setToken(response.token);
                     setTimeout(() => {
                         location.reload();
-                    }, 1500);
+                    }, 3000);
                 }
             },
             error: function (xhr, status, error) {
@@ -193,18 +194,12 @@ $(document).ready(function () {
         currentPostId = postId;
         $('input[name="post_id"]').val(postId);
 
-        $('#openModalBtn').trigger('click');
-        $('#modalNewPost-title').text('Chỉnh sửa tin đăng');
-        $('.modal-action').find('button').text('Cập nhật').removeClass('addNewPostBtn').addClass('pointer-events-none opacity-50 updatePostBtn');
-        // Reset form trước
-        $('form#formNewPost')[0].reset();
-
         // Load dữ liệu tỉnh thành trước
         App.setProvinceData($('select[name="province"]')).then(function () {
             // Sau khi load tỉnh thành xong, gọi API lấy dữ liệu post
             $.ajax({
                 type: 'GET',
-                url: App.appURL + 'landlord/posts/get',
+                url: App.appURL + role + '/posts/get',
                 data: {
                     post_id: postId,
                 },
@@ -212,6 +207,11 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status === 'success') {
                         const post = response.post;
+                        $('#openModalBtn').trigger('click');
+                        // Reset form trước
+                        $('form#formNewPost')[0].reset();
+                        $('#modalNewPost-title').text('Chỉnh sửa tin đăng');
+                        $('.modal-action').find('button').text('Cập nhật').removeClass('addNewPostBtn').addClass('pointer-events-none opacity-50 updatePostBtn');
 
                         // Set dữ liệu cơ bản
                         $('input[name="title"]').val(post.rental_post_title);
@@ -292,12 +292,13 @@ $(document).ready(function () {
         $('.cleave-input').each(function () {
             this.value = this.value.replace(/,/g, '');
         });
+
         currentPostId = $('input[name="post_id"]').val();
         const formData = new FormData($('form#formNewPost')[0]);
         formData.append('post_id', currentPostId);
 
         $.ajax({
-            url: App.appURL + 'landlord/posts/update',
+            url: App.appURL + role + '/posts/update',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -314,7 +315,7 @@ $(document).ready(function () {
                     App.setToken(response.token);
                     setTimeout(() => {
                         location.reload();
-                    }, 1500);
+                    }, 3000);
                 }
             },
             error: function (xhr, status, error) {
@@ -400,7 +401,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: App.appURL + 'landlord/posts/hide',
+                    url: App.appURL + role + '/posts/hide',
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -413,7 +414,7 @@ $(document).ready(function () {
                             showSuccessMessage(response.message);
                             setTimeout(() => {
                                 location.reload();
-                            }, 1500);
+                            }, 3000);
                         }
                     },
                     error: (xhr, status, error) => {
@@ -437,7 +438,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: App.appURL + 'landlord/posts/delete',
+                    url: App.appURL + role + '/posts/delete',
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -449,7 +450,7 @@ $(document).ready(function () {
                             showSuccessMessage(response.message);
                             setTimeout(() => {
                                 location.reload();
-                            }, 1500);
+                            }, 3000);
                         }
                     },
                     error: (xhr, status, error) => {

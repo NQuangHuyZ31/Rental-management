@@ -9,6 +9,7 @@
 
 namespace App\Middleware;
 
+use Core\CSRF;
 use Core\Middleware;
 use Core\Session;
 use Core\Request;
@@ -28,7 +29,7 @@ class AuthAdminMiddleware implements Middleware
 
     if (!Session::has('user')) {
 			if ($this->isApiRequest($request)) {
-				Response::json(['error' => 'Unauthorized'], 401);
+				Response::json(['status' => 'error', 'msg' => 'Vui lòng đăng nhập', 'token' => CSRF::getTokenRefresh()], 401);
 				exit();
 			}
 			header('location: ' . BASE_URL . '/login');

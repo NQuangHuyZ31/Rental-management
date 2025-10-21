@@ -9,7 +9,7 @@ $dataModelHelper = new DataModelHelper();
     Purpose: Sidebar for admin
 -->
     
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform sidebar-transition">
+<aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform sidebar-transition">
     <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
         <h1 class="text-xl font-bold text-white">Admin Panel</h1>
     </div>

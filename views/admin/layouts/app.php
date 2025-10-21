@@ -12,12 +12,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard' ?></title>
     <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand()?>"></link>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link href="<?= BASE_URL ?>/Public/css/flowbite.min.css?v=<?= rand()?>" rel="stylesheet" />
     <!-- Custom CSS -->
     <style>
         .sidebar-transition {
@@ -103,18 +104,22 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
-
-
     </script>
-    
+
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/customer-chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/app.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/index.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/custom-chart.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
 
     <script>
         // Configure SweetAlert Toast (after SweetAlert2 is loaded)
@@ -153,11 +158,11 @@
         $successMessage = $flashData['success'] ?? null;
         $errorMessage = $flashData['error'] ?? null;
         ?>
-        
+
         <?php if ($successMessage): ?>
             showSuccessMessage('<?= addslashes($successMessage) ?>');
         <?php endif; ?>
-        
+
         <?php if ($errorMessage): ?>
             showErrorMessage('<?= addslashes($errorMessage) ?>');
         <?php endif; ?>

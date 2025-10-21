@@ -2,26 +2,26 @@
 
 /*
  * Author: Huy Nguyen
- * Date: 2025-01-15
- * Purpose: Upload images to cloud using queue
+ * Date: 2025-10-21
+ * Purpose: upload images report violation
  */
 
 namespace Queue;
 
-use App\Models\RenTalPost;
+use App\Models\ReportViolation;
 use Core\Job;
 use Exception;
 use Helpers\UploadClound;
 
-class UploadImageOnCloud extends Job {
+class UploadImageForReportViolation extends Job {
     protected $priority = \Core\Queue::PRIORITY_HIGH;
     protected $queueName = 'upload-image-on-cloud';
     protected $maxAttempts = 5;
-    protected $rentalPostModel;
+    protected $reportViolationModel;
 
     public function __construct() {
         parent::__construct();
-        $this->rentalPostModel = new RenTalPost();
+        $this->reportViolationModel = new ReportViolation();
     }
 
     /**
@@ -29,16 +29,9 @@ class UploadImageOnCloud extends Job {
      */
     public function handle($data) {
         try {
-            $postId = $data['post_id'];
+            $reportId = $data['report_id'];
             $images = $data['images'];
-            $prevImages = $data['prev_images'] ?? [];
             $uploadedUrls = [];
-
-            if (!empty($prevImages)) {
-                foreach ($prevImages as $prevImage) {
-                    UploadClound::delete(UploadClound::getPublicIdFromUrl($prevImage));
-                }
-            }
 
             // Upload each image to cloud
             $fileCount = count($images['name']);
@@ -75,11 +68,11 @@ class UploadImageOnCloud extends Job {
 
                 // Tạo tên file unique
                 $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-                $filePath = 'post_' . $postId . '_' . time() . '_' . $i . '_' . hash('sha1', $image['name']);
+                $filePath = 'post_' . $reportId . '_' . time() . '_' . $i . '_' . hash('sha1', $image['name']);
 
                 try {
                     // Upload lên Cloudinary
-                    $url_path = UploadClound::upload($image['tmp_name'], 'rental_post_images', $filePath);
+                    $url_path = UploadClound::upload($image['tmp_name'], 'report_violation', $filePath);
 
                     if ($url_path) {
                         $uploadedUrls[] = $url_path;
@@ -91,10 +84,10 @@ class UploadImageOnCloud extends Job {
             }
 
             // Update post with uploaded image URLs
-            $this->rentalPostModel->updatePostImages($postId, $uploadedUrls);
+            $this->reportViolationModel->updateColumn($reportId, 'note', $uploadedUrls);
 
             // Clean up temporary files
-            $this->cleanupTempFiles($postId);
+            $this->cleanupTempFiles($reportId);
 
         } catch (\Exception $e) {
             error_log("UploadImageOnCloud: Error: " . $e->getMessage());
@@ -104,10 +97,10 @@ class UploadImageOnCloud extends Job {
     /**
      * Clean up temporary files after upload
      */
-    private function cleanupTempFiles($postId) {
+    private function cleanupTempFiles($reportId) {
         // Use __DIR__ to get the correct path in CLI mode
         $rootPath = ROOT_PATH;
-        $tempDir = $rootPath . 'temp_uploads/' . $postId;
+        $tempDir = $rootPath . 'temp_uploads/' . $reportId;
 
         if (is_dir($tempDir)) {
             $files = glob($tempDir . '/*');

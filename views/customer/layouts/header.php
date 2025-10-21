@@ -1,9 +1,11 @@
-<!-- 
+<!--
     Author: Huy Nguyen
     Date: 2025-09-01
     Purpose: Header for customer layout - LOZIDO style
 -->
-
+<?php
+$modelDataHelper = new \Helpers\DataModelHelper();
+?>
 <header class="w-full fixed top-0 left-0 right-0 z-50">
     <!-- Warning Banner -->
     <div class="bg-yellow-200 text-black py-2 px-4">
@@ -20,7 +22,7 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-2">
                 <!-- Logo Section -->
-                <a href="<?= BASE_URL ?>/" class="flex items-center">
+                <a href="<?=BASE_URL?>/" class="flex items-center">
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
                             <span class="text-green-600 font-bold text-lg">H</span>
@@ -36,7 +38,7 @@
 
                 <!-- Center Navigation -->
                 <nav class="hidden lg:flex items-center space-x-2" id="main-nav">
-                    <a href="<?= BASE_URL. '/' ?>" class="nav-item text-white bg-green-500 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="home">
+                    <a href="<?=BASE_URL . '/phong-tro-nha-tro'?>" class="nav-item text-white bg-green-500 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="home">
                         <i class="fas fa-home"></i>
                         <span class="text-[12px]">Tìm trọ, căn hộ</span>
                     </a>
@@ -62,10 +64,10 @@
                 <div class="flex items-center space-x-3">
                     <!-- Bookmark with notification -->
                     <div class="relative">
-                        <button class="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors">
+                        <a href="<?= BASE_URL ?>/customer/interests" class="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors">
                             <i class="fas fa-bookmark"></i>
-                        </button>
-                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                        </a>
+                        <span class="allPostInterest absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"><?=$modelDataHelper->countPostInterestById()?></span>
                     </div>
 
                     <!-- Tenant/Job Seeker Button -->
@@ -74,7 +76,7 @@
                             <div class="flex items-center justify-center">
                                 <i class="fas fa-user text-[16px]"></i>
                             </div>
-                            <?php if (\Core\Session::has('user') && \Core\Session::get('user')['role'] == '3') { ?>
+                            <?php if (\Core\Session::has('user') && \Core\Session::get('user')['role'] == '3') {?>
                                 <div class="text-xs text-nowrap flex flex-col flex-start">
                                     <div class="font-medium text-[9px]">Khách thuê, tìm việc</div>
                                     <div class="text-xs text-nowrap flex gap-2 items-center underline">
@@ -82,7 +84,7 @@
                                         <a href="<?php echo BASE_URL ?>/logout" class="hover:text-green-900">Đăng xuất</a>
                                     </div>
                                 </div>
-                            <?php } else { ?>
+                            <?php } else {?>
                                 <div class="text-xs text-nowrap flex flex-col flex-start">
                                     <div class="font-medium text-[9px]">Khách thuê, tìm việc</div>
                                     <div class="text-xs text-nowrap flex gap-2 items-center underline">
@@ -90,7 +92,7 @@
                                         <a href="<?php echo BASE_URL ?>/register" class="hover:text-green-900">Đăng ký</a>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            <?php }?>
                         </div>
                     </div>
 
@@ -113,41 +115,41 @@
     </div>
 
     <!-- Sub Navigation Bar -->
-    <?php if ($subNav) { ?>
+    <?php if ($subNav) {?>
         <div class="bg-white border-b border-gray-200">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-center gap-10 py-2 overflow-x-auto" id="sub-nav">
-                    <a href="<?= BASE_URL. '/phong-tro-nha-tro' ?>" class="sub-nav-item flex items-center text-gray-700 px-3 py-2 rounded-lg space-x-2 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="room">
+                    <a href="<?=BASE_URL . '/phong-tro-nha-tro'?>" class="sub-nav-item flex items-center text-gray-700 px-3 py-2 rounded-lg space-x-2 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="room">
                         <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-home text-gray-600"></i>
                         </div>
                         <span class="text-sm">Phòng trọ, nhà trọ</span>
                     </a>
-                    <a href="<?= BASE_URL. '/ky-truc-xa-sleepbox' ?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="dormitory">
+                    <a href="<?=BASE_URL . '/ky-tuc-xa-sleepbox'?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="dormitory">
                         <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-bed text-gray-600"></i>
                         </div>
                         <span class="text-sm">Ký túc xá, sleepbox</span>
                     </a>
-                    <a href="<?= BASE_URL. '/nha-cho-thue' ?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="house">
+                    <a href="<?=BASE_URL . '/nha-cho-thue'?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="house">
                         <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-home text-gray-600"></i>
                         </div>
                         <span class="text-sm">Nhà cho thuê</span>
                     </a>
-                    <a href="<?= BASE_URL. '/can-ho-chung-cu' ?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="apartment">
+                    <a href="<?=BASE_URL . '/can-ho-chung-cu'?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="apartment">
                         <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-building text-gray-600"></i>
                         </div>
                         <span class="text-sm">Căn hộ chung cư</span>
                     </a>
-                    <a href="<?= BASE_URL. '/van-phong' ?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="office">
+                    <a href="<?=BASE_URL . '/van-phong'?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="office">
                         <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-briefcase text-gray-600"></i>
                         </div>
                         <span class="text-sm">Văn phòng</span>
                     </a>
-                    <a href="<?= BASE_URL. '/o-ghep-pass-phong' ?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="roommate">
+                    <a href="<?=BASE_URL . '/o-ghep-pass-phong'?>" class="sub-nav-item flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-green-600 transition-colors whitespace-nowrap" data-sub-nav="roommate">
                         <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                             <i class="fas fa-users text-gray-600"></i>
                         </div>
@@ -156,7 +158,7 @@
                 </div>
             </div>
         </div>
-    <?php } ?>
+    <?php }?>
 </header>
 
 <!-- Header Spacer to prevent content from being hidden behind fixed header -->

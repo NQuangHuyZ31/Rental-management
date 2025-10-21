@@ -24,6 +24,7 @@
     <?php include VIEW_PATH . '/landlord/layouts/header.php'; ?>
     <!-- Main Content -->
     <main class="min-h-screen bg-gray-100 w-full">
+        <input type="hidden" name="role" value="landlord">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <!-- Header Section -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -55,8 +56,8 @@
                             <h2 class="text-xl font-bold text-gray-900 mb-2">Danh sách tin đăng</h2>
                             <p class="text-gray-600">Danh sách tin đăng tìm kiếm khách thuê</p>
                         </div>
-                        <button id="openModalBtn" onclick="modalNewPost.showModal()" class="bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all">
-                            <i class="fas fa-plus text-xl"></i>
+                        <button data-modal-target="default-modal" id="openModalBtn" data-modal-toggle="default-modal" class="bg-green-500 hover:bg-green-600 text-white w-11 h-11 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all" type="button">
+                            <i class="fas fa-plus text-2xl"></i>
                         </button>
                     </div>
 

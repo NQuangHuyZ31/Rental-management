@@ -1,7 +1,7 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: false, // Tắt dark mode để luôn sử dụng light theme
-    content: ['./views/**/*.{html,js,ts,jsx,tsx,php}', './index.php'],
-    // content: ['./**/*.php', './**/*.html', './**/*.js'],
+    content: ['./views/**/*.{html,js,ts,jsx,tsx,php}', './index.php', './App/**/*.php', './Public/**/*.{html,js,css}', './**/*.php', './**/*.html', './**/*.js'],
     theme: {
         extend: {
             boxShadow: {
@@ -22,4 +22,7 @@ module.exports = {
         },
     },
     plugins: [require('daisyui')],
+    corePlugins: {
+        preflight: true,
+    },
 };

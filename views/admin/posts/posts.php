@@ -6,6 +6,7 @@
 
 <!-- Page Header -->
 <div class="p-3">
+    <input type="hidden" name="role" value="admin">
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
@@ -102,7 +103,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
-                    <input type="text" name="search" placeholder="Tiêu đề, địa chỉ..." 
+                    <input type="text" name="search" placeholder="Tiêu đề, địa chỉ..."
                         value="<?= htmlspecialchars($currentFilters['search']) ?>"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -119,7 +120,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Loại nhà</label>
                     <select name="rental_category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Tất cả</option>
-                        <?php foreach ($allCategory as $category) : ?>
+                        <?php foreach ($rentalCategories as $category) : ?>
                             <option value="<?= $category['id'] ?>" <?= $currentFilters['rental_category_id'] == $category['id'] ? 'selected' : '' ?>><?= $category['rental_category_name'] ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -140,8 +141,11 @@
 
     <!-- Posts Table -->
     <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center gap-10 px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-medium text-gray-900">Danh sách bài đăng</h3>
+            <button data-modal-target="default-modal" id="openModalBtn" data-modal-toggle="default-modal" class="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all" type="button">
+                <i class="fas fa-plus text-xl"></i>
+            </button>
         </div>
 
         <div class="overflow-x-auto">
@@ -149,7 +153,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <input type="checkbox" class="rounded border-gray-300 check-all-pending">
+                            <input type="checkbox" name="check-all" class="rounded border-gray-300 check-all-pending">
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Bài đăng
@@ -191,10 +195,10 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-16 w-16">
-                                            <?php if (!empty($post['rental_post_image'])) : ?>
-                                                <img class="h-16 w-16 rounded-lg object-cover" 
-                                                     src="<?= BASE_URL ?>/Public/images/<?= $post['rental_post_image'] ?>" 
-                                                     alt="<?= htmlspecialchars($post['rental_post_title']) ?>">
+                                            <?php if (!empty($post['images'])) : ?>
+                                                <img class="h-16 w-16 rounded-lg object-cover"
+                                                    src="<?= json_decode($post['images'])[0] ?>"
+                                                    alt="<?= htmlspecialchars($post['rental_post_title']) ?>">
                                             <?php else : ?>
                                                 <div class="h-16 w-16 rounded-lg bg-gray-200 flex items-center justify-center">
                                                     <i class="fas fa-home text-gray-400 text-xl"></i>
@@ -204,9 +208,6 @@
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
                                                 <?= htmlspecialchars($post['rental_post_title']) ?>
-                                            </div>
-                                            <div class="text-sm text-gray-500">
-                                                <?= $post['bedrooms'] ?? 'N/A' ?> phòng ngủ, <?= $post['bathrooms'] ?? 'N/A' ?> phòng tắm
                                             </div>
                                             <div class="text-sm text-gray-500">
                                                 <?= htmlspecialchars($post['address']) ?>
@@ -226,7 +227,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    <?= number_format($post['price']) ?> VNĐ/tháng
+                                    <?= \Helpers\Format::forMatPrice($post['price']) ?> VNĐ/tháng
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php
@@ -246,7 +247,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết">
+                                        <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết" onclick="viewPost('<?= $post['id'] ?>')">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <?php if ($post['approval_status'] === 'pending') : ?>
@@ -275,17 +276,17 @@
             <?= \Helpers\Pagination::render($pagination, BASE_URL . '/admin/posts', $queryParams) ?>
         <?php endif; ?>
     </div>
+    <?php include_once VIEW_PATH . 'partials/edit-post.php'; ?>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkAll = document.querySelector('.check-all-pending');
-        if (checkAll) {
-            checkAll.addEventListener('change', function() {
-                document.querySelectorAll('.check-item-pending').forEach(function(checkbox) {
-                    checkbox.checked = this.checked;
-                });
-            });
-        }
+        const checkboxes = document.querySelectorAll('.check-item-pending');
+
+        // Khi click vào check-all
+        checkAll.addEventListener('change', function() {
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
     });
 </script>

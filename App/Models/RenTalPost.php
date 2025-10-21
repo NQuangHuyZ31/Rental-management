@@ -17,8 +17,14 @@ class RenTalPost extends Model {
         parent::__construct();
     }
 
-    public function getAllRentalPosts() {
-        return $this->table($this->table)->where('deleted', 0)->get();
+    public function getAllRentalPosts($ownerId = true) {
+        $query = $this->table($this->table);
+
+        if ($ownerId) {
+            $query->where('owner_id', $this->getCurrentUserId());
+        }
+
+        return $query->where('deleted', 0)->get();
     }
 
     public function getRentalPostsByStatus($column, $status, $limit = 10, $offset = 0) {
@@ -85,14 +91,89 @@ class RenTalPost extends Model {
             $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
         }
 
+        if (isset($filters['category_name']) && !empty($filters['category_name'])) {
+            $raw = $filters['category_name'] ?? '';
+            $nameList = array_filter(array_map('trim', preg_split('/\s*,\s*/', $raw)));
+
+            foreach ($nameList as $i => $name) {
+                $query->whereOr('rental_categories.rental_category_name COLLATE utf8mb4_general_ci', 'LIKE', "%{$name}%");
+            }
+        }
+
         if (isset($filters['province']) && !empty($filters['province'])) {
             $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
         }
 
         if (isset($filters['price']) && !empty($filters['price'])) {
             [$fromPrice, $toPrice] = explode('-', $filters['price']);
-            $query->where('rental_posts.price', '>=', $fromPrice*1000000);
-            $query->where('rental_posts.price', '<=', $toPrice*1000000);
+            $query->where('rental_posts.price', '>=', $fromPrice * 1000000);
+            $query->where('rental_posts.price', '<=', $toPrice * 1000000);
+        }
+
+        if (isset($filters['area']) && !empty($filters['area'])) {
+            [$fromArea, $toArea] = explode('-', $filters['area']);
+            $query->where('rental_posts.area', '>=', "{$fromArea}");
+            $query->where('rental_posts.area', '<=', "{$toArea}");
+        }
+
+        if (isset($filters['search']) && !empty($filters['search'])) {
+            $query->whereOr('rental_posts.rental_post_title', 'LIKE', "%{$filters['search']}%")
+                ->whereOr('rental_posts.description', 'LIKE', "%{$filters['search']}%")
+                ->whereOr('rental_posts.address', 'LIKE', "%{$filters['search']}%")
+                ->whereOr('rental_posts.province', 'LIKE', "%{$filters['search']}%")
+                ->whereOr('rental_posts.ward', 'LIKE', "%{$filters['search']}%")
+                ->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$filters['search']}%");
+        }
+
+        return $query->orderBy('rental_posts.' . $orderBy, $sort)
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+    }
+
+    // get total rental posts count
+    public function getTotalRentalPostsCount($filters = [], $customerPage = false, $ownerId = false) {
+        $query = $this->table($this->table)
+            ->select([
+                'rental_posts.*',
+                'rental_categories.rental_category_name',
+                'users.username as landlord_name',
+            ])
+            ->join('rental_categories', 'rental_posts.rental_category_id', '=', 'rental_categories.id')
+            ->join('users', 'rental_posts.owner_id', '=', 'users.id')
+            ->where('rental_posts.deleted', 0);
+
+        if ($ownerId) {
+            $query->where('rental_posts.owner_id', $this->getCurrentUserId());
+        }
+
+        if ($customerPage) {
+            $query->where('rental_posts.approval_status', 'approved');
+            $query->where('rental_posts.status', 'active');
+        }
+
+        if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
+            $query->where('rental_posts.approval_status', $filters['approval_status']);
+        }
+
+        if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
+            $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
+        }
+
+        if (isset($filters['category_name']) && !empty($filters['category_name'])) {
+            $name = array_map('trim', explode(',', $filters['category_name']));
+            $query->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$name[0]}%");
+            $query->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$name[1]}%");
+        }
+
+        if (isset($filters['province']) && !empty($filters['province'])) {
+            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
+        }
+
+        if (isset($filters['price']) && !empty($filters['price'])) {
+            [$fromPrice, $toPrice] = explode('-', $filters['price']);
+            $query->where('rental_posts.price', '>=', $fromPrice * 1000000);
+            $query->where('rental_posts.price', '<=', $toPrice * 1000000);
         }
 
         if (isset($filters['area']) && !empty($filters['area'])) {
@@ -109,67 +190,11 @@ class RenTalPost extends Model {
                 ->whereOr('rental_posts.ward', 'LIKE', "%{$filters['search']}%");
         }
 
-        return $query->orderBy('rental_posts.' . $orderBy, $sort)
-            ->limit($limit)
-            ->offset($offset)
-            ->get();
+        return $query->count();
     }
 
-	// get total rental posts count
-	public function getTotalRentalPostsCount($filters = [], $customerPage = false, $ownerId = false) {
-		$query = $this->table($this->table)
-			->where('deleted', 0);
-
-		if ($ownerId) {
-			$query->where('owner_id', $this->getCurrentUserId());
-		}
-
-        if ($customerPage) {
-            $query->where('rental_posts.approval_status', 'approved');
-            $query->where('rental_posts.status', 'active');
-        }
-
-		if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
-			$query->where('approval_status', $filters['approval_status']);
-		}
-
-		if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
-			$query->where('rental_category_id', $filters['rental_category_id']);
-		}
-
-        if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
-            $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
-        }
-
-        if (isset($filters['province']) && !empty($filters['province'])) {
-            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
-        }
-
-        if (isset($filters['price']) && !empty($filters['price'])) {
-            [$fromPrice, $toPrice] = explode('-', $filters['price']);
-            $query->where('rental_posts.price', '>=', $fromPrice*1000000);
-            $query->where('rental_posts.price', '<=', $toPrice*1000000);
-        }
-
-        if (isset($filters['area']) && !empty($filters['area'])) {
-            [$fromArea, $toArea] = explode('-', $filters['area']);
-            $query->where('rental_posts.area', '>=', "{$fromArea}");
-            $query->where('rental_posts.area', '<=', "{$toArea}");
-        }
-
-		if (isset($filters['search']) && !empty($filters['search'])) {
-			$query->whereOr('rental_post_title', 'LIKE', "%{$filters['search']}%")
-				->whereOr('description', 'LIKE', "%{$filters['search']}%")
-				->whereOr('address', 'LIKE', "%{$filters['search']}%")
-				->whereOr('province', 'LIKE', "%{$filters['search']}%")
-				->whereOr('ward', 'LIKE', "%{$filters['search']}%");
-		}
-
-		return $query->count();
-	}
-
-    public function getRentalPostById($id) {
-        return $this->table($this->table)
+    public function getRentalPostById($id, $role = '') {
+        $query = $this->table($this->table)
             ->select([
                 'rental_posts.*',
                 'rental_categories.rental_category_name',
@@ -180,9 +205,13 @@ class RenTalPost extends Model {
             ->join('rental_categories', 'rental_posts.rental_category_id', '=', 'rental_categories.id')
             ->join('users', 'rental_posts.owner_id', '=', 'users.id')
             ->where('rental_posts.id', $id)
-            ->where('rental_posts.deleted', 0)
-            ->where('rental_posts.owner_id', $this->getCurrentUserId())
-            ->first();
+            ->where('rental_posts.deleted', 0);
+
+        if ($role == 'landlord') {
+            $query->where('rental_posts.owner_id', $this->getCurrentUserId());
+        }
+
+        return $query->first();
     }
 
     public function createRentalPost($data) {
@@ -246,24 +275,32 @@ class RenTalPost extends Model {
             ->update($updateData);
     }
 
-    public function updateRentalPostStatus($id, $status) {
-        return $this->table($this->table)
-            ->where('id', $id)
-            ->where('owner_id', $this->getCurrentUserId())
-            ->update([
-                'status' => $status,
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
+    public function updateRentalPostStatus($id, $status, $role = '') {
+        $query = $this->table($this->table)
+            ->where('id', $id);
+
+        if ($role == 'landlord') {
+            $query->where('owner_id', $this->getCurrentUserId());
+        }
+
+        return $query->update([
+            'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 
-    public function deleteRentalPost($id) {
-        return $this->table($this->table)
-            ->where('id', $id)
-            ->where('owner_id', $this->getCurrentUserId())
-            ->update([
-                'deleted' => 1,
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
+    public function deleteRentalPost($id, $role = '') {
+        $query = $this->table($this->table)
+            ->where('id', $id);
+
+        if ($role == 'landlord') {
+            $query->where('owner_id', $this->getCurrentUserId());
+        }
+
+        return $query->update([
+            'deleted' => 1,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 
     public function getRentalPostAmenities($postId) {

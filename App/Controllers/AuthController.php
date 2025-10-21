@@ -73,8 +73,11 @@ class AuthController extends Controller {
             // Update last login time only if user session exists
             $this->user->updateColumn(Session::get('user')['id'], 'last_login', date('Y-m-d H:i:s'));
 
-            Log::write(json_encode(['redirect' => $redirect, 'message' => 'success', 'user_id' => Session::get('user')['id']]), Log::LEVEL_ERROR);
-            $this->request->redirect($redirect);
+            if (Session::has('current_url') && Session::get('current_url')) {
+                header('location: '.Session::get('current_url').'');
+            } else {
+                $this->request->redirect($redirect);
+            }
             exit;
         }
     }

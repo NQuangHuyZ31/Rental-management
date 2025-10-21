@@ -132,32 +132,13 @@
             </div>
         </div>
 
-        <!-- Actions -->
+        <!-- Actions
         <div class="mt-8 pt-6 border-t border-gray-200">
             <div class="flex flex-wrap gap-3">
-                <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-phone mr-2"></i>Liên hệ chủ nhà
-                </button>
                 <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                     <i class="fas fa-sign-out-alt mr-2"></i>Trả phòng
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Contact landlord functionality
-        document.querySelectorAll('button').forEach(button => {
-            if (button.textContent.includes('Liên hệ chủ nhà')) {
-                button.addEventListener('click', function() {
-                    const phoneNumber = '<?= $landlordInfor['phone'] ?>';
-                    if (confirm(`Bạn có muốn gọi cho chủ nhà (${phoneNumber}) không?`)) {
-                        window.open(`tel:${phoneNumber}`, '_self');
-                    }
-                });
-            }
-        });
-    });
-</script>

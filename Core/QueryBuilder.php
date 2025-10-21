@@ -284,6 +284,9 @@ class QueryBuilder {
         $params = $this->getWhereParameters();
         
         $this->logQuery($sql, $params, 'SELECT');
+        // if ($this->getCurrentUserId() != 0) {
+        //     $this->logActivityDB($sql, 'SELECT');
+        // }
         
         try {
             $stmt = $this->connection->prepare($sql);

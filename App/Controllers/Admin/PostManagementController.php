@@ -9,10 +9,16 @@
 
 namespace App\Controllers\Admin;
 
+use App\Controllers\BaseRentalPostController;
 use Core\ViewRender;
 
-class PostManagementController extends AdminController {
+class PostManagementController extends BaseRentalPostController {
     protected $title = "Quản lí bài đăng";
+    protected $role = 'admin';
+
+    public function __construct() {
+        parent::__construct();
+    }
 
     public function index() {
         // Get pagination parameters
@@ -59,7 +65,8 @@ class PostManagementController extends AdminController {
             'approvedPost' => $approvedPost,
             'rejectedPost' => $rejectedPost,
             'posts' => $posts,
-            'allCategory' => $this->getAllRentalPostCategory(),
+            'rentalCategories' => $this->getAllRentalCategory(),
+            'rentalAmenities' => $this->getAllRentalAmenity(),
             'pagination' => $pagination,
             'queryParams' => $queryParams,
             'currentFilters' => [
@@ -92,10 +99,5 @@ class PostManagementController extends AdminController {
 			'rejectedPost' => $rejectedPost,
 		],'admin/layouts/app');
 	}
-
-    private function getAllRentalPostCategory() {
-        return $this->rentalCategoryModel->getAllRentalCategories();
-    }
-	
 }
 

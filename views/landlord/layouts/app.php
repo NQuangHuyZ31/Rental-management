@@ -11,9 +11,11 @@ Purpose: Libraries and Dependencies for Landlord Layout
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="<?=BASE_URL?>/Public/css/app.css">
-<link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+<link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css">
+<link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
+<link href="<?= BASE_URL ?>/Public/css/flowbite.min.css?v=<?= rand()?>" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
 <?= \Core\CSRF::getTokenMeta() ?>
 <!-- Custom Tailwind Config -->
@@ -35,11 +37,11 @@ Purpose: Libraries and Dependencies for Landlord Layout
     .nav-item {
         transition: all 0.3s ease;
     }
-    
+
     .nav-item:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .notification-badge {
         position: absolute;
         top: -5px;
@@ -55,16 +57,16 @@ Purpose: Libraries and Dependencies for Landlord Layout
         font-size: 12px;
         font-weight: bold;
     }
-    
+
     /* SweetAlert2 Layout Fix */
     .swal2-container {
         z-index: 9999 !important;
     }
-    
+
     .swal2-html-container {
         overflow: visible !important;
     }
-    
+
     /* Modal Layout Fix - Chỉ sửa để không vỡ layout */
     .modal-container {
         position: fixed !important;
@@ -79,11 +81,11 @@ Purpose: Libraries and Dependencies for Landlord Layout
         padding: 1rem !important;
         z-index: 9999 !important;
     }
-    
+
     .modal-container.hidden {
         display: none !important;
     }
-    
+
     .modal-content {
         background: white !important;
         border-radius: 0.75rem !important;
@@ -93,16 +95,16 @@ Purpose: Libraries and Dependencies for Landlord Layout
         width: 100% !important;
         max-width: 32rem !important;
     }
-    
+
     .modal-content.large {
         max-width: 48rem !important;
     }
-    
+
     .modal-content.extra-large {
         max-width: 80vw !important;
         width: 80vw !important;
     }
-    
+
     /* Đảm bảo modal content không làm vỡ layout */
     .modal-content * {
         box-sizing: border-box !important;
@@ -164,11 +166,11 @@ Purpose: Libraries and Dependencies for Landlord Layout
         $successMessage = $flashData['success'] ?? null;
         $errorMessage = $flashData['error'] ?? null;
         ?>
-        
+
         <?php if ($successMessage): ?>
             showSuccessMessage('<?= addslashes($successMessage) ?>');
         <?php endif; ?>
-        
+
         <?php if ($errorMessage): ?>
             showErrorMessage('<?= addslashes($errorMessage) ?>');
         <?php endif; ?>

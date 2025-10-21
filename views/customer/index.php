@@ -225,7 +225,7 @@ use Helpers\Format;
 			<!-- Cities Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-6 gap-6">
 				<!-- Hồ Chí Minh -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phố Hồ Chí Minh" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/ho-chi-minh.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute top-4 left-4 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
 						<div class="absolute top-4 left-8 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
@@ -238,7 +238,7 @@ use Helpers\Format;
 				</a>
 
 				<!-- Hà Nội -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phố Hà Nội" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/ha-noi.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-8 h-8 bg-white bg-opacity-20 rounded-full"></div>
@@ -251,7 +251,7 @@ use Helpers\Format;
 				</a>
 
 				<!-- Cần Thơ -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phồ Cần Thơ" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/can-tho.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-4 h-4 bg-white bg-opacity-30 rounded-full"></div>
@@ -265,20 +265,20 @@ use Helpers\Format;
 				</a>
 
 				<!-- Bình Dương -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Đồng Nai" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/binh-duong.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-6 h-6 bg-white bg-opacity-20 rounded"></div>
 						<div class="absolute top-8 right-8 w-4 h-4 bg-white bg-opacity-20 rounded"></div>
 						<div class="relative z-10 p-4 text-white">
-							<h3 class="text-xl font-bold mb-1">Bình Dương</h3>
-							<p class="text-sm opacity-90">Phòng trọ Bình Dương</p>
+							<h3 class="text-xl font-bold mb-1">Đồng Nai</h3>
+							<p class="text-sm opacity-90">Phòng trọ Đồng Nai</p>
 						</div>
 					</div>
 				</a>
 
 				<!-- Đà Nẵng -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phố Đà Nẵng" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/da-nang.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-3 h-3 bg-yellow-300 rounded-full"></div>
@@ -292,15 +292,15 @@ use Helpers\Format;
 				</a>
 
 				<!-- Đồng Nai -->
-				<a class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
+				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Đồng Tháp" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/dong-nai.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 						<div class="absolute inset-0 bg-black bg-opacity-30"></div>
 						<div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full"></div>
 						<div class="absolute top-8 right-8 w-3 h-3 bg-blue-400 rounded-full"></div>
 						<div class="absolute top-12 right-12 w-2 h-2 bg-blue-400 rounded-full"></div>
 						<div class="relative z-10 p-4 text-white">
-							<h3 class="text-xl font-bold mb-1">Đồng Nai</h3>
-							<p class="text-sm opacity-90">Phòng trọ Đồng Nai</p>
+							<h3 class="text-xl font-bold mb-1">Đồng Tháp</h3>
+							<p class="text-sm opacity-90">Phòng trọ Đồng Tháp</p>
 						</div>
 					</div>
 				</a>
@@ -334,7 +334,7 @@ use Helpers\Format;
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<!-- Property Card 1 -->
 				<?php foreach ($rentalHotDeals as $rentalHotDeal) { ?>
-					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalHotDeal['rental_post_title']) .'-'. $rentalHotDeal['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalHotDeal['rental_post_title']) . '-' . $rentalHotDeal['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
 						<!-- Image Area -->
 						<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
@@ -363,8 +363,8 @@ use Helpers\Format;
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
-									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden'?>"><?=  Format::forMatPrice($rentalHotDeal['price']) ?>₫</span>
-									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden'?>"><?= round(($rentalHotDeal['price'] - $rentalHotDeal['price_discount']) / $rentalHotDeal['price'] * 100) ?>% OFF</span>
+									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden' ?>"><?= Format::forMatPrice($rentalHotDeal['price']) ?>₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalHotDeal['price_discount'] > 0 ? '' : 'hidden' ?>"><?= round(($rentalHotDeal['price'] - $rentalHotDeal['price_discount']) / $rentalHotDeal['price'] * 100) ?>% OFF</span>
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?= $rentalHotDeal['price_discount'] > 0 ? Format::forMatPrice($rentalHotDeal['price_discount']) :  Format::forMatPrice($rentalHotDeal['price']) ?>đ/tháng</div>
@@ -401,7 +401,7 @@ use Helpers\Format;
 			<!-- Property Cards Grid -->
 			<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<?php foreach ($rentalStayNow as $rentalStayNow) { ?>
-					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalStayNow['rental_post_title']) .'-'. $rentalStayNow['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalStayNow['rental_post_title']) . '-' . $rentalStayNow['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
 						<!-- Image Area -->
 						<div class="relative h-60 bg-gray-200 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
@@ -435,8 +435,8 @@ use Helpers\Format;
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
-									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden'?>"><?=  Format::forMatPrice($rentalStayNow['price']) ?>₫</span>
-									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden'?>"><?= round(($rentalStayNow['price'] - $rentalStayNow['price_discount']) / $rentalStayNow['price'] * 100) ?>% OFF</span>
+									<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden' ?>"><?= Format::forMatPrice($rentalStayNow['price']) ?>₫</span>
+									<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalStayNow['price_discount'] > 0 ? '' : 'hidden' ?>"><?= round(($rentalStayNow['price'] - $rentalStayNow['price_discount']) / $rentalStayNow['price'] * 100) ?>% OFF</span>
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?= $rentalStayNow['price_discount'] > 0 ? Format::forMatPrice($rentalStayNow['price_discount']) :  Format::forMatPrice($rentalStayNow['price']) ?>đ/tháng</div>
@@ -468,7 +468,7 @@ use Helpers\Format;
 			<!-- Property Cards Grid - Horizontal Layout -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<?php foreach ($rentalNewPosts as $rentalNewPost) { ?>
-					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalNewPost['rental_post_title']) .'-'. $rentalNewPost['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow flex">
+					<a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($rentalNewPost['rental_post_title']) . '-' . $rentalNewPost['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow flex">
 						<!-- Image Area -->
 						<div class="relative w-48 h-40 bg-gray-200 flex-shrink-0 overflow-visible">
 							<div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
@@ -496,12 +496,14 @@ use Helpers\Format;
 								<span class="truncate"><?= $rentalNewPost['contact'] ?> - <?= $rentalNewPost['province'] ?> . <?= $rentalNewPost['ward'] ?></span>
 							</div>
 							<div class="flex items-center justify-between mb-2">
-								<div class="h-11">
-									<div class="flex items-center gap-1 mb-1">
-										<span class="text-gray-400 line-through text-xs"><?= Format::forMatPrice($rentalNewPost['price']) ?>₫</span>
-										<span class="bg-red-500 text-white text-nowrap text-[8px] px-1 py-0.5 rounded"><?= round(($rentalNewPost['price'] - $rentalNewPost['price_discount']) / $rentalNewPost['price'] * 100) ?>% OFF</span>
+								<div class="flex items-start justify-between flex-col">
+									<div class="flex items-center gap-2">
+										<span class="text-gray-400 line-through text-sm mr-2 <?= $rentalNewPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= Format::forMatPrice($rentalNewPost['price']) ?>₫</span>
+										<span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $rentalNewPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= round(($rentalNewPost['price'] - $rentalNewPost['price_discount']) / $rentalNewPost['price'] * 100) ?>% OFF</span>
 									</div>
-									<div class="text-base font-bold text-red-600"><?= Format::forMatPrice($rentalNewPost['price_discount']) ?>đ/tháng</div>
+									<div class="text-right flex w-full items-center justify-between pt-1">
+										<div class="text-[16px] font-bold text-red-600"><?= $rentalNewPost['price_discount'] > 0 ? Format::forMatPrice($rentalNewPost['price_discount']) :  Format::forMatPrice($rentalNewPost['price']) ?>đ/tháng</div>
+									</div>
 								</div>
 								<div class="text-xs text-gray-600 font-medium"><?= $rentalNewPost['area'] ?> m²</div>
 							</div>

@@ -23,8 +23,10 @@ class RentalCategory extends Model {
         }
 
         if ($ownerId && $system) {
-            $sql .= " AND (owner_id = ? OR owner_id IS NULL)";
-            $params[] = $this->getCurrentUserId();
+            if ($this->getCurrentUserId() != 1) {
+                $sql .= " AND (owner_id = ? OR owner_id IS NULL)";
+                $params[] = $this->getCurrentUserId();
+            }
         } elseif ($ownerId && !$system) {
             $sql .= " AND owner_id = ?";
             $params[] = $this->getCurrentUserId();
@@ -34,9 +36,15 @@ class RentalCategory extends Model {
 
         return $this->queryAll($sql, $params);
     }
-    
+
     public function getRentalCategoryById($id, $ownerId) {
-        return $this->table($this->table)->where('id', $id)->where('deleted', 0)->where('owner_id', $ownerId)->first();
+        $query = $this->table($this->table)->where('id', $id)->where('deleted', 0);
+
+        if ($ownerId) {
+            $query->where('owner_id', $ownerId);
+        }
+
+        return $query->first();
     }
 
     public function createRentalCategory($data) {

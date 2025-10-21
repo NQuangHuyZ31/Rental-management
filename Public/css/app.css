@@ -134,3 +134,9 @@
     background-color: #d1ecf1;
     color: #0c5460;
 }
+
+/* Adđe by Huy Nguyen on 2025-10-20 to custom ckeditor */
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+.ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    height: 200px;
+}
