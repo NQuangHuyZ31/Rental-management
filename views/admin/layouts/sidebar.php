@@ -102,10 +102,6 @@ $dataModelHelper = new DataModelHelper();
                         <i class="fas fa-star mr-3 flex-shrink-0 h-4 w-4"></i>
                         Tiện ích
                     </a>
-                    <a href="<?= BASE_URL ?>/admin/locations" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-map-marker-alt mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Khu vực
-                    </a>
                 </div>
             </div>
             
