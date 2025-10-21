@@ -683,7 +683,6 @@
             .then(function(provinces) {
                 // Clear dropdown trước khi thêm options mới
                 $(TENANT_PROVINCE_SELECTOR).html('<option value="">Chọn tỉnh/thành phố</option>');
-                console.log('Loading tenant provinces:', provinces.length);
                 
                 provinces.forEach((province) => {
                     $(TENANT_PROVINCE_SELECTOR).append(
@@ -692,22 +691,17 @@
                          }</option>`
                     );
                 });
-                console.log('Tenant provinces loaded successfully');
             })
             .catch(function(err) {
-                console.log(err);
             });
     };
 
     // Lấy danh sách phường xã cho modal tenant
     window.getTenantWards = function(ward_value) {
-        console.log('getTenantWards called with ward_value:', ward_value);
         const selectedOption = $(TENANT_PROVINCE_SELECTOR + ' option:selected');
         const provinceCode = selectedOption.attr('data-code');
-        console.log('Tenant selected province code:', provinceCode);
 
         if (!provinceCode) {
-            console.log('No province code found in tenant modal, disabling ward dropdown');
             $(TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
             $(TENANT_WARD_SELECTOR).attr('disabled', true);
             return;
@@ -718,32 +712,25 @@
                 return response.json();
             })
             .then(function(provinceData) {
-                console.log('Tenant province data:', provinceData);
                 $(TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
                 
                 // Cấu trúc dữ liệu đúng: provinceData.wards[]
                 if (provinceData.wards && provinceData.wards.length > 0) {
-                    console.log('Tenant wards found:', provinceData.wards.length);
                     provinceData.wards.forEach((ward) => {
                         $(TENANT_WARD_SELECTOR).append(`<option value="${ward.name}" data-code="${ward.code}" ${ward_value != '' ? (ward.name == ward_value ? 'selected' : '') : ''}>${ward.name}</option>`);
                     });
                     $(TENANT_WARD_SELECTOR).attr('disabled', false);
-                    console.log('Tenant ward dropdown enabled');
                 } else {
                     $(TENANT_WARD_SELECTOR).attr('disabled', true);
-                    console.log('No tenant wards found, dropdown disabled');
                 }
             })
             .catch(function(err) {
-                console.log(err);
             });
     };
 
     // Event listeners cho dropdown tenant
     $(document).ready(function() {
-        console.log('Setting up tenant province/ward event listeners');
         $(TENANT_PROVINCE_SELECTOR).change(function() {
-            console.log('Tenant province changed:', $(this).val());
             // Reset ward khi thay đổi province
             $(TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
             $(TENANT_WARD_SELECTOR).attr('disabled', true);
@@ -753,7 +740,6 @@
 
         // Event handler cho edit modal
         $(EDIT_TENANT_PROVINCE_SELECTOR).change(function() {
-            console.log('Edit tenant province changed:', $(this).val());
             // Reset ward khi thay đổi province
             $(EDIT_TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
             $(EDIT_TENANT_WARD_SELECTOR).attr('disabled', true);
@@ -951,13 +937,13 @@
                     populateEditForm(data.tenant, data.rooms);
                 } else {
                     console.error('API Error:', data);
-                    showErrorMessage(data.message || 'Không thể tải thông tin khách hàng');
+                    App.showSuccessMessage(data.message || 'Không thể tải thông tin khách hàng', 'error');
                     closeAddTenantModal();
                 }
             })
             .catch(error => {
                 console.error('Fetch Error:', error);
-                showErrorMessage('Có lỗi xảy ra khi tải thông tin khách hàng: ' + error.message);
+                App.showSuccessMessage('Có lỗi xảy ra khi tải thông tin khách hàng: ' + error.message, 'error');
                 closeAddTenantModal();
             });
     }
@@ -1087,10 +1073,8 @@
     function loadEditTenantWards(selectedWard = '') {
         const selectedOption = $(EDIT_TENANT_PROVINCE_SELECTOR + ' option:selected');
         const provinceCode = selectedOption.attr('data-code');
-        console.log('Edit tenant selected province code:', provinceCode);
 
         if (!provinceCode) {
-            console.log('No province code found in edit modal, disabling ward dropdown');
             $(EDIT_TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
             $(EDIT_TENANT_WARD_SELECTOR).attr('disabled', true);
             return;
@@ -1099,12 +1083,10 @@
         fetch(`https://provinces.open-api.vn/api/v2/p/${provinceCode}?depth=2`)
             .then(response => response.json())
             .then(provinceData => {
-                console.log('Edit tenant province data:', provinceData);
                 $(EDIT_TENANT_WARD_SELECTOR).html('<option value="">Chọn phường/xã</option>');
                 
                 // Cấu trúc dữ liệu đúng: provinceData.wards[]
                 if (provinceData.wards && provinceData.wards.length > 0) {
-                    console.log('Edit tenant wards found:', provinceData.wards.length);
                     provinceData.wards.forEach((ward) => {
                         const option = document.createElement('option');
                         option.value = ward.name;
@@ -1116,9 +1098,7 @@
                         $(EDIT_TENANT_WARD_SELECTOR).append(option);
                     });
                     $(EDIT_TENANT_WARD_SELECTOR).attr('disabled', false);
-                    console.log('Edit tenant ward dropdown enabled');
                 } else {
-                    console.log('No wards found for edit tenant province');
                     $(EDIT_TENANT_WARD_SELECTOR).attr('disabled', true);
                 }
             })
@@ -1141,7 +1121,7 @@
         if (currentMode === 'add') {
         const selectedRoomId = document.getElementById('selected_room_id').value;
         if (!selectedRoomId) {
-            showErrorMessage('Vui lòng chọn phòng trước khi thêm khách hàng');
+            App.showSuccessMessage('Vui lòng chọn phòng trước khi thêm khách hàng', 'error');
             return;
             }
         }
@@ -1180,11 +1160,11 @@
                 }
                 
                 if (response.success) {
-                    showSuccessMessage(response.message);
+                    App.showSuccessMessage(response.message || 'Thành công', 'success');
                     closeAddTenantModal();
                     setTimeout(() => {
                         location.reload();
-                    }, 1500);
+                    }, 1200);
                 } else {
                     // Xử lý lỗi từ success response
                     if (response.errors) {
@@ -1193,7 +1173,7 @@
                             showError(field, response.errors[field]);
                         });
                     } else {
-                        showErrorMessage(response.message);
+                        App.showSuccessMessage(response.message || 'Có lỗi', 'error');
                     }
                 }
             },
@@ -1217,12 +1197,12 @@
                             showError(field, response.errors[field]);
                         });
                     } else {
-                        showErrorMessage(response.message || 'Có lỗi xảy ra');
+                        App.showSuccessMessage(response.message || 'Có lỗi xảy ra', 'error');
                     }
                 } catch (e) {
                     console.error('Error parsing response:', e);
                     console.error('Response text:', xhr.responseText);
-                    showErrorMessage('Có lỗi xảy ra khi xử lý dữ liệu');
+                    App.showSuccessMessage('Có lỗi xảy ra khi xử lý dữ liệu', 'error');
                 }
             }
         });
@@ -1264,11 +1244,11 @@
                 }
                 
                 if (response.success) {
-                    showSuccessMessage(response.message);
+                    App.showSuccessMessage(response.message || 'Thành công', 'success');
                     closeEditTenantModal();
                     setTimeout(() => {
                         location.reload();
-                    }, 1500);
+                    }, 1200);
                 } else {
                     // Xử lý lỗi từ success response
                     if (response.errors) {
@@ -1277,7 +1257,7 @@
                             showEditError(field, response.errors[field]);
                         });
                     } else {
-                        showErrorMessage(response.message);
+                        App.showSuccessMessage(response.message || 'Có lỗi', 'error');
                     }
                 }
             },
@@ -1301,12 +1281,12 @@
                             showEditError(field, response.errors[field]);
                         });
                     } else {
-                        showErrorMessage(response.message || 'Có lỗi xảy ra');
+                        App.showSuccessMessage(response.message || 'Có lỗi xảy ra', 'error');
                     }
                 } catch (e) {
                     console.error('Error parsing response:', e);
                     console.error('Response text:', xhr.responseText);
-                    showErrorMessage('Có lỗi xảy ra khi xử lý dữ liệu');
+                    App.showSuccessMessage('Có lỗi xảy ra khi xử lý dữ liệu', 'error');
                 }
             }
         });
@@ -1341,7 +1321,7 @@
             }
         })
         .then(response => response.json())
-        .then(data => {
+            .then(data => {
             if (data.success) {
                 // Cập nhật CSRF token từ response
                 if (data.csrf_token) {
@@ -1385,12 +1365,12 @@
                     });
                 }
             } else {
-                showErrorMessage(data.message || 'Có lỗi xảy ra khi kiểm tra thông tin khách thuê');
+                App.showSuccessMessage(data.message || 'Có lỗi xảy ra khi kiểm tra thông tin khách thuê', 'error');
             }
         })
         .catch(error => {
             console.error('Error checking tenant:', error);
-            showErrorMessage('Có lỗi xảy ra khi kiểm tra thông tin khách thuê');
+            App.showSuccessMessage('Có lỗi xảy ra khi kiểm tra thông tin khách thuê', 'error');
         });
     }
 
@@ -1408,18 +1388,18 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showSuccessMessage(data.message);
-                // Reload trang sau 1.5 giây để user thấy thông báo
+                App.showSuccessMessage(data.message || 'Xóa khách thuê thành công', 'success');
+                // Reload trang sau 1.2 giây để user thấy thông báo
                 setTimeout(() => {
                     window.location.reload();
-                }, 1500);
+                }, 1200);
             } else {
-                showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa khách thuê');
+                App.showSuccessMessage(data.message || 'Có lỗi xảy ra khi xóa khách thuê', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showErrorMessage('Có lỗi xảy ra khi xóa khách thuê');
+            App.showSuccessMessage('Có lỗi xảy ra khi xóa khách thuê', 'error');
         });
     }
 

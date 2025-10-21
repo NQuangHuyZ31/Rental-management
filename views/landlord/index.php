@@ -59,31 +59,31 @@ Purpose: Build Index house for Landlord
                         </div>
                     </div>
 
-                    <!-- Total Deposit Card -->
+                    <!-- Total Amenities Card -->
                     <div class="bg-white rounded-lg shadow-md p-6 border border-[#E5E7EB]">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-money-bill-wave text-green-600 text-xl"></i>
+                                    <i class="fas fa-couch text-green-600 text-xl"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-600 text-sm">Tổng số tiền cọc</p>
-                                    <p class="text-green-500 font-bold text-lg"><?= number_format($totalDeposit) ?>₫</p>
+                                    <p class="text-gray-600 text-sm">Tổng số tiện ích</p>
+                                    <p class="text-green-500 font-bold text-lg"><?= $totalAmenities ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Room Issues Card -->
+                    <!-- Total Services Card -->
                     <div class="bg-white rounded-lg shadow-md p-6 border border-[#E5E7EB]">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-briefcase text-orange-600 text-xl"></i>
+                                    <i class="fas fa-concierge-bell text-orange-600 text-xl"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-600 text-sm">Sự cố phòng</p>
-                                    <p class="text-red-500 font-bold text-lg"><?= $maintenanceIssues ?> Vấn đề</p>
+                                    <p class="text-gray-600 text-sm">Tổng số dịch vụ</p>
+                                    <p class="text-red-500 font-bold text-lg"><?= $totalServices ?></p>
                                 </div>
                             </div>
                         </div>
@@ -439,8 +439,7 @@ Purpose: Build Index house for Landlord
                             <div class="relative">
                                 <select id="room_status" name="room_status" required class="peer w-full px-4 py-3 border <?= isset($validationErrors['room_status']) ? 'border-red-500' : 'border-blue-300' ?> rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
                                     <option value="">Chọn trạng thái</option>
-                                    <option value="available" <?= (isset($oldInput['room_status']) && $oldInput['room_status'] === 'available') ? 'selected' : '' ?>>Đang trống</option>
-                                    <option value="occupied" <?= (isset($oldInput['room_status']) && $oldInput['room_status'] === 'occupied') ? 'selected' : '' ?>>Đã thuê</option>
+                                    <option value="available" <?= (!isset($oldInput['room_status']) || $oldInput['room_status'] === 'available') ? 'selected' : '' ?>>Đang trống</option>
                                     <option value="maintenance" <?= (isset($oldInput['room_status']) && $oldInput['room_status'] === 'maintenance') ? 'selected' : '' ?>>Bảo trì</option>
                                 </select>
                                 <label for="room_status" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not([value=''])]:top-0 peer-[:not([value=''])]:text-xs peer-[:not([value=''])]:text-blue-500 peer-[:not([value=''])]:font-medium">Trạng thái <span class="text-red-500">*</span></label>
@@ -476,6 +475,13 @@ Purpose: Build Index house for Landlord
             document.body.style.overflow = 'hidden';
             // Reset form to create mode
             resetRoomFormToCreate();
+            // Reset dropdown trạng thái về 2 option khi thêm mới
+            const statusSelect = document.getElementById('room_status');
+            statusSelect.innerHTML = '';
+            statusSelect.appendChild(new Option('Đang trống', 'available'));
+            statusSelect.appendChild(new Option('Bảo trì', 'maintenance'));
+            statusSelect.value = 'available';
+            statusSelect.disabled = false;
         }
 
         function closeRoomModal() {
@@ -529,7 +535,23 @@ Purpose: Build Index house for Landlord
             document.getElementById('room_price').value = Math.floor(Number(room.room_price) || 0);
             document.getElementById('deposit').value = room.deposit;
             document.getElementById('max_people').value = room.max_people;
-            document.getElementById('room_status').value = room.room_status;
+
+            // Xử lý dropdown trạng thái
+            const statusSelect = document.getElementById('room_status');
+            // Xóa hết option cũ
+            statusSelect.innerHTML = '';
+            // Luôn thêm 2 trạng thái cơ bản
+            statusSelect.appendChild(new Option('Đang trống', 'available'));
+            statusSelect.appendChild(new Option('Bảo trì', 'maintenance'));
+            // Nếu phòng đang thuê thì thêm option 'Đã thuê' và disable dropdown
+            if (room.room_status === 'occupied') {
+                statusSelect.appendChild(new Option('Đã thuê', 'occupied'));
+                statusSelect.value = 'occupied';
+                statusSelect.disabled = true;
+            } else {
+                statusSelect.value = room.room_status;
+                statusSelect.disabled = false;
+            }
 
             // Thay đổi tiêu đề modal
             document.getElementById('roomModalTitle').textContent = 'Chỉnh sửa phòng';
@@ -855,7 +877,7 @@ Purpose: Build Index house for Landlord
                                    placeholder=" ">
                             <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tháng lập phiếu *</label>
                             <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5 cursor-pointer" id="createInvoiceCalendarIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 012 2z"></path>
                             </svg>
 
                             <!-- Month/Year Picker Overlay -->
@@ -1229,7 +1251,7 @@ Purpose: Build Index house for Landlord
                     console.log('Response data:', data); // Debug logging
                     
                     if (data.success) {
-                        showSuccessMessage('Tạo hóa đơn thành công!');
+                        App.showSuccessMessage(data.message || 'Tạo hóa đơn thành công!', 'success');
                         closeCreateInvoiceModal();
                         // Delay 1.5 seconds before reloading page
                         setTimeout(() => {
@@ -1242,14 +1264,14 @@ Purpose: Build Index house for Landlord
                         if (data.errors && typeof data.errors === 'object') {
                             // Display field-specific errors
                             displayFieldErrors(data.errors);
-                        } else {
-                            showErrorMessage(data.message || 'Có lỗi xảy ra khi tạo hóa đơn');
+                            } else {
+                            App.showSuccessMessage(data.message || 'Có lỗi xảy ra khi tạo hóa đơn', 'error');
                         }
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showErrorMessage('Có lỗi xảy ra khi tạo hóa đơn');
+                    App.showSuccessMessage('Có lỗi xảy ra khi tạo hóa đơn', 'error');
                 })
                 .finally(() => {
                     // Hide loading

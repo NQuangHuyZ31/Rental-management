@@ -7,19 +7,16 @@ Purpose: Build Service Controller
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
-use App\Models\Service;
 use App\Models\ServiceUsage;
 use Core\CSRF;
 use Core\Session;
 use Core\ViewRender;
 
 class ServiceController extends LandlordController {
-    private $serviceModel;
     private $serviceUsageModel;
 
     public function __construct() {
         parent::__construct();
-        $this->serviceModel = new Service();
         $this->serviceUsageModel = new ServiceUsage();
     }
 

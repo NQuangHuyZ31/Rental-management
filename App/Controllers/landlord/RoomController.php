@@ -37,22 +37,6 @@ class RoomController extends LandlordController {
             $roomStats = $this->roomModel->getRoomStatistics($selectedHouse['id']);
         }
 
-        // Tính toán dữ liệu cho summary cards
-        $totalDebt = 0;
-        $totalDeposit = 0;
-        $totalReservationDeposit = 0;
-        $maintenanceIssues = 0;
-
-        foreach ($rooms as $room) {
-            $totalDeposit += $room['deposit'] ?? 0;
-            if ($room['room_status'] === 'occupied') {
-                $totalDebt += $room['room_price'] ?? 0;
-            }
-            if ($room['room_status'] === 'maintenance') {
-                $maintenanceIssues++;
-            }
-        }
-
         // Get validation errors and old input from session
         $validationErrors = Session::get('validation_errors', []);
         $oldInput = Session::get('old_input', []);
@@ -67,10 +51,6 @@ class RoomController extends LandlordController {
             'selectedHouse' => $selectedHouse,
             'rooms' => $rooms,
             'roomStats' => $roomStats,
-            'totalDebt' => $totalDebt,
-            'totalDeposit' => $totalDeposit,
-            'totalReservationDeposit' => $totalReservationDeposit,
-            'maintenanceIssues' => $maintenanceIssues,
             'validationErrors' => $validationErrors,
             'oldInput' => $oldInput,
         ]);
@@ -88,7 +68,7 @@ class RoomController extends LandlordController {
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
             return;
         }
 
@@ -150,7 +130,7 @@ class RoomController extends LandlordController {
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
             return;
         }
 
@@ -171,6 +151,11 @@ class RoomController extends LandlordController {
         }
 
         // Lấy dữ liệu từ request
+        $newStatus = $this->request->post('room_status');
+        if ($existingRoom['room_status'] === 'occupied' && $newStatus !== $existingRoom['room_status']) {
+            $this->request->redirectWithError('/landlord', 'Phòng đang có khách ở, không thể cập nhật!');
+            return;
+        }
         $roomData = [
             'room_name' => $this->request->post('room_name'),
             'floor' => $this->request->post('floor'),
@@ -178,7 +163,7 @@ class RoomController extends LandlordController {
             'room_price' => $this->request->post('room_price'),
             'deposit' => $this->request->post('deposit'),
             'max_people' => $this->request->post('max_people'),
-            'room_status' => $this->request->post('room_status'),
+            'room_status' => $newStatus,
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
@@ -257,7 +242,7 @@ class RoomController extends LandlordController {
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
             return;
         }
 

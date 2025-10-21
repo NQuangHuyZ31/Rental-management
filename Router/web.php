@@ -5,7 +5,6 @@
 use App\Controllers\Admin\AuthAdminController;
 use App\Controllers\Admin\DashboardAdminController;
 use App\Controllers\Admin\PostManagementController;
-use App\Controllers\Admin\UserManagementController;
 use App\Controllers\AuthController;
 use App\Controllers\Customer\BillCustomerController;
 use App\Controllers\Customer\CustomerController;
@@ -16,6 +15,10 @@ use App\Controllers\Customer\ProfileCustomerController;
 use App\Controllers\Customer\RentalPostCustomerController;
 use App\Controllers\Customer\RentalPostDormitoryController;
 // Admin Controller
+use App\Controllers\Admin\UserManagementController;
+use App\Controllers\Admin\CategoryManagementController;
+use App\Controllers\Admin\AmenityManagementController;
+
 // Landlord Controller
 use App\Controllers\Customer\RentalPostHouseController;
 use App\Controllers\Customer\RentalPostOfficeController;
@@ -121,6 +124,29 @@ $router->get('/admin/users/edit/{id}', [UserManagementController::class, 'edit']
 $router->post('/admin/users/update/{id}', [UserManagementController::class, 'update'], [AuthAdminMiddleware::class]);
 $router->post('/admin/users/toggle-status/{id}', [UserManagementController::class, 'toggleStatus'], [AuthAdminMiddleware::class]);
 $router->post('/admin/users/delete/{id}', [UserManagementController::class, 'delete'], [AuthAdminMiddleware::class]);
+$router->get('/admin/users', [UserManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/store', [UserManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->get('/admin/users/edit/{id}', [UserManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/update/{id}', [UserManagementController::class, 'update'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/toggle-status/{id}', [UserManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/ban/{id}', [UserManagementController::class, 'ban'],[AuthAdminMiddleware::class]);
+$router->post('/admin/users/delete/{id}', [UserManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+
+// CATEGORY MANAGEMENT
+$router->get('/admin/categories', [CategoryManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/store', [CategoryManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/delete/{id}', [CategoryManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/toggle-status/{id}', [CategoryManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->get('/admin/categories/edit/{id}', [CategoryManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/categories/update/{id}', [CategoryManagementController::class, 'update'],[AuthAdminMiddleware::class]);
+
+// AMENITY MANAGEMENT
+$router->get('/admin/amenities', [AmenityManagementController::class, 'index'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/store', [AmenityManagementController::class, 'store'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/delete/{id}', [AmenityManagementController::class, 'delete'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/toggle-status/{id}', [AmenityManagementController::class, 'toggleStatus'],[AuthAdminMiddleware::class]);
+$router->get('/admin/amenities/edit/{id}', [AmenityManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
+$router->post('/admin/amenities/update/{id}', [AmenityManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes

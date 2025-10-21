@@ -95,7 +95,7 @@
         // Close sidebar when clicking overlay
         document.getElementById('sidebar-overlay').addEventListener('click', toggleSidebar);
 
-        // Auto-hide alerts
+        // Auto-hide alerts (for any legacy .alert-auto-hide elements)
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert-auto-hide');
             alerts.forEach(alert => {
@@ -122,36 +122,8 @@
     <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
 
     <script>
-        // Configure SweetAlert Toast (after SweetAlert2 is loaded)
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        // Function to show success message
-        function showSuccessMessage(message) {
-            Toast.fire({
-                icon: 'success',
-                title: message
-            });
-        }
-
-        // Function to show error message
-        function showErrorMessage(message) {
-            Toast.fire({
-                icon: 'error',
-                title: message
-            });
-        }
-
-        // Check for flash messages on page load
+        // Use App.showSuccessMessage for notifications (centralized in Public/js/app.js)
+        // Check for flash messages on page load and forward to App.showSuccessMessage
         <?php
         $request = new \Core\Request();
         $flashData = $request->getFlashData();
@@ -160,11 +132,20 @@
         ?>
 
         <?php if ($successMessage): ?>
-            showSuccessMessage('<?= addslashes($successMessage) ?>');
+            if (window.App && typeof window.App.showSuccessMessage === 'function') {
+                App.showSuccessMessage('<?= addslashes($successMessage) ?>', 'success');
+            } else {
+                // fallback to simple alert if App not ready
+                console.log('Flash:', '<?= addslashes($successMessage) ?>');
+            }
         <?php endif; ?>
 
         <?php if ($errorMessage): ?>
-            showErrorMessage('<?= addslashes($errorMessage) ?>');
+            if (window.App && typeof window.App.showSuccessMessage === 'function') {
+                App.showSuccessMessage('<?= addslashes($errorMessage) ?>', 'error');
+            } else {
+                console.error('Flash:', '<?= addslashes($errorMessage) ?>');
+            }
         <?php endif; ?>
     </script>
 </body>

@@ -292,7 +292,7 @@
 
                             <!-- Giá dịch vụ -->
                             <div class="relative">
-                                <input type="number" id="service_price" name="service_price" min="0" step="100" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
+                                <input type="number" id="service_price" name="service_price" min="0" required class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none placeholder-transparent" placeholder=" ">
                                 <label for="service_price" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Giá dịch vụ (VNĐ) <span class="text-red-500">*</span></label>
                             </div>
                         </div>
@@ -717,14 +717,8 @@
          */
         function loadUsageData(month, year) {
             const houseId = '<?= $selectedHouse['id'] ?? '' ?>';
-            console.log('loadUsageData called with:', {
-                month,
-                year,
-                houseId
-            });
 
             if (!houseId) {
-                console.log('No house selected');
                 showEmptyState('Chưa chọn nhà trọ');
                 return;
             }
@@ -736,18 +730,14 @@
             showLoadingState();
 
             const apiUrl = `${App.appURL}landlord/service/usage?house_id=${houseId}&month=${month}&year=${year}`;
-            console.log('Calling API:', apiUrl);
 
             // Gọi API để lấy dữ liệu
             fetch(apiUrl)
                 .then(response => {
-                    console.log('API Response status:', response.status);
                     return response.json();
                 })
                 .then(data => {
-                    console.log('API Response data:', data);
                     if (data.success) {
-                        console.log('Calling renderUsageTable with data:', data.data);
                         if (data.data && data.data.length > 0) {
                             renderUsageTable(data.data);
                         } else {
@@ -755,7 +745,6 @@
                             showEmptyState(data.message || 'Không có dữ liệu sử dụng cho tháng này');
                         }
                     } else {
-                        console.log('API returned error:', data.message);
                         showEmptyState(data.message || 'Không thể tải dữ liệu');
                     }
                 })
@@ -780,10 +769,8 @@
          */
         function renderUsageTable(roomsData) {
             const tbody = document.getElementById('usageTableBody');
-            console.log('renderUsageTable called with:', roomsData);
 
             if (!roomsData || roomsData.length === 0) {
-                console.log('No data to render');
                 showEmptyState('Không có dữ liệu sử dụng cho tháng này');
                 return;
             }
@@ -797,7 +784,6 @@
 
             // Dữ liệu đã được xử lý từ backend, chỉ cần render trực tiếp
             roomsData.forEach(room => {
-                console.log('Rendering room:', room);
                 html += `
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm font-medium text-gray-900 border border-gray-300">
@@ -812,7 +798,6 @@
                 `;
             });
 
-            console.log('Generated HTML:', html);
             tbody.innerHTML = html;
         }
 
@@ -820,22 +805,17 @@
          * Render cột dịch vụ
          */
         function renderServiceColumns(services, serviceType) {
-            console.log('renderServiceColumns called with:', {
-                services,
-                serviceType
-            });
+    // ...existing code...
 
             const service = services[serviceType];
 
             if (!service) {
-                console.log(`No service found for type: ${serviceType}`);
                 return `
                     <td class="px-4 py-3 text-sm text-gray-500 text-center border border-gray-300">-</td>
                     <td class="px-4 py-3 text-sm text-gray-500 text-center border border-gray-300">-</td>
                 `;
             }
 
-            console.log(`Service found for ${serviceType}:`, service);
 
             const usageText = service.usage_amount > 0 ? service.usage_amount + ' ' + service.unit_vi : '-';
             const amountText = service.total_amount > 0 ? formatCurrency(service.total_amount) : '-';

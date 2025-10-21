@@ -52,6 +52,10 @@
                     <i class="fas fa-search mr-2"></i>
                     Lọc
                 </button>
+                <a href="<?= BASE_URL ?>/admin/users" class="w-full flex items-center justify-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-200 ml-2">
+                    <i class="fas fa-times mr-2"></i>
+                    Xóa
+                </a>
             </div>
         </div>
     </form>
@@ -140,11 +144,11 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <?php if ($user['account_status'] === 'banned'): ?>
-                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'active')" class="text-green-600 hover:text-green-900" title="Bỏ cấm">
+                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'active', '<?= htmlspecialchars($user['email'], ENT_QUOTES) ?>')" class="text-green-600 hover:text-green-900" title="Bỏ cấm">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         <?php else: ?>
-                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'banned')" class="text-red-600 hover:text-red-900" title="Cấm tài khoản">
+                                            <button onclick="toggleUserStatus(<?= $user['id'] ?>, 'banned', '<?= htmlspecialchars($user['email'], ENT_QUOTES) ?>')" class="text-red-600 hover:text-red-900" title="Cấm tài khoản">
                                                 <i class="fas fa-ban"></i>
                                             </button>
                                         <?php endif; ?>
@@ -704,36 +708,85 @@
     }
 
     // Toggle user status (ban/unban)
-    function toggleUserStatus(userId, status) {
+    function toggleUserStatus(userId, status, userEmail = '') {
         const action = status === 'banned' ? 'cấm' : 'kích hoạt';
+
+        if (status === 'banned') {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || document.querySelector('input[name="csrf_token"]')?.value;
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Xác nhận cấm tài khoản?',
+                text: `${userEmail}`,
+                input: 'textarea',
+                inputPlaceholder: 'Nhập lý do cấm...',
+                inputAttributes: {
+                    'aria-label': 'Lý do cấm'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Cấm tài khoản',
+                cancelButtonText: 'Hủy',
+                customClass: {
+                    container: 'swal2-modal-high-z',
+                },
+                backdrop: false,
+                allowOutsideClick: false,
+                preConfirm: (reason) => {
+                    if (!reason || String(reason).trim() === '') {
+                        Swal.showValidationMessage('Vui lòng nhập lý do cấm');
+                        return false;
+                    }
+
+                    return fetch(`${App.appURL}admin/users/ban/${userId}`, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data || !data.success) {
+                            throw new Error(data?.message || 'Có lỗi xảy ra');
+                        }
+                        return data;
+                    })
+                    .catch(err => {
+                        Swal.showValidationMessage(`Lỗi: ${err.message || err}`);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                    if (result.isConfirmed) {
+                    App.showSuccessMessage(result.value.message || 'Cấm thành công', 'success');
+                    setTimeout(() => location.reload(), 1200);
+                }
+            });
+
+            return;
+        }
+
+        // unban flow remains confirm + toggle-status
         App.showModalConfirm(`Bạn có chắc chắn muốn ${action} tài khoản này?`).then((result) => {
             if (result.isConfirmed) {
-                // Get CSRF token
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
                     document.querySelector('input[name="csrf_token"]')?.value;
 
                 fetch(`${App.appURL}admin/users/toggle-status/${userId}`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `status=${status}&csrf_token=${csrfToken}`
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1500);
+                            App.showSuccessMessage(data.message || 'Thao tác thành công', 'success');
+                            setTimeout(() => { location.reload(); }, 1500);
                         } else {
                             App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        App.showSuccessMessage('Có lỗi xảy ra khi cập nhật trạng thái', 'error');
-                    });
+                    .catch(error => { console.error('Error:', error); App.showSuccessMessage('Có lỗi xảy ra khi cập nhật trạng thái', 'error'); });
             }
         });
     }
@@ -746,6 +799,7 @@
                     document.querySelector('input[name="csrf_token"]')?.value;
                 fetch(`${App.appURL}admin/users/delete/${userId}`, {
                         method: 'POST',
+                        credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
@@ -753,8 +807,8 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
+                            if (data.success) {
+                            App.showSuccessMessage(data.message || 'Thành công', 'success');
                             setTimeout(() => {
                                 location.reload();
                             }, 1500);
@@ -787,6 +841,41 @@
                 App.setWardData(provinceCode, $('#ward'));
             }
         });
+
+        // Attach ban form submit handler (ensure modal elements exist)
+        const banForm = document.getElementById('banReasonForm');
+        if (banForm) {
+            banForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const userId = document.getElementById('ban_user_id_input').value;
+                const reason = document.getElementById('ban_reason_input').value.trim();
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || document.querySelector('input[name="csrf_token"]')?.value;
+                if (!reason) {
+                    document.getElementById('ban_reason_error').textContent = 'Vui lòng nhập lý do cấm';
+                    document.getElementById('ban_reason_error').classList.remove('hidden');
+                    return;
+                }
+                const btn = document.getElementById('ban_reason_submit');
+                btn.disabled = true; btn.textContent = 'Đang xử lý...';
+
+                fetch(`${App.appURL}admin/users/ban/${userId}`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    btn.disabled = false; btn.textContent = 'Xác nhận cấm';
+                    if (data.success) {
+                            App.showSuccessMessage(data.message || 'Cấm thành công', 'success');
+                            setTimeout(() => location.reload(), 1200);
+                        } else {
+                        App.showSuccessMessage(data.message || 'Có lỗi', 'error');
+                    }
+                }).catch(err => { btn.disabled = false; btn.textContent = 'Xác nhận cấm'; console.error(err); App.showSuccessMessage('Lỗi kết nối', 'error'); });
+            });
+        }
     });
 
     // Close modal when clicking outside
@@ -817,7 +906,8 @@
             <?php endif; ?>
         });
     <?php endif; ?>
-</script>
+
+    </script>
 
 <?php
 $content = ob_get_clean();
