@@ -199,55 +199,57 @@ $images = isset($post['images']) ? json_decode($post['images'], true) : [];
                 <?php } ?>
 
                 <!-- Same address -->
-                <div class="bg-white rounded-md shadow-sm border border-gray-200 p-3">
-                    <h3 class="text-sm font-semibold text-gray-900 pb-2 uppercase border-b"><?= $category ?> cùng địa chỉ</h3>
-                    <div class="mt-2">
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <!-- Property Card 1 -->
-                            <?php foreach ($sameAddressPosts as $sameAddressPost) { ?>
-                                <a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($sameAddressPost['rental_post_title']) . '-' . $sameAddressPost['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
-                                    <!-- Image Area -->
-                                    <div class="relative h-60 bg-gray-200 overflow-visible">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-                                            <img src="<?= json_decode($sameAddressPost['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
+                <?php if (count($sameAddressPosts) > 0) { ?>
+                    <div class="bg-white rounded-md shadow-sm border border-gray-200 p-3">
+                        <h3 class="text-sm font-semibold text-gray-900 pb-2 uppercase border-b"><?= $category ?> cùng địa chỉ</h3>
+                        <div class="mt-2">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Property Card 1 -->
+                                <?php foreach ($sameAddressPosts as $sameAddressPost) { ?>
+                                    <a href="<?= BASE_URL ?>/rental-post/<?= \Helpers\CreateSlug::createSlug($sameAddressPost['rental_post_title']) . '-' . $sameAddressPost['id'] ?>" class="bg-white rounded-lg cursor-pointer shadow-md overflow-visible hover:shadow-lg transition-shadow">
+                                        <!-- Image Area -->
+                                        <div class="relative h-60 bg-gray-200 overflow-visible">
+                                            <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
+                                                <img src="<?= json_decode($sameAddressPost['images'])[0] ?>" alt="Post Image" class="w-full h-full object-cover rounded-lg">
+                                            </div>
+                                            <!-- Verified Badge -->
+                                            <div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
+                                                <i class="fas fa-check text-white mr-1"></i>
+                                                Đã xác minh
+                                            </div>
+                                            <!-- Camera -->
+                                            <div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
+                                                <i class="fas fa-camera text-gray-600"></i>
+                                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($sameAddressPost['images'])) ?></span>
+                                            </div>
                                         </div>
-                                        <!-- Verified Badge -->
-                                        <div class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs flex items-center">
-                                            <i class="fas fa-check text-white mr-1"></i>
-                                            Đã xác minh
-                                        </div>
-                                        <!-- Camera -->
-                                        <div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
-                                            <i class="fas fa-camera text-gray-600"></i>
-                                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($sameAddressPost['images'])) ?></span>
-                                        </div>
-                                    </div>
 
-                                    <!-- Content Area -->
-                                    <div class="p-4">
-                                        <h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-                                            <?= $sameAddressPost['rental_post_title'] ?>
-                                        </h3>
-                                        <div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
-                                            <i class="fas fa-user text-gray-400 mr-2"></i>
-                                            <span><?= $sameAddressPost['contact'] ?> - <?= $sameAddressPost['province'] ?> . <?= $sameAddressPost['ward'] ?></span>
-                                        </div>
-                                        <div class="flex items-start justify-between flex-col">
-                                            <div class="flex items-center gap-2">
-                                                <span class="text-gray-400 line-through text-sm mr-2 <?= $sameAddressPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= Format::forMatPrice($sameAddressPost['price']) ?>₫</span>
-                                                <span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $sameAddressPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= round(($sameAddressPost['price'] - $sameAddressPost['price_discount']) / $sameAddressPost['price'] * 100) ?>% OFF</span>
+                                        <!-- Content Area -->
+                                        <div class="p-4">
+                                            <h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
+                                                <?= $sameAddressPost['rental_post_title'] ?>
+                                            </h3>
+                                            <div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
+                                                <i class="fas fa-user text-gray-400 mr-2"></i>
+                                                <span><?= $sameAddressPost['contact'] ?> - <?= $sameAddressPost['province'] ?> . <?= $sameAddressPost['ward'] ?></span>
                                             </div>
-                                            <div class="text-right flex w-full items-center justify-between pt-1">
-                                                <div class="text-[16px] font-bold text-red-600"><?= $sameAddressPost['price_discount'] > 0 ? Format::forMatPrice($sameAddressPost['price_discount']) : Format::forMatPrice($sameAddressPost['price']) ?>đ/tháng</div>
-                                                <div class="text-sm text-gray-600 font-medium mr-3"><?= $sameAddressPost['area'] ?> m²</div>
+                                            <div class="flex items-start justify-between flex-col">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-gray-400 line-through text-sm mr-2 <?= $sameAddressPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= Format::forMatPrice($sameAddressPost['price']) ?>₫</span>
+                                                    <span class="bg-red-500 text-white text-nowrap text-[9px] px-2 py-1 rounded <?= $sameAddressPost['price_discount'] > 0 ? '' : 'hidden' ?>"><?= round(($sameAddressPost['price'] - $sameAddressPost['price_discount']) / $sameAddressPost['price'] * 100) ?>% OFF</span>
+                                                </div>
+                                                <div class="text-right flex w-full items-center justify-between pt-1">
+                                                    <div class="text-[16px] font-bold text-red-600"><?= $sameAddressPost['price_discount'] > 0 ? Format::forMatPrice($sameAddressPost['price_discount']) : Format::forMatPrice($sameAddressPost['price']) ?>đ/tháng</div>
+                                                    <div class="text-sm text-gray-600 font-medium mr-3"><?= $sameAddressPost['area'] ?> m²</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                            <?php } ?>
+                                    </a>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
             </div>
 
             <!-- Contact Sidebar -->

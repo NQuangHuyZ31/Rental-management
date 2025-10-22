@@ -64,4 +64,8 @@ class ProfileCustomerController extends ProfileController {
             'customer/layouts/app'
         );
     }
+
+    public function handleDeleteAccount() {
+        parent::handleDeleteAccount();
+    }
 }

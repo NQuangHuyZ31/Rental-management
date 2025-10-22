@@ -808,7 +808,7 @@ class Invoice extends Model
 
     // Added by Huy Nguyen on 2025-09-17 update column
     public function updateColumn($invoiceId, $column, $value) {
-        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update([$column => $value]);
+        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
     }
 }
 

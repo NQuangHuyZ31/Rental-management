@@ -15,12 +15,4 @@ class ReportViolation extends Model {
     public function add($data) {
         return $this->table($this->table)->insert($data);
     }
-
-    public function updateColumn($reportId, $column, $value) {
-        if (empty($column) || empty($value)) return;
-
-        $value = is_array($value) ? json_encode($value) : $value;
-
-        return $this->table($this->table)->where('id', $reportId)->update([$column => $value]);
-    }
 }

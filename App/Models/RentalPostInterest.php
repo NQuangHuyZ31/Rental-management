@@ -36,8 +36,4 @@ class RentalPostInterest extends Model {
         }
         return $first ? $query->first() : $query->get();
     }
-
-    public function updateColumn($id, $column, $value) {
-        return parent::updateColumn($id, $column, $value);
-    }
 }

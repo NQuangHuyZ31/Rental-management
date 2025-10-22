@@ -20,7 +20,6 @@ use Core\Response;
 use Core\Session;
 use Core\ViewRender;
 use Helpers\Hash;
-use Helpers\Log;
 use Queue\SendEmailOTPJob;
 use Queue\SendEmailResetPassword;
 
@@ -54,31 +53,29 @@ class AuthController extends Controller {
 
         if (!empty($errors)) {
             $this->request->redirectWithErrors('/login', $errors);
-            exit;
         }
 
         if (!CSRF::validatePostRequest()) {
             CSRF::refreshToken();
             $this->request->redirectWithErrors('/login', 'Lỗi xảy ra. Vui lòng thử lại');
-            exit;
         }
 
         if (!$this->auth->login($request['email'], $request['password'], $role)) {
             $this->request->redirectWithErrors('/login', 'Email hoặc mật khẩu không đúng');
-            exit;
+        }
+
+        $user = $this->user->getUserById(Session::get('user')['id']);
+
+        if ($user && $user['account_status'] == 'banned') {
+            Session::delete('user');
+            $this->request->redirectWithErrors('/login', 'Tài khoản của bạn đã bị cấm. Vui lòng liên hệ hosty để được hỗ trợ');
         }
 
         // Check if user session exists and role matches
         if (Session::has('user') && Session::get('user')['role'] == $role) {
             // Update last login time only if user session exists
             $this->user->updateColumn(Session::get('user')['id'], 'last_login', date('Y-m-d H:i:s'));
-
-            if (Session::has('current_url') && Session::get('current_url')) {
-                header('location: '.Session::get('current_url').'');
-            } else {
-                $this->request->redirect($redirect);
-            }
-            exit;
+            $this->request->redirect($redirect);
         }
     }
 
@@ -100,13 +97,11 @@ class AuthController extends Controller {
 
         if (!empty($errors)) {
             $this->request->redirectWithErrors('/register', $errors);
-            exit;
         }
 
         if (!CSRF::validatePostRequest()) {
             CSRF::refreshToken();
             $this->request->redirectWithErrors('/register', 'Lỗi xảy ra. Vui lòng thử lại');
-            exit;
         }
 
         // Xóa user nếu email tồn tại và chưa active
@@ -132,7 +127,6 @@ class AuthController extends Controller {
             $this->request->redirect('/verify-account', [
                 'email' => $request['email'] ?? 'abc@gmail.com',
             ]);
-            exit;
         }
 
         $this->request->redirectWithErrors('/register', 'Lỗi xảy ra. Vui lòng thử lại');
@@ -148,13 +142,11 @@ class AuthController extends Controller {
 
         if (!empty($errors)) {
             $this->request->redirectWithError('/verify-account', $errors);
-            exit;
         }
 
         if (!CSRF::validatePostRequest()) {
             CSRF::refreshToken();
             $this->request->redirectWithError('/verify-account', 'Lỗi xảy ra. Vui lòng thử lại');
-            exit;
         }
 
         $user = $this->user->getUserByEmail(Session::get('email'), 'inactive');
@@ -162,12 +154,10 @@ class AuthController extends Controller {
 
         if (!Hash::verify($otpRequest, $otp['otp_code'])) {
             $this->request->redirectWithError('/verify-account', 'Mã OTP không đúng. Vui lòng thử lại');
-            exit;
         }
 
         if ($otp && $otp['expired'] < time()) {
             $this->request->redirectWithError('/verify-account', 'Mã OTP đã hết hạn. Vui lòng gửi lại mã OTP.');
-            exit;
         }
 
         $this->user->updateColumn($user['id'], 'account_status', 'active');
@@ -217,7 +207,6 @@ class AuthController extends Controller {
                 ],
                 'token' => CSRF::getToken(),
             ], 400);
-            exit;
         }
 
         $user = $this->user->getUserByEmail(Session::get('email'), 'inactive');
@@ -229,7 +218,6 @@ class AuthController extends Controller {
                 ],
                 'token' => CSRF::getToken(),
             ], 200);
-            exit;
         }
     }
 
@@ -246,23 +234,19 @@ class AuthController extends Controller {
 
         if (!CSRF::validatePostRequest()) {
             Response::json(['status' => 'error', 'msg' => 'Lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         if (empty($data['email'])) {
             Response::json(['status' => 'error', 'msg' => 'Vui lòng nhập email', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         if (!preg_match('/^[\w\.-]+@[\w\.-]+\.com$/', $data['email'])) {
             Response::json(['status' => 'error', 'msg' => 'Email không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         $user = $this->user->getUserByEmail($data['email']);
         if (!$user) {
             Response::json(['status' => 'error', 'msg' => 'Email không tồn tại trong hệ thống', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         $dataUser = ['email' => $user['email'], 'username' => $user['username'], 'time' => time()];
@@ -307,17 +291,14 @@ class AuthController extends Controller {
 
         if (!CSRF::validatePostRequest()) {
             Response::json(['status' => 'error', 'msg' => 'Lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         if (empty($request['token'])) {
             Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
         $errors = PasswordValidate::validate($request);
         if (!empty($errors)) {
             Response::json(['status' => 'error', 'msg' => $errors, 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
         $data = Hash::decrypt($request['token']);
         $data = json_decode($data, true);
@@ -325,20 +306,17 @@ class AuthController extends Controller {
 
         if (!$user) {
             Response::json(['status' => 'error', 'msg' => 'Email không tồn tại trong hệ thống', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         $otp = $this->otp->getOTPByUserIdAndType($user['id'], 'forgot_password');
         if ($request['token'] !== $otp['otp_code']) {
             Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
 
         if ($otp['expired'] < time()) {
             Response::json(['status' => 'error', 'msg' => 'Token đã hết hạn', 'token' => CSRF::getTokenRefresh()], 400);
-            exit;
         }
-        
+
         $hashed = password_hash($request['password'], PASSWORD_DEFAULT);
         $this->user->updateColumn($user['id'], 'password', $hashed);
         $this->user->updateColumn($user['id'], 'updated_at', date('Y-m-d H:i:s'));

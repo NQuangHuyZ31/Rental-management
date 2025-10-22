@@ -13,8 +13,6 @@ Purpose: Libraries and Dependencies for Landlord Layout
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css">
 <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
-<link href="<?= BASE_URL ?>/Public/css/flowbite.min.css?v=<?= rand()?>" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
 <?php \Core\Session::set('current_url', $_SERVER['REQUEST_URI']); ?>
 <?= \Core\CSRF::getTokenMeta() ?>

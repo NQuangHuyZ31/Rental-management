@@ -34,12 +34,12 @@ class Auth
     public function login($email, $password, $role = '1')
     {
         // Truy vấn người dùng theo email
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ? AND account_status = 'active' AND deleted = 0 AND role_id = ?");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ? AND deleted = 0 AND role_id = ?");
         $stmt->execute([$email, $role]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Kiểm tra người dùng và xác minh mật khẩu
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user && password_verify($password, $user['password']) && $user['account_status'] != 'inactive') {
             session_regenerate_id(true); // chống session fixation
             Session::set('user', [
                 'id' => $user['id'],

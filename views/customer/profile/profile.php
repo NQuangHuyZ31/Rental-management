@@ -214,7 +214,7 @@ use Helpers\Format;
 					</div>
 
 					<div class="flex items-center justify-between">
-						<span class="text-sm font-medium text-gray-700">Phòng đã thuê</span>
+						<span class="text-sm font-medium text-gray-700">Phòng đang thuê</span>
 						<span class="text-sm text-gray-600"><?= $countRentedRooms ?></span>
 					</div>
 
@@ -236,7 +236,7 @@ use Helpers\Format;
 					<div>
 						<h3 class="font-medium text-gray-900 mb-2">Xóa tài khoản</h3>
 						<p class="text-sm text-gray-600 mb-4">Xóa vĩnh viễn tài khoản và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.</p>
-						<button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+						<button id="deleteAccount" data-modal-target="deleteAccountModal" data-modal-toggle="deleteAccountModal" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
 							<i class="fas fa-trash mr-2"></i>
 							Xóa tài khoản
 						</button>
@@ -246,3 +246,5 @@ use Helpers\Format;
 		</div>
 	</div>
 </div>
+
+<?php include_once ROOT_PATH .'/views/partials/deleted-account-modal.php'; ?>

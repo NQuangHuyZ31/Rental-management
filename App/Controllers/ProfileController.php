@@ -52,10 +52,10 @@ class ProfileController extends CustomerController {
         }
     }
 
-	public function updateProfilePicture() {
-		$data = $this->request->post();
-		$file = $this->request->file('profilePicture');
-		$error = FileValidate::validate($file);
+    public function updateProfilePicture() {
+        $data = $this->request->post();
+        $file = $this->request->file('profilePicture');
+        $error = FileValidate::validate($file);
 
         if (!empty($error)) {
             Response::json(['status' => 'error', 'message' => $error, 'token' => CSRF::getTokenRefresh()], 400);
@@ -75,7 +75,7 @@ class ProfileController extends CustomerController {
         }
 
         $filename = uniqid() . '_' . $file['name'];
-        
+
         $url = UploadClound::upload($file['tmp_name'], 'avatar', $filename);
 
         if (!$url) {
@@ -85,9 +85,9 @@ class ProfileController extends CustomerController {
 
         $this->userModel->updateColumn($this->userID, 'avatar', $url);
 
-		Response::json(['status' => 'success', 'message' => 'Cập nhật ảnh đại diện thành công!', 'token' => CSRF::getTokenRefresh()], 200);
-		exit;
-	}
+        Response::json(['status' => 'success', 'message' => 'Cập nhật ảnh đại diện thành công!', 'token' => CSRF::getTokenRefresh()], 200);
+        exit;
+    }
 
     protected function changePassword() {
         $data = $this->request->post();
@@ -129,5 +129,26 @@ class ProfileController extends CustomerController {
 
         Response::json(['status' => 'success', 'message' => 'Đổi mật khẩu thành công', 'token' => CSRF::getTokenRefresh()], 200);
         exit;
+    }
+
+    // ========================DELETE ACCCOUNT==========================================================
+    public function handleDeleteAccount() {
+        if(!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $user = $this->userModel->getUserById($this->user['id']);
+
+        if (!$user) {
+            Response::json(['status' => 'error', 'msg' => 'Tài khoản không tồn tại hoặc bị xóa', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if (!$this->userModel->updateColumn($user['id'], 'account_status', 'inactive')) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi trong quá trình xóa. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+        
+        $this->auth->logout();
+
+        Response::json(['status' => 'success', 'msg' => 'Xóa tài khoản thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 }

@@ -42,19 +42,19 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                         <i class="fas fa-home"></i>
                         <span class="text-[12px]">Tìm trọ, căn hộ</span>
                     </a>
-                    <a href="#" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="jobs">
+                    <a href="<?= BASE_URL ?>/tim-viec" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="jobs">
                         <i class="fas fa-briefcase"></i>
                         <span class="text-[12px]">Tìm việc làm</span>
                     </a>
-                    <a href="#" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="plus">
+                    <a href="<?= BASE_URL ?>/hosty-plus" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="plus">
                         <i class="fas fa-plus"></i>
                         <span class="text-[12px]">HOSTY Plus+</span>
                     </a>
-                    <a href="#" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="recruitment">
+                    <a href="<?= BASE_URL ?>/ho-tro" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="recruitment">
                         <i class="fas fa-bullhorn"></i>
-                        <span class="text-[12px]">HOSTY Tuyển dụng</span>
+                        <span class="text-[12px]">Hỗ trợ</span>
                     </a>
-                    <a href="#" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="about">
+                    <a href="<?= BASE_URL ?>/gioi-thieu" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="about">
                         <i class="fas fa-info-circle"></i>
                         <span class="text-[12px]">Giới thiệu</span>
                     </a>

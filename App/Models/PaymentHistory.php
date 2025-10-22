@@ -49,8 +49,8 @@ class PaymentHistory extends Model {
         return $this->table($this->table)->where('payer_id', $userId)->where('deleted', 0)->count();
     }
 
-    public function getTotalPaymentHistoryByUserId($userId) {
-        return $this->table($this->table)->select('SUM(amount) as total')->where('payer_id', $userId)->where('deleted', 0)->first();
+    public function getTotalPaymentHistoryByUserId($userId, $type = 'payer_id') {
+        return $this->table($this->table)->select('SUM(amount) as total')->where($type, $userId)->where('deleted', 0)->first();
     }
 
     public function getPaymentHistoryDetail($id) {

@@ -107,16 +107,4 @@ class User extends Model {
 
         return $this->table($this->table)->where('id', $id)->update($data);
     }
-
-    public function updateColumn($id, $column, $value) {
-        try {
-            // Build and execute the update query
-            $result = $this->table($this->table)->where('id', $id)->update([$column => $value]);
-            return $result;
-        } catch (\Exception $e) {
-            error_log("Error updating user column: " . $e->getMessage());
-            return false;
-        }
-    }
-
 }

@@ -34,4 +34,37 @@ $(document).ready(function () {
     const defaultProvince = $(PROVINCE).data('default');
     const defaultWard = $(WARD).data('default');
     loadProvince(defaultProvince, defaultWard);
+
+    // Send customer-support
+    $('button#supportBtn').on('click', function (e) {
+        const button = $(this);
+        button.prop('disabled', true);
+        const formData = new FormData($('form#supportForm')[0]);
+        console.log(formData);
+
+        if (window.JsLoadingOverlay?.show) JsLoadingOverlay.show();
+
+        $.ajax({
+            url: App.appURL + 'ho-tro',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (response) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                showSuccessMessage(response.msg);
+                if (response.token) App.setToken(response.token);
+                $('form#supportForm')[0].reset();
+                setTimeout(() => button.prop('disabled', false), 1500);
+            },
+            error: function (xhr) {
+                if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
+                const json = xhr.responseJSON || {};
+                showErrorMessage(json.msg || 'Có lỗi xảy ra');
+                if (json.token) App.setToken(json.token);
+                setTimeout(() => button.prop('disabled', false), 1500);
+            },
+        });
+    });
 });

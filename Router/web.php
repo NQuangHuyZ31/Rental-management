@@ -18,7 +18,7 @@ use App\Controllers\Customer\RentalPostDormitoryController;
 use App\Controllers\Admin\UserManagementController;
 use App\Controllers\Admin\CategoryManagementController;
 use App\Controllers\Admin\AmenityManagementController;
-
+use App\Controllers\BaseCustomerController;
 // Landlord Controller
 use App\Controllers\Customer\RentalPostHouseController;
 use App\Controllers\Customer\RentalPostOfficeController;
@@ -65,6 +65,12 @@ $router->post('/send-link-reset-password', [AuthController::class, 'sendLinkRese
 $router->get('/reset-password', [AuthController::class, 'showResetPasswordPage']);
 $router->post('/reset-password', [AuthController::class, 'handleResetPassword']);
 
+// Developer Page Route
+$router->get('/tim-viec', [BaseCustomerController::class, 'showJobPage']);
+$router->get('/hosty-plus', [BaseCustomerController::class, 'showHostyPlusPage']);
+$router->get('/ho-tro', [BaseCustomerController::class, 'showSupportPage']);
+$router->post('/ho-tro', [BaseCustomerController::class, 'handleSupportProblem']);
+
 // Search page
 $router->get('/phong-tro-nha-tro', [RentalPostRoomController::class, 'searchByFilter']);
 $router->get('/ky-tuc-xa-sleepbox', [RentalPostDormitoryController::class, 'searchByFilter']);
@@ -81,6 +87,7 @@ $router->get('/customer/profile', [ProfileCustomerController::class, 'profile'],
 $router->post('/customer/profile/update', [ProfileCustomerController::class, 'update'], [AuthMiddleware::class]);
 $router->post('/customer/profile/update-profile-picture', [ProfileCustomerController::class, 'updateProfilePicture'], [AuthMiddleware::class]);
 $router->post('/customer/profile/change-password', [ProfileCustomerController::class, 'changePassword'], [AuthMiddleware::class]);
+$router->post('/customer/profile/delete-account', [ProfileCustomerController::class, 'handleDeleteAccount'], [AuthMiddleware::class]);
 $router->get('/customer/bills', [BillCustomerController::class, 'bills'], [AuthMiddleware::class]);
 $router->get('/customer/payment-history', [BillCustomerController::class, 'paymentHistory'], [AuthMiddleware::class]);
 $router->get('/customer/interests', [InterestCustomerController::class, 'interests'], [AuthMiddleware::class]);
@@ -228,6 +235,7 @@ $router->get('/landlord/profile', [ProfileLandlordController::class, 'profile'],
 $router->post('/landlord/profile/update', [ProfileLandlordController::class, 'update'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/profile/change-password', [ProfileLandlordController::class, 'changePassword'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/profile/update-profile-picture', [ProfileLandlordController::class, 'updateProfilePicture'], [AuthLandlordMiddleware::class]);
+$router->post('/landlord/profile/delete-account', [ProfileLandlordController::class, 'handleDeleteAccount'], [AuthLandlordMiddleware::class]);
 // Route test
 $router->get('/test', [TestController::class, 'index']);
 // Xử lý request

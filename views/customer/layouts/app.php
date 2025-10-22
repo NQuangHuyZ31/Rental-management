@@ -44,46 +44,6 @@ if ($error) {
     <!-- Bootstrap Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <style>
-        .sidebar-transition {
-            transition: all 0.3s ease-in-out;
-        }
-        .sidebar-hidden {
-            display: none;
-        }
-        .sidebar-visible {
-            display: block;
-        }
-        @media (min-width: 1024px) {
-            .lg\:sidebar-visible {
-                display: block;
-            }
-            .lg\:sidebar-hidden {
-                display: block;
-            }
-        }
-        .w-70 {
-            width: 18rem;
-        }
-        @media (max-width: 1023px) {
-            #sidebar {
-                position: fixed;
-                top: 8rem; /* Adjusted for header height */
-                left: 0;
-                height: calc(100vh - 8rem);
-                z-index: 30;
-                overflow-y: auto;
-            }
-            .sidebar-hidden {
-                transform: translateX(-100%);
-                display: block;
-            }
-            .sidebar-visible {
-                transform: translateX(0);
-                display: block;
-            }
-        }
-    </style> -->
 </head>
 
 <body class="bg-gray-50 h-screen">

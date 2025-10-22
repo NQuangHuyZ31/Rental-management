@@ -129,7 +129,7 @@ class CustomerController extends BaseCustomerController {
             $savedFiles = $this->saveTemporaryFiles($files, $reportId);
 
             // Xử lý upload ảnh
-            $this->uploadImageReportViolation->dispatch(['report_id' => $reportId, 'images' => $savedFiles]);
+            $this->uploadImageReportViolation->dispatch(['id' => $reportId, 'images' => $savedFiles]);
         }
 
         Response::json(['status' => 'success', 'msg' => 'Cảm ơn bạn đã báo cáo. Hosty sẽ xử lí trong vào 24h tới', 'token' => CSRF::getTokenRefresh()], 200);

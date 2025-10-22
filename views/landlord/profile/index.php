@@ -218,22 +218,22 @@ use Core\CSRF;
 
 							<div class="flex items-center justify-between">
 								<span class="text-sm font-medium text-gray-700">Tổng số nhà</span>
-								<span class="text-sm text-gray-600"><?= $stats['total_houses'] ?? 0 ?></span>
+								<span class="text-sm text-gray-600"><?= $totalHouse ?? 0 ?></span>
 							</div>
 
 							<div class="flex items-center justify-between">
 								<span class="text-sm font-medium text-gray-700">Tổng số phòng</span>
-								<span class="text-sm text-gray-600"><?= $stats['total_rooms'] ?? 0 ?></span>
+								<span class="text-sm text-gray-600"><?= $totalRoom ?? 0 ?></span>
 							</div>
 
 							<div class="flex items-center justify-between">
 								<span class="text-sm font-medium text-gray-700">Phòng đang cho thuê</span>
-								<span class="text-sm text-gray-600"><?= $stats['occupied_rooms'] ?? 0 ?></span>
+								<span class="text-sm text-gray-600"><?= $totalRentalRoom ?? 0 ?></span>
 							</div>
 
 							<div class="flex items-center justify-between">
 								<span class="text-sm font-medium text-gray-700">Tổng doanh thu</span>
-								<span class="text-sm text-gray-600"><?= number_format($stats['total_revenue'] ?? 0) ?> VNĐ</span>
+								<span class="text-sm text-gray-600"><?= $totalRevenue ?> VNĐ</span>
 							</div>
 						</div>
 					</div>
@@ -249,7 +249,7 @@ use Core\CSRF;
 							<div>
 								<h3 class="font-medium text-gray-900 mb-2">Xóa tài khoản</h3>
 								<p class="text-sm text-gray-600 mb-4">Xóa vĩnh viễn tài khoản và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.</p>
-								<button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+								<button id="deleteAccount" data-modal-target="deleteAccountModal" data-modal-toggle="deleteAccountModal" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
 									<i class="fas fa-trash mr-2"></i>
 									Xóa tài khoản
 								</button>
@@ -259,6 +259,7 @@ use Core\CSRF;
 				</div>
 			</div>
 		</div>
+		<?php include_once ROOT_PATH .'/views/partials/deleted-account-modal.php'; ?>
 	</main>
 	<?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
     <script src="<?= BASE_URL ?>/Public/js/profile.js"></script>

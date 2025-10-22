@@ -22,6 +22,10 @@ class Model extends QueryBuilder {
 	}
 
 	public function updateColumn($id, $column, $value) {
-		return $this->table($this->table)->where('id', $id)->update([$column => $value]);
+		if (empty($column) || empty($value)) return;
+		
+		$value = is_array($value) ? json_encode($value) : $value;
+
+		return $this->table($this->table)->where('id', $id)->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
 	}
 }

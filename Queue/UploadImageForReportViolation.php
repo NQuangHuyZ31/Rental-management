@@ -8,6 +8,7 @@
 
 namespace Queue;
 
+use App\Models\CustomerSupport;
 use App\Models\ReportViolation;
 use Core\Job;
 use Exception;
@@ -18,10 +19,12 @@ class UploadImageForReportViolation extends Job {
     protected $queueName = 'upload-image-on-cloud';
     protected $maxAttempts = 5;
     protected $reportViolationModel;
+    protected $customerSupportModel;
 
     public function __construct() {
         parent::__construct();
         $this->reportViolationModel = new ReportViolation();
+        $this->customerSupportModel = new CustomerSupport();
     }
 
     /**
@@ -29,8 +32,9 @@ class UploadImageForReportViolation extends Job {
      */
     public function handle($data) {
         try {
-            $reportId = $data['report_id'];
+            $id = $data['id'];
             $images = $data['images'];
+            $type = $data['type'] ?? 'report';
             $uploadedUrls = [];
 
             // Upload each image to cloud
@@ -68,7 +72,7 @@ class UploadImageForReportViolation extends Job {
 
                 // Tạo tên file unique
                 $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-                $filePath = 'post_' . $reportId . '_' . time() . '_' . $i . '_' . hash('sha1', $image['name']);
+                $filePath = 'post_' . $id . '_' . time() . '_' . $i . '_' . hash('sha1', $image['name']);
 
                 try {
                     // Upload lên Cloudinary
@@ -84,10 +88,14 @@ class UploadImageForReportViolation extends Job {
             }
 
             // Update post with uploaded image URLs
-            $this->reportViolationModel->updateColumn($reportId, 'note', $uploadedUrls);
+            if ($type == 'support') {
+                $this->customerSupportModel->updateColumn($id, 'images', $uploadedUrls);
+            } else {
+                $this->reportViolationModel->updateColumn($id, 'note', $uploadedUrls);
+            }
 
             // Clean up temporary files
-            $this->cleanupTempFiles($reportId);
+            $this->cleanupTempFiles($id);
 
         } catch (\Exception $e) {
             error_log("UploadImageOnCloud: Error: " . $e->getMessage());

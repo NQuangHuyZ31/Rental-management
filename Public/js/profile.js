@@ -6,12 +6,14 @@ $(document).ready(function () {
         const updateUrl = options?.updateUrl || App.appURL + defaultBase + '/update';
         const changePasswordUrl = options?.changePasswordUrl || App.appURL + defaultBase + '/change-password';
         const updateProfilePictureUrl = options?.updateProfilePictureUrl || App.appURL + defaultBase + '/update-profile-picture';
+        const deleteAccount = options?.updateProfilePictureUrl || App.appURL + defaultBase + '/delete-account';
 
         const $updateBtn = $('#updateProfile');
         const $profileForm = $('#profileForm');
         const $changePasswordForm = $('#changePasswordForm');
         const $updateProfilePictureTrigger = $('#updateProfilePictureTrigger');
         const $profilePictureInput = $('#profilePicture');
+        const $deleteAccountBtn = $('button#confirmDeleteBtn');
 
         if ($updateBtn.length && $profileForm.length) {
             $updateBtn.off('click.profile').on('click.profile', function (e) {
@@ -138,6 +140,43 @@ $(document).ready(function () {
                     },
                 });
             });
+        }
+
+        // Delete Account
+        if ($deleteAccountBtn.length) {
+            $('button#confirmDeleteBtn')
+                .off('click')
+                .on('click', function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: deleteAccount,
+                        data: {
+                            csrf_token: App.getToken(),
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            App.setToken(response.token);
+
+                            if (response.status == 'success') {
+                                showSuccessMessage(response.msg);
+                                $('button#cancelDeleteAccount').trigger('click');
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 3000);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            App.setToken(xhr.responseJSON.token);
+
+                            if (xhr.responseJSON.status == 'error') {
+                                showErrorMessage(xhr.responseJSON.msg);
+                                return;
+                            }
+                        },
+                    });
+                });
         }
     };
 });

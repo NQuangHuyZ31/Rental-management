@@ -201,11 +201,12 @@ class Room extends Model {
     /**
      * Get available rooms by house ID
      */
-    public function getAvailableRoomsByHouseId($houseId) {
+    // Modify by Huy Nguyen on 2025-10-21 to support get by status
+    public function getAvailableRoomsByHouseId($houseId, $status = 'available', $ownerId = false) {
         return $this->queryBuilder
             ->table($this->table)
             ->where('house_id', $houseId)
-            ->where('room_status', 'available')
+            ->where('room_status', $status)
             ->where('deleted', 0)
             ->orderBy('room_name')
             ->get();

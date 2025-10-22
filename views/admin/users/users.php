@@ -82,6 +82,9 @@
                             Ngày đăng ký
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Đăng nhập lần cuối
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Hành động
                         </th>
                     </tr>
@@ -134,6 +137,25 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <?= date('d/m/Y', strtotime($user['created_at'])) ?>
+                                </td>
+                                <?php
+                                    $date = new DateTime($user['last_login']);
+                                    $now = new DateTime();
+                                    $interval = $date->diff($now);
+                                    $lastLogin = '';
+
+                                    if ($interval->y > 0) {
+                                        $lastLogin .= $interval->y . ' ' . 'năm';
+                                    } elseif ($interval->m > 0) {
+                                        $lastLogin .= $interval->m . ' ' . 'tháng';
+                                    } elseif ($interval->d > 0) {
+                                        $lastLogin .= $interval->d . ' ' . 'ngày';
+                                    } else {
+                                        $lastLogin .= '1 ngày';
+                                    }
+                                ?>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= $lastLogin ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
@@ -738,25 +760,27 @@
                     }
 
                     return fetch(`${App.appURL}admin/users/ban/${userId}`, {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (!data || !data.success) {
-                            throw new Error(data?.message || 'Có lỗi xảy ra');
-                        }
-                        return data;
-                    })
-                    .catch(err => {
-                        Swal.showValidationMessage(`Lỗi: ${err.message || err}`);
-                    });
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (!data || !data.success) {
+                                throw new Error(data?.message || 'Có lỗi xảy ra');
+                            }
+                            return data;
+                        })
+                        .catch(err => {
+                            Swal.showValidationMessage(`Lỗi: ${err.message || err}`);
+                        });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
-                    if (result.isConfirmed) {
+                if (result.isConfirmed) {
                     App.showSuccessMessage(result.value.message || 'Cấm thành công', 'success');
                     setTimeout(() => location.reload(), 1200);
                 }
@@ -774,19 +798,26 @@
                 fetch(`${App.appURL}admin/users/toggle-status/${userId}`, {
                         method: 'POST',
                         credentials: 'same-origin',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
                         body: `status=${status}&csrf_token=${csrfToken}`
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             App.showSuccessMessage(data.message || 'Thao tác thành công', 'success');
-                            setTimeout(() => { location.reload(); }, 1500);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
                         } else {
                             App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
                         }
                     })
-                    .catch(error => { console.error('Error:', error); App.showSuccessMessage('Có lỗi xảy ra khi cập nhật trạng thái', 'error'); });
+                    .catch(error => {
+                        console.error('Error:', error);
+                        App.showSuccessMessage('Có lỗi xảy ra khi cập nhật trạng thái', 'error');
+                    });
             }
         });
     }
@@ -807,7 +838,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                            if (data.success) {
+                        if (data.success) {
                             App.showSuccessMessage(data.message || 'Thành công', 'success');
                             setTimeout(() => {
                                 location.reload();
@@ -856,24 +887,33 @@
                     return;
                 }
                 const btn = document.getElementById('ban_reason_submit');
-                btn.disabled = true; btn.textContent = 'Đang xử lý...';
+                btn.disabled = true;
+                btn.textContent = 'Đang xử lý...';
 
                 fetch(`${App.appURL}admin/users/ban/${userId}`, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
-                })
-                .then(res => res.json())
-                .then(data => {
-                    btn.disabled = false; btn.textContent = 'Xác nhận cấm';
-                    if (data.success) {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `reason=${encodeURIComponent(reason)}&csrf_token=${csrfToken}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        btn.disabled = false;
+                        btn.textContent = 'Xác nhận cấm';
+                        if (data.success) {
                             App.showSuccessMessage(data.message || 'Cấm thành công', 'success');
                             setTimeout(() => location.reload(), 1200);
                         } else {
-                        App.showSuccessMessage(data.message || 'Có lỗi', 'error');
-                    }
-                }).catch(err => { btn.disabled = false; btn.textContent = 'Xác nhận cấm'; console.error(err); App.showSuccessMessage('Lỗi kết nối', 'error'); });
+                            App.showSuccessMessage(data.message || 'Có lỗi', 'error');
+                        }
+                    }).catch(err => {
+                        btn.disabled = false;
+                        btn.textContent = 'Xác nhận cấm';
+                        console.error(err);
+                        App.showSuccessMessage('Lỗi kết nối', 'error');
+                    });
             });
         }
     });
@@ -906,8 +946,7 @@
             <?php endif; ?>
         });
     <?php endif; ?>
-
-    </script>
+</script>
 
 <?php
 $content = ob_get_clean();
