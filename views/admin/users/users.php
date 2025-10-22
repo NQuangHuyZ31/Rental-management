@@ -150,12 +150,12 @@
                                         $lastLogin .= $interval->m . ' ' . 'tháng';
                                     } elseif ($interval->d > 0) {
                                         $lastLogin .= $interval->d . ' ' . 'ngày';
-                                    } else {
-                                        $lastLogin .= '1 ngày';
+                                    } elseif ($interval->d == 0) {
+                                        $lastLogin .= 'Hôm nay';
                                     }
                                 ?>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?= $lastLogin ?>
+                                    <?= $lastLogin != 'Hôm nay' ? ($lastLogin != '' ? $lastLogin . ' trước' : '') : $lastLogin ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">

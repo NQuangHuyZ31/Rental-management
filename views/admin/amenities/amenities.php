@@ -77,7 +77,9 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <?php if (!empty($amenities)): ?>
                         <?php foreach ($amenities as $amenity): ?>
-                            <?php $adminUserIds = $adminUserIds ?? []; $ownerId = $amenity['owner_id'] ?? null; $isSystemAmenity = (empty($ownerId) || in_array((int)$ownerId, $adminUserIds)); ?>
+                            <?php $adminUserIds = $adminUserIds ?? [];
+                            $ownerId = $amenity['owner_id'] ?? null;
+                            $isSystemAmenity = (empty($ownerId) || in_array((int)$ownerId, $adminUserIds)); ?>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
@@ -101,9 +103,11 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex items-center space-x-3">
-                                        <button onclick="openEditAmenityModal(<?= htmlspecialchars(json_encode($amenity)) ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                                        <?php if (empty($amenity['owner_id']) || $amenity['owner_id'] == \Core\Session::get('user')['id']) { ?>
+                                            <button onclick="openEditAmenityModal(<?= htmlspecialchars(json_encode($amenity)) ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        <?php } ?>
                                         <?php $currentStatus = ($amenity['rental_amenity_status'] ?? 'inactive'); ?>
                                         <?php if ($currentStatus === 'active'): ?>
                                             <button onclick="toggleAmenityStatus(<?= $amenity['id'] ?>, 'inactive')" class="text-green-600 hover:text-green-900" title="Đổi trạng thái sang Tạm dừng">
@@ -185,138 +189,189 @@
 </div>
 
 <script>
-// JS modal helpers for amenity page
-function openCreateAmenityModal() {
-    clearAmenityFormErrors();
-    document.getElementById('amenityForm').reset();
-    document.getElementById('amenity_id').value = '';
-    // ensure form posts to create endpoint
-    document.getElementById('amenityForm').action = `${App.appURL}admin/amenities/store`;
-    document.getElementById('amenityModalTitle').textContent = 'Thêm tiện ích mới';
-    document.getElementById('amenityModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
+    // JS modal helpers for amenity page
+    function openCreateAmenityModal() {
+        clearAmenityFormErrors();
+        document.getElementById('amenityForm').reset();
+        document.getElementById('amenity_id').value = '';
+        // ensure form posts to create endpoint
+        document.getElementById('amenityForm').action = `${App.appURL}admin/amenities/store`;
+        document.getElementById('amenityModalTitle').textContent = 'Thêm tiện ích mới';
+        document.getElementById('amenityModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
 
-function openEditAmenityModal(amenity) {
-    clearAmenityFormErrors();
-    document.getElementById('amenity_id').value = amenity.id || '';
-    document.getElementById('rental_amenity_name').value = amenity.rental_amenity_name || '';
-    document.getElementById('rental_amenity_status').checked = (amenity.rental_amenity_status || 'inactive') === 'active';
-    // set form action to update endpoint for this amenity
-    document.getElementById('amenityForm').action = `${App.appURL}admin/amenities/update/${amenity.id || ''}`;
-    document.getElementById('amenityModalTitle').textContent = 'Chỉnh sửa tiện ích';
-    document.getElementById('amenityModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
+    function openEditAmenityModal(amenity) {
+        clearAmenityFormErrors();
+        document.getElementById('amenity_id').value = amenity.id || '';
+        document.getElementById('rental_amenity_name').value = amenity.rental_amenity_name || '';
+        document.getElementById('rental_amenity_status').checked = (amenity.rental_amenity_status || 'inactive') === 'active';
+        // set form action to update endpoint for this amenity
+        document.getElementById('amenityForm').action = `${App.appURL}admin/amenities/update/${amenity.id || ''}`;
+        document.getElementById('amenityModalTitle').textContent = 'Chỉnh sửa tiện ích';
+        document.getElementById('amenityModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
 
-function closeAmenityModal() {
-    document.getElementById('amenityModal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
+    function closeAmenityModal() {
+        document.getElementById('amenityModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 
-function clearAmenityFormErrors() {
-    const errs = document.querySelectorAll('#amenityForm .error-message');
-    errs.forEach(e => { e.classList.add('hidden'); e.textContent = ''; });
-}
-
-function deleteAmenity(id) {
-    App.showModalConfirm('Bạn có chắc chắn muốn xoá tiện ích này?').then((result) => {
-        if (!result.isConfirmed) return;
-        const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
-        fetch(`${App.appURL}admin/amenities/delete/${id}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `csrf_token=${csrf}`
-        })
-        .then(response => response.text())
-        .then(text => {
-            let data;
-            try { data = JSON.parse(text); } catch (e) { data = { success: false, message: text }; }
-            if (data.success) {
-                App.showSuccessMessage(data.message || 'Xoá thành công', 'success');
-                setTimeout(() => { location.reload(); }, 1200);
-            } else {
-                App.showSuccessMessage(data.message || 'Có lỗi', 'error');
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            App.showSuccessMessage('Lỗi kết nối', 'error');
+    function clearAmenityFormErrors() {
+        const errs = document.querySelectorAll('#amenityForm .error-message');
+        errs.forEach(e => {
+            e.classList.add('hidden');
+            e.textContent = '';
         });
-    });
-}
+    }
 
-// Intercept form submit to show inline errors (basic)
-document.getElementById('amenityForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    clearAmenityFormErrors();
-    const form = this;
-    const formData = new FormData(form);
-    // Ensure status is sent as 'active' or 'inactive'
-    const statusCheckbox = document.getElementById('rental_amenity_status');
-    formData.set('rental_amenity_status', statusCheckbox && statusCheckbox.checked ? 'active' : 'inactive');
-    const action = form.action;
-    const btn = document.getElementById('amenitySaveBtn');
-    btn.disabled = true; btn.textContent = 'Đang xử lý...';
-
-    fetch(action, { method: 'POST', body: formData })
-        .then(response => response.text())
-        .then(text => {
-            let data;
-            try { data = JSON.parse(text); } catch (e) { data = { success: false, message: text }; }
-            btn.disabled = false; btn.textContent = 'Lưu';
-            if (data.success) {
-                App.showSuccessMessage(data.message || 'Thành công', 'success');
-                setTimeout(() => { closeAmenityModal(); location.reload(); }, 1200);
-            } else if (data.validationErrors) {
-                for (const [field, msg] of Object.entries(data.validationErrors)) {
-                    const el = document.getElementById(field + '-error');
-                    const input = document.getElementById(field);
-                    if (el) { el.textContent = msg; el.classList.remove('hidden'); }
-                    if (input) input.classList.add('border-red-500');
-                }
-                if (data.message) {
-                    App.showSuccessMessage(data.message, 'error');
-                }
-            } else {
-                App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
-            }
-        }).catch(err => { console.error(err); btn.disabled = false; btn.textContent = 'Lưu'; App.showSuccessMessage('Lỗi kết nối', 'error'); });
-});
-
-function toggleAmenityStatus(amenityId, newStatus) {
-    App.showModalConfirm('Bạn có chắc chắn muốn đổi trạng thái?').then(result => {
-        if (!result.isConfirmed) return;
-        const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
-        fetch(`${App.appURL}admin/amenities/toggle-status/${amenityId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `status=${newStatus}&csrf_token=${csrf}`
-        })
-        .then(response => response.text())
-        .then(text => {
-            let data;
-            try { data = JSON.parse(text); } catch (e) { data = { success: false, message: text }; }
-            if (data.success) {
-                App.showSuccessMessage(data.message || 'Cập nhật trạng thái thành công', 'success');
-                // update badge
-                const badge = document.getElementById('status-badge-' + amenityId);
-                if (badge) {
-                    if (newStatus === 'active') {
-                        badge.textContent = 'Hoạt động';
-                        badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800';
-                    } else {
-                        badge.textContent = 'Tạm dừng';
-                        badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+    function deleteAmenity(id) {
+        App.showModalConfirm('Bạn có chắc chắn muốn xoá tiện ích này?').then((result) => {
+            if (!result.isConfirmed) return;
+            const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
+            fetch(`${App.appURL}admin/amenities/delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `csrf_token=${csrf}`
+                })
+                .then(response => response.text())
+                .then(text => {
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        data = {
+                            success: false,
+                            message: text
+                        };
                     }
+                    if (data.success) {
+                        App.showSuccessMessage(data.message || 'Xoá thành công', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1200);
+                    } else {
+                        App.showSuccessMessage(data.message || 'Có lỗi', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    App.showSuccessMessage('Lỗi kết nối', 'error');
+                });
+        });
+    }
+
+    // Intercept form submit to show inline errors (basic)
+    document.getElementById('amenityForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearAmenityFormErrors();
+        const form = this;
+        const formData = new FormData(form);
+        // Ensure status is sent as 'active' or 'inactive'
+        const statusCheckbox = document.getElementById('rental_amenity_status');
+        formData.set('rental_amenity_status', statusCheckbox && statusCheckbox.checked ? 'active' : 'inactive');
+        const action = form.action;
+        const btn = document.getElementById('amenitySaveBtn');
+        btn.disabled = true;
+        btn.textContent = 'Đang xử lý...';
+
+        fetch(action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = {
+                        success: false,
+                        message: text
+                    };
                 }
-                // reload page shortly after showing success so list reflects any server-side changes
-                setTimeout(() => { location.reload(); }, 1200);
-            } else {
-                App.showSuccessMessage(data.message || 'Có lỗi', 'error');
-            }
-        })
-        .catch(err => { console.error(err); App.showSuccessMessage('Lỗi kết nối', 'error'); });
+                btn.disabled = false;
+                btn.textContent = 'Lưu';
+                if (data.success) {
+                    App.showSuccessMessage(data.message || 'Thành công', 'success');
+                    setTimeout(() => {
+                        closeAmenityModal();
+                        location.reload();
+                    }, 1200);
+                } else if (data.validationErrors) {
+                    for (const [field, msg] of Object.entries(data.validationErrors)) {
+                        const el = document.getElementById(field + '-error');
+                        const input = document.getElementById(field);
+                        if (el) {
+                            el.textContent = msg;
+                            el.classList.remove('hidden');
+                        }
+                        if (input) input.classList.add('border-red-500');
+                    }
+                    if (data.message) {
+                        App.showSuccessMessage(data.message, 'error');
+                    }
+                } else {
+                    App.showSuccessMessage(data.message || 'Có lỗi xảy ra', 'error');
+                }
+            }).catch(err => {
+                console.error(err);
+                btn.disabled = false;
+                btn.textContent = 'Lưu';
+                App.showSuccessMessage('Lỗi kết nối', 'error');
+            });
     });
-}
+
+    function toggleAmenityStatus(amenityId, newStatus) {
+        App.showModalConfirm('Bạn có chắc chắn muốn đổi trạng thái?').then(result => {
+            if (!result.isConfirmed) return;
+            const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
+            fetch(`${App.appURL}admin/amenities/toggle-status/${amenityId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `status=${newStatus}&csrf_token=${csrf}`
+                })
+                .then(response => response.text())
+                .then(text => {
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        data = {
+                            success: false,
+                            message: text
+                        };
+                    }
+                    if (data.success) {
+                        App.showSuccessMessage(data.message || 'Cập nhật trạng thái thành công', 'success');
+                        // update badge
+                        const badge = document.getElementById('status-badge-' + amenityId);
+                        if (badge) {
+                            if (newStatus === 'active') {
+                                badge.textContent = 'Hoạt động';
+                                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800';
+                            } else {
+                                badge.textContent = 'Tạm dừng';
+                                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+                            }
+                        }
+                        // reload page shortly after showing success so list reflects any server-side changes
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1200);
+                    } else {
+                        App.showSuccessMessage(data.message || 'Có lỗi', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    App.showSuccessMessage('Lỗi kết nối', 'error');
+                });
+        });
+    }
 </script>

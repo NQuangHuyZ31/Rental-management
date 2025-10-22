@@ -74,7 +74,7 @@
 		
 		<!-- Search Button -->
 		<div class="flex justify-center mt-4">
-			<button type="submit" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0">
+			<button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0">
 				<i class="fas fa-search mr-3 text-lg"></i>
 				Tìm kiếm
 			</button>

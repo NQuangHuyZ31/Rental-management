@@ -51,7 +51,7 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                         <span class="text-[12px]">HOSTY Plus+</span>
                     </a>
                     <a href="<?= BASE_URL ?>/ho-tro" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="recruitment">
-                        <i class="fas fa-bullhorn"></i>
+                        <i class="fas fa-question-circle"></i>
                         <span class="text-[12px]">Hỗ trợ</span>
                     </a>
                     <a href="<?= BASE_URL ?>/gioi-thieu" class="nav-item text-white hover:bg-green-700 px-3 py-2 rounded-lg flex gap-2 text-nowrap items-center transition-colors" data-nav="about">
