@@ -3,6 +3,9 @@ Author: Nguyen Xuan Duong
 Date: 2025-08-29
 Purpose: Build Index house for Landlord 
 -->
+<?php
+use Helpers\Format;
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -145,6 +148,14 @@ Purpose: Build Index house for Landlord
                                         <span class="text-white text-xs font-bold"><?= $availableRooms ?></span>
                                     </div>
                                 </div>
+                                
+                                <div id="filter-maintenance-wrap" class="relative bg-white rounded-lg px-3 py-2 border border-gray-200 cursor-pointer">
+                                    <input type="checkbox" id="filter-maintenance" class="form-checkbox text-green-600 mr-2">
+                                    <span class="text-sm text-gray-700">Đang bảo trì</span>
+                                    <div class="absolute -top-2 -right-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border border-white">
+                                        <span class="text-white text-xs font-bold"><?= $maintenanceIssues ?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -166,37 +177,41 @@ Purpose: Build Index house for Landlord
                         <table id="roomsTable" class="w-full">
                             <thead class="bg-[#F9FAFB]">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tên phòng</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tầng</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Diện tích</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Giá thuê</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tiền cọc</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Số người tối đa</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200">Tình trạng</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-black border border-gray-200"></th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Tên phòng</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Tầng</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Diện tích</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Giá thuê</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Tiền cọc</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Số người tối đa</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200">Tình trạng</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-black border border-gray-200"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $stt = 0; foreach ($rooms as $room): ?>
                                 <tr data-room-status="<?= $room['room_status'] ?>" class="bg-white">
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <span class="text-sm font-medium text-gray-900"><?= htmlspecialchars($room['room_name']) ?></span>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
+                                        <span><?= htmlspecialchars($room['room_name']) ?></span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200"><?= htmlspecialchars($room['floor']) ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($room['area']) ?> m²</div>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-900 border border-gray-200 text-center text-sm text-gray-900">
+                                        <?= htmlspecialchars($room['floor']) ?>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <div class="text-sm font-medium text-gray-900"><?= \Helpers\Format::forMatPrice($room['room_price']) ?> ₫</div>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
+                                        <?= htmlspecialchars($room['area']) ?> m²
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200"><?= \Helpers\Format::forMatPrice($room['deposit']) ?> ₫</td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
-                                        <div class="flex items-center">
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
+                                        <?= Format::formatPriceVND($room['room_price']) ?> ₫
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-900 border border-gray-200 text-center text-sm text-gray-900">
+                                        <?= Format::formatPriceVND($room['deposit']) ?> ₫
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
+                                        <div class="flex items-center justify-center">
                                             <i class="fas fa-user text-gray-400 mr-1"></i>
-                                            <span class="text-sm text-gray-900"><?= htmlspecialchars($room['max_people']) ?> người</span>
+                                            <span><?= htmlspecialchars($room['max_people']) ?> người</span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center">
                                         <?php
                                         $statusText = '';
                                         $statusColor = '';
@@ -263,6 +278,12 @@ Purpose: Build Index house for Landlord
                         </table>
                     </div>
                 </div>
+                <!-- Pagination -->
+                <?php if (!empty($pagination) && is_array($pagination) && ($pagination['total_pages'] ?? 0) > 1): ?>
+                    <div class="mt-8 px-6">
+                        <?= \Helpers\Pagination::render($pagination, '', $queryParams ?? []) ?>
+                    </div>
+                <?php endif; ?>
                 <?php elseif ($selectedHouse && empty($rooms)): ?>
                 <div class="text-center py-12">
                     <div class="mb-4">
@@ -618,51 +639,15 @@ Purpose: Build Index house for Landlord
             const roomsTable = document.getElementById('roomsTable');
             
             if (searchInput && roomsTable) {
+                // Debounced input: call server-side filtering to avoid navigating every keystroke
                 searchInput.addEventListener('input', function() {
-                    // Call the unified filter function if it exists
                     if (typeof applyFilters === 'function') {
-                        applyFilters();
+                        clearTimeout(window._roomsFilterDebounce);
+                        window._roomsFilterDebounce = setTimeout(() => {
+                            applyFilters();
+                        }, 450);
                     } else {
-                        // Fallback to original search functionality
-                        const searchTerm = this.value.toLowerCase().trim();
-                        const tableRows = roomsTable.querySelectorAll('tbody tr');
-                        
-                        tableRows.forEach(function(row) {
-                            const roomNameCell = row.querySelector('td:first-child span');
-                            if (roomNameCell) {
-                                const roomName = roomNameCell.textContent.toLowerCase();
-                                
-                                if (roomName.includes(searchTerm)) {
-                                    row.style.display = '';
-                                    row.classList.remove('hidden');
-                                } else {
-                                    row.style.display = 'none';
-                                    row.classList.add('hidden');
-                                }
-                            }
-                        });
-                        
-                        // Hiển thị thông báo nếu không tìm thấy kết quả
-                        const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
-                        const noResultsMessage = document.getElementById('noSearchResults');
-                        
-                        if (visibleRows.length === 0 && searchTerm !== '') {
-                            if (!noResultsMessage) {
-                                const messageRow = document.createElement('tr');
-                                messageRow.id = 'noSearchResults';
-                                messageRow.innerHTML = `
-                                    <td colspan="8" class="px-6 py-8 text-center text-gray-500 border border-gray-200">
-                                        <div class="flex flex-col items-center">
-                                            <i class="fas fa-search text-gray-400 text-2xl mb-2"></i>
-                                            <p>Không tìm thấy phòng nào có tên "${searchTerm}"</p>
-                                        </div>
-                                    </td>
-                                `;
-                                roomsTable.querySelector('tbody').appendChild(messageRow);
-                            }
-                        } else if (noResultsMessage) {
-                            noResultsMessage.remove();
-                        }
+                        // existing fallback (client-side) - should not be used when server-side is active
                     }
                 });
                 
@@ -692,92 +677,115 @@ Purpose: Build Index house for Landlord
             // Room status filtering functionality
             const filterOccupied = document.getElementById('filter-occupied');
             const filterAvailable = document.getElementById('filter-available');
+            const filterMaintenance = document.getElementById('filter-maintenance');
             
-            if (filterOccupied && filterAvailable && roomsTable) {
-                // Function to apply filters and search
+            if (filterOccupied && filterAvailable && filterMaintenance && roomsTable) {
+                // Function to apply filters via AJAX (no full page reload)
                 function applyFilters() {
-                    const tableRows = roomsTable.querySelectorAll('tbody tr');
                     const isOccupiedChecked = filterOccupied.checked;
                     const isAvailableChecked = filterAvailable.checked;
-                    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-                    
-                    tableRows.forEach(function(row) {
-                        const roomStatus = row.getAttribute('data-room-status');
-                        const roomNameCell = row.querySelector('td:first-child span'); // Room name is in first column
-                        
-                        // Check if room matches search term
-                        let matchesSearch = true;
-                        if (searchTerm !== '' && roomNameCell) {
-                            const roomName = roomNameCell.textContent.toLowerCase();
-                            matchesSearch = roomName.includes(searchTerm);
-                        }
-                        
-                        // Check if room matches filter
-                        let matchesFilter = true;
-                        if (isOccupiedChecked || isAvailableChecked) {
-                            matchesFilter = false;
-                            if (isOccupiedChecked && roomStatus === 'occupied') {
-                                matchesFilter = true;
-                            }
-                            if (isAvailableChecked && roomStatus === 'available') {
-                                matchesFilter = true;
-                            }
-                        }
-                        
-                        if (matchesSearch && matchesFilter) {
-                            row.style.display = '';
-                            row.classList.remove('hidden');
-                        } else {
-                            row.style.display = 'none';
-                            row.classList.add('hidden');
-                        }
-                    });
-                    
-                    // Check if any rows are visible and show/hide no results message
-                    const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
-                    const noResultsMessage = document.getElementById('noSearchResults');
-                    
-                    if (visibleRows.length === 0 && (searchTerm !== '' || isOccupiedChecked || isAvailableChecked)) {
-                        if (!noResultsMessage) {
-                            const messageRow = document.createElement('tr');
-                            messageRow.id = 'noSearchResults';
-                            messageRow.innerHTML = `
-                                <td colspan="9" class="px-6 py-8 text-center text-gray-500 border border-gray-200">
-                                    <div class="flex flex-col items-center">
-                                        <i class="fas fa-search text-gray-400 text-2xl mb-2"></i>
-                                        <p>Không tìm thấy phòng nào phù hợp</p>
-                                    </div>
-                                </td>
-                            `;
-                            roomsTable.querySelector('tbody').appendChild(messageRow);
-                        }
-                    } else if (noResultsMessage) {
-                        noResultsMessage.remove();
-                    }
+                    const searchTerm = searchInput ? searchInput.value.trim() : '';
+
+                    const currentParams = new URLSearchParams(window.location.search);
+                    const houseId = currentParams.get('house_id');
+                    const newParams = new URLSearchParams();
+                    if (houseId) newParams.set('house_id', houseId);
+                    if (searchTerm !== '') newParams.set('search', searchTerm);
+                    if (isOccupiedChecked) newParams.set('occupied', 1);
+                    if (isAvailableChecked) newParams.set('available', 1);
+                    if (filterMaintenance && filterMaintenance.checked) newParams.set('maintenance', 1);
+                    newParams.set('page', 1);
+
+                    const url = window.location.pathname + '?' + newParams.toString();
+                    fetchAndReplace(url, true);
                 }
-                
+
                 // Add event listeners to checkboxes
                 filterOccupied.addEventListener('change', applyFilters);
                 filterAvailable.addEventListener('change', applyFilters);
+                filterMaintenance.addEventListener('change', applyFilters);
 
-                // Make whole wrappers clickable (without double-trigger when clicking checkbox)
+                // Make whole wrappers clickable but trigger native click to avoid double-toggle
                 const occupiedWrap = document.getElementById('filter-occupied-wrap');
                 const availableWrap = document.getElementById('filter-available-wrap');
+                const maintenanceWrap = document.getElementById('filter-maintenance-wrap');
 
                 if (occupiedWrap) {
                     occupiedWrap.addEventListener('click', function(e) {
                         if (e.target && e.target.id === 'filter-occupied') return; // ignore direct checkbox click
-                        filterOccupied.checked = !filterOccupied.checked;
-                        applyFilters();
+                        // trigger native click so only one change event fires and checkbox state is preserved
+                        filterOccupied.click();
                     });
                 }
 
                 if (availableWrap) {
                     availableWrap.addEventListener('click', function(e) {
                         if (e.target && e.target.id === 'filter-available') return; // ignore direct checkbox click
-                        filterAvailable.checked = !filterAvailable.checked;
-                        applyFilters();
+                        filterAvailable.click();
                     });
+                }
+
+                if (maintenanceWrap) {
+                    maintenanceWrap.addEventListener('click', function(e) {
+                        if (e.target && e.target.id === 'filter-maintenance') return;
+                        filterMaintenance.click();
+                    });
+                }
+
+                // Intercept pagination link clicks (delegated) to use AJAX
+                document.addEventListener('click', function(e) {
+                    const a = e.target.closest('.mt-8 a');
+                    if (!a) return;
+                    e.preventDefault();
+                    const href = a.getAttribute('href');
+                    if (href) fetchAndReplace(href, true);
+                });
+
+                // Fetch a full page and replace the rooms container + pagination only
+                function fetchAndReplace(url, pushHistory = true) {
+                    fetch(url, {credentials: 'same-origin'})
+                        .then(res => res.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+
+                            const newContainer = doc.querySelector('div.bg-gray-50.rounded-lg.overflow-hidden.border.border-gray-200');
+                            const currentContainer = document.querySelector('div.bg-gray-50.rounded-lg.overflow-hidden.border.border-gray-200');
+                            if (newContainer && currentContainer) {
+                                currentContainer.innerHTML = newContainer.innerHTML;
+                            }
+
+                            // Replace pagination block
+                            const currentParent = currentContainer ? currentContainer.parentElement : null;
+                            if (currentParent) {
+                                const currentPagination = currentParent.querySelector('.mt-8');
+                                const newPagination = doc.querySelector('.mt-8');
+                                if (currentPagination && newPagination) {
+                                    currentPagination.innerHTML = newPagination.innerHTML;
+                                } else if (!newPagination && currentPagination) {
+                                    currentPagination.remove();
+                                } else if (newPagination && !currentPagination) {
+                                    currentParent.appendChild(newPagination.cloneNode(true));
+                                }
+                            }
+
+                            // Update URL without reloading
+                            if (pushHistory) {
+                                try {
+                                    const newUrl = new URL(url, window.location.origin);
+                                    history.pushState({}, '', newUrl);
+                                } catch (e) {
+                                    // ignore
+                                }
+                            }
+
+                            // After replacing content, nothing else to rebind because filter bar remains intact.
+                        })
+                        .catch(err => {
+                            console.error('Error fetching filtered rooms:', err);
+                            // fallback: full navigation
+                            window.location.href = url;
+                        });
                 }
             }
         });
