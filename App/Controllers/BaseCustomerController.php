@@ -1,9 +1,9 @@
 <?php
 /*
-	Author: Huy Nguyen
-	Date: 2025-08-15
-	Purpose: base customer controller
-*/
+Author: Huy Nguyen
+Date: 2025-08-15
+Purpose: base customer controller
+ */
 namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\CustomerSupport;
@@ -18,45 +18,49 @@ use Queue\UploadImageForReportViolation;
 
 class BaseCustomerController extends Controller {
 
-	protected $request;
-	protected $rentalPostModel;
-	protected $customerSupportModel;
-	protected $uploadImageOnCLoud;
+    protected $request;
+    protected $rentalPostModel;
+    protected $customerSupportModel;
+    protected $uploadImageOnCLoud;
 
-	public function __construct() {
-		parent::__construct();
-		$this->request = new Request();
-		$this->rentalPostModel = new RenTalPost();
-		$this->customerSupportModel = new CustomerSupport();
-		$this->uploadImageOnCLoud = new UploadImageForReportViolation();
-	}
+    public function __construct() {
+        parent::__construct();
+        $this->request = new Request();
+        $this->rentalPostModel = new RenTalPost();
+        $this->customerSupportModel = new CustomerSupport();
+        $this->uploadImageOnCLoud = new UploadImageForReportViolation();
+    }
 
-	// Added by Huy Nguyen on 2025-10-22 to show job page
-	public function showJobPage() {
-		ViewRender::renderWithLayout('developer-page',[], 'customer/layouts/app');
-	}
+    // Added by Huy Nguyen on 2025-10-22 to show job page
+    public function showJobPage() {
+        ViewRender::renderWithLayout('developer-page', [], 'customer/layouts/app');
+    }
 
-	// Added by Huy Nguyen on 2025-10-22 to show Hosty Plus page
-	public function showHostyPlusPage() {
-		ViewRender::renderWithLayout('developer-page', [], 'customer/layouts/app');
-	}
+    // Added by Huy Nguyen on 2025-10-22 to show Hosty Plus page
+    public function showHostyPlusPage() {
+        ViewRender::renderWithLayout('developer-page', [], 'customer/layouts/app');
+    }
 
-	// Added by Huy Nguyen on 2025-10-22 to show support page
-	public function showSupportPage() {
-		ViewRender::renderWithLayout('support', [], 'customer/layouts/app');
-	}
+    // Added by Huy Nguyen on 2025-10-22 to show support page
+    public function showSupportPage() {
+        ViewRender::renderWithLayout('support',
+            [
+                'noFooter' => true,
+            ],
+            'customer/layouts/app');
+    }
 
-	public function handleSupportProblem() {
-		$requests = $this->request->post();
-		$files = $this->request->file('image_problem');
+    public function handleSupportProblem() {
+        $requests = $this->request->post();
+        $files = $this->request->file('image_problem');
 
-		$error = SupportCustomerValidate::validate($requests);
+        $error = SupportCustomerValidate::validate($requests);
 
-		if (!empty($error)) {
-			Response::json(['status' => 'error', 'msg' => $error, 'token' => CSRF::getTokenRefresh()], 400);
-		}
+        if (!empty($error)) {
+            Response::json(['status' => 'error', 'msg' => $error, 'token' => CSRF::getTokenRefresh()], 400);
+        }
 
-		if (!isset($files) || !empty($files['name'][0])) {
+        if (!isset($files) || !empty($files['name'][0])) {
             $error = FileValidate::validate($files, false);
 
             if (!empty($error)) {
@@ -64,17 +68,17 @@ class BaseCustomerController extends Controller {
             }
         }
 
-		$data = [
-			'customer_name' => $requests['customer_name'],
-			'customer_email' => $requests['customer_email'],
-			'support_type' => $requests['support_type'],
-			'description_problem' => $requests['description_problem'],
-			'created_at' => date('Y-m-d H:s:i'),
-			'updated_at' => date('Y-m-d H:s:i')
-		];
-		$supportId = $this->customerSupportModel->add($data);
+        $data = [
+            'customer_name' => $requests['customer_name'],
+            'customer_email' => $requests['customer_email'],
+            'support_type' => $requests['support_type'],
+            'description_problem' => $requests['description_problem'],
+            'created_at' => date('Y-m-d H:s:i'),
+            'updated_at' => date('Y-m-d H:s:i'),
+        ];
+        $supportId = $this->customerSupportModel->add($data);
 
-		if (empty($supportId)) {
+        if (empty($supportId)) {
             Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
@@ -85,13 +89,13 @@ class BaseCustomerController extends Controller {
             // Xử lý upload ảnh
             $this->uploadImageOnCLoud->dispatch(['id' => $supportId, 'type' => 'support', 'images' => $savedFiles]);
         }
-		
-		Response::json(['status' => 'success', 'msg' => 'Yêu cầu đã được gửi thành công', 'token' => CSRF::getTokenRefresh()], 200);
-	}
 
-	public function getPagination($page, $totalData, $limit, $offset) {
-		$totalPages = ceil($totalData / $limit);
-		return [
+        Response::json(['status' => 'success', 'msg' => 'Yêu cầu đã được gửi thành công', 'token' => CSRF::getTokenRefresh()], 200);
+    }
+
+    public function getPagination($page, $totalData, $limit, $offset) {
+        $totalPages = ceil($totalData / $limit);
+        return [
             'current_page' => $page,
             'total_pages' => $totalPages,
             'total_items' => $totalData,
@@ -100,12 +104,12 @@ class BaseCustomerController extends Controller {
             'has_next' => $page < $totalPages,
             'prev_page' => $page > 1 ? $page - 1 : null,
             'next_page' => $page < $totalPages ? $page + 1 : null,
-			'showing_from' => $offset + 1,
-            'showing_to' => min($offset + $limit, $totalData)
-        ];  
-	}
+            'showing_from' => $offset + 1,
+            'showing_to' => min($offset + $limit, $totalData),
+        ];
+    }
 
-	/**
+    /**
      * Lưu files tạm thời để queue worker có thể xử lý sau
      */
     private function saveTemporaryFiles($files, $postId) {

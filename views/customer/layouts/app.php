@@ -39,7 +39,6 @@ if ($error) {
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/pagination.css">
     <!-- Fix Scrollbar CSS -->
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/fix-scrollbar.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Payment Modal CSS -->
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/payment-modal.css">
     <!-- Bootstrap Datepicker -->
@@ -86,16 +85,18 @@ if ($error) {
     <?php }?>
 
     <!-- Footer -->
-    <?php require_once 'footer.php'; ?>
+    <?php if (!isset($noFooter) || $noFooter == false) require_once 'footer.php'; ?>
 
     <!-- Library js -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/lazysizes.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/lity.min.js"></script>
     <script src="<?=BASE_URL?>/Public/js/app.js"></script>

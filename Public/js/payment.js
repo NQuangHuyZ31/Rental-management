@@ -263,4 +263,15 @@ $(document).ready(function () {
         };
         return statusMap[status] || status;
     }
+
+    // show invoice details
+    window.invoiceDetail = function (e) {
+        var data = $(e).data('invoice');
+        const label = '.invoice';
+        console.log(data);
+
+        $(`${label}-room-house-name`).text(`${data.room_name} - ${data.house_name}`);
+        $(`${label}-no`).text(`${data.}`)
+        $('button#invoiceDetailModalBtn').trigger('click');
+    };
 });

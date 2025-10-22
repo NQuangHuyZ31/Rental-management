@@ -16,12 +16,12 @@
         <!-- Table Header -->
         <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div class="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
-                <div class="col-span-3">Phòng</div>
+                <div class="col-span-2">Phòng</div>
                 <div class="col-span-2">Địa chỉ</div>
                 <div class="col-span-2">Giá</div>
                 <div class="col-span-1">Diện tích</div>
                 <div class="col-span-2">Ngày vào ở</div>
-                <div class="col-span-1">Trạng thái</div>
+                <div class="col-span-2">Trạng thái</div>
                 <div class="col-span-1">Thao tác</div>
             </div>
         </div>
@@ -49,8 +49,8 @@
                     
                     <div class="grid grid-cols-12 gap-4 items-center">
                         <!-- Room Info -->
-                        <div class="col-span-3">
-                            <div class="flex items-center space-x-3">
+                        <div class="col-span-2">
+                            <div class="flex items-center space-x-2">
                                 <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
                                     <i class="fas fa-home text-white text-lg"></i>
                                 </div>
@@ -88,7 +88,7 @@
                         </div>
                         
                         <!-- Status -->
-                        <div class="col-span-1">
+                        <div class="col-span-2">
                             <span class="<?= $status['class'] ?> text-xs px-2 py-1 rounded-full">
                                 <i class="fas <?= $status['icon'] ?> mr-1"></i><?= $status['text'] ?>
                             </span>

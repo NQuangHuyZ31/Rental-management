@@ -343,10 +343,10 @@
                                 <i class="fas fa-qrcode mr-2"></i>Thanh toán hóa đơn
                             </button>
                         <?php } ?>
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
                             <i class="fas fa-download mr-2"></i>Tải hóa đơn
                         </button>
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <button type="button" onclick="invoiceDetail(this)" data-invoice='<?= htmlspecialchars(json_encode($invoice), ENT_QUOTES, "UTF-8") ?>' class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer invoice-detail">
                             <i class="fas fa-eye mr-2"></i>Xem chi tiết
                         </button>
                     </div>
@@ -361,6 +361,8 @@
             </div>
         <?php endif; ?>
     <?php } ?>
+
+    <?php include_once ROOT_PATH . '/views/partials/invoice-detail-modal.php'; ?>
 </div>
 
 <!-- Payment Modal -->
@@ -506,114 +508,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bill Detail Modal -->
-<div id="billDetailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-bold text-gray-900">Chi tiết hóa đơn</h2>
-                    <button id="closeBillDetailModal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="p-6">
-                <div class="space-y-6">
-                    <div class="text-center">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Hóa đơn #HD-2024-001</h3>
-                        <p class="text-gray-600">Phòng 101 - Chung cư ABC</p>
-                        <p class="text-3xl font-bold text-red-600 mt-4">2.5M VNĐ</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-medium text-gray-900 mb-3">Thông tin hóa đơn</h4>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Số hóa đơn:</span>
-                                        <span class="font-medium">HD-2024-001</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Ngày tạo:</span>
-                                        <span class="font-medium">01/01/2025</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Hạn thanh toán:</span>
-                                        <span class="font-medium text-red-600">05/01/2025</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Trạng thái:</span>
-                                        <span class="text-red-600 font-medium">Chưa thanh toán</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="font-medium text-gray-900 mb-3">Chi tiết phòng</h4>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Tên phòng:</span>
-                                        <span class="font-medium">Phòng 101</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Địa chỉ:</span>
-                                        <span class="font-medium">Chung cư ABC</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Tháng:</span>
-                                        <span class="font-medium">01/2025</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">Diện tích:</span>
-                                        <span class="font-medium">25m²</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 class="font-medium text-gray-900 mb-3">Chi tiết chi phí</h4>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="space-y-3">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Tiền phòng tháng 01/2025:</span>
-                                    <span class="font-medium">2.5M VNĐ</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Phí dịch vụ:</span>
-                                    <span class="font-medium">0 VNĐ</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Phí trễ hạn:</span>
-                                    <span class="font-medium">0 VNĐ</span>
-                                </div>
-                                <hr class="border-gray-300">
-                                <div class="flex justify-between text-lg font-bold">
-                                    <span>Tổng cộng:</span>
-                                    <span class="text-red-600">2.5M VNĐ</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-                <button id="closeBillDetailModalBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                    Đóng
-                </button>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-download mr-2"></i>Tải xuống
-                </button>
             </div>
         </div>
     </div>

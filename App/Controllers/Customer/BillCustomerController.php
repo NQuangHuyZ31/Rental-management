@@ -54,7 +54,7 @@ class BillCustomerController extends CustomerController {
         $countAllInvoices = $this->invoiceModel->getAllInvoices();
         $countInvoicesPending = $this->invoiceModel->getAllInvoicesByStatus('pending');
         $countInvoicesPaid = $this->invoiceModel->getAllInvoicesByStatus('paid');
-        $totalAmount = $this->invoiceModel->getTotalAmount();
+        $totalAmount = $this->paymentHistoryModel->getTotalPaymentHistoryByUserId($this->user['id']);
 
         ViewRender::renderWithLayout(
             'customer/payment/bills',

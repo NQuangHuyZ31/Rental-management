@@ -240,7 +240,6 @@ use Helpers\Format;
 				<!-- Hà Nội -->
 				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phố Hà Nội" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/ha-noi.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-8 h-8 bg-white bg-opacity-20 rounded-full"></div>
 						<div class="absolute bottom-8 left-4 w-6 h-6 bg-white bg-opacity-20 rounded-full"></div>
 						<div class="relative z-10 p-4 text-white">
@@ -253,7 +252,6 @@ use Helpers\Format;
 				<!-- Cần Thơ -->
 				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phồ Cần Thơ" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/can-tho.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-4 h-4 bg-white bg-opacity-30 rounded-full"></div>
 						<div class="absolute top-8 left-8 w-3 h-3 bg-white bg-opacity-30 rounded-full"></div>
 						<div class="absolute top-12 left-12 w-2 h-2 bg-white bg-opacity-30 rounded-full"></div>
@@ -267,7 +265,6 @@ use Helpers\Format;
 				<!-- Bình Dương -->
 				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Đồng Nai" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/binh-duong.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 right-4 w-6 h-6 bg-white bg-opacity-20 rounded"></div>
 						<div class="absolute top-8 right-8 w-4 h-4 bg-white bg-opacity-20 rounded"></div>
 						<div class="relative z-10 p-4 text-white">
@@ -280,7 +277,6 @@ use Helpers\Format;
 				<!-- Đà Nẵng -->
 				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Thành phố Đà Nẵng" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/da-nang.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-						<div class="absolute inset-0 bg-black bg-opacity-20"></div>
 						<div class="absolute top-4 left-4 w-3 h-3 bg-yellow-300 rounded-full"></div>
 						<div class="absolute top-6 left-6 w-2 h-2 bg-yellow-300 rounded-full"></div>
 						<div class="absolute top-8 left-8 w-1 h-1 bg-yellow-300 rounded-full"></div>
@@ -294,7 +290,6 @@ use Helpers\Format;
 				<!-- Đồng Nai -->
 				<a href="<?= BASE_URL ?>/phong-tro-nha-tro?province=Đồng Tháp" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group">
 					<div class="h-64 flex items-end relative overflow-hidden" style="background-image: url('<?= BASE_URL ?>/Public/images/dong-nai.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-						<div class="absolute inset-0 bg-black bg-opacity-30"></div>
 						<div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full"></div>
 						<div class="absolute top-8 right-8 w-3 h-3 bg-blue-400 rounded-full"></div>
 						<div class="absolute top-12 right-12 w-2 h-2 bg-blue-400 rounded-full"></div>
