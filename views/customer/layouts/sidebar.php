@@ -46,12 +46,6 @@
                 <i class="fas fa-cog text-lg"></i>
                 <span class="font-medium">Cài đặt</span>
             </a>
-
-            <!-- Help & Support -->
-            <a href="<?= BASE_URL ?>/customer/support" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors <?= (strpos($_SERVER['REQUEST_URI'], '/customer/support') !== false) ? 'bg-green-50 text-green-600 border-r-2 border-green-500' : '' ?>">
-                <i class="fas fa-question-circle text-lg"></i>
-                <span class="font-medium">Hỗ trợ</span>
-            </a>
         </nav>
     </div>
 </aside>

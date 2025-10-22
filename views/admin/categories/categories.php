@@ -101,9 +101,11 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex items-center space-x-3">
-                                        <button onclick="openEditCategoryModal(<?= htmlspecialchars(json_encode($category)) ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
+                                        <?php if(empty($category['owner_id']) || $category['owner_id'] == \Core\Session::get('user')['id']) { ?>
+                                            <button onclick="openEditCategoryModal(<?= htmlspecialchars(json_encode($category)) ?>)" class="text-yellow-600 hover:text-yellow-900" title="Chỉnh sửa">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        <?php } ?>
                                         <?php $currentStatus = ($category['rental_category_status'] ?? 'inactive'); ?>
                                         <?php if ($currentStatus === 'active'): ?>
                                             <button onclick="toggleCategoryStatus(<?= $category['id'] ?>, 'inactive')" class="text-green-600 hover:text-green-900" title="Đổi trạng thái sang Tạm dừng">

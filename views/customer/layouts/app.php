@@ -39,11 +39,11 @@ if ($error) {
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/pagination.css">
     <!-- Fix Scrollbar CSS -->
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/fix-scrollbar.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Payment Modal CSS -->
     <link rel="stylesheet" href="<?=BASE_URL?>/Public/css/payment-modal.css">
     <!-- Bootstrap Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-50 h-screen">

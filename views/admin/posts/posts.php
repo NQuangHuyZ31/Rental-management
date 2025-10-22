@@ -13,12 +13,6 @@
                 <h1 class="text-3xl font-bold text-gray-900">Quản lý bài đăng</h1>
                 <p class="mt-2 text-gray-600">Duyệt và quản lý tất cả bài đăng cho thuê nhà</p>
             </div>
-            <div class="flex space-x-3">
-                <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
-                    <i class="fas fa-check-double mr-2"></i>
-                    Duyệt tất cả
-                </button>
-            </div>
         </div>
     </div>
 
@@ -141,11 +135,19 @@
 
     <!-- Posts Table -->
     <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="flex items-center gap-10 px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Danh sách bài đăng</h3>
-            <button data-modal-target="default-modal" id="openModalBtn" data-modal-toggle="default-modal" class="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all" type="button">
-                <i class="fas fa-plus text-xl"></i>
-            </button>
+        <div class="flex items-center justify-between gap-10 border-b border-gray-200 pr-3">
+            <div class="flex items-center gap-10 px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Danh sách bài đăng</h3>
+                <button data-modal-target="default-modal" id="openModalBtn" data-modal-toggle="default-modal" class="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all" type="button">
+                    <i class="fas fa-plus text-xl"></i>
+                </button>
+            </div>
+            <div class="flex space-x-3">
+                <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
+                    <i class="fas fa-check-double mr-2"></i>
+                    Duyệt bài đã chọn
+                </button>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

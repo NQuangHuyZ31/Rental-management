@@ -9,18 +9,22 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\Controller;
+use App\Models\User;
 use App\Requests\LoginValidate;
 use Core\CSRF;
 use Core\ViewRender;
 use Core\Request;
+use Core\Session;
 
 class AuthAdminController extends Controller {
 
 	protected $request;
+	protected $userModel;
 
 	public function __construct() {
 		parent::__construct();
 		$this->request = new Request();
+		$this->userModel = new User();
 	}
 
 	public function showLoginPage() {
@@ -46,6 +50,9 @@ class AuthAdminController extends Controller {
 			$this->request->redirectWithErrors('/admin/auth/login', 'Email hoặc mật khẩu không đúng');
 			exit;
 		}
+
+		// Check if user session exists and role matches
+        $this->userModel->updateColumn(Session::get('user')['id'], 'last_login', date('Y-m-d H:s:i'));
 
 		$this->request->redirect('/admin/dashboard');
 		exit;
