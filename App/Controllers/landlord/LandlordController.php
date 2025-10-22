@@ -22,6 +22,7 @@ use Core\Session;
 
 abstract class LandlordController extends Controller {
     protected $user;
+    protected $limit = 10;
     protected $houseModel;
     protected $amenityModel;
     protected $roomModel;

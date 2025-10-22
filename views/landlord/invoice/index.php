@@ -99,15 +99,15 @@ use Helpers\Format;
                         <table class="w-full border-collapse">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tên phòng</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền phòng</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền điện</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền nước</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền mạng</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền xe</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tiền rác</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Tổng cộng</th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border border-gray-200">Trạng thái</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tên phòng</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền phòng</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền điện</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền nước</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền mạng</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền xe</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tiền rác</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Tổng cộng</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200">Trạng thái</th>
                                     <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200 w-20"></th>
                                 </tr>
                             </thead>
@@ -115,31 +115,31 @@ use Helpers\Format;
                                 <?php if (!empty($invoices)): ?>
                                     <?php foreach ($invoices as $invoice): ?>
                                         <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
                                                 <?= htmlspecialchars($invoice['room_name']) ?>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['rental_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['rental_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['electric_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['electric_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['water_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['water_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['internet_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['internet_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['parking_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['parking_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['garbage_amount']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['garbage_amount']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200">
-                                                <?= Format::forMatPrice($invoice['total']) ?> ₫
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 border border-gray-200">
+                                                <?= Format::formatPriceVND($invoice['total']) ?> ₫
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap border border-gray-200">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center border border-gray-200">
                                                 <?php
                                                 $statusText = '';
                                                 $statusColor = '';

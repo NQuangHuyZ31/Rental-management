@@ -213,6 +213,81 @@ class Room extends Model {
     }
 
     /**
+     * Get paginated rooms by house id
+     */
+    public function getRoomsByHouseIdPaginated($houseId, $limit, $offset) {
+        return $this->queryBuilder
+            ->table($this->table)
+            ->where('house_id', $houseId)
+            ->where('deleted', 0)
+            ->orderBy('room_name')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+    }
+
+    /**
+     * Count rooms by house id
+     */
+    public function getRoomsCountByHouseId($houseId) {
+        $result = $this->queryBuilder
+            ->table($this->table)
+            ->where('house_id', $houseId)
+            ->where('deleted', 0)
+            ->select(['COUNT(*) as total'])
+            ->first();
+
+        return $result ? (int) $result['total'] : 0;
+    }
+
+    /**
+     * Get paginated rooms with filters (search by name and status flags)
+     * $filters = ['search' => 'text', 'status' => 'available'|'occupied'|null]
+     */
+    public function getRoomsByHouseIdWithFiltersPaginated($houseId, $limit, $offset, $filters = []) {
+        $query = $this->queryBuilder
+            ->table($this->table)
+            ->where('house_id', $houseId)
+            ->where('deleted', 0);
+
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $query->where('room_name', 'LIKE', $search);
+        }
+
+        if (!empty($filters['status'])) {
+            $query->where('room_status', $filters['status']);
+        }
+
+        return $query->orderBy('room_name')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+    }
+
+    /**
+     * Count rooms by house id with filters
+     */
+    public function getRoomsCountByHouseIdWithFilters($houseId, $filters = []) {
+        $query = $this->queryBuilder
+            ->table($this->table)
+            ->where('house_id', $houseId)
+            ->where('deleted', 0);
+
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $query->where('room_name', 'LIKE', $search);
+        }
+
+        if (!empty($filters['status'])) {
+            $query->where('room_status', $filters['status']);
+        }
+
+        $result = $query->select(['COUNT(*) as total'])->first();
+        return $result ? (int) $result['total'] : 0;
+    }
+
+    /**
      * Update room status
      */
     public function updateRoomStatus($roomId, $status) {

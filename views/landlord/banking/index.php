@@ -36,7 +36,7 @@
                 <div class="mb-6">
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <input type="text" id="bankingMonthYearInput" readonly class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none cursor-pointer bg-white min-w-[200px] h-10" placeholder="Chọn tháng/năm" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>">
+                            <input type="text" id="bankingMonthYearInput" readonly class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none cursor-pointer bg-white min-w-[200px] h-10" placeholder="Tìm hóa đơn" value="<?= htmlspecialchars($_GET['month'] ?? '') ?>">
                             <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5 cursor-pointer" id="bankingCalendarIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>

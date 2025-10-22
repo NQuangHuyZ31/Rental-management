@@ -84,9 +84,9 @@
                                         <?php foreach ($roomData['tenants'] as $tenant): ?>
                                             <tr class="hover:bg-gray-50 transition-colors tenant-row" id="tenant-row-room-<?= $roomId ?>">
                                                 <td class="px-4 py-3 whitespace-nowrap border border-gray-300 w-28">
-                                                    <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($tenant['username']) ?></div>
+                                                    <div class="text-sm text-gray-900"><?= htmlspecialchars($tenant['username']) ?></div>
                                                 </td>
-                                                <td class="px-4 py-3 whitespace-nowrap border border-gray-300 w-24">
+                                                <td class="px-4 py-3 whitespace-nowrap text-center border border-gray-300 w-24">
                                                     <div class="text-sm text-gray-900"><?= htmlspecialchars($tenant['phone'] ?? 'Chưa cập nhật') ?></div>
                                                 </td>
                                                 <td class="px-4 py-3 whitespace-nowrap text-center border border-gray-300 w-12">

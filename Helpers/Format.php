@@ -23,4 +23,8 @@ class Format {
             return number_format($number / 1000, 2) . 'K';
         };
     }
+
+    public static function formatPriceVND($price) {
+        return number_format($price, 0, ',', '.');
+    } 
 }

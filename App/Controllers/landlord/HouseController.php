@@ -30,14 +30,58 @@ class HouseController extends LandlordController {
         $rooms = [];
         $roomStats = [];
 
-        // Lấy danh sách phòng của nhà trọ được chọn
+        // Lấy danh sách phòng của nhà trọ được chọn với phân trang
         if ($selectedHouse) {
-            $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
+            // page param
+            $page = (int) ($this->request->get('page') ?? 1);
+            if ($page < 1) $page = 1;
+            $limit = $this->limit ?? 10;
+            $offset = ($page - 1) * $limit;
+
+            // Read filter params
+            $search = trim((string) $this->request->get('search'));
+            $filterOccupied = $this->request->get('occupied');
+            $filterAvailable = $this->request->get('available');
+            $filterMaintenance = $this->request->get('maintenance');
+
+            $filters = [];
+            // status precedence: if both occupied and available are checked, treat as no status filter
+            // If exactly one status is selected, apply that status. If multiple or none, do not filter by status.
+            $statusCount = (!empty($filterOccupied) ? 1 : 0) + (!empty($filterAvailable) ? 1 : 0) + (!empty($filterMaintenance) ? 1 : 0);
+            if ($statusCount === 1) {
+                if (!empty($filterOccupied)) $filters['status'] = 'occupied';
+                if (!empty($filterAvailable)) $filters['status'] = 'available';
+                if (!empty($filterMaintenance)) $filters['status'] = 'maintenance';
+            }
+
+            if ($search !== '') {
+                $filters['search'] = $search;
+            }
+
+            // If filters exist, use filtered methods; otherwise use unfiltered paginated methods
+            if (!empty($filters)) {
+                $totalRoomsCount = $this->roomModel->getRoomsCountByHouseIdWithFilters($selectedHouse['id'], $filters);
+                $rooms = $this->roomModel->getRoomsByHouseIdWithFiltersPaginated($selectedHouse['id'], $limit, $offset, $filters);
+            } else {
+                $totalRoomsCount = $this->roomModel->getRoomsCountByHouseId($selectedHouse['id']);
+                $rooms = $this->roomModel->getRoomsByHouseIdPaginated($selectedHouse['id'], $limit, $offset);
+            }
+
+            // room stats and summary
             $roomStats = $this->roomModel->getRoomStatistics($selectedHouse['id']);
 
             // Lấy tổng số tiện ích và dịch vụ
             $totalAmenities = count($this->amenityModel->getAmenitiesByHouseId($selectedHouse['id']));
             $totalServices = count($this->serviceModel->getServicesByHouseId($selectedHouse['id']));
+
+            // build pagination
+            $pagination = $this->getPagination($page, $totalRoomsCount, $limit, $offset);
+            // carry query params for links
+            $queryParams = ['house_id' => $selectedHouse['id']];
+            if (!empty($search)) $queryParams['search'] = $search;
+            if (!empty($filterOccupied)) $queryParams['occupied'] = 1;
+            if (!empty($filterAvailable)) $queryParams['available'] = 1;
+            if (!empty($filterMaintenance)) $queryParams['maintenance'] = 1;
         }
 
         // Tính toán dữ liệu cho summary cards
@@ -82,6 +126,8 @@ class HouseController extends LandlordController {
             'availableRooms' => $availableRooms,
             'totalAmenities' => $totalAmenities,
             'totalServices' => $totalServices,
+            'pagination' => $pagination ?? null,
+            'queryParams' => $queryParams ?? [],
         ]);
     }
 
