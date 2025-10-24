@@ -908,18 +908,18 @@ use Helpers\Format;
                                 <!-- Months Grid -->
                                 <div class="p-3">
                                     <div class="grid grid-cols-4 gap-2">
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="01">Th1</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="02">Th2</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="03">Th3</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="04">Th4</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="05">Th5</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="06">Th6</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="07">Th7</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="08">Th8</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="09">Th9</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="10">Th10</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="11">Th11</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="12">Th12</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="01">Th1</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="02">Th2</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="03">Th3</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="04">Th4</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="05">Th5</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="06">Th6</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="07">Th7</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="08">Th8</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="09">Th9</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="10">Th10</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="11">Th11</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="12">Th12</button>
                                     </div>
                                 </div>
                             </div>
@@ -973,11 +973,11 @@ use Helpers\Format;
                                         <!-- Bên trái: Checkbox, tên dịch vụ và đơn giá -->
                                         <div class="flex-1">
                                             <div class="flex items-center mb-2">
-                                                <input type="checkbox" 
-                                                       name="services[${service.id}][enabled]"
-                                                       value="1"
-                                                       checked
-                                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-2">
+                                                <!-- fixed tick icon (service always enabled in create invoice) -->
+                                                <input type="hidden" name="services[${service.id}][enabled]" value="1">
+                                                <div class="w-4 h-4 bg-blue-500 rounded flex items-center justify-center mr-2">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
                                                 <span class="font-bold text-gray-800">${service.service_name} (${service.service_type})</span>
                                             </div>
                                             <div class="text-sm text-gray-600">
@@ -1359,7 +1359,8 @@ use Helpers\Format;
             });
 
             monthBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    if (e && typeof e.preventDefault === 'function') e.preventDefault();
                     selectedMonth = btn.dataset.month;
                     updateInput();
                     highlightSelectedMonth();
