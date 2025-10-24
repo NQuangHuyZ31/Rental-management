@@ -21,7 +21,7 @@ class Banned extends Model {
 
     /**
      * Insert a new banned record
-     * $data: [user_id, reason, banned_at, banned_status, created_at, updated_at]
+     * $data should contain keys: user_id, banner_id, reason, banned_at, banned_status, created_at, updated_at
      */
     public function insertBan(array $data) {
         return $this->queryBuilder->table($this->table)->insert($data);
@@ -38,16 +38,22 @@ class Banned extends Model {
     }
 
     /**
-     * Revoke active bans for a user (set banned_status = 'revoked' and update timestamps)
+     * Revoke active bans for a user (set banned_status = 'revoked', set revoker_id and revoked_at, update timestamps)
      */
-    public function revokeActiveBansByUser($userId) {
+    public function revokeActiveBansByUser($userId, $revokerId = null) {
+        $data = [
+            'banned_status' => 'revoked',
+            'revoked_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        if ($revokerId) {
+            $data['revoker_id'] = $revokerId;
+        }
+
         return $this->queryBuilder->table($this->table)
             ->where('user_id', $userId)
             ->where('banned_status', 'active')
-            ->update([
-                'banned_status' => 'revoked',
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
+            ->update($data);
     }
 
     /**
