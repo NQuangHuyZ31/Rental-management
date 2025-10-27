@@ -50,6 +50,30 @@ class PostManagementController extends BaseRentalPostController {
 			$totalPosts = $this->rentalPostModel->getTotalRentalPostsCount();
 		}
 
+        // If admin requested a highlight_id, ensure that post is visible on the page by prepending it
+        $highlightId = $this->request->get('highlight_id') ?? null;
+        if (!empty($highlightId)) {
+            $highlightPost = $this->rentalPostModel->getRentalPostById((int)$highlightId);
+            if ($highlightPost) {
+                $found = false;
+                foreach ($posts as $p) {
+                    if (isset($p['id']) && (int)$p['id'] === (int)$highlightPost['id']) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    array_unshift($posts, $highlightPost);
+                    // Trim to limit so we don't exceed the page size
+                    if (count($posts) > $limit) {
+                        array_pop($posts);
+                    }
+                    // adjust total count so pagination still makes sense visually
+                    $totalPosts = (int)$totalPosts + 1;
+                }
+            }
+        }
+
         // Calculate pagination
         $pagination = $this->getPagination($page, $totalPosts, $limit, $offset);
         // Build query parameters for pagination links

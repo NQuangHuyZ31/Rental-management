@@ -16,6 +16,7 @@ use App\Models\RentalAmenity;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Banned;
+use App\Models\ReportViolation;
 use Core\QueryBuilder;
 use Core\Request;
 use Core\Session;
@@ -29,6 +30,7 @@ class AdminController extends Controller {
 	protected $rentalAmenityModel;
 	protected $roleModel;
 	protected $bannedModel;
+	protected $reportModel;
 	protected $request;
 	protected $userID;
 	protected $queryBuilder;
@@ -41,6 +43,7 @@ class AdminController extends Controller {
 		$this->rentalAmenityModel = new RentalAmenity();
 		$this->roleModel = new Role();
 		$this->bannedModel = new Banned();
+		$this->reportModel = new ReportViolation();
 		$this->request = new Request();
 		$this->userID = Session::get('user')['id'] ?? '';
 		$this->queryBuilder = new QueryBuilder();

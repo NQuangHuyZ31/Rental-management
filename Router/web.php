@@ -18,6 +18,7 @@ use App\Controllers\Customer\RentalPostDormitoryController;
 use App\Controllers\Admin\UserManagementController;
 use App\Controllers\Admin\CategoryManagementController;
 use App\Controllers\Admin\AmenityManagementController;
+use App\Controllers\Admin\ReportManagementController;
 use App\Controllers\BaseCustomerController;
 // Landlord Controller
 use App\Controllers\Customer\RentalPostHouseController;
@@ -155,6 +156,10 @@ $router->post('/admin/amenities/toggle-status/{id}', [AmenityManagementControlle
 $router->get('/admin/amenities/edit/{id}', [AmenityManagementController::class, 'edit'],[AuthAdminMiddleware::class]);
 $router->post('/admin/amenities/update/{id}', [AmenityManagementController::class, 'update'],[AuthAdminMiddleware::class]);
 
+// REPORT MANAGEMENT
+$router->get('/admin/reports', [ReportManagementController::class, 'index'], [AuthAdminMiddleware::class]);
+$router->get('/admin/reports/get/{id}', [ReportManagementController::class, 'edit'], [AuthAdminMiddleware::class]);
+$router->post('/admin/reports/update-status/{id}', [ReportManagementController::class, 'updateStatus'], [AuthAdminMiddleware::class]);
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes
 $router->get('/landlord', [HouseController::class, 'index'], [AuthLandlordMiddleware::class]);
