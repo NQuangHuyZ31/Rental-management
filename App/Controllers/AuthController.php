@@ -296,35 +296,44 @@ class AuthController extends Controller {
         if (empty($request['token'])) {
             Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
         }
+
         $errors = PasswordValidate::validate($request);
+
         if (!empty($errors)) {
             Response::json(['status' => 'error', 'msg' => $errors, 'token' => CSRF::getTokenRefresh()], 400);
         }
+
         $data = Hash::decrypt($request['token']);
         $data = json_decode($data, true);
-        $user = $this->user->getUserByEmail($data['email']);
+        $user = $request['verify_account'] == 1 ? $this->user->getUserByEmail($data['email'], 'inactive') : $this->user->getUserByEmail($data['email']);
 
         if (!$user) {
-            Response::json(['status' => 'error', 'msg' => 'Email không tồn tại trong hệ thống', 'token' => CSRF::getTokenRefresh()], 400);
+            Response::json(['status' => 'error', 'msg' => 'Tài khoản không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        $otp = $this->otp->getOTPByUserIdAndType($user['id'], 'forgot_password');
-        if ($request['token'] !== $otp['otp_code']) {
-            Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
-        }
+        if ($request['verify_account'] != 1) {
+            $otp = $this->otp->getOTPByUserIdAndType($user['id'], 'forgot_password');
 
-        if ($otp['expired'] < time()) {
-            Response::json(['status' => 'error', 'msg' => 'Token đã hết hạn', 'token' => CSRF::getTokenRefresh()], 400);
+            if ($request['token'] !== $otp['otp_code']) {
+                Response::json(['status' => 'error', 'msg' => 'Token không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
+            }
+
+            if ($otp['expired'] < time()) {
+                Response::json(['status' => 'error', 'msg' => 'Token đã hết hạn', 'token' => CSRF::getTokenRefresh()], 400);
+            }
+
+            $this->otp->updateColumn($otp['id'], 'is_verified', '1');
+            $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'));
+        } else {
+            $this->user->updateColumn($user['id'], 'account_status', 'active');
         }
 
         $hashed = password_hash($request['password'], PASSWORD_DEFAULT);
         $this->user->updateColumn($user['id'], 'password', $hashed);
         $this->user->updateColumn($user['id'], 'updated_at', date('Y-m-d H:i:s'));
-        $this->otp->updateColumn($otp['id'], 'is_verified', '1');
-        $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'));
+        $this->user->updateColumn($user['id'], 'email_verified_at', date('Y-m-d H:i:s'));
 
-        Response::json(['status' => 'success', 'msg' => 'Đặt lại mật khẩu thành công', 'token' => CSRF::getTokenRefresh()], 200);
-        exit;
+        Response::json(['status' => 'success', 'msg' => $request['verify_account'] != 1 ? 'Đặt lại mật khẩu thành công' : 'Kích hoạt tài khoản thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 
     public function logout() {

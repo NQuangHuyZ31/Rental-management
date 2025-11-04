@@ -8,10 +8,23 @@
 
 namespace App\Models;
 use App\Models\Model;
-use GuzzleHttp\Psr7\Query;
 
 class User extends Model {
     protected $table = 'users';
+    protected $field = [
+        'id',
+        'username',
+        'phone',
+        'gender',
+        'birthday',
+        'job',
+        'province',
+        'ward',
+        'address',
+        'account_status',
+        'avatar',
+        'last_login',
+    ];
 
     public function __construct() {
         parent::__construct();
@@ -27,13 +40,15 @@ class User extends Model {
     }
 
     public function getUserById($id) {
-        return $this->table($this->table)->where('id', $id)->where('deleted', 0)->first();
+        $this->field[] = 'citizen_id';
+        $this->field[] = 'email'; // Added by Huy Nguyen on 2025-10-14 to include email
+        return $this->table($this->table)->select($this->field)->where('id', $id)->where('deleted', 0)->first();
     }
 
     // Added by Huy Nguyen on 2025-10-14 to get user by filter
     public function getUserByFilter($filter, $limit = 10, $offset = 0, $total = false, $tableJoin = '', $fieldJoin = '', $possition = 1, $type = 'INNER') {
         $query = $this->table($this->table)->select([$this->table . '.*', 'roles.role_name AS role_name'])
-                        ->join('roles', 'users.role_id', '=', 'roles.id');
+            ->join('roles', 'users.role_id', '=', 'roles.id');
 
         if (!empty($tableJoin) && !empty($fieldJoin)) {
             if ($possition == 1) {
@@ -55,17 +70,17 @@ class User extends Model {
             $query->where($this->table . '.account_status', $filter['status']);
         }
 
-		$query->where($this->table.'.deleted', 0)->orderBy('users.created_at', 'DESC');
+        $query->where($this->table . '.deleted', 0)->orderBy('users.created_at', 'DESC');
 
-		if ($total) {
-			$users = $query->get();
-		} else {
-			$users = $query->limit($limit)
-							->offset($offset)
-							->get();
-		}
+        if ($total) {
+            $users = $query->get();
+        } else {
+            $users = $query->limit($limit)
+                ->offset($offset)
+                ->get();
+        }
 
-		return $users;
+        return $users;
     }
 
     public function insertUser($data) {
@@ -74,12 +89,31 @@ class User extends Model {
 
     public function getUserByEmail($email, $account_status = 'active') {
         try {
-            $user = $this->table($this->table)->where('email', $email)->where('account_status', $account_status)->where('deleted', 0)->first();
+            $user = $this->table($this->table)->select($this->field)->where('email', $email)->where('account_status', $account_status)->where('deleted', 0)->first();
             return $user;
         } catch (\Exception $e) {
             error_log("Error checking email: " . $e->getMessage());
             return false;
         }
+    }
+
+    // Added by Huy Nguyen on 2025-11-03 to get user by citizenid
+    public function getUserByCitizenId($citizenId, $notInclueUserId = []) {
+        if (empty($citizenId)) {
+            return;
+        }
+
+        if (!is_array($notInclueUserId)) {
+            $notInclueUserId = [$notInclueUserId];
+        }
+
+        $query = $this->table($this->table)->where('citizen_id', $citizenId)->where('deleted', 0)->where('account_status', 'active');
+
+        if (!empty($notInclueUserId)) {
+            $query->whereNotIn('id', $notInclueUserId);
+        }
+
+        return $query->first();
     }
 
     public function getUserByPhone($phone, $account_status = 'active') {

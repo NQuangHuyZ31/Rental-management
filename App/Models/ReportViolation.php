@@ -11,8 +11,4 @@ namespace App\Models;
 class ReportViolation extends Model {
     protected $table = 'report_violations';
     protected $primary_key = 'id';
-
-    public function add($data) {
-        return $this->table($this->table)->insert($data);
-    }
 }

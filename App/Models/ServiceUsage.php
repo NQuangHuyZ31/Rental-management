@@ -147,4 +147,19 @@ class ServiceUsage extends Model {
         $result = $this->queryBuilder->query($sql, [$houseId, $monthYear]);
         return $result && $result[0]['count'] > 0;
     }
+
+    // Added by Huy Nguyen on 2025-10-24 to get service usage by service id and room id
+    public function getServiceUsageByRoomAndServiceId($roomId = null, $serviceId = null) {
+        $query = $this->table($this->table);
+
+        if (!empty($roomId)) {
+            $query->where('room_id', $roomId);
+        }
+
+        if (!empty($serviceId)) {
+            $query->where('service_id', $serviceId);
+        }
+
+        return $query->first();
+    }
 }

@@ -128,6 +128,27 @@ class SendMail
     }
   }
 
+    /**
+   * Gửi email active account
+   */
+  public function sendActiveAccount($email, $customer, $resetUrl)
+  {
+    try {
+      $this->config();
+      $this->mail->addAddress($email, $customer);
+      $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+      $this->mail->Subject = "Kích hoạt tài khoản - Hệ thống quản lý cho thuê nhà";
+      $this->mail->Body = EmailTemplate::renderActiveAccount($customer, $resetUrl);
+      $this->mail->send();
+      Log::queue("Active account email sent successfully to: " . $email);
+      return true;
+    } catch (Exception $e) {
+      Log::queue("Failed to send active account email to {$email}: {$this->mail->ErrorInfo}");
+      return false;
+    }
+  }
+
   /**
    * Gửi email thông báo chung
    */

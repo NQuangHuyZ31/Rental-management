@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard' ?></title>
     <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand()?>"></link>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand()?>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 

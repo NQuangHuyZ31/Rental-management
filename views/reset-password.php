@@ -14,7 +14,7 @@ use Core\CSRF;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
+    <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
     <title>Đặt lại mật khẩu - HOSTY</title>
 
     <!-- Tailwind CSS -->
@@ -27,7 +27,7 @@ use Core\CSRF;
     <style>
         body {
             background-color: #f7fafc;
-            background: url('<?= BASE_URL ?>/Public/images/admin/login-background.jpg') no-repeat;
+            background: url('<?=BASE_URL?>/Public/images/admin/login-background.jpg') no-repeat;
             background-size: contain;
             background-position-y: 60%;
             min-height: 100vh;
@@ -50,10 +50,11 @@ use Core\CSRF;
         <div class="bg-white rounded-lg shadow-lg p-8">
             <form id="resetPasswordForm">
                 <!-- CSRF Token -->
-                <?= CSRF::getTokenField() ?>
+                <?=CSRF::getTokenField()?>
 
                 <!-- Hidden token field -->
-                <input type="hidden" id="resetToken" name="token" value="<?= $token ?? '' ?>">
+                <input type="hidden" id="resetToken" name="token" value="<?=$token ?? ''?>">
+                <input type="hidden" name="verify_account" value="<?=$_GET['verify_account'] ?? ''?>">
 
                 <!-- New Password Input -->
                 <div class="mb-6">
@@ -103,13 +104,13 @@ use Core\CSRF;
                      id="resetPasswordBtn"
                      class="w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                      <i class="fas fa-save mr-2"></i>
-                     Đặt lại mật khẩu
+                     <?= $_GET['verify_account'] != 1 ? 'Đặt lại mật khẩu' : 'Kích hoạt tài khoản' ?>
                  </button>
             </form>
 
             <!-- Back to Login -->
             <div class="mt-6 text-center">
-                 <a href="<?= BASE_URL ?>/login" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                 <a href="<?=BASE_URL?>/login" class="text-green-600 hover:text-green-800 text-sm font-medium">
                     <i class="fas fa-arrow-left mr-1"></i>
                     Quay lại đăng nhập
                 </a>
@@ -129,8 +130,8 @@ use Core\CSRF;
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/app.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/auth.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/auth.js"></script>
 
     <script>
         // Toggle password visibility

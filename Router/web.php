@@ -42,6 +42,7 @@ use App\Controllers\TestController;
 use App\Middleware\AuthAdminMiddleware;
 use App\Middleware\AuthLandlordMiddleware;
 use App\Middleware\AuthMiddleware;
+use App\Models\PaymentHistory;
 use Core\Router;
 
 // Khởi tạo đối tượng Router
@@ -102,6 +103,7 @@ $router->get('/customer/support', [ProfileCustomerController::class, 'support'],
 $router->post('/customer/payment', [PaymentController::class, 'payment'], [AuthMiddleware::class]);
 $router->post('/customer/payment/callback', [PaymentController::class, 'callback']);
 $router->post('/customer/payment/check-status', [PaymentController::class, 'checkPaymentStatus']);
+$router->get('/customer/payment/download-invoice/{id}', [PaymentController::class, 'dowloadInvoice'], [AuthMiddleware::class]);
 
 // =============================================================ROUTER ADMIN==================================================
 $router->get('/admin', [AuthAdminController::class, 'index'], [AuthAdminMiddleware::class]);
@@ -190,8 +192,9 @@ $router->get('/landlord/banking/detail', [BankingController::class, 'detail'], [
 
 // Tenant Management Routes
 $router->get('/landlord/tenant', [TenantController::class, 'index'], [AuthLandlordMiddleware::class]);
+$router->post('/landlord/tenant/find', [TenantController::class, 'find'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/create', [TenantController::class, 'create'], [AuthLandlordMiddleware::class]);
-$router->get('/landlord/tenant/edit/{id}', [TenantController::class, 'edit'], [AuthLandlordMiddleware::class]);
+$router->get('/landlord/tenant/edit', [TenantController::class, 'edit'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/update', [TenantController::class, 'update'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/tenant/delete', [TenantController::class, 'delete'], [AuthLandlordMiddleware::class]);
 $router->get('/landlord/tenant/check-before-remove', [TenantController::class, 'checkTenantBeforeRemove'], [AuthLandlordMiddleware::class]);

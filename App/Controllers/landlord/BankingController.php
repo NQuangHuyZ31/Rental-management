@@ -8,7 +8,6 @@
 namespace App\Controllers\Landlord;
 
 use Core\ViewRender;
-use Core\Session;
 use App\Models\PaymentHistory;
 use Exception;
 

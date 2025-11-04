@@ -8,18 +8,27 @@ Purpose: Payment Controller
  */
 namespace App\Controllers\Customer;
 
-use App\Models\PaymentHistory;
+use App\Models\House;
+use App\Models\Room;
+use App\Models\ServiceUsage;
 use App\Models\UserBanking;
 use Core\CSRF;
 use Core\Response;
 use Helpers\Log;
+use Helpers\PDF;
 
 class PaymentController extends CustomerController {
     private $userBankingModel;
+    protected $houseModel;
+    protected $roomModel;
+    protected $serviceUsageModel;
 
     public function __construct() {
         parent::__construct();
         $this->userBankingModel = new UserBanking();
+        $this->houseModel = new House();
+        $this->roomModel = new Room();
+        $this->serviceUsageModel = new ServiceUsage();
     }
 
     public function payment() {
@@ -90,7 +99,6 @@ class PaymentController extends CustomerController {
             } else {
                 $invoiceID = null;
             }
-            
 
             $dataPayment = [
                 'invoice_id' => $invoiceID,
@@ -152,6 +160,7 @@ class PaymentController extends CustomerController {
         }
 
         $this->invoiceModel->updateColumn($invoice['id'], 'user_id', $this->userID);
+        $this->invoiceModel->updateColumn($invoice['id'], 'pay_at', date('Y-m-d'));
         $this->paymentHistoryModel->updatePaymentHistory($paymentHistory['id'], ['payer_id' => $this->userID]);
         Response::json(['status' => 'success', 'payment_status' => 'paid', 'message' => 'Thanh toán thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
@@ -161,11 +170,71 @@ class PaymentController extends CustomerController {
         $bankCode = $userBanking['bank_code'];
 
         $totalAmount = intval($invoice['total']);
-        $des = 'Thanh toán hóa đơn phòng tháng ' . $invoice['invoice_month'] . ' : HD'. $invoice['id'];
+        $des = 'Thanh toán hóa đơn phòng tháng ' . $invoice['invoice_month'] . ' : HD' . $invoice['id'];
         $template = 'compact';
 
         $qrCode = 'https://qr.sepay.vn/img?acc=' . $bankNumber . '&bank=' . $bankCode . '&amount=' . $totalAmount . '&des=' . $des . '&template=' . $template;
 
         return $qrCode;
+    }
+
+    public function dowloadInvoice($id) {
+        $invoiceID = $id;
+
+        $invoice = $this->invoiceModel->getInvoiceById($invoiceID);
+
+        if (!$invoice) {
+            $this->request->redirectWithErrors('customer/bills', 'Hóa đơn không tồn tại hoặc chưa thanh toán');
+        }
+
+        $house = $this->houseModel->getHouseById($invoice['house_id']);
+        $owner = $this->userModel->getUserById($house['owner_id']);
+        $room = $this->roomModel->getRoomById($invoice['room_id']);
+        $tenants = $this->tenantModel->getAllUserByRoomId($room['id']);
+        $banking = $this->userBankingModel->getUserBankingByUserId($owner['id']);
+        $tenantData = [];
+
+        foreach ($tenants as $tenant) {
+            $result = $this->userModel->getUserById($tenant['user_id']);
+            $tenantData[] = $result;
+        }
+
+        $services = $this->serviceModel->getServicesByRoomId($room['id']);
+
+        $serviceData = [];
+
+        foreach ($services as $service) {
+            $serviceUsage = $this->serviceUsageModel->getServiceUsageByRoomAndServiceId($room['id'], $service['id']);
+            $item = [
+                'service_name' => $service['service_name'],
+                'unit' => $service['unit_vi'],
+                'unit_price' => $service['service_price'],
+                'old_value' => !empty($serviceUsage['old_value']) ? $serviceUsage['old_value'] : '',
+                'new_value' => !empty($serviceUsage['new_value']) ? $serviceUsage['new_value'] : '',
+                'usage_amount' => $serviceUsage['usage_amount'],
+                'total_service' => $serviceUsage['total_amount'],
+            ];
+            $serviceData[] = $item;
+        }
+
+        PDF::createPDF('invoice-template', $invoice['ref_code'] ,[
+            'invoice' => $invoice,
+            'house' => $house,
+            'owner' => $owner,
+            'room' => $room,
+            'tenants' => $tenantData,
+            'services' => $serviceData,
+            'banking' => $banking,
+        ]);
+
+        // ViewRender::renderWithLayout('template/pdf/invoice-template', [
+        //     'invoice' => $invoice,
+        //     'house' => $house,
+        //     'owner' => $owner,
+        //     'room' => $room,
+        //     'tenants' => $tenantData,
+        //     'services' => $serviceData,
+        //     'banking' => $banking,
+        // ], 'template/pdf/base-pdf-template');
     }
 }

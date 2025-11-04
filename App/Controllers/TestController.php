@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Core\ViewRender;
 use Helpers\Hash;
 use Helpers\UploadClound;
 
@@ -24,7 +25,8 @@ class TestController
     // echo Hash::decrypt('mYp0dHQomSrLLow76U6ej1pR8XhLGICGmLAs71bmigbYnxVaC67tdhUlv2NiI8OXXplm3tdKO0shye0/vwnnLg==');
     // $result = UploadClound::extractPublicId('https://res.cloudinary.com/whr-clound/image/upload/v1745473515/whr_images/feedback_images/1745473513_f8717c2c6f76beb7e07819c35ab6505437528c20.jpg');
     // UploadClound::delete('whr_images/feedback_images/' . $result);
-    $data = Hash::decrypt('Sz5eHv/6tWo5Sq06LSxId5JypqpjMHldQvNXYPGFAyljNTQ2cmopMs5CZx+nH3hoL15/UWLyjIYgJaGhs2ilHFIgMRgnwGEGSb+ySEhnfVGqO+71aaXKnZbKYFjKsyCvGaRXjXaVuJNj1kC3VWX6bXhynSoYwmA6nXFs94fqfto=');
-    var_dump(json_decode($data, true));
+    // $data = Hash::decrypt('Sz5eHv/6tWo5Sq06LSxId5JypqpjMHldQvNXYPGFAyljNTQ2cmopMs5CZx+nH3hoL15/UWLyjIYgJaGhs2ilHFIgMRgnwGEGSb+ySEhnfVGqO+71aaXKnZbKYFjKsyCvGaRXjXaVuJNj1kC3VWX6bXhynSoYwmA6nXFs94fqfto=');
+    // var_dump(json_decode($data, true));
+    ViewRender::renderWithLayout('template/pdf/invoice-template', [], 'template/pdf/base-pdf-template');
   }
 }

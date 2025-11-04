@@ -1,7 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 <!-- Main modal -->
 <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-	<div class="relative p-4 w-full max-w-1/2 max-h-full">
+	<div class="relative p-4 max-w-1/2 max-h-full">
 		<!-- Modal content -->
 		<form id="formNewPost">
 		<div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">

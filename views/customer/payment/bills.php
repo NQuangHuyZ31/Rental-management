@@ -343,9 +343,9 @@
                                 <i class="fas fa-qrcode mr-2"></i>Thanh toán hóa đơn
                             </button>
                         <?php } ?>
-                        <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
+                        <a href="<?= BASE_URL ?>/customer/payment/download-invoice/<?= $invoice['id'] ?>" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
                             <i class="fas fa-download mr-2"></i>Tải hóa đơn
-                        </button>
+                        </a>
                         <button type="button" onclick="invoiceDetail(this)" data-invoice='<?= htmlspecialchars(json_encode($invoice), ENT_QUOTES, "UTF-8") ?>' class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer invoice-detail">
                             <i class="fas fa-eye mr-2"></i>Xem chi tiết
                         </button>
@@ -366,8 +366,9 @@
 </div>
 
 <!-- Payment Modal -->
-<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden payment-modal">
-    <div class="flex items-center justify-center min-h-screen p-4">
+<div id="paymentModal" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-hidden
+md:inset-0 bg-gray-900/50 payment-modal items-center justify-center">>
+    <div class="flex items-center justify-center p-4">
         <div class="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden modal-content">
             <!-- Modal Header -->
             <div class="p-6 border-b border-gray-200 bg-green-50">

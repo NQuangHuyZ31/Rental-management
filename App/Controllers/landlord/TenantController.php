@@ -7,15 +7,21 @@ Purpose: Build Tenant Controller
 namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
+use App\Requests\AddTenantValidate;
 use Core\CSRF;
+use Core\Response;
 use Core\Session;
 use Core\ViewRender;
-use Helpers\Validate;
+use Helpers\Hash;
+use Queue\SendEmailResetPassword;
 
 class TenantController extends LandlordController {
 
+    protected $sendEmailResetPasswordJob;
+
     public function __construct() {
         parent::__construct();
+        $this->sendEmailResetPasswordJob = new SendEmailResetPassword();
     }
 
     public function index() {
@@ -59,370 +65,190 @@ class TenantController extends LandlordController {
         ]);
     }
 
-    /**
-     * Tạo mới khách hàng
-     */
+    // Added by Huy Nguyen on 2025-10-31 to find customer for email
+    public function find() {
+        $requests = $this->request->post();
+
+        if (!isset($requests['email']) || (isset($requests['email']) && !preg_match('/^[\w\.-]+@[\w\.-]+\.com$/', $requests['email']))) {
+            Response::json(['status' => 'error', 'msg' => 'Email không đúng định dạng', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi khi tìm kiếm. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $customer = $this->userModel->getUserByEmail($requests['email']);
+
+        Response::json(['status' => 'success', 'data' => $customer, 'token' => CSRF::getTokenRefresh()], 200);
+    }
+
+    // Modify by Huy Nguyen on 2024-11-1 to refactor handle logic
     public function create() {
-        // Kiểm tra request method
-        if (!$this->request->isPost()) {
-            http_response_code(405);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Phương thức không hợp lệ',
-            ]);
-            exit;
+        $requests = $this->request->post();
+
+        if (empty($requests['room_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Phòng này không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
-        // Lấy dữ liệu từ request
-        $userData = [
-            'username' => $this->request->post('username'),
-            'email' => $this->request->post('email'),
-            'phone' => $this->request->post('phone'),
-            'gender' => $this->request->post('gender'),
-            'birthday' => $this->request->post('birthday'),
-            'job' => $this->request->post('job'),
-            'province' => $this->request->post('province'),
-            'ward' => $this->request->post('ward'),
-            'address' => $this->request->post('address'),
-            'citizen_id' => $this->request->post('citizen_id'),
-            'role_id' => 3, // Customer role
-            'account_status' => 'active',
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ];
-
-        $tenantData = [
-            'room_id' => $this->request->post('room_id'),
-            'join_date' => $this->request->post('join_date'),
-            'expected_leave_date' => $this->request->post('expected_leave_date'),
-            'is_primary' => $this->request->post('is_primary') ? 1 : 0,
-            'note' => $this->request->post('note'),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ];
-
-        // Validate dữ liệu sử dụng Validate helper
-        $validationData = array_merge($userData, $tenantData);
-        $validationErrors = Validate::validateTenantData($validationData, $this->tenantModel);
-
-        if (!empty($validationErrors)) {
-            // Trả về JSON response với lỗi
-            http_response_code(400);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'errors' => $validationErrors,
-                'csrf_token' => CSRF::generateToken(),
-            ]);
-            exit;
+        if (empty($requests['tenant_id']) && $requests['is_create'] == 0) {
+            Response::json(['status' => 'error', 'msg' => 'Chưa có khách hàng nào được chọn', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        // Lấy thông tin email đã active
-        $emailInfo = $this->tenantModel->checkEmailExistsAndActive($userData['email']);
-
-        try {
-            // Bắt đầu transaction
-            $this->tenantModel->beginTransaction();
-
-            // Sử dụng user_id có sẵn từ email đã active
-            $userId = $emailInfo['id'];
-
-            // Cập nhật thông tin user (nếu có thay đổi)
-            $updateData = [];
-            if ($userData['username'] !== $emailInfo['username']) {
-                $updateData['username'] = $userData['username'];
-            }
-            if (!empty($userData['phone'])) {
-                $updateData['phone'] = $userData['phone'];
-            }
-            if (!empty($userData['gender'])) {
-                $updateData['gender'] = $userData['gender'];
-            }
-            if (!empty($userData['birthday'])) {
-                $updateData['birthday'] = $userData['birthday'];
-            }
-            if (!empty($userData['job'])) {
-                $updateData['job'] = $userData['job'];
-            }
-            if (!empty($userData['province'])) {
-                $updateData['province'] = $userData['province'];
-            }
-            if (!empty($userData['ward'])) {
-                $updateData['ward'] = $userData['ward'];
-            }
-            if (!empty($userData['address'])) {
-                $updateData['address'] = $userData['address'];
-            }
-            if (!empty($userData['citizen_id'])) {
-                $updateData['citizen_id'] = $userData['citizen_id'];
-            }
-
-            // Cập nhật thông tin user nếu có thay đổi
-            if (!empty($updateData)) {
-                $updateData['updated_at'] = date('Y-m-d H:i:s');
-                $this->tenantModel->query('UPDATE users SET ' . implode(' = ?, ', array_keys($updateData)) . ' = ? WHERE id = ?',
-                    array_merge(array_values($updateData), [$userId]));
-            }
-
-            // Gán user vào phòng
-            $tenantData['user_id'] = $userId;
-            $result = $this->tenantModel->createTenant($tenantData);
-
-            if ($result) {
-                // Commit transaction
-                $this->tenantModel->commit();
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Thêm khách hàng thành công!',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
-            } else {
-                // Rollback nếu có lỗi
-                $this->tenantModel->rollback();
-                http_response_code(500);
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Có lỗi xảy ra khi thêm khách hàng vào phòng',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
-            }
-        } catch (\Exception $e) {
-            // Rollback nếu có exception
-            $this->tenantModel->rollback();
-            http_response_code(500);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
-            exit;
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Dữ liệu không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
         }
+
+        // Kiểm tra lại lần cuối khách thuê đã được thêm vào phòng chưa
+        if (!empty($requests['tenant_id']) && $this->tenantModel->getByTenantAndRoom($requests['tenant_id'], $requests['room_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Khách thuê đã tồn tại trong phòng', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if ($requests['is_create'] == 0 && !$this->userModel->getUserById($requests['tenant_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Khách hàng không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $error = AddTenantValidate::validate($requests);
+
+        if (!empty($error)) {
+            Response::json(['status' => 'error', 'msg' => $error, 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        // Kiểm tra xem khách trong phòng đã đầy chưa
+        $room = $this->roomModel->getRoomById($requests['room_id']);
+
+        if (!$room || $room['max_people'] <= $room['stay_in']) {
+            Response::json(['status' => 'error', 'msg' => 'Phòng đã đầy, không thể thêm khách thuê mới', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if ($requests['is_create'] == 1) {
+            $tenantId = $this->createAccountForTenant($requests);
+
+            if (!$tenantId) {
+                Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra khi tạo khách hàng mới', 'token' => CSRF::getTokenRefresh()], 500);
+            }
+
+            $requests['tenant_id'] = $tenantId;
+        }
+
+        // Thêm khách thuê vào phòng
+        $addTenantResult = $this->tenantModel->add(
+            ['room_id' => $requests['room_id'], 'user_id' => $requests['tenant_id'], 'join_date' => $requests['join_date'], 'is_primary' => $requests['is_primary'] ?? 0,
+                'note' => $requests['note'] ?? '', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
+        if (!$addTenantResult) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra khi thêm khách thuê vào phòng', 'token' => CSRF::getTokenRefresh()], 500);
+        }
+
+        // Update citizen_id trong bảng users
+        $this->userModel->updateColumn($requests['tenant_id'], 'citizen_id', $requests['citizen_id']);
+        // Cập nhật số người ở hiện tại trong phòng
+        $this->roomModel->updateColumn($requests['room_id'], 'stay_in', $room['stay_in'] + 1);
+
+        if ($this->roomModel->getColumn(['stay_in'], 'rooms', $requests['room_id']) > 0) {
+            $this->roomModel->updateColumn($requests['room_id'], 'room_status', 'occupied');
+        }
+
+        Response::json(['status' => 'success', 'msg' => 'Thêm khách thuê thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 
-    /**
-     * Lấy thông tin khách hàng để edit
-     */
-    public function edit($tenantId = null) {
-        // Kiểm tra request method
-        if (!$this->request->isGet()) {
-            http_response_code(405);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Phương thức không hợp lệ',
-            ]);
-            exit;
-        }
+    // Added by Huy Nguyen on 2025-11-03 to create acccount
+    private function createAccountForTenant($requests) {
+        $dataUser = ['email' => $requests['email'], 'username' => $requests['username']];
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
+        $dataEncrypted = Hash::encrypt(json_encode($dataUser));
 
-        // Lấy tenant_id từ parameter hoặc request
-        if (empty($tenantId)) {
-            $tenantId = $this->request->get('id');
-        }
-
-        if (empty($tenantId)) {
-            http_response_code(400);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'ID khách hàng không hợp lệ',
-            ]);
-            exit;
-        }
-
-        // Lấy thông tin khách hàng
-        try {
-            $tenant = $this->tenantModel->getTenantForEdit($tenantId, $ownerId);
-
-            if (!$tenant) {
-                http_response_code(404);
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Không tìm thấy khách hàng',
-                ]);
-                exit;
-            }
-        } catch (\Exception $e) {
-            http_response_code(500);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Lỗi khi lấy thông tin khách hàng: ' . $e->getMessage(),
-            ]);
-            exit;
-        }
-
-        // Lấy danh sách phòng có thể chuyển đến
-        try {
-            $rooms = $this->tenantModel->getAvailableRoomsByHouseId($tenant['house_id'], $ownerId);
-
-            // Thêm phòng hiện tại vào danh sách (nếu không có trong available rooms)
-            $currentRoomExists = false;
-            foreach ($rooms as $room) {
-                if ($room['id'] == $tenant['room_id']) {
-                    $currentRoomExists = true;
-                    break;
-                }
-            }
-
-            if (!$currentRoomExists) {
-                $rooms[] = [
-                    'id' => $tenant['room_id'],
-                    'room_name' => $tenant['room_name'],
-                    'room_status' => 'occupied',
-                    'max_tenants' => 999, // Không giới hạn cho phòng hiện tại
-                    'current_tenants' => 1,
-                ];
-            }
-        } catch (\Exception $e) {
-            http_response_code(500);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Lỗi khi lấy danh sách phòng: ' . $e->getMessage(),
-            ]);
-            exit;
-        }
-
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => true,
-            'tenant' => $tenant,
-            'rooms' => $rooms,
+        $resetUrl = APP_URL . '/reset-password?token=' . $dataEncrypted . '&verify_account=1';
+        $this->sendEmailResetPasswordJob->dispatchHigh([
+            'to' => $requests['email'],
+            'customer' => $requests['username'],
+            'resetUrl' => $resetUrl,
+            'activeAccount' => true,
         ]);
-        exit;
+
+        // Tạo mới khách hàng
+        $newUserData = [
+            'username' => $requests['username'],
+            'email' => $requests['email'],
+            'password' => password_hash('hosty@123456', PASSWORD_DEFAULT),
+            'phone' => $requests['phone'],
+            'gender' => $requests['gender'] ?? '',
+            'birthday' => $requests['birthday'] ?? null,
+            'job' => $requests['job'] ?? '',
+            'province' => $requests['province'] ?? '',
+            'ward' => $requests['ward'] ?? '',
+            'address' => $requests['address'] ?? '',
+            'citizen_id' => $requests['citizen_id'] ?? '',
+            'role_id' => 3, // role_id cho khách thuê
+            'account_status' => 'inactive', // Mặc định tài khoản chưa kích hoạt
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $tenantId = $this->userModel->insertUser($newUserData);
+
+        return $tenantId;
     }
 
-    /**
-     * Cập nhật thông tin khách hàng
-     */
+    // Modify by Huy Nguyen on 2025-11-1 to refactor handle show info customer rental
+    public function edit() {
+        // Lấy thông tin tenant từ request
+        $requests = $this->request->get();
+        // Lấy thông tin khách thuê
+        $user = $this->userModel->getUserById($requests['tenant_id']);
+
+        if (!$user) {
+            Response::json(['status' => 'error', 'msg' => 'Khách thuê không tồn tại'], 400);
+        }
+
+        // Lấy thông tin thuê phòng
+        $room = $this->tenantModel->getByTenantAndRoom($requests['tenant_id'], $requests['room_id']);
+        $additionalInfo = $this->tenantModel->getRoomDetailById($room['room_id']);
+        $room = array_merge($room, $additionalInfo);
+
+        if (!$room) {
+            Response::json(['status' => 'error', 'msg' => 'Khách thuê không thuộc phòng này'], 400);
+        }
+
+        Response::json(['status' => 'success', 'data' => ['user' => $user, 'room' => $room]], 200);
+    }
+
+    // Modify by Huy Nguyen on 2025-11-1 to refactor handle update info customer rental
     public function update() {
-        // Kiểm tra request method
-        if (!$this->request->isPost()) {
-            http_response_code(405);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Phương thức không hợp lệ',
-            ]);
-            exit;
+        $requests = $this->request->post();
+
+        if (empty($requests['tenant_id']) || empty($requests['room_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Dữ liệu không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        // Lấy thông tin user đã đăng nhập
-        $user = Session::get('user');
-        $ownerId = $user['id'];
-
-        // Lấy tenant_id từ request
-        $tenantId = $this->request->post('tenant_id');
-
-        if (empty($tenantId)) {
-            http_response_code(400);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'ID khách hàng không hợp lệ',
-            ]);
-            exit;
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Dữ liệu không hợp lệ', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        // Kiểm tra khách hàng có tồn tại và thuộc về owner không
-        $existingTenant = $this->tenantModel->getTenantForEdit($tenantId, $ownerId);
-        if (!$existingTenant) {
-            http_response_code(404);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Không tìm thấy khách hàng',
-            ]);
-            exit;
+        if ($this->userModel->getUserByCitizenId($requests['citizen_id'], $requests['tenant_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Căn cước công dân đã tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        // Lấy dữ liệu từ request
-        $userData = [
-            'username' => $this->request->post('username'),
-            'phone' => $this->request->post('phone'),
-            'gender' => $this->request->post('gender'),
-            'birthday' => $this->request->post('birthday'),
-            'job' => $this->request->post('job'),
-            'province' => $this->request->post('province'),
-            'ward' => $this->request->post('ward'),
-            'address' => $this->request->post('address'),
-            'citizen_id' => $this->request->post('citizen_id'),
-        ];
+        $error = AddTenantValidate::validate($requests, false);
 
-        $tenantData = [
-            'room_id' => $this->request->post('room_id'),
-            'join_date' => $this->request->post('join_date'),
-            'expected_leave_date' => $this->request->post('expected_leave_date'),
-            'is_primary' => $this->request->post('is_primary') ? 1 : 0,
-            'note' => $this->request->post('note'),
-        ];
+        if (!empty($error)) {
+            Response::json(['status' => 'error', 'msg' => $error, 'token' => CSRF::getTokenRefresh()], 400);
+        }
+        // Cập nhật thông tin khách thuê
+        $tenantRoom = $this->tenantModel->getByTenantAndRoom($requests['tenant_id'], $requests['room_id']);
 
-        // Validate dữ liệu sử dụng Validate helper (không validate email)
-        $validationData = array_merge($userData, $tenantData);
-        // Xóa phone và citizen_id khỏi validation để không bắt buộc nhập
-        unset($validationData['phone']);
-        unset($validationData['citizen_id']);
-        $validationErrors = Validate::validateTenantDataForUpdate($validationData, $this->tenantModel, $existingTenant['user_id']);
-
-        if (!empty($validationErrors)) {
-            // Trả về JSON response với lỗi
-            http_response_code(400);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'errors' => $validationErrors,
-                'csrf_token' => CSRF::generateToken(),
-            ]);
-            exit;
+        if (!$tenantRoom) {
+            Response::json(['status' => 'error', 'msg' => 'Khách thuê không thuộc phòng này', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
-        try {
-            // Cập nhật thông tin khách hàng
-            $result = $this->tenantModel->updateTenant($tenantId, $userData, $tenantData, $ownerId);
+        // Cập nhật thông tin khách thuê
+        $this->userModel->updateColumn($requests['tenant_id'], 'citizen_id', $requests['citizen_id']);
+        $this->tenantModel->updateTable($tenantRoom['id'], [
+            'join_date' => $requests['join_date'],
+            'is_primary' => $requests['is_primary'] ?? 0,
+            'note' => $requests['note'] ?? '',
+        ]);
 
-            if ($result) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Cập nhật thông tin khách hàng thành công!',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
-            } else {
-                http_response_code(500);
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Có lỗi xảy ra khi cập nhật thông tin khách hàng',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
-            }
-        } catch (\Exception $e) {
-            http_response_code(500);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
-            exit;
-        }
+        Response::json(['status' => 'success', 'msg' => 'Cập nhật thông tin khách thuê thành công', 'token' => CSRF::getTokenRefresh()], 200);
     }
 
     /**
@@ -524,8 +350,15 @@ class TenantController extends LandlordController {
         }
 
         try {
-            // Xóa khách thuê khỏi phòng
+            // // Xóa khách thuê khỏi phòng
             $result = $this->tenantModel->removeTenantFromRoom($tenantId, $ownerId);
+
+            // Added by Huy Nguyen on 2025-11-04 to update stay_in when remove last tenant
+            $room = $this->roomModel->getRoomById($this->request->post('room_id'));
+
+            if ($room['stay_in'] > 0) {
+                $this->roomModel->updateColumn($this->request->post('room_id'), 'stay_in', max(0, $room['stay_in'] - 1));
+            }
 
             if ($result) {
                 header('Content-Type: application/json');

@@ -31,6 +31,8 @@ if ($error) {
     <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- App.css -->
+     <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand() ?>">
     <!-- Toastr -->
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <!-- Empty States CSS -->

@@ -11,12 +11,16 @@ window.App = {
     WARD: null,
 
     getToken: function () {
-        return $('input[name="csrf_token"]').val();
+        return $('input[name="csrf_token"]').val() ?? '';
     },
 
     setToken: function (token) {
         console.log('setToken', token);
         $('input[name="csrf_token"]').val(token);
+    },
+
+    getRole: function () {
+        return $('input[name="role"]').val() ?? '';
     },
 
     showSuccessMessage: function (message, status) {

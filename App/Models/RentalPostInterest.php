@@ -15,10 +15,6 @@ class RentalPostInterest extends Model {
         parent::__construct();
     }
 
-    public function add($data) {
-        return $this->table($this->table)->insert($data);
-    }
-
     public function getByUserId($userId, $postId = null, $limit = '', $offset = '', $first = false) {
         $query = $this->table($this->table)->select(['rental_posts.*', $this->table . '.' . $this->primary_key . ' AS post_interest_id'])
             ->join('rental_posts', 'rental_post_interestes.rental_post_id', '=', 'rental_posts.id')->where('user_id', $userId)->where('rental_post_interestes.deleted', 0);

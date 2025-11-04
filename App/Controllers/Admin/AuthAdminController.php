@@ -8,7 +8,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Controllers\Controller;
+use App\Controllers\AuthController;
 use App\Models\User;
 use App\Requests\LoginValidate;
 use Core\CSRF;
@@ -16,7 +16,7 @@ use Core\ViewRender;
 use Core\Request;
 use Core\Session;
 
-class AuthAdminController extends Controller {
+class AuthAdminController extends AuthController {
 
 	protected $request;
 	protected $userModel;

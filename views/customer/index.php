@@ -46,7 +46,7 @@ use Helpers\Format;
 					<!-- Content -->
 					<div class="flex-1">
 						<h3 class="text-lg font-bold text-gray-900 mb-3">
-							Tải APP tìm phòng trọ, căn hộ, việc làm!
+							 Tìm phòng trọ, căn hộ, việc làm trên Hosty!
 						</h3>
 
 						<!-- Rating -->
@@ -58,7 +58,7 @@ use Helpers\Format;
 								<i class="fas fa-star text-yellow-400"></i>
 								<i class="fas fa-star text-gray-300"></i>
 							</div>
-							<span class="text-sm text-gray-600 ml-2">4.5+ rating, hơn 10.000+ đồng minh tải APP & sử dụng</span>
+							<span class="text-sm text-gray-600 ml-2">4.5+ rating, hơn 1,000+ người sử dụng</span>
 						</div>
 
 						<p class="text-sm text-gray-600 mb-4">
@@ -66,7 +66,7 @@ use Helpers\Format;
 						</p>
 
 						<!-- Download Buttons -->
-						<div class="flex space-x-3">
+						<!-- <div class="flex space-x-3">
 							<button class="flex items-center bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
 								<i class="fab fa-apple text-xl mr-2"></i>
 								<div class="text-left">
@@ -81,7 +81,7 @@ use Helpers\Format;
 									<div class="text-sm font-medium">Google Play</div>
 								</div>
 							</button>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -92,15 +92,11 @@ use Helpers\Format;
 				<ul class="space-y-3">
 					<li class="flex items-center">
 						<i class="fas fa-check-circle text-green-500 mr-3"></i>
-						<span class="text-gray-700">Tìm việc tiện lợi</span>
+						<span class="text-gray-700">Tìm phòng trọ, căn hộ nhanh chống</span>
 					</li>
 					<li class="flex items-center">
 						<i class="fas fa-check-circle text-green-500 mr-3"></i>
-						<span class="text-gray-700">Theo dõi khu vực tìm phòng của bạn</span>
-					</li>
-					<li class="flex items-center">
-						<i class="fas fa-check-circle text-green-500 mr-3"></i>
-						<span class="text-gray-700">Không bỏ lỡ thông báo tìm phòng</span>
+						<span class="text-gray-700">Theo dõi phòng và hóa đơn tiện lợi</span>
 					</li>
 					<li class="flex items-center">
 						<i class="fas fa-check-circle text-green-500 mr-3"></i>

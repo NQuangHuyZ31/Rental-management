@@ -33,7 +33,7 @@ class RentalRoomCustomerController extends CustomerController {
 	}
 
 	public function roomDetail($id) {
-		$roomDetail = $this->tenantModel->getRoomDetailById($id);
+		$roomDetail = $this->tenantModel->getRoomDetailById($id, $this->user['id']);
 
 		if (!$roomDetail) {
 			$this->request->redirectBackWithError('Phòng không tồn tại');

@@ -58,8 +58,8 @@ class Tenant extends Model {
     /**
      * Lấy thông tin chi tiết khách thuê theo ID
      */
-    public function getTenantById($tenantId, $ownerId) {
-        return $this->queryBuilder
+    public function getTenantById($tenantId, $ownerId = '') {
+        $query = $this->queryBuilder
             ->table($this->table)
             ->select([
                 'users.id',
@@ -86,9 +86,13 @@ class Tenant extends Model {
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('users.id', $tenantId)
-            ->where('houses.owner_id', $ownerId)
-            ->where('users.deleted', 0)
+            ->where('users.id', $tenantId);
+
+        if (!empty($ownerId)) {
+            $query->where('houses.owner_id', $ownerId);
+        }
+
+        return $query->where('users.deleted', 0)
             ->where('rooms.deleted', 0)
             ->first();
     }
@@ -456,7 +460,7 @@ class Tenant extends Model {
     /**
      * Lấy thông tin khách thuê để edit (bao gồm cả thông tin user và tenant)
      */
-    public function getTenantForEdit($tenantId, $ownerId) {
+    public function getTenantForEdit($tenantId, $ownerId = '') {
         $result = $this->table('room_tenants')
             ->select([
                 'room_tenants.id as tenant_id', // ID của room_tenants (đây là ID cần dùng)
@@ -473,6 +477,7 @@ class Tenant extends Model {
                 'users.citizen_id',
                 'rooms.id as room_id',
                 'rooms.room_name',
+                'rooms.stay_in',
                 'houses.id as house_id',
                 'houses.house_name',
                 'room_tenants.join_date',
@@ -483,14 +488,14 @@ class Tenant extends Model {
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('room_tenants.id', $tenantId)
-            ->where('houses.owner_id', $ownerId)
-            ->where('users.deleted', 0)
-            ->where('rooms.deleted', 0)
-            ->whereNull('room_tenants.left_date')
-            ->first();
+            ->where('room_tenants.id', $tenantId);
 
-        return $result;
+        // Added by Huy Nguyen on 2025-11-04 to support not ownerId
+        if (!empty($ownerId)) {
+            $result->where('houses.owner_id', $ownerId);
+        }
+
+        return $result->where('users.deleted', 0)->where('rooms.deleted', 0)->whereNull('room_tenants.left_date')->first();
     }
 
     /**
@@ -622,7 +627,7 @@ class Tenant extends Model {
     // Added by Huy Nguyen get room by user id
     public function getAllRoomByUserId() {
         return $this->table('room_tenants')->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
-                            ->where('room_tenants.user_id', $this->userID)->where('rooms.deleted', 0)->get();
+            ->where('room_tenants.user_id', $this->userID)->where('rooms.deleted', 0)->get();
     }
 
     // Added by Huy Nguyen get detailed rented rooms by user id
@@ -650,8 +655,8 @@ class Tenant extends Model {
     }
 
     // Added by Huy Nguyen get room detail by id
-    public function getRoomDetailById($id) {
-        return $this->table('room_tenants')
+    public function getRoomDetailById($id, $userId = '') {
+        $query = $this->table('room_tenants')
             ->select([
                 'rooms.*',
                 'houses.house_name',
@@ -663,9 +668,13 @@ class Tenant extends Model {
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
             ->join('users', 'room_tenants.user_id', '=', 'users.id')
-            ->where('room_tenants.room_id   ', $id)
-            ->where('room_tenants.user_id', $this->userID)
-            ->where('rooms.deleted', 0)
+            ->where('room_tenants.room_id   ', $id);
+
+        if (!empty($userId)) {
+            $query->where('room_tenants.user_id', $userId);
+        }
+
+        return $query->where('rooms.deleted', 0)
             ->first();
     }
 
@@ -718,5 +727,22 @@ class Tenant extends Model {
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    // Added by Huy Nguyen on 2025-10-24 to get all user by room
+    public function getAllUserByRoomId($roomId) {
+        return $this->table('room_tenants')->join('rooms', 'rooms.id', '=', 'room_tenants.room_id')
+            ->where('room_tenants.room_id', $roomId)->where('rooms.deleted', 0)->get();
+    }
+
+    // Added by Huy Nguyen on 2025-11-04 to check tenant exits in room
+    public function getByTenantAndRoom($userId, $roomId) {
+        $result = $this->table('room_tenants')
+            ->where('user_id', $userId)
+            ->where('room_id', $roomId)
+            ->whereNull('left_date')
+            ->first();
+
+        return $result;
     }
 }

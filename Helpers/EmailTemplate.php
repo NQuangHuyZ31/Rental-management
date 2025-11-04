@@ -101,4 +101,13 @@ class EmailTemplate
     {
         return self::render($template, $data);
     }
+
+    // Render active account email template
+    public static function renderActiveAccount($customer, $resetUrl)
+    {
+        return self::render('active-account', [
+            'customer' => $customer,
+            'resetUrl' => $resetUrl
+        ]);
+    }
 }

@@ -3,23 +3,23 @@ $(document).ready(function () {
     const WARD = '#ward';
 
     // Hàm load Province
-    function loadProvince(defaultValue = null, defaultWard = null) {
-        $(PROVINCE).html('<option value="">Chọn tỉnh/thành phố</option>');
-        return App.setProvinceData(PROVINCE).then(function () {
+    window.loadProvince = function (provinceElement, defaultValue = null, wardElement, defaultWard = null) {
+        $(provinceElement).html('<option value="">Chọn tỉnh/thành phố</option>');
+        return App.setProvinceData(provinceElement).then(function () {
             if (defaultValue) {
-                $(PROVINCE).val(defaultValue).trigger('change');
+                $(provinceElement).val(defaultValue).trigger('change');
 
                 // Sau khi chọn province xong -> load ward
                 if (defaultWard) {
-                    const code = $(PROVINCE).find(':selected').data('code');
+                    const code = $(provinceElement).find(':selected').data('code');
                     if (code) {
-                        $(WARD).html('<option value="">Chọn phường/xã</option>');
-                        App.setWardData(code, WARD, defaultWard);
+                        $(wardElement).html('<option value="">Chọn phường/xã</option>');
+                        App.setWardData(code, wardElement, defaultWard);
                     }
                 }
             }
         });
-    }
+    };
 
     // Province change event
     $(PROVINCE).on('change', function () {
@@ -33,7 +33,7 @@ $(document).ready(function () {
     // --- chạy 1 lần khi load page ---
     const defaultProvince = $(PROVINCE).data('default');
     const defaultWard = $(WARD).data('default');
-    loadProvince(defaultProvince, defaultWard);
+    loadProvince(PROVINCE, defaultProvince, WARD, defaultWard);
 
     // Send customer-support
     $('button#supportBtn').on('click', function (e) {

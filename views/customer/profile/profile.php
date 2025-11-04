@@ -193,8 +193,8 @@ use Helpers\Format;
 
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-medium text-gray-700">Xác thực CCCD</span>
-						<span class="inline-block bg-<?= $user['citizen_id'] ? 'green' : 'yellow' ?>-100 text-<?= $user['citizen_id'] ? 'green' : 'yellow' ?>-800 text-xs px-2 py-1 rounded-full">
-							<i class="fas fa-<?= $user['citizen_id'] ? 'check' : 'clock' ?> mr-1"></i><?= $user['citizen_id'] ? 'Đã xác thực' : 'Chưa cập nhật' ?>
+						<span class="inline-block bg-<?= $user['citizen_id'] != '' ? 'green' : 'yellow' ?>-100 text-<?= $user['citizen_id'] != '' ? 'green' : 'yellow' ?>-800 text-xs px-2 py-1 rounded-full">
+							<i class="fas fa-<?= $user['citizen_id'] != '' ? 'check' : 'clock' ?> mr-1"></i><?= $user['citizen_id'] != '' ? 'Đã xác thực' : 'Chưa cập nhật' ?>
 						</span>
 					</div>
 				</div>

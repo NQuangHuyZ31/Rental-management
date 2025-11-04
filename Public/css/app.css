@@ -1,4 +1,8 @@
 /* Image Preview Styles */
+button {
+    cursor: pointer !important;
+}
+
 #imagePreview {
     display: flex;
     flex-wrap: wrap;

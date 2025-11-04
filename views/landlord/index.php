@@ -193,7 +193,7 @@ use Helpers\Format;
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
                                         <span><?= htmlspecialchars($room['room_name']) ?></span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-gray-900 border border-gray-200 text-center text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
                                         <?= htmlspecialchars($room['floor']) ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
@@ -202,7 +202,7 @@ use Helpers\Format;
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
                                         <?= Format::formatPriceVND($room['room_price']) ?> ₫
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-gray-900 border border-gray-200 text-center text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
                                         <?= Format::formatPriceVND($room['deposit']) ?> ₫
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-200 text-center text-sm text-gray-900">
@@ -319,7 +319,7 @@ use Helpers\Format;
                 </p>
             </div>
             
-            <div class="mt-6 text-center -mt-2">
+            <div class="mt-6 text-center">
                 <button class="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-102 flex items-center mx-auto">
                     <i class="fas fa-plus mr-3 text-lg"></i>
                     Tạo nhà trọ đầu tiên
@@ -1274,6 +1274,7 @@ use Helpers\Format;
                             displayFieldErrors(data.errors);
                             } else {
                             App.showSuccessMessage(data.message || 'Có lỗi xảy ra khi tạo hóa đơn', 'error');
+                            App.setToken(data.csrf_token);
                         }
                     }
                 })

@@ -65,13 +65,13 @@
                     <div id="postsTable" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                         <!-- Table Header -->
                         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                            <div class="grid grid-cols-14 gap-4 items-center text-sm font-medium text-gray-600">
-                                <div class="col-span-5">Tiêu đề</div>
+                            <div class="grid grid-cols-12 gap-4 items-center text-sm font-medium text-gray-600">
+                                <div class="col-span-4">Tiêu đề</div>
                                 <div class="col-span-2">Giá phòng</div>
                                 <div class="col-span-1">Trạng thái</div>
                                 <div class="col-span-2">Trạng thái duyệt</div>
                                 <div class="col-span-2">Nguyên nhân từ chối</div>
-                                <div class="col-span-2">Hành động</div>
+                                <div class="col-span-1">Hành động</div>
                             </div>
                         </div>
 
@@ -80,9 +80,9 @@
                             <!-- Post Row 1 -->
                             <?php foreach ($rentalPosts as $rentalPost) { ?>
                                 <div class="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer rental-post-row" data-id="<?= $rentalPost['id'] ?>">
-                                    <div class="grid grid-cols-14 gap-4 items-center">
+                                    <div class="grid grid-cols-12 gap-4 items-center">
                                         <!-- Title Column -->
-                                        <div class="col-span-5 flex items-start space-x-4">
+                                        <div class="col-span-4 flex items-start space-x-4">
                                             <img src="<?= json_decode($rentalPost['images'])[0] ?>" alt="Post Image" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             <div class="flex-1 min-w-0">
                                                 <div class="text-sm font-medium text-blue-600 mb-1">#<?= $rentalPost['id'] ?>: <?= $rentalPost['rental_post_title'] ?></div>
@@ -166,7 +166,7 @@
                                         </div>
 
                                         <!-- Actions Column -->
-                                        <div class="col-span-2">
+                                        <div class="col-span-1">
                                             <div class="relative inline-block">
                                                 <button class="p-2 rounded-full hover:bg-gray-100 transition-colors" onclick="toggleActionMenu(this)">
                                                     <i class="fas fa-ellipsis-v text-gray-400"></i>
@@ -245,7 +245,6 @@
 
     <!-- Include posts.js -->
     <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </body>
 
 </html>

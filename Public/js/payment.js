@@ -271,7 +271,45 @@ $(document).ready(function () {
         console.log(data);
 
         $(`${label}-room-house-name`).text(`${data.room_name} - ${data.house_name}`);
-        $(`${label}-no`).text(`${data.}`)
+        $(`${label}-no`).text(`${data.ref_code}`);
+        $(`${label}-created`).text(`${formatDate(data.created_at)}`);
+        $(`${label}-overdue`).text(`${formatDate(data.due_date)}`);
+        $(`${label}-status`).text(`${data.invoice_status}`);
+        $(`${label}-room-name`).text(`${data.room_name}`);
+        $(`${label}-house-name`).text(`${data.house_name}`);
+        $(`${label}-month`).text(`${data.invoice_month.replace('-', '/')}`);
+        $(`${label}-area`).text(`${data.area}m²`);
+        $(`${label}-detail-title`).text(`Tiền phòng tháng ${data.invoice_month.replace('-', '/')}`);
+        $(`${label}-room-price`).text(`${formatCompact(data.rental_amount)}`);
+        $(`${label}-electronic-fee`).text(`${formatCompact(data.electric_amount)}`);
+        $(`${label}-warter-fee`).text(`${formatCompact(data.water_amount)}`);
+        $(`${label}-garbage-fee`).text(`${formatCompact(data.garbage_amount)}`);
+        $(`${label}-internet-fee`).text(`${formatCompact(data.internet_amount)}`);
+        $(`${label}-parking-fee`).text(`${formatCompact(data.parking_amount)}`);
+        $(`${label}-service-fee`).text(`${formatCompact(data.service_amount)}`);
+        $(`${label}-orther-fee`).text(`${formatCompact(data.other_amount)}`);
+        $(`${label}-total-fee`).text(`${formatCompact(data.total)}`);
+        $('.invoice-download').attr('data-invoice-id', data.id);
         $('button#invoiceDetailModalBtn').trigger('click');
     };
+
+    window.downloadInvoice = function (e) {
+        const invoiceId = $(e).data('invoice-id');
+        window.location.href = `${App.appURL}customer/payment/download-invoice/${invoiceId}`;
+        return;
+    };
+
+    function formatDate(date) {
+        const [datePart] = date.split(' ');
+
+        // Tách tiếp phần năm-tháng-ngày
+        const [year, month, day] = datePart.split('-');
+
+        // Gộp lại thành định dạng mới
+        return `${day}/${month}/${year}`;
+    }
+
+    function formatCompact(num) {
+        return Intl.NumberFormat('en').format(num);
+    }
 });

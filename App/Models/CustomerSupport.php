@@ -11,8 +11,4 @@ namespace App\Models;
 class CustomerSupport extends Model {
 	protected $table = 'customer_supports';
 	protected $primaty_key = 'id';
-
-	public function add($data) {
-		return $this->table($this->table)->insert($data);
-	}
 }

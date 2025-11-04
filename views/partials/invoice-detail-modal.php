@@ -17,7 +17,7 @@
 					<div class="text-center">
 						<h3 class="text-2xl font-bold text-gray-900 mb-2 invoice-title"></h3>
 						<p class="text-gray-600 invoice-room-house-name">Phòng 101 - Chung cư ABC</p>
-						<p class="text-3xl font-bold text-red-600 mt-4 invoice-room-price">2.5M VNĐ</p>
+						<p class="text-3xl font-bold text-red-600 mt-4 invoice-total-fee">2.5M VNĐ</p>
 					</div>
 
 					<div class="grid grid-cols-2 gap-6">
@@ -117,10 +117,10 @@
 				</div>
 			</div>
 			<div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-				<button id="closeBillDetailModalBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+				<button data-modal-hide="invoiceDetailModal" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
 					Đóng
 				</button>
-				<button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+				<button onclick="downloadInvoice(this)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors invoice-download" data-invoice-id="">
 					<i class="fas fa-download mr-2"></i>Tải xuống
 				</button>
 			</div>

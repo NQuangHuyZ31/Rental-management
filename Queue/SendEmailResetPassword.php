@@ -29,12 +29,17 @@ class SendEmailResetPassword extends Job {
 			$to = $data['to'] ?? '';
 			$customer = $data['customer'] ?? '';
 			$resetUrl = $data['resetUrl'] ?? '';
+			$activeAccount = $data['activeAccount'] ?? false;
 
 			if (empty($to) || empty($customer) || empty($resetUrl)) {
 				throw new \Exception("Missing required email data");
 			}
 
-			$this->sendEmail->sendPasswordReset($to, $customer, $resetUrl);
+			if ($activeAccount) {
+				$this->sendEmail->sendActiveAccount($to, $customer, $resetUrl);
+			} else {
+				$this->sendEmail->sendPasswordReset($to, $customer, $resetUrl);
+			}
 		} catch (\Throwable $th) {
 			Log::queue("Failed to send reset password email to {$data['email']}: {$th->getMessage()}");
 			$this->failed($th);

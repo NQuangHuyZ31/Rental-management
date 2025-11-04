@@ -17,6 +17,7 @@ use App\Models\RentalCategory;
 use App\Models\RenTalPost;
 use App\Models\Room;
 use App\Models\Tenant;
+use App\Models\User;
 use Core\Request;
 use Core\Session;
 
@@ -32,6 +33,7 @@ abstract class LandlordController extends Controller {
     protected $rentalAmenityModel;
     protected $rentalPostModel;
     protected $serviceModel;
+    protected $userModel;
 
     public function __construct() {
         parent::__construct();
@@ -45,6 +47,7 @@ abstract class LandlordController extends Controller {
         $this->rentalAmenityModel = new RentalAmenity();
         $this->rentalPostModel = new RenTalPost();
         $this->serviceModel = new Service();
+        $this->userModel = new User();
     }
 
     /**

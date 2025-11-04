@@ -11,6 +11,8 @@ namespace App\Controllers\Landlord;
 use App\Controllers\Landlord\LandlordController;
 use App\Models\Invoice;
 use Core\CSRF;
+use Core\Request;
+use Core\Response;
 use Core\Session;
 use Core\ViewRender;
 use Helpers\Validate;
@@ -275,6 +277,19 @@ class InvoiceController extends LandlordController {
             // Validate CSRF token
             if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
                 throw new \Exception('Dữ liệu không hợp lệ');
+            }
+
+            // Added by Huy Nguyen on 2025-10-24 to check if exit invoice 
+            $requests = $this->request->post();
+
+            if ($this->invoiceModel->getInvoiceByRoomIdAndMonth($requests['room_id'], $requests['invoice_month'])) {
+                Response::json(['success' => false, 'message' => 'Hóa đơn tháng này cho phòng này đã có', 'csrf_token' => CSRF::getTokenRefresh()], 200);
+            }
+            
+            [$month, $year] = explode('-', $requests['invoice_month']);
+
+            if (($year == date('Y') && $month > date('m')) || $year > date('Y')) {
+                Response::json(['success' => false, 'message' => 'Chưa tới tháng lập hóa đơn', 'csrf_token' => CSRF::getTokenRefresh()], 200);
             }
 
             // Lấy dữ liệu từ form
