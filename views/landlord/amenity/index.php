@@ -296,7 +296,7 @@ function editAmenity(amenityId) {
     const amenity = amenities.find(a => a.id == amenityId);
 
     if (!amenity) {
-        App.showErrorMessage('Không tìm thấy thông tin tài sản!');
+        showErrorMessage('Không tìm thấy thông tin tài sản!');
         return;
     }
 
@@ -350,7 +350,7 @@ function editAmenity(amenityId) {
 
 function deleteAmenity(amenityId, amenityName, canDelete, deleteReason) {
     if (!canDelete) {
-        App.showErrorMessage(deleteReason || 'Không thể xóa tài sản');
+        showErrorMessage(deleteReason || 'Không thể xóa tài sản');
         return;
     }
     

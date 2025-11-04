@@ -143,14 +143,6 @@ class InvoiceController extends LandlordController {
      * Cập nhật thông tin hóa đơn
      */
     public function update() {
-        // Đảm bảo không có output trước JSON
-        if (ob_get_level()) {
-            ob_clean();
-        }
-
-        // Set header để đảm bảo trả về JSON
-        header('Content-Type: application/json');
-
         try {
             $invoiceId = $this->request->post('invoice_id');
 
@@ -176,36 +168,21 @@ class InvoiceController extends LandlordController {
             // Validate dữ liệu sử dụng Helper Validate
             $errors = Validate::validateInvoiceData($data);
             if (!empty($errors)) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $errors,
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
+                $this->request->redirectWithError('/landlord/invoice', 'Dữ liệu không hợp lệ: ' . implode(', ', $errors));
+                return;
             }
 
             // Cập nhật hóa đơn
             $result = $this->invoiceModel->updateInvoice($invoiceId, $data, $this->user['id']);
 
             if ($result) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Cập nhật hóa đơn thành công',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
+                $this->request->redirectWithSuccess('/landlord/invoice', 'Cập nhật hóa đơn thành công!');
             } else {
                 throw new \Exception('Không thể cập nhật hóa đơn');
             }
         } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
+            $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
         }
-
-        exit; // Đảm bảo không có output nào khác
     }
 
     /**
@@ -263,20 +240,19 @@ class InvoiceController extends LandlordController {
      * Tạo hóa đơn mới
      */
     public function create() {
-        // Đảm bảo không có output trước JSON
-        if (ob_get_level()) {
-            ob_clean();
+        // Kiểm tra request method
+        if (!$this->request->isPost()) {
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            return;
         }
 
-        // Set header để đảm bảo trả về JSON
-        header('Content-Type: application/json');
+        // Kiểm tra CSRF token
+        if (!CSRF::validatePostRequest()) {
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
+            return;
+        }
 
         try {
-            // Validate CSRF token
-            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
-                throw new \Exception('Dữ liệu không hợp lệ');
-            }
-
             // Lấy dữ liệu từ form
             $data = [
                 'room_id' => $this->request->post('room_id'),
@@ -292,50 +268,30 @@ class InvoiceController extends LandlordController {
             // Validate dữ liệu sử dụng Helper Validate
             $errors = Validate::validateCreateInvoiceData($data);
             if (!empty($errors)) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Dữ liệu không hợp lệ',
-                    'errors' => $errors,
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
-                exit;
+                // Store validation errors in session to display
+                Session::set('validation_errors', $errors);
+                Session::set('old_input', $data);
+                $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập');
+                return;
             }
 
             // Tạo hóa đơn
             $result = $this->invoiceModel->createInvoice($data, $this->user['id']);
 
             if ($result) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Tạo hóa đơn thành công',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
+                $this->request->redirectWithSuccess('/landlord', 'Tạo hóa đơn thành công!');
             } else {
-                throw new \Exception('Không thể tạo hóa đơn');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo hóa đơn');
             }
         } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
-
-        exit; // Đảm bảo không có output nào khác
     }
 
     /**
      * Đánh dấu hóa đơn đã thanh toán
      */
     public function markAsPaid() {
-        // Đảm bảo không có output trước JSON
-        if (ob_get_level()) {
-            ob_clean();
-        }
-
-        // Set header để đảm bảo trả về JSON
-        header('Content-Type: application/json');
-
         try {
             $invoiceId = $this->request->post('invoice_id');
 
@@ -365,38 +321,19 @@ class InvoiceController extends LandlordController {
             if ($result) {
                 // Cập nhật pay_at field với thời gian hiện tại
                 $this->invoiceModel->updateColumn($invoiceId, 'pay_at', date('Y-m-d H:i:s'));
-
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Đánh dấu hóa đơn đã thanh toán thành công',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
+                $this->request->redirectWithSuccess('/landlord/invoice', 'Đánh dấu hóa đơn đã thanh toán thành công!');
             } else {
                 throw new \Exception('Không thể cập nhật trạng thái hóa đơn');
             }
         } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
+            $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
         }
-
-        exit; // Đảm bảo không có output nào khác
     }
 
     /**
      * Xóa hóa đơn
      */
     public function delete() {
-        // Đảm bảo không có output trước JSON
-        if (ob_get_level()) {
-            ob_clean();
-        }
-
-        // Set header để đảm bảo trả về JSON
-        header('Content-Type: application/json');
-
         try {
             $invoiceId = $this->request->post('invoice_id');
 
@@ -424,23 +361,13 @@ class InvoiceController extends LandlordController {
             $result = $this->invoiceModel->deleteInvoice($invoiceId);
 
             if ($result) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Xóa hóa đơn thành công',
-                    'csrf_token' => CSRF::generateToken(),
-                ]);
+                $this->request->redirectWithSuccess('/landlord/invoice', 'Xóa hóa đơn thành công!');
             } else {
                 throw new \Exception('Không thể xóa hóa đơn');
             }
         } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'csrf_token' => CSRF::generateToken(),
-            ]);
+            $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
         }
-
-        exit; // Đảm bảo không có output nào khác
     }
 
 }
