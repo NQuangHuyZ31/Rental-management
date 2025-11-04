@@ -162,4 +162,84 @@ class ServiceUsage extends Model {
 
         return $query->first();
     }
+    /**
+     * Lấy chỉ số mới của tháng trước để làm chỉ số cũ cho tháng hiện tại
+     */
+    public function getPreviousMonthValues($roomId, $serviceId, $currentMonthYear) {
+        // Parse current month/year
+        list($currentMonth, $currentYear) = explode('-', $currentMonthYear);
+        $currentMonth = (int)$currentMonth;
+        $currentYear = (int)$currentYear;
+        
+        // Calculate previous month
+        $prevMonth = $currentMonth - 1;
+        $prevYear = $currentYear;
+        
+        if ($prevMonth <= 0) {
+            $prevMonth = 12;
+            $prevYear = $currentYear - 1;
+        }
+        
+        $prevMonthYear = sprintf('%02d-%d', $prevMonth, $prevYear);
+        
+        $sql = "
+            SELECT 
+                new_value,
+                usage_amount
+            FROM service_usages 
+            WHERE room_id = ? 
+            AND service_id = ? 
+            AND month_year = ?
+            LIMIT 1
+        ";
+        
+        $result = $this->queryBuilder->query($sql, [$roomId, $serviceId, $prevMonthYear]);
+        return $result ? $result[0] : null;
+    }
+
+    /**
+     * Lấy tất cả chỉ số tháng trước cho phòng
+     */
+    public function getAllPreviousMonthValues($roomId, $currentMonthYear) {
+        // Parse current month/year
+        list($currentMonth, $currentYear) = explode('-', $currentMonthYear);
+        $currentMonth = (int)$currentMonth;
+        $currentYear = (int)$currentYear;
+        
+        // Calculate previous month
+        $prevMonth = $currentMonth - 1;
+        $prevYear = $currentYear;
+        
+        if ($prevMonth <= 0) {
+            $prevMonth = 12;
+            $prevYear = $currentYear - 1;
+        }
+        
+        $prevMonthYear = sprintf('%02d-%d', $prevMonth, $prevYear);
+        
+        $sql = "
+            SELECT 
+                service_id,
+                new_value,
+                usage_amount
+            FROM service_usages 
+            WHERE room_id = ? 
+            AND month_year = ?
+        ";
+        
+        $result = $this->queryBuilder->query($sql, [$roomId, $prevMonthYear]);
+        
+        // Convert to associative array with service_id as key
+        $values = [];
+        if ($result) {
+            foreach ($result as $row) {
+                $values[$row['service_id']] = [
+                    'new_value' => $row['new_value'],
+                    'usage_amount' => $row['usage_amount']
+                ];
+            }
+        }
+        
+        return $values;
+    }
 }

@@ -449,6 +449,7 @@ class Invoice extends Model {
                 'invoices.note',
                 'invoices.created_at',
                 'rooms.room_name',
+                'rooms.room_price',
                 'houses.house_name',
                 'houses.address as house_address',
                 'users.username as tenant_name',
@@ -816,4 +817,51 @@ class Invoice extends Model {
 
         return $query->first();
     }
+
+    /**
+     * Added by Nguyen Xuan Duong on 2025-11-05 to get latest service readings
+     */
+    public function getLatestServiceReadings($roomId, $ownerId) {
+        try {
+            // Lấy hóa đơn mới nhất của phòng
+            $latestInvoice = $this->queryBuilder
+                ->table('invoices')
+                ->select([
+                    'invoices.id',
+                    'invoices.invoice_month',
+                    'invoices.created_at'
+                ])
+                ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+                ->join('houses', 'rooms.house_id', '=', 'houses.id')
+                ->where('invoices.room_id', $roomId)
+                ->where('houses.owner_id', $ownerId)
+                ->where('invoices.deleted', 0)
+                ->orderBy('invoices.created_at', 'DESC')
+                ->first();
+
+            if (!$latestInvoice) {
+                return [];
+            }
+
+            // Lấy các chỉ số dịch vụ từ tháng của hóa đơn đó
+            $serviceReadings = $this->queryBuilder
+                ->table('service_usages')
+                ->select([
+                    'service_usages.service_id',
+                    'service_usages.new_value',
+                    'services.service_name',
+                    'services.service_type'
+                ])
+                ->join('services', 'service_usages.service_id', '=', 'services.id')
+                ->where('service_usages.room_id', $roomId)
+                ->where('service_usages.month_year', $latestInvoice['invoice_month'])
+                ->get();
+
+            return $serviceReadings ?: [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 }
+
+

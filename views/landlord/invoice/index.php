@@ -258,7 +258,6 @@ use Helpers\Format;
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
 
     <script>
-
         // Hàm mở modal xem hóa đơn
         function viewInvoice(invoiceId) {
             // Hiển thị loading
@@ -300,14 +299,13 @@ use Helpers\Format;
 
         // Hàm hiển thị chi tiết hóa đơn
         function displayInvoiceDetails(invoice, serviceDetails, csrfToken) {
+            // Reset flag để ngăn submit tự động
+            window.allowFormSubmit = false;
+
             const modalBody = document.getElementById('modalBody');
 
             // Xóa tất cả lỗi validation cũ
             clearValidationErrors();
-
-            // Debug log
-            console.log('Invoice data:', invoice);
-            console.log('Invoice month:', invoice.invoice_month);
 
             // Set tên phòng vào tiêu đề modal
             document.getElementById('roomName').textContent = invoice.room_name;
@@ -444,6 +442,17 @@ use Helpers\Format;
                         </div>
                     </div>
                     
+                    <!-- Tiền phòng trọ -->
+                    <div class="relative">
+                        <input type="text" 
+                               name="room_price"
+                               id="roomPrice"
+                               value="${formatMoney(invoice.room_price || 0)}" 
+                               readonly
+                               class="peer w-full px-4 py-3 border border-blue-300 rounded-lg bg-white outline-none cursor-default">
+                        <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tiền phòng trọ</label>
+                    </div>
+                    
                     <!-- Chi tiết dịch vụ -->
                     ${serviceDetails && serviceDetails.length > 0 ? `
                     <div class="p-4">
@@ -561,11 +570,54 @@ use Helpers\Format;
                 }
             }
 
+            // Disable tất cả input khi hóa đơn đã thanh toán
+            if (invoice.invoice_status === 'paid') {
+                const form = document.getElementById('updateInvoiceForm');
+                if (form) {
+                    // Disable tất cả input, textarea, select trong form (trừ hidden và readonly)
+                    const inputs = form.querySelectorAll('input:not([type="hidden"]):not([readonly]), textarea:not([readonly]), select:not([readonly])');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        input.classList.add('bg-gray-100', 'cursor-not-allowed');
+                        input.classList.remove('hover:border-blue-400', 'focus:border-blue-500', 'focus:ring-2', 'focus:ring-blue-500');
+                    });
+
+                    // Disable month picker riêng
+                    const monthInput = document.getElementById('modalMonthYearInput');
+                    if (monthInput) {
+                        monthInput.disabled = true;
+                        monthInput.classList.add('bg-gray-100', 'cursor-not-allowed');
+                        monthInput.classList.remove('cursor-pointer', 'hover:border-blue-400', 'focus:border-blue-500', 'focus:ring-2', 'focus:ring-blue-500');
+
+                        // Disable month picker icon
+                        const monthIcon = document.getElementById('modalCalendarIcon');
+                        if (monthIcon) {
+                            monthIcon.style.pointerEvents = 'none';
+                            monthIcon.style.opacity = '0.5';
+                            monthIcon.classList.remove('cursor-pointer');
+                            monthIcon.classList.add('cursor-not-allowed');
+                        }
+                    }
+                }
+            }
+
             // Khởi tạo Month/Year Picker cho modal
             setTimeout(() => {
                 initModalMonthYearPicker();
                 // Thêm event listeners để xóa lỗi khi user nhập liệu
                 addInputEventListeners();
+
+                // Ngăn form submit tự động khi có thay đổi
+                const form = document.getElementById('updateInvoiceForm');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        // Chỉ cho phép submit khi user click nút cập nhật
+                        if (!window.allowFormSubmit) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    });
+                }
             }, 100);
         }
 
@@ -757,14 +809,13 @@ use Helpers\Format;
 
             // Capture form data trước khi đóng modal
             const formData = new FormData(form);
-            
+
             // Đóng modal trước
             closeInvoiceModal();
-            
-            // Submit form sau khi đóng modal
-            setTimeout(() => {
-                form.submit();
-            }, 100);
+
+            // Set flag để cho phép submit và submit form ngay lập tức
+            window.allowFormSubmit = true;
+            form.submit();
         }
 
         // Modal Month/Year Picker functionality
@@ -779,6 +830,11 @@ use Helpers\Format;
 
             if (!input || !picker) return;
 
+            // Không khởi tạo picker nếu input bị disabled (hóa đơn đã thanh toán)
+            if (input.disabled) {
+                return;
+            }
+
             // Get current date
             const now = new Date();
             let currentYear = now.getFullYear();
@@ -786,19 +842,16 @@ use Helpers\Format;
 
             // Parse existing value if available
             if (input.value && input.value.trim() !== '') {
-                console.log('Input value:', input.value);
                 const parts = input.value.split('-');
                 if (parts.length === 2) {
                     selectedMonth = parts[0];
                     currentYear = parseInt(parts[1]);
-                    console.log('Parsed month:', selectedMonth, 'year:', currentYear);
                 }
             } else {
                 // Nếu không có giá trị, sử dụng tháng hiện tại
                 const now = new Date();
                 selectedMonth = (now.getMonth() + 1).toString().padStart(2, '0');
                 currentYear = now.getFullYear();
-                console.log('Using current month:', selectedMonth, 'year:', currentYear);
             }
 
             // Toggle picker visibility
@@ -810,13 +863,16 @@ use Helpers\Format;
             function updateInput() {
                 const newValue = `${selectedMonth}-${currentYear}`;
                 input.value = newValue;
-                console.log('Updated input value:', newValue);
 
-                // Trigger input event to activate floating label
-                if (newValue && newValue.trim() !== '') {
-                    input.dispatchEvent(new Event('input', {
-                        bubbles: true
-                    }));
+                // Clear any inline styles from label to let CSS handle it naturally
+                const label = input.nextElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    // Clear all inline styles
+                    label.style.transform = '';
+                    label.style.top = '';
+                    label.style.fontSize = '';
+                    label.style.color = '';
+                    label.style.fontWeight = '';
                 }
             }
 
@@ -913,19 +969,19 @@ use Helpers\Format;
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = `${App.appURL}landlord/invoice/mark-as-paid`;
-                    
+
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    
+
                     const invoiceInput = document.createElement('input');
                     invoiceInput.type = 'hidden';
                     invoiceInput.name = 'invoice_id';
                     invoiceInput.value = invoiceId;
-                    
+
                     const csrfInput = document.createElement('input');
                     csrfInput.type = 'hidden';
                     csrfInput.name = 'csrf_token';
                     csrfInput.value = csrfToken;
-                    
+
                     form.appendChild(invoiceInput);
                     form.appendChild(csrfInput);
                     document.body.appendChild(form);
@@ -952,19 +1008,19 @@ use Helpers\Format;
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = `${App.appURL}landlord/invoice/delete`;
-                    
+
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    
+
                     const invoiceInput = document.createElement('input');
                     invoiceInput.type = 'hidden';
                     invoiceInput.name = 'invoice_id';
                     invoiceInput.value = invoiceId;
-                    
+
                     const csrfInput = document.createElement('input');
                     csrfInput.type = 'hidden';
                     csrfInput.name = 'csrf_token';
                     csrfInput.value = csrfToken;
-                    
+
                     form.appendChild(invoiceInput);
                     form.appendChild(csrfInput);
                     document.body.appendChild(form);

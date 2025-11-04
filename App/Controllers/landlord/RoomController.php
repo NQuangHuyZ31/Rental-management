@@ -62,13 +62,13 @@ class RoomController extends LandlordController {
     public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -93,14 +93,14 @@ class RoomController extends LandlordController {
             // Store validation errors in session to display under fields
             Session::set('validation_errors', $validationErrors);
             Session::set('old_input', $roomData);
-            $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập');
+            $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập!');
             return;
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
         $existingHouse = $this->houseModel->getHouseById($roomData['house_id'], $this->user['id']);
         if (!$existingHouse) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền thêm phòng');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền thêm phòng!');
             return;
         }
 
@@ -111,10 +111,10 @@ class RoomController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Tạo phòng thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo phòng');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo phòng!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -124,13 +124,13 @@ class RoomController extends LandlordController {
     public function update() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -139,14 +139,14 @@ class RoomController extends LandlordController {
         $roomId = $this->request->post('room_id');
 
         if (empty($roomId)) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID phòng');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID phòng!');
             return;
         }
 
         // Kiểm tra phòng có tồn tại và thuộc về landlord này không
         $existingRoom = $this->roomModel->getRoomById($roomId, $this->user['id']);
         if (!$existingRoom) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền chỉnh sửa');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền chỉnh sửa!');
             return;
         }
 
@@ -173,7 +173,7 @@ class RoomController extends LandlordController {
             // Store validation errors in session to display under fields
             Session::set('validation_errors', $validationErrors);
             Session::set('old_input', $roomData);
-            $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập');
+            $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập!');
             return;
         }
 
@@ -184,10 +184,10 @@ class RoomController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Cập nhật phòng thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi cập nhật phòng');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi cập nhật phòng!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -199,7 +199,7 @@ class RoomController extends LandlordController {
         $this->user['id'] = Session::get('user')['id'];
 
         if (!$this->user['id']) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng!');
             return;
         }
 
@@ -236,13 +236,13 @@ class RoomController extends LandlordController {
     public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -251,20 +251,20 @@ class RoomController extends LandlordController {
         $roomId = $this->request->post('room_id');
 
         if (empty($roomId)) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID phòng');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID phòng!');
             return;
         }
 
         // Kiểm tra phòng có tồn tại và thuộc về landlord này không
         $existingRoom = $this->roomModel->getRoomById($roomId, $this->user['id']);
         if (!$existingRoom) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền xóa');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy phòng hoặc bạn không có quyền xóa!');
             return;
         }
 
         // Kiểm tra xem phòng có đang được thuê không
         if ($existingRoom['room_status'] === 'occupied') {
-            $this->request->redirectWithError('/landlord', 'Không thể xóa phòng đang được thuê. Vui lòng chuyển trạng thái phòng trước khi xóa.');
+            $this->request->redirectWithError('/landlord', 'Phòng đang có khách ở, không thể xóa!');
             return;
         }
 
@@ -275,10 +275,10 @@ class RoomController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Xóa phòng thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi xóa phòng');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi xóa phòng!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 }

@@ -1,5 +1,9 @@
 <?php
-
+/*
+Author: Nguyen Xuan Duong
+Date: 2025-09-05
+Purpose: Build Room Model
+ */
 namespace App\Models;
 
 use App\Models\Model;

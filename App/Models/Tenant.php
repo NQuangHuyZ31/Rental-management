@@ -199,6 +199,20 @@ class Tenant extends Model {
     }
 
     /**
+     * Đếm số khách thuê đang ở theo room_id
+     */
+    public function getActiveTenantCountByRoom($roomId) {
+        $result = $this->queryBuilder
+            ->table($this->table)
+            ->select('COUNT(*) as count')
+            ->where('room_id', $roomId)
+            ->whereNull('left_date')
+            ->first();
+
+        return $result ? (int) $result['count'] : 0;
+    }
+
+    /**
      * Tạo user mới
      */
     public function createUser($userData) {

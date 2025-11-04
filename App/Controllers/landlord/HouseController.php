@@ -137,13 +137,13 @@ class HouseController extends LandlordController {
     public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -166,7 +166,7 @@ class HouseController extends LandlordController {
             empty($houseData['ward']) || empty($houseData['address']) ||
             empty($houseData['payment_date']) || empty($houseData['due_date'])
         ) {
-            $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+            $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc!');
             return;
         }
 
@@ -177,10 +177,10 @@ class HouseController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Tạo nhà trọ thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo nhà trọ');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo nhà trọ!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -190,13 +190,13 @@ class HouseController extends LandlordController {
     public function update() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -204,14 +204,14 @@ class HouseController extends LandlordController {
         $houseId = $this->request->post('house_id');
 
         if (empty($houseId)) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID nhà trọ');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID nhà trọ!');
             return;
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
         $existingHouse = $this->houseModel->getHouseById($houseId, $this->user['id']);
         if (!$existingHouse) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền chỉnh sửa');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền chỉnh sửa!');
             return;
         }
 
@@ -232,7 +232,7 @@ class HouseController extends LandlordController {
             empty($houseData['ward']) || empty($houseData['address']) ||
             empty($houseData['payment_date']) || empty($houseData['due_date'])
         ) {
-            $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+            $this->request->redirectWithError('/landlord', 'Vui lòng điền đầy đủ thông tin bắt buộc!');
             return;
         }
 
@@ -243,10 +243,10 @@ class HouseController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Cập nhật nhà trọ thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi cập nhật nhà trọ');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi cập nhật nhà trọ!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -258,7 +258,7 @@ class HouseController extends LandlordController {
         $ownerId = Session::get('user_id');
 
         if (!$ownerId) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy thông tin người dùng!');
             return;
         }
 
@@ -295,13 +295,13 @@ class HouseController extends LandlordController {
     public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -309,14 +309,14 @@ class HouseController extends LandlordController {
         $houseId = $this->request->post('house_id');
 
         if (empty($houseId)) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID nhà trọ');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy ID nhà trọ!');
             return;
         }
 
         // Kiểm tra nhà trọ có tồn tại và thuộc về landlord này không
         $existingHouse = $this->houseModel->getHouseById($houseId, $this->user['id']);
         if (!$existingHouse) {
-            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền xóa');
+            $this->request->redirectWithError('/landlord', 'Không tìm thấy nhà trọ hoặc bạn không có quyền xóa!');
             return;
         }
 

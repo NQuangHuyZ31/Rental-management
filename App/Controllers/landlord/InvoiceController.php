@@ -8,7 +8,6 @@ Purpose: Build Invoice Controller
 
 namespace App\Controllers\Landlord;
 
-use App\Controllers\Landlord\LandlordController;
 use App\Models\Invoice;
 use Core\CSRF;
 use Core\Request;
@@ -170,7 +169,7 @@ class InvoiceController extends LandlordController {
             // Validate dữ liệu sử dụng Helper Validate
             $errors = Validate::validateInvoiceData($data);
             if (!empty($errors)) {
-                $this->request->redirectWithError('/landlord/invoice', 'Dữ liệu không hợp lệ: ' . implode(', ', $errors));
+                $this->request->redirectWithError('/landlord/invoice', 'Dữ liệu không hợp lệ: ' . implode(', ', $errors) . '!');
                 return;
             }
 
@@ -180,7 +179,7 @@ class InvoiceController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord/invoice', 'Cập nhật hóa đơn thành công!');
             } else {
-                throw new \Exception('Không thể cập nhật hóa đơn');
+                throw new \Exception('Không thể cập nhật hóa đơn!');
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
@@ -209,22 +208,48 @@ class InvoiceController extends LandlordController {
                 throw new \Exception('ID phòng không hợp lệ');
             }
 
-            // Lấy thông tin phòng
-            $roomModel = new \App\Models\Room();
-            $room = $roomModel->getRoomById($roomId, $this->user['id']);
+            // Lấy thông tin phòng (sử dụng model từ parent class)
+            $room = $this->roomModel->getRoomById($roomId, $this->user['id']);
 
             if (!$room) {
                 throw new \Exception('Không tìm thấy phòng hoặc bạn không có quyền truy cập');
             }
 
-            // Lấy danh sách dịch vụ của phòng
-            $serviceModel = new \App\Models\Service();
-            $services = $serviceModel->getServicesByRoomId($roomId);
+            // Lấy danh sách dịch vụ của phòng (sử dụng model từ parent class)
+            $services = $this->serviceModel->getServicesByRoomId($roomId);
+
+            // Lấy chỉ số dịch vụ từ hóa đơn mới nhất
+            $latestServiceReadings = $this->invoiceModel->getLatestServiceReadings($roomId, $this->user['id']);
+            
+            // Lấy số lượng người thuê hiện tại (sử dụng model từ parent class)
+            $tenantCount = $this->tenantModel->getActiveTenantCountByRoom($roomId);
+
+            // Gắn thông tin chỉ số cũ vào dịch vụ
+            if ($services) {
+                // Tạo mảng để dễ tìm kiếm chỉ số cũ
+                $oldReadings = [];
+                foreach ($latestServiceReadings as $reading) {
+                    $oldReadings[$reading['service_id']] = $reading['new_value'];
+                }
+
+                foreach ($services as &$service) {
+                    // Gắn chỉ số cũ từ hóa đơn trước
+                    $service['old_value'] = isset($oldReadings[$service['id']]) 
+                        ? $oldReadings[$service['id']] 
+                        : 1;
+                    
+                    // Với dịch vụ tính theo người, đặt giá trị mặc định
+                    if ($service['unit'] === 'person') {
+                        $service['quantity'] = $tenantCount ?: 1;
+                    }
+                }
+            }
 
             echo json_encode([
                 'success' => true,
                 'room' => $room,
                 'services' => $services ?: [],
+                'tenant_count' => $tenantCount,
                 'csrf_token' => CSRF::generateToken(),
             ]);
         } catch (\Exception $e) {
@@ -244,13 +269,13 @@ class InvoiceController extends LandlordController {
     public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại');
+            $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra. Vui lòng thử lại!');
             return;
         }
 
@@ -291,7 +316,7 @@ class InvoiceController extends LandlordController {
                 // Store validation errors in session to display
                 Session::set('validation_errors', $errors);
                 Session::set('old_input', $data);
-                $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập');
+                $this->request->redirectWithError('/landlord', 'Vui lòng kiểm tra lại thông tin đã nhập!');
                 return;
             }
 
@@ -301,7 +326,7 @@ class InvoiceController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord', 'Tạo hóa đơn thành công!');
             } else {
-                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo hóa đơn');
+                $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra khi tạo hóa đơn!');
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
@@ -332,7 +357,7 @@ class InvoiceController extends LandlordController {
 
             // Kiểm tra trạng thái hiện tại - chỉ cho phép cập nhật hóa đơn chưa thanh toán
             if ($invoice['invoice_status'] === 'paid') {
-                throw new \Exception('Hóa đơn đã được đánh dấu thanh toán rồi');
+                throw new \Exception('Hóa đơn đã được đánh dấu thanh toán rồi!');
             }
 
             // Cập nhật trạng thái hóa đơn thành "paid" và cập nhật pay_at
@@ -343,7 +368,7 @@ class InvoiceController extends LandlordController {
                 $this->invoiceModel->updateColumn($invoiceId, 'pay_at', date('Y-m-d H:i:s'));
                 $this->request->redirectWithSuccess('/landlord/invoice', 'Đánh dấu hóa đơn đã thanh toán thành công!');
             } else {
-                throw new \Exception('Không thể cập nhật trạng thái hóa đơn');
+                throw new \Exception('Không thể cập nhật trạng thái hóa đơn!');
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
@@ -374,7 +399,7 @@ class InvoiceController extends LandlordController {
 
             // Kiểm tra trạng thái thanh toán - chỉ cho phép xóa hóa đơn chưa thanh toán
             if ($invoice['invoice_status'] === 'paid') {
-                throw new \Exception('Không thể xóa hóa đơn đã thanh toán');
+                throw new \Exception('Không thể xóa hóa đơn đã thanh toán!');
             }
 
             // Xóa hóa đơn (soft delete)
@@ -383,7 +408,7 @@ class InvoiceController extends LandlordController {
             if ($result) {
                 $this->request->redirectWithSuccess('/landlord/invoice', 'Xóa hóa đơn thành công!');
             } else {
-                throw new \Exception('Không thể xóa hóa đơn');
+                throw new \Exception('Không thể xóa hóa đơn!');
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord/invoice', $e->getMessage());
