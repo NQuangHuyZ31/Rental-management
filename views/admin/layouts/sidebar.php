@@ -57,28 +57,10 @@ $dataModelHelper = new DataModelHelper();
             </div>
             
             <!-- Quản lý báo cáo -->
-            <div class="space-y-1">
-                <button onclick="toggleSubmenu('reports-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                    <i class="fas fa-flag mr-3 flex-shrink-0 h-6 w-6"></i>
-                    Báo cáo vi phạm
-                    <i class="fas fa-chevron-down ml-auto flex-shrink-0 h-4 w-4" id="reports-chevron"></i>
-                </button>
-                <div id="reports-menu" class="hidden space-y-1 ml-8">
-                    <a href="<?= BASE_URL ?>/admin/reports" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-list mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Tất cả báo cáo
-                    </a>
-                    <a href="<?= BASE_URL ?>/admin/reports/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-clock mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Chờ xử lý
-                        <span class="ml-auto bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full">2</span>
-                    </a>
-                    <a href="<?= BASE_URL ?>/admin/reports/resolved" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-check mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Đã xử lý
-                    </a>
-                </div>
-            </div>
+            <a href="<?= BASE_URL ?>/admin/reports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                <i class="fas fa-flag mr-3 flex-shrink-0 h-6 w-6"></i>
+                Báo cáo vi phạm
+            </a>
             
             <!-- Quản lý giao dịch -->
             <a href="<?= BASE_URL ?>/admin/transactions" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">

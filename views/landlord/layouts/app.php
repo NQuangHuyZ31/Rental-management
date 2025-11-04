@@ -110,29 +110,36 @@ Purpose: Libraries and Dependencies for Landlord Layout
 </style>
 
 <script>
-    // Forward flash messages to centralized App.showSuccessMessage (defined in Public/js/app.js)
+    // Forward flash messages to window.showSuccessMessage and window.showErrorMessage (defined in Public/js/app.js)
     document.addEventListener('DOMContentLoaded', function() {
-        <?php
-        $request = new \Core\Request();
-        $flashData = $request->getFlashData();
-        $successMessage = $flashData['success'] ?? null;
-        $errorMessage = $flashData['error'] ?? null;
-        ?>
+        // Wait a bit longer to ensure app.js functions are loaded
+        setTimeout(function() {
+            <?php
+            $request = new \Core\Request();
+            $flashData = $request->getFlashData();
+            $successMessage = $flashData['success'] ?? null;
+            $errorMessage = $flashData['error'] ?? null;
+            ?>
 
-        <?php if ($successMessage): ?>
-            if (window.App && typeof window.App.showSuccessMessage === 'function') {
-                App.showSuccessMessage('<?= addslashes($successMessage) ?>', 'success');
-            } else {
-                console.log('Flash:', '<?= addslashes($successMessage) ?>');
-            }
-        <?php endif; ?>
+            <?php if ($successMessage): ?>
+                if (typeof window.showSuccessMessage === 'function') {
+                    window.showSuccessMessage('<?= addslashes($successMessage) ?>');
+                } else {
+                    // Fallback if function not available
+                    console.log('showSuccessMessage not available, using alert');
+                    alert('<?= addslashes($successMessage) ?>');
+                }
+            <?php endif; ?>
 
-        <?php if ($errorMessage): ?>
-            if (window.App && typeof window.App.showSuccessMessage === 'function') {
-                App.showSuccessMessage('<?= addslashes($errorMessage) ?>', 'error');
-            } else {
-                console.error('Flash:', '<?= addslashes($errorMessage) ?>');
-            }
-        <?php endif; ?>
+            <?php if ($errorMessage): ?>
+                if (typeof window.showErrorMessage === 'function') {
+                    window.showErrorMessage('<?= addslashes($errorMessage) ?>');
+                } else {
+                    // Fallback if function not available
+                    console.log('showErrorMessage not available, using alert');
+                    alert('<?= addslashes($errorMessage) ?>');
+                }
+            <?php endif; ?>
+        }, 100); // Wait 100ms for app.js to fully load
     });
 </script>

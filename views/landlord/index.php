@@ -384,7 +384,7 @@ use Helpers\Format;
             </div>
 
             <!-- Form -->
-            <form id="roomForm" method="POST" action="${App.appURL}landlord/room/create" class="flex flex-col flex-1 min-h-0">
+            <form id="roomForm" method="POST" action="<?= BASE_URL ?>/landlord/room/create" onsubmit="return submitRoomForm(event)" class="flex flex-col flex-1 min-h-0">
                 <input type="hidden" id="room_id" name="room_id" value="">
                 <?= \Core\CSRF::getTokenField() ?>
                 <input type="hidden" name="house_id" value="<?= $selectedHouse['id'] ?? '' ?>">
@@ -514,6 +514,41 @@ use Helpers\Format;
             resetRoomFormToCreate();
         }
 
+        function submitRoomForm(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('roomForm');
+            
+            // Capture all form data BEFORE closing modal
+            const formData = new FormData(form);
+            const formAction = form.action;
+            const formMethod = form.method;
+            
+            // Close modal
+            closeRoomModal();
+            
+            // Create new form with all captured data
+            const newForm = document.createElement('form');
+            newForm.method = formMethod;
+            newForm.action = formAction;
+            newForm.style.display = 'none';
+            
+            // Add all captured form data to new form
+            for (let [key, value] of formData.entries()) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                newForm.appendChild(input);
+            }
+            
+            // Submit immediately - let server handle notifications via app.php
+            document.body.appendChild(newForm);
+            newForm.submit();
+            
+            return false;
+        }
+
         function resetRoomFormToCreate() {
             // Reset form action
             document.getElementById('roomForm').action = `${App.appURL}landlord/room/create`;
@@ -617,6 +652,7 @@ use Helpers\Format;
                     roomIdInput.value = roomId;
                     form.appendChild(roomIdInput);
                     
+                    // Submit immediately - let server handle notifications via app.php
                     document.body.appendChild(form);
                     form.submit();
                 }
@@ -858,7 +894,7 @@ use Helpers\Format;
             const currentYear = now.getFullYear();
 
             modalBody.innerHTML = `
-                <form id="createInvoiceForm" class="space-y-4">
+                <form id="createInvoiceForm" method="POST" action="${App.appURL}landlord/invoice/create" class="space-y-4">
                     <input type="hidden" id="roomId" name="room_id" value="${room.id}">
                     <input type="hidden" id="csrfToken" name="csrf_token" value="${csrfToken}">
                     
@@ -908,18 +944,18 @@ use Helpers\Format;
                                 <!-- Months Grid -->
                                 <div class="p-3">
                                     <div class="grid grid-cols-4 gap-2">
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="01">Th1</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="02">Th2</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="03">Th3</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="04">Th4</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="05">Th5</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="06">Th6</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="07">Th7</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="08">Th8</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="09">Th9</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="10">Th10</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="11">Th11</button>
-                                        <button class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="12">Th12</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="01">Th1</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="02">Th2</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="03">Th3</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="04">Th4</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="05">Th5</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="06">Th6</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="07">Th7</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="08">Th8</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="09">Th9</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="10">Th10</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="11">Th11</button>
+                                        <button type="button" class="create-invoice-month-btn p-2 text-sm rounded hover:bg-gray-100" data-month="12">Th12</button>
                                     </div>
                                 </div>
                             </div>
@@ -973,11 +1009,11 @@ use Helpers\Format;
                                         <!-- Bên trái: Checkbox, tên dịch vụ và đơn giá -->
                                         <div class="flex-1">
                                             <div class="flex items-center mb-2">
-                                                <input type="checkbox" 
-                                                       name="services[${service.id}][enabled]"
-                                                       value="1"
-                                                       checked
-                                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-2">
+                                                <!-- fixed tick icon (service always enabled in create invoice) -->
+                                                <input type="hidden" name="services[${service.id}][enabled]" value="1">
+                                                <div class="w-4 h-4 bg-blue-500 rounded flex items-center justify-center mr-2">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
                                                 <span class="font-bold text-gray-800">${service.service_name} (${service.service_type})</span>
                                             </div>
                                             <div class="text-sm text-gray-600">
@@ -1239,55 +1275,32 @@ use Helpers\Format;
                 return;
             }
 
+            // Capture form data before closing modal
             const formData = new FormData(form);
-            const createBtn = document.getElementById('createInvoiceBtn');
-            const createBtnText = document.getElementById('createBtnText');
-            const createBtnLoading = document.getElementById('createBtnLoading');
+            const formAction = form.action;
+            const formMethod = form.method || 'POST';
 
-            // Show loading
-            createBtn.disabled = true;
-            createBtnText.classList.add('hidden');
-            createBtnLoading.classList.remove('hidden');
+            // Close modal
+            closeCreateInvoiceModal();
 
-            // Send request
-            fetch(`${App.appURL}landlord/invoice/create`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Response data:', data); // Debug logging
-                    
-                    if (data.success) {
-                        App.showSuccessMessage(data.message || 'Tạo hóa đơn thành công!', 'success');
-                        closeCreateInvoiceModal();
-                        // Delay 1.5 seconds before reloading page
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        // Clear previous errors
-                        clearFieldErrors();
-                        
-                        if (data.errors && typeof data.errors === 'object') {
-                            // Display field-specific errors
-                            displayFieldErrors(data.errors);
-                            } else {
-                            App.showSuccessMessage(data.message || 'Có lỗi xảy ra khi tạo hóa đơn', 'error');
-                            App.setToken(data.csrf_token);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    App.showSuccessMessage('Có lỗi xảy ra khi tạo hóa đơn', 'error');
-                })
-                .finally(() => {
-                    // Hide loading
-                    createBtn.disabled = false;
-                    createBtnText.classList.remove('hidden');
-                    createBtnLoading.classList.add('hidden');
-                });
+            // Create new form with captured data
+            const newForm = document.createElement('form');
+            newForm.method = formMethod;
+            newForm.action = formAction;
+            newForm.style.display = 'none';
+
+            // Add all captured form data to new form
+            for (let [key, value] of formData.entries()) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                newForm.appendChild(input);
+            }
+
+            // Submit immediately - let server handle notifications via app.php
+            document.body.appendChild(newForm);
+            newForm.submit();
         }
 
         // Create Invoice Month/Year Picker functionality
@@ -1360,7 +1373,8 @@ use Helpers\Format;
             });
 
             monthBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    if (e && typeof e.preventDefault === 'function') e.preventDefault();
                     selectedMonth = btn.dataset.month;
                     updateInput();
                     highlightSelectedMonth();

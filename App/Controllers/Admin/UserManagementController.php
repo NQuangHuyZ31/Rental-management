@@ -279,13 +279,14 @@ class UserManagementController extends AdminController {
 
             if ($updated !== false) {
                 // If unbanning, revoke active bans using the Banned model
-                if ($status === 'active' && isset($this->bannedModel)) {
-                    try {
-                        $this->bannedModel->revokeActiveBansByUser($id);
-                    } catch (\Exception $e) {
-                        error_log('Failed to revoke bans for user ' . $id . ': ' . $e->getMessage());
+                    if ($status === 'active' && isset($this->bannedModel)) {
+                        try {
+                            // pass current admin id as revoker
+                            $this->bannedModel->revokeActiveBansByUser($id, $this->userID ?? null);
+                        } catch (\Exception $e) {
+                            error_log('Failed to revoke bans for user ' . $id . ': ' . $e->getMessage());
+                        }
                     }
-                }
 
                 return Response::json([
                     'success' => true,
@@ -334,6 +335,7 @@ class UserManagementController extends AdminController {
             if (isset($this->bannedModel)) {
                 $inserted = $this->bannedModel->insertBan([
                     'user_id' => $id,
+                    'banner_id' => $this->userID ?? null,
                     'reason' => $reason,
                     'banned_at' => $now,
                     'banned_status' => 'active',
@@ -344,6 +346,7 @@ class UserManagementController extends AdminController {
                 // fallback to direct query
                 $inserted = $this->queryBuilder->table('banned')->insert([
                     'user_id' => $id,
+                    'banner_id' => $this->userID ?? null,
                     'reason' => $reason,
                     'banned_at' => $now,
                     'banned_status' => 'active',

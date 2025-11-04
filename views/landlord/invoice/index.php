@@ -259,36 +259,6 @@ use Helpers\Format;
 
     <script>
 
-        // Ensure App.showSuccessMessage / App.showErrorMessage exist as fallbacks
-        if (typeof window.App === 'undefined') window.App = {};
-        if (typeof window.App.showSuccessMessage !== 'function') {
-            window.App.showSuccessMessage = function (message, status) {
-                // Use Swal if available, otherwise alert
-                if (typeof Swal !== 'undefined' && typeof Swal.fire === 'function') {
-                    Swal.fire({
-                        icon: status || 'success',
-                        title: 'Thông báo',
-                        text: message,
-                    });
-                } else {
-                    alert(message);
-                }
-            };
-        }
-        if (typeof window.App.showErrorMessage !== 'function') {
-            window.App.showErrorMessage = function (message) {
-                if (typeof Swal !== 'undefined' && typeof Swal.fire === 'function') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: message,
-                    });
-                } else {
-                    alert(message);
-                }
-            };
-        }
-
         // Hàm mở modal xem hóa đơn
         function viewInvoice(invoiceId) {
             // Hiển thị loading
@@ -384,8 +354,10 @@ use Helpers\Format;
 
             const statusInfo = getStatusInfo(invoice.invoice_status);
 
+            // Disable linter for template literals
+            /* eslint-disable */
             modalBody.innerHTML = `
-                <form id="updateInvoiceForm" class="space-y-4">
+                <form id="updateInvoiceForm" action="<?= BASE_URL ?>/landlord/invoice/update" method="POST" class="space-y-4">
                     <input type="hidden" id="invoiceId" name="invoice_id" value="${invoice.id}">
                     <input type="hidden" id="csrfToken" name="csrf_token" value="${csrfToken}">
                     
@@ -577,6 +549,7 @@ use Helpers\Format;
                                 </div>
                     </form>
             `;
+            /* eslint-enable */
 
             // Kiểm tra trạng thái hóa đơn để ẩn/hiện nút cập nhật
             const updateBtn = document.getElementById('updateInvoiceBtn');
@@ -778,53 +751,20 @@ use Helpers\Format;
         function updateInvoice() {
             const form = document.getElementById('updateInvoiceForm');
             if (!form) {
-                App.showErrorMessage('Không tìm thấy form cập nhật');
+                showErrorMessage('Không tìm thấy form cập nhật');
                 return;
             }
 
+            // Capture form data trước khi đóng modal
             const formData = new FormData(form);
-            const updateBtn = document.getElementById('updateInvoiceBtn');
-            const updateBtnText = document.getElementById('updateBtnText');
-            const updateBtnLoading = document.getElementById('updateBtnLoading');
-
-            // Hiển thị loading
-            updateBtn.disabled = true;
-            updateBtnText.classList.add('hidden');
-            updateBtnLoading.classList.remove('hidden');
-
-            // Gửi request
-            fetch(`${App.appURL}landlord/invoice/update`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        App.showSuccessMessage('Cập nhật hóa đơn thành công!', 'success');
-                        closeInvoiceModal();
-                        // Delay 1.5 giây trước khi reload trang để user thấy thông báo
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        // Hiển thị lỗi validation dưới các input
-                        if (data.errors && Array.isArray(data.errors)) {
-                            displayValidationErrors(data.errors);
-                        } else {
-                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi cập nhật hóa đơn');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    App.showErrorMessage('Có lỗi xảy ra khi cập nhật hóa đơn');
-                })
-                .finally(() => {
-                    // Ẩn loading
-                    updateBtn.disabled = false;
-                    updateBtnText.classList.remove('hidden');
-                    updateBtnLoading.classList.add('hidden');
-                });
+            
+            // Đóng modal trước
+            closeInvoiceModal();
+            
+            // Submit form sau khi đóng modal
+            setTimeout(() => {
+                form.submit();
+            }, 100);
         }
 
         // Modal Month/Year Picker functionality
@@ -969,31 +909,27 @@ use Helpers\Format;
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Gọi API đánh dấu đã thanh toán
+                    // Tạo form để submit
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `${App.appURL}landlord/invoice/mark-as-paid`;
+                    
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    fetch(`${App.appURL}landlord/invoice/mark-as-paid`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `invoice_id=${invoiceId}&csrf_token=${csrfToken}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
-                            // Reload trang sau 1.5 giây để user thấy thông báo
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1500);
-                        } else {
-                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi đánh dấu hóa đơn');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        App.showErrorMessage('Có lỗi xảy ra khi đánh dấu hóa đơn');
-                    });
+                    
+                    const invoiceInput = document.createElement('input');
+                    invoiceInput.type = 'hidden';
+                    invoiceInput.name = 'invoice_id';
+                    invoiceInput.value = invoiceId;
+                    
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrf_token';
+                    csrfInput.value = csrfToken;
+                    
+                    form.appendChild(invoiceInput);
+                    form.appendChild(csrfInput);
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         }
@@ -1012,31 +948,27 @@ use Helpers\Format;
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Gọi API xóa hóa đơn
+                    // Tạo form để submit
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `${App.appURL}landlord/invoice/delete`;
+                    
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    fetch(`${App.appURL}landlord/invoice/delete`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `invoice_id=${invoiceId}&csrf_token=${csrfToken}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            App.showSuccessMessage(data.message, 'success');
-                            // Reload trang sau 1.5 giây để user thấy thông báo
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1500);
-                        } else {
-                            App.showErrorMessage(data.message || 'Có lỗi xảy ra khi xóa hóa đơn');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        App.showErrorMessage('Có lỗi xảy ra khi xóa hóa đơn');
-                    });
+                    
+                    const invoiceInput = document.createElement('input');
+                    invoiceInput.type = 'hidden';
+                    invoiceInput.name = 'invoice_id';
+                    invoiceInput.value = invoiceId;
+                    
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrf_token';
+                    csrfInput.value = csrfToken;
+                    
+                    form.appendChild(invoiceInput);
+                    form.appendChild(csrfInput);
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         }

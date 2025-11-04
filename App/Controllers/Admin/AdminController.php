@@ -16,6 +16,7 @@ use App\Models\RentalAmenity;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Banned;
+use App\Models\ReportViolation;
 use Core\QueryBuilder;
 
 class AdminController extends BaseCustomerController {

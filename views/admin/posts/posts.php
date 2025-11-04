@@ -133,6 +133,11 @@
         </form>
     </div>
 
+            <?php
+            // Highlight support: if highlight_id provided, will try to scroll/highlight that row on load
+            $highlightId = isset($_GET['highlight_id']) && $_GET['highlight_id'] !== '' ? (int)$_GET['highlight_id'] : null;
+            ?>
+
     <!-- Posts Table -->
     <div class="bg-white shadow rounded-lg overflow-hidden">
         <div class="flex items-center justify-between gap-10 border-b border-gray-200 pr-3">
@@ -188,7 +193,7 @@
                         </tr>
                     <?php else : ?>
                         <?php foreach ($posts as $post) : ?>
-                            <tr>
+                            <tr data-post-id="<?= $post['id'] ?>" id="post-row-<?= $post['id'] ?>">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php if ($post['approval_status'] === 'pending') : ?>
                                         <input type="checkbox" class="rounded border-gray-300 checked:bg-blue-500 check-item-pending" value="<?= $post['id'] ?>">
@@ -290,5 +295,23 @@
         checkAll.addEventListener('change', function() {
             checkboxes.forEach(cb => cb.checked = this.checked);
         });
+
+        // If highlightId is present server-side, scroll to the row and briefly mark it
+        try {
+            const highlightId = <?= $highlightId ? (int)$highlightId : 'null' ?>;
+            if (highlightId) {
+                // small delay to ensure DOM is rendered
+                setTimeout(() => {
+                    const row = document.getElementById(`post-row-${highlightId}`) || document.querySelector(`[data-post-id="${highlightId}"]`);
+                    if (row) {
+                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        row.classList.add('ring-2', 'ring-yellow-400');
+                        setTimeout(() => row.classList.remove('ring-2', 'ring-yellow-400'), 8000);
+                    }
+                }, 200);
+            }
+        } catch (e) {
+            console.error('Highlight handling failed', e);
+        }
     });
 </script>
