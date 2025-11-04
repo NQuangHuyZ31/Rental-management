@@ -884,6 +884,8 @@
     </script>
 
     <?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
+    <script src="<?=BASE_URL?>/Public/js/index.js"></script>
+    <script src="<?=BASE_URL?>/Public/js/landlord/customer-management.js"></script>
 </body>
 
 </html>
