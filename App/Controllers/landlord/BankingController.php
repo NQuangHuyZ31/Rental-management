@@ -8,6 +8,7 @@
 namespace App\Controllers\Landlord;
 
 use Core\ViewRender;
+use Core\Response;
 use App\Models\PaymentHistory;
 use Exception;
 
@@ -31,67 +32,10 @@ class BankingController extends LandlordController {
 
         $month = $this->request->get('month'); // format: mm-YYYY
 
-        // Count query
-        $countQuery = $this->paymentHistoryModel
-            ->table('payment_histories')
-            ->select('COUNT(*) as total')
-            ->join('invoices', 'payment_histories.invoice_id', '=', 'invoices.id')
-            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
-            ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('payment_histories.deleted', 0)
-            ->where('invoices.deleted', 0)
-            ->where('rooms.deleted', 0)
-            ->where('houses.deleted', 0)
-            ->where('houses.owner_id', $ownerId);
-
-        // Chỉ lọc theo selectedHouse nếu có
-        if ($selectedHouse) {
-            $countQuery->where('houses.id', $selectedHouse['id']);
-        }
-        
-        if (!empty($month)) {
-            $countQuery->where('invoices.invoice_month', $month);
-        }
-
-        $totalCountRow = $countQuery->first();
-        $totalCount = $totalCountRow['total'] ?? 0;
-
-        // Data query
-        $dataQuery = $this->paymentHistoryModel
-            ->table('payment_histories')
-            ->select([
-                'payment_histories.*',
-                'invoices.invoice_name',
-                'invoices.invoice_month',
-                'invoices.ref_code',
-                'invoices.invoice_status',
-                'rooms.room_name',
-                'houses.house_name',
-                'users.username as payer_name'
-            ])
-            ->join('invoices', 'payment_histories.invoice_id', '=', 'invoices.id')
-            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
-            ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->leftJoin('users', 'payment_histories.payer_id', '=', 'users.id')
-            ->where('payment_histories.deleted', 0)
-            ->where('invoices.deleted', 0)
-            ->where('rooms.deleted', 0)
-            ->where('houses.deleted', 0)
-            ->where('houses.owner_id', $ownerId);
-
-        // Chỉ lọc theo selectedHouse nếu có
-        if ($selectedHouse) {
-            $dataQuery->where('houses.id', $selectedHouse['id']);
-        }
-
-        if (!empty($month)) {
-            $dataQuery->where('invoices.invoice_month', $month);
-        }
-
-        $histories = $dataQuery->orderBy('payment_histories.created_at', 'DESC')
-            ->limit($limit)
-            ->offset($offset)
-            ->get();
+        // Sử dụng method từ model thay vì viết SQL trong controller
+        $houseId = $selectedHouse ? $selectedHouse['id'] : null;
+        $totalCount = $this->paymentHistoryModel->getPaymentHistoryCountByOwner($ownerId, $houseId, $month);
+        $histories = $this->paymentHistoryModel->getPaymentHistoriesByOwner($ownerId, $houseId, $month, $limit, $offset);
 
         ViewRender::render('landlord/banking/index', [
             'houses' => $houses,
@@ -104,13 +48,11 @@ class BankingController extends LandlordController {
     }
 
     public function detail() {
-        header('Content-Type: application/json');
-        
         $ownerId = $this->user['id'] ?? null;
         $paymentId = $this->request->get('id');
 
         if (!$paymentId) {
-            echo json_encode(['success' => false, 'message' => 'ID giao dịch không hợp lệ']);
+            Response::json(['success' => false, 'message' => 'ID giao dịch không hợp lệ!'], 400);
             return;
         }
 
@@ -118,25 +60,25 @@ class BankingController extends LandlordController {
             $paymentDetail = $this->paymentHistoryModel->getPaymentHistoryDetail($paymentId);
 
             if (!$paymentDetail) {
-                echo json_encode(['success' => false, 'message' => 'Không tìm thấy giao dịch']);
+                Response::json(['success' => false, 'message' => 'Không tìm thấy giao dịch!'], 404);
                 return;
             }
 
             // Kiểm tra quyền sở hữu - chỉ chủ nhà mới được xem giao dịch của nhà mình
             if ($paymentDetail['owner_id'] != $ownerId) {
-                echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
+                Response::json(['success' => false, 'message' => 'Không có quyền truy cập!'], 403);
                 return;
             }
 
-            echo json_encode([
+            Response::json([
                 'success' => true,
                 'data' => $paymentDetail
-            ]);
+            ], 200);
         } catch (Exception $e) {
-            echo json_encode([
+            Response::json([
                 'success' => false, 
-                'message' => 'Lỗi server: ' . $e->getMessage()
-            ]);
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage() . '!'
+            ], 500);
         }
     }
 }

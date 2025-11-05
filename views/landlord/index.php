@@ -848,7 +848,7 @@ use Helpers\Format;
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        displayCreateInvoiceForm(data.room, data.services, data.csrf_token);
+                        displayCreateInvoiceForm(data.room, data.services, data.csrf_token, data.tenant_count);
                     } else {
                         document.getElementById('createInvoiceModalBody').innerHTML = `
                             <div class="text-center py-8">
@@ -874,7 +874,7 @@ use Helpers\Format;
             document.body.style.overflow = 'auto';
         }
 
-        function displayCreateInvoiceForm(room, services, csrfToken) {
+        function displayCreateInvoiceForm(room, services, csrfToken, tenantCount) {
             const modalBody = document.getElementById('createInvoiceModalBody');
 
             // Format money
@@ -1029,7 +1029,7 @@ use Helpers\Format;
                                                         <span class="text-sm text-gray-600 mr-1">Số cũ:</span>
                                                         <input type="number" 
                                                                name="services[${service.id}][old_value]"
-                                                               value="0" 
+                                                               value="${service.old_value || 0}" 
                                                                min="0"
                                                                step="1"
                                                                required
@@ -1040,7 +1040,7 @@ use Helpers\Format;
                                                         <span class="text-sm text-gray-600 mr-1">Số mới:</span>
                                                         <input type="number" 
                                                                name="services[${service.id}][new_value]"
-                                                               value="0" 
+                                                               value="" 
                                                                min="0"
                                                                step="1"
                                                                required
@@ -1053,7 +1053,7 @@ use Helpers\Format;
                                                     <span class="text-sm text-gray-600 mr-1">Số lượng:</span>
                                                     <input type="number" 
                                                            name="services[${service.id}][usage_amount]"
-                                                           value="1" 
+                                                           value="${service.unit === 'person' ? (tenantCount || 1) : (service.quantity || 1)}" 
                                                            min="0"
                                                            step="1"
                                                            required

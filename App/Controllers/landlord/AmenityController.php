@@ -63,13 +63,13 @@ class AmenityController extends LandlordController {
     public function create() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord/amenity', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -91,7 +91,7 @@ class AmenityController extends LandlordController {
         if (empty($amenityData['house_id']) || empty($amenityData['amenity_name']) ||
             empty($amenityData['amenity_price']) || empty($amenityData['quantity']) ||
             empty($amenityData['unit'])) {
-            $this->request->redirectWithError('/landlord/amenity', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+            $this->request->redirectWithError('/landlord/amenity', 'Vui lòng điền đầy đủ thông tin bắt buộc!');
             return;
         }
 
@@ -116,12 +116,12 @@ class AmenityController extends LandlordController {
             } else {
                 // Rollback nếu có lỗi
                 $this->amenityModel->rollback();
-                $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra khi tạo tài sản');
+                $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra khi tạo tài sản!');
             }
         } catch (\Exception $e) {
             // Rollback nếu có exception
             $this->amenityModel->rollback();
-            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -131,13 +131,13 @@ class AmenityController extends LandlordController {
     public function update() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord/amenity', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -158,7 +158,7 @@ class AmenityController extends LandlordController {
         if (empty($amenityId) || empty($amenityData['amenity_name']) ||
             empty($amenityData['amenity_price']) || empty($amenityData['quantity']) ||
             empty($amenityData['unit'])) {
-            $this->request->redirectWithError('/landlord/amenity', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+            $this->request->redirectWithError('/landlord/amenity', 'Vui lòng điền đầy đủ thông tin bắt buộc!');
             return;
         }
 
@@ -186,12 +186,12 @@ class AmenityController extends LandlordController {
             } else {
                 // Rollback nếu có lỗi
                 $this->amenityModel->rollback();
-                $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra khi cập nhật tài sản');
+                $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra khi cập nhật tài sản!');
             }
         } catch (\Exception $e) {
             // Rollback nếu có exception
             $this->amenityModel->rollback();
-            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 
@@ -238,13 +238,13 @@ class AmenityController extends LandlordController {
     public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord/amenity', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord/amenity', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -253,7 +253,7 @@ class AmenityController extends LandlordController {
 
         // Validate dữ liệu
         if (empty($amenityId)) {
-            $this->request->redirectWithError('/landlord/amenity', 'Thiếu thông tin tài sản cần xóa');
+            $this->request->redirectWithError('/landlord/amenity', 'Thiếu thông tin tài sản cần xóa!');
             return;
         }
 
@@ -267,7 +267,7 @@ class AmenityController extends LandlordController {
                 $this->request->redirectWithError('/landlord/amenity', $result['message']);
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 

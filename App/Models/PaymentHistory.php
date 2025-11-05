@@ -82,4 +82,74 @@ class PaymentHistory extends Model {
             ->where('houses.deleted', 0)
             ->first();
     }
+
+    /**
+     * Author: Nguyen Xuan Duong
+     * Date: 2025-11-05
+     * Get payment histories by owner with optional filters for house and month
+     */
+    public function getPaymentHistoriesByOwner($ownerId, $houseId = null, $month = null, $limit = 10, $offset = 0) {
+        $query = $this->table($this->table)
+            ->select([
+                'payment_histories.*',
+                'invoices.invoice_name',
+                'invoices.invoice_month',
+                'invoices.ref_code',
+                'invoices.invoice_status',
+                'rooms.room_name',
+                'houses.house_name',
+                'users.username as payer_name'
+            ])
+            ->join('invoices', 'payment_histories.invoice_id', '=', 'invoices.id')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->leftJoin('users', 'payment_histories.payer_id', '=', 'users.id')
+            ->where('payment_histories.deleted', 0)
+            ->where('invoices.deleted', 0)
+            ->where('rooms.deleted', 0)
+            ->where('houses.deleted', 0)
+            ->where('houses.owner_id', $ownerId);
+
+        if ($houseId) {
+            $query->where('houses.id', $houseId);
+        }
+
+        if ($month) {
+            $query->where('invoices.invoice_month', $month);
+        }
+
+        return $query->orderBy('payment_histories.created_at', 'DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+    }
+
+    /**
+     * Author: Nguyen Xuan Duong
+     * Date: 2025-11-05
+     * Get payment history count by owner with optional filters for house and month
+     */
+    public function getPaymentHistoryCountByOwner($ownerId, $houseId = null, $month = null) {
+        $query = $this->table($this->table)
+            ->select('COUNT(*) as total')
+            ->join('invoices', 'payment_histories.invoice_id', '=', 'invoices.id')
+            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+            ->join('houses', 'rooms.house_id', '=', 'houses.id')
+            ->where('payment_histories.deleted', 0)
+            ->where('invoices.deleted', 0)
+            ->where('rooms.deleted', 0)
+            ->where('houses.deleted', 0)
+            ->where('houses.owner_id', $ownerId);
+
+        if ($houseId) {
+            $query->where('houses.id', $houseId);
+        }
+
+        if ($month) {
+            $query->where('invoices.invoice_month', $month);
+        }
+
+        $result = $query->first();
+        return $result['total'] ?? 0;
+    }
 }
