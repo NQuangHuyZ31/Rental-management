@@ -17,7 +17,7 @@ class RentalRoomCustomerController extends CustomerController {
 	protected $title = 'Phòng đang thuê';
 
 	public function rentedRooms() {
-		$rentedRooms = $this->tenantModel->getDetailedRentedRoomsByUserId();
+		$rentedRooms = $this->tenantModel->getDetailedRentedRoomsByUserId($this->user['id']);
 
 		ViewRender::renderWithLayout(
 			'customer/rental-room/rented-rooms',

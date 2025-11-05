@@ -255,22 +255,21 @@ class InvoiceController extends LandlordController {
         }
 
         try {
-            // Validate CSRF token
-            if (!CSRF::verifyToken($this->request->post('csrf_token'))) {
-                throw new \Exception('Dữ liệu không hợp lệ');
-            }
-
             // Added by Huy Nguyen on 2025-10-24 to check if exit invoice 
             $requests = $this->request->post();
 
             if ($this->invoiceModel->getInvoiceByRoomIdAndMonth($requests['room_id'], $requests['invoice_month'])) {
-                Response::json(['success' => false, 'message' => 'Hóa đơn tháng này cho phòng này đã có', 'csrf_token' => CSRF::getTokenRefresh()], 200);
+                // Response::json(['success' => false, 'message' => 'Hóa đơn tháng này cho phòng này đã có', 'csrf_token' => CSRF::getTokenRefresh()], 200);
+                $this->request->redirectWithError('/landlord', 'Hóa đơn tháng này cho phòng này đã có');
+                exit;
             }
             
             [$month, $year] = explode('-', $requests['invoice_month']);
 
             if (($year == date('Y') && $month > date('m')) || $year > date('Y')) {
-                Response::json(['success' => false, 'message' => 'Chưa tới tháng lập hóa đơn', 'csrf_token' => CSRF::getTokenRefresh()], 200);
+                // Response::json(['success' => false, 'message' => 'Chưa tới tháng lập hóa đơn', 'csrf_token' => CSRF::getTokenRefresh()], 200);
+                $this->request->redirectWithError('/landlord', 'Chưa tới tháng lập hóa đơn');
+                exit;
             }
 
             // Lấy dữ liệu từ form

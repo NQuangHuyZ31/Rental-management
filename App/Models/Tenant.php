@@ -627,12 +627,12 @@ class Tenant extends Model {
     // Added by Huy Nguyen get room by user id
     public function getAllRoomByUserId() {
         return $this->table('room_tenants')->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
-            ->where('room_tenants.user_id', $this->userID)->where('rooms.deleted', 0)->get();
+            ->where('room_tenants.user_id', $this->userID)->where('rooms.deleted', 0)->whereNull('left_date')->get();
     }
 
     // Added by Huy Nguyen get detailed rented rooms by user id
-    public function getDetailedRentedRoomsByUserId() {
-        return $this->table('room_tenants')
+    public function getDetailedRentedRoomsByUserId($userId = '') {
+        $query = $this->table('room_tenants')
             ->select([
                 'room_tenants.join_date',
                 'rooms.*',
@@ -646,8 +646,12 @@ class Tenant extends Model {
             ])
             ->join('rooms', 'room_tenants.room_id', '=', 'rooms.id')
             ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->join('users', 'houses.owner_id', '=', 'users.id')
-            ->where('room_tenants.user_id', $this->userID)
+            ->join('users', 'houses.owner_id', '=', 'users.id');
+
+            if (!empty($userId)) {
+                $query->where('room_tenants.user_id', $userId);
+            }
+        return $query->whereNull('room_tenants.left_date')
             ->where('rooms.deleted', 0)
             ->where('houses.deleted', 0)
             ->orderBy('room_tenants.join_date', 'DESC')
@@ -732,7 +736,7 @@ class Tenant extends Model {
     // Added by Huy Nguyen on 2025-10-24 to get all user by room
     public function getAllUserByRoomId($roomId) {
         return $this->table('room_tenants')->join('rooms', 'rooms.id', '=', 'room_tenants.room_id')
-            ->where('room_tenants.room_id', $roomId)->where('rooms.deleted', 0)->get();
+            ->where('room_tenants.room_id', $roomId)->where('rooms.deleted', 0)->whereNull('room_tenants.left_date')->get();
     }
 
     // Added by Huy Nguyen on 2025-11-04 to check tenant exits in room
