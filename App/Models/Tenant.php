@@ -665,6 +665,7 @@ class Tenant extends Model {
             if (!empty($userId)) {
                 $query->where('room_tenants.user_id', $userId);
             }
+            
         return $query->whereNull('room_tenants.left_date')
             ->where('rooms.deleted', 0)
             ->where('houses.deleted', 0)
