@@ -100,9 +100,9 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                     </div>
 
                     <!-- Landlord Button -->
-                    <?php if (Session::has('user') && Session::get('user')['role'] == '2') { ?>
+                    <?php if (!Session::has('user') || (Session::has('user') && Session::get('user')['role'] == '2')) { ?>
                         <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg">
-                            <a href="<?php echo BASE_URL ?>/landlord/post-news" class="text-xs flex text-nowrap gap-2 items-center">
+                            <a href="<?= BASE_URL ?><?= Session::has('user') ? '/landlord/post-news' : '/login?type=landlord' ?>" class="text-xs flex text-nowrap gap-2 items-center">
                                 <div class="flex items-center justify-center text-nowrap">
                                     <i class="fas fa-file-alt text-[16px]"></i>
                                     <i class="fas fa-plus text-yellow-500 ml-1 text-xs"></i>
