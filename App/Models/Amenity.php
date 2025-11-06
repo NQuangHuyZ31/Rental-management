@@ -177,11 +177,14 @@ class Amenity {
     /**
      * Kiểm tra có thể xóa tài sản không
      */
-    public function canDeleteAmenity($amenityId, $ownerId) {
+    /**
+     * Xóa tài sản
+     */
+    public function deleteAmenity($amenityId, $ownerId) {
         // Kiểm tra tài sản có tồn tại và thuộc về owner không
         $amenity = $this->getAmenityById($amenityId, $ownerId);
         if (!$amenity) {
-            return ['can_delete' => false, 'reason' => 'Không tìm thấy tài sản hoặc bạn không có quyền truy cập'];
+            return false;
         }
 
         // Kiểm tra có phòng nào đang sử dụng tài sản này không
@@ -201,57 +204,34 @@ class Amenity {
             $occupiedRoomCount = $result ? $result['count'] : 0;
 
             if ($occupiedRoomCount > 0) {
-                return ['can_delete' => false, 'reason' => 'Tài sản đang được sử dụng bởi ' . $occupiedRoomCount . ' phòng có khách thuê'];
+                return false;
             }
-
-            // Có phòng sử dụng nhưng không có khách thuê - có thể xóa
-            return ['can_delete' => true, 'reason' => 'Tài sản đang được sử dụng bởi ' . $roomCount . ' phòng trống. Xóa sẽ gỡ bỏ tài sản khỏi tất cả phòng.', 'has_rooms' => true];
         }
 
-        // Không có phòng nào sử dụng - có thể xóa
-        return ['can_delete' => true, 'reason' => 'Tài sản chưa được sử dụng bởi phòng nào'];
-    }
+        // Bắt đầu transaction
+        $this->queryBuilder->beginTransaction();
 
-    /**
-     * Xóa tài sản
-     */
-    public function deleteAmenity($amenityId, $ownerId) {
-        // Kiểm tra có thể xóa không
-        $canDelete = $this->canDeleteAmenity($amenityId, $ownerId);
-
-        if (!$canDelete['can_delete']) {
-            return $canDelete;
+        // Nếu có phòng sử dụng, xóa khỏi room_amenities
+        if ($roomCount > 0) {
+            $this->removeAllRoomsFromAmenity($amenityId);
         }
 
-        try {
-            // Bắt đầu transaction
-            $this->queryBuilder->beginTransaction();
+        // Xóa tài sản (soft delete)
+        $result = $this->queryBuilder
+            ->table('amenities')
+            ->where('amenities.id', $amenityId)
+            ->update([
+                'deleted' => 1,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
 
-            // Nếu có phòng sử dụng, xóa khỏi room_amenities
-            if (isset($canDelete['has_rooms']) && $canDelete['has_rooms']) {
-                $this->removeAllRoomsFromAmenity($amenityId);
-            }
-
-            // Xóa tài sản (soft delete)
-            $result = $this->queryBuilder
-                ->table('amenities')
-                ->where('amenities.id', $amenityId)
-                ->update([
-                    'deleted' => 1,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ]);
-
-            if ($result) {
-                $this->queryBuilder->commit();
-                return ['success' => true, 'message' => 'Xóa tài sản thành công!'];
-            } else {
-                $this->queryBuilder->rollback();
-                return ['success' => false, 'message' => 'Có lỗi xảy ra khi xóa tài sản'];
-            }
-        } catch (\Exception $e) {
+        if ($result) {
+            $this->queryBuilder->commit();
+        } else {
             $this->queryBuilder->rollback();
-            return ['success' => false, 'message' => 'Có lỗi xảy ra: ' . $e->getMessage()];
         }
+
+        return $result;
     }
 
     /**

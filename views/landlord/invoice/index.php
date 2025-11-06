@@ -86,11 +86,6 @@ use Helpers\Format;
                             <p class="text-gray-600 italic mt-1 text-sm">Tất cả hóa đơn thu tiền nhà xuất hiện ở đây</p>
                         </div>
                     </div>
-                    <button id="addInvoiceBtn" class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </button>
                 </div>
 
                 <!-- Invoice Table -->
