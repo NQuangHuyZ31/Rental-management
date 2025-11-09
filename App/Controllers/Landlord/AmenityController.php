@@ -23,13 +23,24 @@ class AmenityController extends LandlordController {
 
         $amenities = [];
         $rooms = [];
+        $pagination = null;
+        $queryParams = [];
 
         // Lấy danh sách phòng của nhà được chọn
         if ($selectedHouse) {
             $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
 
-            // Lấy danh sách tài sản của nhà được chọn
-            $amenities = $this->amenityModel->getAmenitiesByHouseId($selectedHouse['id']);
+            // Pagination params
+            $page = (int) ($this->request->get('page') ?? 1);
+            if ($page < 1) $page = 1;
+            $limit = $this->limit ?? 10;
+            $offset = ($page - 1) * $limit;
+
+            // Get total count
+            $totalAmenities = $this->amenityModel->getAmenitiesCountByHouseId($selectedHouse['id']);
+
+            // Lấy danh sách tài sản của nhà được chọn với pagination
+            $amenities = $this->amenityModel->getAmenitiesByHouseIdPaginated($selectedHouse['id'], $limit, $offset);
 
             // Lấy thông tin phòng đang sử dụng cho mỗi tài sản
             foreach ($amenities as &$amenity) {
@@ -37,6 +48,10 @@ class AmenityController extends LandlordController {
                 $usedRooms = $this->amenityModel->getUsedRoomsByAmenityId($amenity['id'], $selectedHouse['id']);
                 $amenity['used_rooms'] = $usedRooms;
             }
+
+            // Build pagination
+            $pagination = $this->getPagination($page, $totalAmenities, $limit, $offset);
+            $queryParams = ['house_id' => $selectedHouse['id']];
         }
 
         // Lấy các giá trị enum cho đơn vị
@@ -49,6 +64,8 @@ class AmenityController extends LandlordController {
             'amenities' => $amenities,
             'rooms' => $rooms,
             'unitOptions' => $unitOptions,
+            'pagination' => $pagination,
+            'queryParams' => $queryParams,
         ]);
     }
 

@@ -137,7 +137,7 @@
         <!-- Pagination -->
         <?php if (!empty($pagination) && $pagination['total_pages'] > 1) : ?>
             <div class="mt-8">
-                <?= \Helpers\Pagination::render($pagination, '', $queryParams) ?>
+                <?= \Helpers\Pagination::render($pagination, BASE_URL . '/admin/amenities', $queryParams) ?>
             </div>
         <?php endif; ?>
     </div>

@@ -67,7 +67,7 @@
                                                 <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($amenity['amenity_name']) ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                                <div class="text-sm text-gray-900"><?= \Helpers\Format::forMatPrice($amenity['amenity_price']) ?>đ/<?= htmlspecialchars($amenity['unit']) ?></div>
+                                                <div class="text-sm text-gray-900"><?= \Helpers\Format::forMatPriceVND($amenity['amenity_price']) ?>đ/<?= htmlspecialchars($amenity['unit']) ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-center border border-gray-300">
                                                 <span class="text-sm font-medium text-gray-900">
@@ -112,6 +112,13 @@
                                 </tbody>
                             </table>
                         </div>
+                    
+                    <!-- Pagination -->
+                    <?php if (!empty($pagination) && is_array($pagination) && ($pagination['total_pages'] ?? 0) > 1): ?>
+                        <div class="mt-8 px-6">
+                            <?= \Helpers\Pagination::render($pagination, BASE_URL . '/landlord/amenity', $queryParams ?? []) ?>
+                        </div>
+                    <?php endif; ?>
                     <?php else: ?>
                         <div class="text-center py-12">
                             <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

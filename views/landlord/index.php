@@ -281,7 +281,7 @@ use Helpers\Format;
                 <!-- Pagination -->
                 <?php if (!empty($pagination) && is_array($pagination) && ($pagination['total_pages'] ?? 0) > 1): ?>
                     <div class="mt-8 px-6">
-                        <?= \Helpers\Pagination::render($pagination, '', $queryParams ?? []) ?>
+                        <?= \Helpers\Pagination::render($pagination, BASE_URL . '/landlord', $queryParams ?? []) ?>
                     </div>
                 <?php endif; ?>
                 <?php elseif ($selectedHouse && empty($rooms)): ?>

@@ -28,6 +28,34 @@ class Amenity {
     }
 
     /**
+     * Get paginated amenities by house id
+     */
+    public function getAmenitiesByHouseIdPaginated($houseId, $limit, $offset) {
+        return $this->queryBuilder
+            ->table('amenities')
+            ->where('house_id', $houseId)
+            ->where('deleted', 0)
+            ->orderBy('amenity_name', 'ASC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+    }
+
+    /**
+     * Count amenities by house id
+     */
+    public function getAmenitiesCountByHouseId($houseId) {
+        $result = $this->queryBuilder
+            ->table('amenities')
+            ->where('house_id', $houseId)
+            ->where('deleted', 0)
+            ->select(['COUNT(*) as total'])
+            ->first();
+
+        return $result ? (int) $result['total'] : 0;
+    }
+
+    /**
      * Lấy tài sản theo ID
      */
     public function getAmenityById($amenityId, $ownerId = null) {
