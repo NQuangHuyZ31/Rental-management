@@ -56,7 +56,7 @@
                         <!-- Address -->
                         <p class="text-sm text-gray-600 mb-2 flex items-center">
                             <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
-                            <?= $post['address'] ?>, <?= $post['ward'] ?>, <?= $post['province'] ?>
+                            <?= htmlspecialchars($post['address'], ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars($post['ward'], ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars($post['province'], ENT_QUOTES, 'UTF-8') ?>
                         </p>
 
                         <!-- Price Section -->
@@ -78,7 +78,7 @@
                                 <i class="fas fa-user text-gray-600 text-sm"></i>
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-900"><?= $post['contact'] ?></p>
+                                <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($post['contact'], ENT_QUOTES, 'UTF-8') ?></p>
                                 <?php
                                 $date = new DateTime($post['created_at']);
                                 $now = new DateTime();
@@ -103,7 +103,7 @@
                         <div class="flex items-center gap-6 text-sm text-gray-600 mb-6">
                             <span class="flex items-center">
                                 <i class="fas fa-expand-arrows-alt mr-1"></i>
-                                <?= $post['area'] ?> m²
+                                <?= htmlspecialchars($post['area'], ENT_QUOTES, 'UTF-8') ?> m²
                             </span>
                             <span class="flex items-center">
                                 <i class="fas fa-tint mr-1"></i>

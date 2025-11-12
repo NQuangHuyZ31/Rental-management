@@ -15,7 +15,7 @@
 				<div class="relative group">
 					<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-4 py-3 group-hover:border-green-400 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100 transition-all duration-300 shadow-sm hover:shadow-md">
 						<select id="province" name="province" class="w-full bg-transparent border-none outline-none text-gray-900 text-sm font-medium cursor-pointer appearance-none"
-								data-default = "<?= $currentFilters['province'] ?? '' ?>">
+								data-default = "<?= htmlspecialchars($currentFilters['province'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 							<option value="">Chọn tỉnh/thành phố</option>
 						</select>
 					</div>
@@ -28,7 +28,7 @@
 				<div class="relative group">
 					<div class="flex items-center bg-white border-2 border-gray-200 rounded-xl px-4 py-3 group-hover:border-green-400 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100 transition-all duration-300 shadow-sm hover:shadow-md">
 						<i class="fas fa-search text-gray-400 text-sm mr-3 flex-shrink-0"></i>
-						<input type="text" name="search" placeholder="Nhập tiêu chí muốn tìm kiếm..." value="<?= $currentFilters['search'] ?? '' ?>" class="flex-1 outline-none text-gray-900 placeholder-gray-500 text-sm font-medium bg-transparent">
+						<input type="text" name="search" placeholder="Nhập tiêu chí muốn tìm kiếm..." value="<?= htmlspecialchars($currentFilters['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="flex-1 outline-none text-gray-900 placeholder-gray-500 text-sm font-medium bg-transparent">
 					</div>
 				</div>
 			</div>

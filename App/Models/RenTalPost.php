@@ -28,7 +28,7 @@ class RenTalPost extends Model {
     }
 
     public function getRentalPostsByStatus($column, $status, $limit = 10, $offset = 0) {
-        return $this->table($this->table)
+        $query = $this->table($this->table)
             ->select([
                 'rental_posts.*',
                 'rental_categories.rental_category_name',
@@ -39,10 +39,17 @@ class RenTalPost extends Model {
             ->where('rental_posts.deleted', 0)
             ->where('rental_posts.owner_id', $this->getCurrentUserId())
             ->where('rental_posts.' . $column, $status)
-            ->orderBy('rental_posts.created_at', 'DESC')
-            ->limit($limit)
-            ->offset($offset)
-            ->get();
+            ->orderBy('rental_posts.created_at', 'DESC');
+
+        if (!empty($limit) || $limit > 0) {
+            $query->limit($limit);
+        }
+
+        if ($offset >= 0) {
+            $query->offset($offset);
+        }
+
+        return $query->get();
     }
 
     public function getRentalPostsByCategory($categoryId, $limit = 10, $offset = 0) {
@@ -333,11 +340,11 @@ class RenTalPost extends Model {
         $query = $this->table($this->table)
             ->where('deleted', 0);
 
-        if ($approvedStatus != '') {
+        if (!empty($approvedStatus)) {
             $query->whereIn('approval_status', $approvedStatus);
         }
 
-        if ($status != '') {
+        if (!empty($status)) {
             $query->where('status', $status);
         }
 

@@ -32,21 +32,21 @@ use Helpers\Format;
 						<!-- Full Name -->
 						<div>
 							<label for="username" class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
-							<input type="text" id="username" name="username" value="<?= $user['username'] ?>"
+							<input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
 						<!-- Phone -->
 						<div>
 							<label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-							<input type="tel" id="phone" name="phone" value="<?= $user['phone'] ?>"
+							<input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($user['phone'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
 						<!-- Date of Birth -->
 						<div>
 							<label for="birthday" class="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
-							<input type="date" id="birthday" name="birthday" value="<?= $user['birthday'] ?>"
+							<input type="date" id="birthday" name="birthday" value="<?= htmlspecialchars($user['birthday'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 
@@ -63,7 +63,7 @@ use Helpers\Format;
 						<!-- Occupation -->
 						<div>
 							<label for="job" class="block text-sm font-medium text-gray-700 mb-2">Nghề nghiệp</label>
-							<input type="text" id="job" name="job" value="<?= $user['job'] ?>"
+							<input type="text" id="job" name="job" value="<?= htmlspecialchars($user['job'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 						</div>
 					</div>
@@ -94,7 +94,7 @@ use Helpers\Format;
 						<!-- Street Address -->
 						<div>
 							<label for="address" class="block text-sm font-medium text-gray-700 mb-2">Số nhà, tên đường</label>
-							<input type="text" id="address" name="address" value="<?= $user['address'] ?>"
+							<input type="text" id="address" name="address" value="<?= htmlspecialchars($user['address'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
 								class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
 								placeholder="Nhập số nhà và tên đường">
 						</div>
@@ -215,7 +215,7 @@ use Helpers\Format;
 
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-medium text-gray-700">Phòng đang thuê</span>
-						<span class="text-sm text-gray-600"><?= $countRentedRooms ?></span>
+						<span class="text-sm text-gray-600"><?= htmlspecialchars($countRentedRooms, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
 					</div>
 
 					<div class="flex items-center justify-between">

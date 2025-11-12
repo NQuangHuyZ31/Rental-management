@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard' ?></title>
     <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand()?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand() ?>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -119,6 +119,7 @@
     <script src="<?= BASE_URL ?>/Public/js/index.js"></script>
     <script src="<?= BASE_URL ?>/Public/js/custom-chart.js"></script>
     <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/admin/post-management.js?v=<?= rand() ?>"></script>
 
     <script>
         // Use App.showSuccessMessage for notifications (centralized in Public/js/app.js)

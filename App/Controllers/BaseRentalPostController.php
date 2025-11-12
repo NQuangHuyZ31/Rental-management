@@ -16,6 +16,7 @@ use Core\CSRF;
 use Core\QueryBuilder;
 use Core\Request;
 use Core\Response;
+use Core\Session;
 use Exception;
 use Queue\UploadImageOnCloud;
 
@@ -26,6 +27,7 @@ class BaseRentalPostController extends BaseCustomerController {
 	protected $rentalAmenityModel;
 	protected $uploadImageOnCloud;
 	protected $queryBuilder;
+    protected $user;
 
     public function __construct() {
 		parent::__construct();
@@ -35,6 +37,7 @@ class BaseRentalPostController extends BaseCustomerController {
 		$this->rentalAmenityModel = new RentalAmenity();
 		$this->uploadImageOnCloud = new UploadImageOnCloud();
 		$this->queryBuilder = new QueryBuilder();
+        $this->user = Session::get('user');
     }
 
 	public function create() {
@@ -64,6 +67,10 @@ class BaseRentalPostController extends BaseCustomerController {
             if (!$postId) {
                 Response::json(['status' => 'error', 'error' => 'Không thể tạo tin đăng. Vui lòng thử lại!', 'token' => CSRF::getTokenRefresh()], 400);
                 return;
+            }
+
+            if (Session::has('user') && $this->user['role'] == 1) {
+                $this->rentalPostModel->updateColumn($postId, 'approval_status', 'approved');
             }
 
             // Lưu files tạm thời trước khi dispatch job

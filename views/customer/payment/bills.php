@@ -38,7 +38,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600">Tổng hóa đơn</p>
-                <p class="text-2xl font-bold text-gray-900"><?= $countAllInvoices; ?></p>
+                <p class="text-2xl font-bold text-gray-900"><?= htmlspecialchars($countAllInvoices, ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600">Chưa thanh toán</p>
-                <p class="text-2xl font-bold text-red-600"><?= $countInvoicesPending; ?></p>
+                <p class="text-2xl font-bold text-red-600"><?= htmlspecialchars($countInvoicesPending, ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600">Đã thanh toán</p>
-                <p class="text-2xl font-bold text-green-600"><?= $countInvoicesPaid; ?></p>
+                <p class="text-2xl font-bold text-green-600"><?= htmlspecialchars($countInvoicesPaid, ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600">Tổng chi tiêu trong năm</p>
-                <p class="text-2xl font-bold text-gray-900"><?= $totalAmount; ?></p>
+                <p class="text-2xl font-bold text-gray-900"><?= htmlspecialchars($totalAmount, ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
     </div>
@@ -253,8 +253,8 @@
                                 <i class="fas fa-file-invoice-dollar <?= in_array($invoice['invoice_status'], ['pending', 'overdue']) ? 'text-red-600' : 'text-green-600'; ?> text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900">Hóa đơn #HD-<?= $invoice['invoice_month'] ?></h3>
-                                <p class="text-sm text-gray-600"><?= $invoice['room_name'] ?> - <?= $invoice['house_name'] ?></p>
+                                <h3 class="text-lg font-bold text-gray-900">Hóa đơn #HD-<?= htmlspecialchars($invoice['invoice_month'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice['room_name'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($invoice['house_name'], ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -289,15 +289,15 @@
                             <div class="space-y-1 text-sm">
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Tên phòng:</span>
-                                    <span class="font-medium"><?= $invoice['room_name'] ?></span>
+                                    <span class="font-medium"><?= htmlspecialchars($invoice['room_name'], ENT_QUOTES, 'UTF-8') ?></span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Địa chỉ:</span>
-                                    <span class="font-medium"><?= $invoice['house_name'] ?></span>
+                                    <span class="font-medium"><?= htmlspecialchars($invoice['house_name'], ENT_QUOTES, 'UTF-8') ?></span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Tháng:</span>
-                                    <span class="font-medium"><?= $invoice['invoice_month'] ?></span>
+                                    <span class="font-medium"><?= htmlspecialchars($invoice['invoice_month'], ENT_QUOTES, 'UTF-8') ?></span>
                                 </div>
                             </div>
                         </div>
@@ -339,11 +339,11 @@
                         <?php if (in_array($invoice['invoice_status'], ['pending', 'overdue'])) { ?>
                             <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors btn-payment"
                                 data-action="pay-bill-vietqr"
-                                data-invoice-id="<?= $invoice['id'] ?>">
+                                data-invoice-id="<?= htmlspecialchars($invoice['id'], ENT_QUOTES, 'UTF-8') ?>">
                                 <i class="fas fa-qrcode mr-2"></i>Thanh toán hóa đơn
                             </button>
                         <?php } ?>
-                        <a href="<?= BASE_URL ?>/customer/payment/download-invoice/<?= $invoice['id'] ?>" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
+                        <a href="<?= BASE_URL ?>/customer/payment/download-invoice/<?= htmlspecialchars($invoice['id'], ENT_QUOTES, 'UTF-8') ?>" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
                             <i class="fas fa-download mr-2"></i>Tải hóa đơn
                         </a>
                         <button type="button" onclick="invoiceDetail(this)" data-invoice='<?= htmlspecialchars(json_encode($invoice), ENT_QUOTES, "UTF-8") ?>' class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer invoice-detail">

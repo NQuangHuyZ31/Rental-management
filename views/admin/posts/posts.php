@@ -29,7 +29,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Tổng bài đăng</dt>
-                            <dd class="text-lg font-medium text-gray-900"><?= $allPost ?></dd>
+                            <dd class="text-lg font-medium text-gray-900"><?= htmlspecialchars($allPost, ENT_QUOTES, 'UTF-8') ?></dd>
                         </dl>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Chờ duyệt</dt>
-                            <dd class="text-lg font-medium text-gray-900"><?= $pendingPost ?></dd>
+                            <dd class="text-lg font-medium text-gray-900"><?= htmlspecialchars($pendingPost, ENT_QUOTES, 'UTF-8') ?></dd>
                         </dl>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Đã duyệt</dt>
-                            <dd class="text-lg font-medium text-gray-900"><?= $approvedPost ?></dd>
+                            <dd class="text-lg font-medium text-gray-900"><?= htmlspecialchars($approvedPost, ENT_QUOTES, 'UTF-8') ?></dd>
                         </dl>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Từ chối</dt>
-                            <dd class="text-lg font-medium text-gray-900"><?= $rejectedPost ?></dd>
+                            <dd class="text-lg font-medium text-gray-900"><?= htmlspecialchars($rejectedPost, ENT_QUOTES, 'UTF-8') ?></dd>
                         </dl>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     <select name="rental_category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Tất cả</option>
                         <?php foreach ($rentalCategories as $category) : ?>
-                            <option value="<?= $category['id'] ?>" <?= $currentFilters['rental_category_id'] == $category['id'] ? 'selected' : '' ?>><?= $category['rental_category_name'] ?></option>
+                            <option value="<?= htmlspecialchars($category['id'], ENT_QUOTES, 'UTF-8') ?>" <?= $currentFilters['rental_category_id'] == $category['id'] ? 'selected' : '' ?>><?= htmlspecialchars($category['rental_category_name'], ENT_QUOTES, 'UTF-8') ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -133,10 +133,10 @@
         </form>
     </div>
 
-            <?php
-            // Highlight support: if highlight_id provided, will try to scroll/highlight that row on load
-            $highlightId = isset($_GET['highlight_id']) && $_GET['highlight_id'] !== '' ? (int)$_GET['highlight_id'] : null;
-            ?>
+    <?php
+    // Highlight support: if highlight_id provided, will try to scroll/highlight that row on load
+    $highlightId = isset($_GET['highlight_id']) && $_GET['highlight_id'] !== '' ? (int)$_GET['highlight_id'] : null;
+    ?>
 
     <!-- Posts Table -->
     <div class="bg-white shadow rounded-lg overflow-hidden">
@@ -148,7 +148,11 @@
                 </button>
             </div>
             <div class="flex space-x-3">
-                <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center approved-all-post">
+                    <i class="fas fa-check-double mr-2"></i>
+                    Duyệt tất cả bài đăng
+                </button>
+                <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center approved-all-post-on-page">
                     <i class="fas fa-check-double mr-2"></i>
                     Duyệt bài đã chọn
                 </button>
@@ -160,7 +164,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <input type="checkbox" name="check-all" class="rounded border-gray-300 check-all-pending">
+                            <input type="checkbox" name="check-all" class="rounded border-gray-300 check-all-pending w-4 h-4 cursor-pointer">
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Bài đăng
@@ -196,7 +200,7 @@
                             <tr data-post-id="<?= $post['id'] ?>" id="post-row-<?= $post['id'] ?>">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php if ($post['approval_status'] === 'pending') : ?>
-                                        <input type="checkbox" class="rounded border-gray-300 checked:bg-blue-500 check-item-pending" value="<?= $post['id'] ?>">
+                                        <input type="checkbox" class="rounded border-gray-300 checked:bg-blue-500 check-item-pending w-4 h-4 cursor-pointer" value="<?= $post['id'] ?>">
                                     <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
@@ -258,7 +262,7 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <?php if ($post['approval_status'] === 'pending') : ?>
-                                            <button class="text-green-600 hover:text-green-900" title="Duyệt">
+                                            <button class="text-green-600 hover:text-green-900 pending-post" title="Duyệt">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                             <button class="text-red-600 hover:text-red-900" title="Từ chối">
@@ -269,6 +273,9 @@
                                                 <i class="fas fa-redo"></i>
                                             </button>
                                         <?php endif; ?>
+                                        <button class="text-red-600 hover:text-red-900" title="Xóa" onclick="deletePost('<?= $post['id'] ?>')">
+                                            <i class="fas fa-trash mr-2"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -285,7 +292,7 @@
     </div>
     <?php include_once VIEW_PATH . 'partials/edit-post.php'; ?>
 </div>
-
+<!--  -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkAll = document.querySelector('.check-all-pending');
@@ -304,7 +311,10 @@
                 setTimeout(() => {
                     const row = document.getElementById(`post-row-${highlightId}`) || document.querySelector(`[data-post-id="${highlightId}"]`);
                     if (row) {
-                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        row.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
                         row.classList.add('ring-2', 'ring-yellow-400');
                         setTimeout(() => row.classList.remove('ring-2', 'ring-yellow-400'), 8000);
                     }

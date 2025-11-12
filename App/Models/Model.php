@@ -35,18 +35,34 @@ class Model extends QueryBuilder {
         }
 
         $value = is_array($value) ? json_encode($value) : $value;
+        $query = $this->table($this->table)->where('deleted', 0);
 
-        return $this->table($this->table)->where('id', $id)->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
+        if (is_array($id)) {
+            $query->whereIn('id', $id);
+        } else {
+            $query->where('id', $id);
+        }
+        return $this->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
     }
 
     // Added by Huy Nguyen on 2025-10-31 to get column
-    public function getColumn($column = [], $table = '', $id = '') {
+    public function getColumn($column = [], $table = '', $id = '', $extWhere = []) {
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
         $query->select($column);
 
         if (!empty($id)) {
             return $query->where(!empty($table) ? $table .'.id' : $this->table . '.id', $id)
 					->where(!empty($table) ? $table . '.deleted' : $this->table . '.deleted', 0)->first();
+        }
+
+        if (!empty($extWhere) || is_array($extWhere)) {
+            foreach ($extWhere as $column => $value) {
+                if (!empty($value['condition'])) {
+                    $query->where($column, $value['condition'], $value['value']);
+                } else {
+                    $query->where($column, $value['value']);
+                }
+            }
         }
 
         return $query->where(!empty($table) ? $table . '.deleted' : $this->table . '.deleted', 0)->get();
@@ -59,6 +75,38 @@ class Model extends QueryBuilder {
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
         $data['updated_at'] = date('Y-m-d H:i:s');
 
-        return $query->where('id', $id)->update($data);
+        if (is_array($id)) {
+            $query->whereIn('id', $id);
+        } else {
+            $query->where('id', $id);
+        }
+        return $query->where('deleted', 0)->update($data);
+    }
+
+    // Added by Huy Nguyen on 2025-11-07 to get all record
+    public function getAll($table = '', $extWhere = [], $limit = 0, $orderByField = '', $orderByType = 'DESC') {
+        $query = !empty($table) ? $this->table($table) : $this->table($this->table);
+
+        if (!empty($extWhere) || is_array($extWhere)) {
+            foreach ($extWhere as $column => $value) {
+                $condition = '=';
+
+                if (isset($value['condition']) && !empty($value['condition'])) {
+                    $condition = $value['condition'];
+                }
+
+                $query->where($column, $condition, $value['value']);
+            }
+        }
+
+        if (!empty($limit) || $limit > 0) {
+            $query->limit($limit);
+        }
+
+        if (!empty($orderByField)) {
+            $query->orderBy($orderByField, $orderByType);
+        }
+
+        return $query->where('deleted', 0)->get();
     }
 }

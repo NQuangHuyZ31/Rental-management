@@ -70,7 +70,7 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                         <a href="<?= BASE_URL ?>/customer/interests" class="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors">
                             <i class="fas fa-bookmark"></i>
                         </a>
-                        <span class="allPostInterest absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"><?= $modelDataHelper->countPostInterestById() ?></span>
+                        <span class="allPostInterest absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"><?= htmlspecialchars($modelDataHelper->countPostInterestById(), ENT_QUOTES, 'UTF-8') ?></span>
                     </div>
 
                     <!-- Tenant/Job Seeker Button -->
@@ -83,7 +83,7 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                                 <div class="text-xs text-nowrap flex flex-col flex-start">
                                     <div class="font-medium text-[9px]">Khách thuê, tìm việc</div>
                                     <div class="text-xs text-nowrap flex gap-2 items-center underline">
-                                        <a href="<?php echo BASE_URL ?>/customer/profile" class="hover:text-green-900">Xin chào, <?php echo \Core\Session::get('user')['username'] ?>!</a> |
+                                        <a href="<?php echo BASE_URL ?>/customer/profile" class="hover:text-green-900">Xin chào, <?php echo htmlspecialchars(\Core\Session::get('user')['username'], ENT_QUOTES, 'UTF-8') ?>!</a> |
                                         <a href="<?php echo BASE_URL ?>/logout" class="hover:text-green-900">Đăng xuất</a>
                                     </div>
                                 </div>

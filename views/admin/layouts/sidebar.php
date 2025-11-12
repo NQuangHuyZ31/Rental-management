@@ -29,21 +29,21 @@ $dataModelHelper = new DataModelHelper();
             </a>
             
             <!-- Quản lý bài đăng -->
-            <div class="space-y-1">
-                <button onclick="toggleSubmenu('posts-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+            <!-- <div class="space-y-1"> -->
+                <!-- <button onclick="toggleSubmenu('posts-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                     <i class="fas fa-newspaper mr-3 flex-shrink-0 h-6 w-6"></i>
                     Quản lý bài đăng
                     <i class="fas fa-chevron-down ml-auto flex-shrink-0 h-4 w-4" id="posts-chevron"></i>
-                </button>
-                <div id="posts-menu" class="hidden space-y-1 ml-8">
+                </button> -->
+                <!-- <div id="posts-menu" class="hidden space-y-1 ml-8"> -->
                     <a href="<?= BASE_URL ?>/admin/posts" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-list mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Tất cả bài đăng
+                        Quản lý bài đăng
                     </a>
-                    <a href="<?= BASE_URL ?>/admin/posts/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                    <!-- <a href="<?= BASE_URL ?>/admin/posts/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-clock mr-3 flex-shrink-0 h-4 w-4"></i>
                         Chờ duyệt
-                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= $dataModelHelper->getRentalPostStatus('pending') ?></span>
+                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= htmlspecialchars($dataModelHelper->getRentalPostStatus('pending'), ENT_QUOTES, 'UTF-8') ?></span>
                     </a>
                     <a href="<?= BASE_URL ?>/admin/posts/approved" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-check mr-3 flex-shrink-0 h-4 w-4"></i>
@@ -52,9 +52,9 @@ $dataModelHelper = new DataModelHelper();
                     <a href="<?= BASE_URL ?>/admin/posts/rejected" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-times mr-3 flex-shrink-0 h-4 w-4"></i>
                         Từ chối
-                    </a>
-                </div>
-            </div>
+                    </a> -->
+                <!-- </div> -->
+            <!-- </div> -->
             
             <!-- Quản lý báo cáo -->
             <a href="<?= BASE_URL ?>/admin/reports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">

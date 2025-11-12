@@ -339,18 +339,18 @@ use Helpers\Format;
 							<!-- Camera -->
 							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center	">
 								<i class="fas fa-camera text-gray-600"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo count(json_decode($rentalHotDeal['images'])) ?></span>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?php echo !empty($rentalHotDeal['images']) ? count(json_decode($rentalHotDeal['images'])) : 0 ?></span>
 							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-4">
 							<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-								<?= $rentalHotDeal['rental_post_title'] ?>
+								<?= htmlspecialchars($rentalHotDeal['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
 							</h3>
 							<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
 								<i class="fas fa-user text-gray-400 mr-2"></i>
-								<span><?= $rentalHotDeal['contact'] ?> - <?= $rentalHotDeal['province'] ?> . <?= $rentalHotDeal['ward'] ?></span>
+								<span><?= htmlspecialchars($rentalHotDeal['contact'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($rentalHotDeal['province'], ENT_QUOTES, 'UTF-8') ?> . <?= htmlspecialchars($rentalHotDeal['ward'], ENT_QUOTES, 'UTF-8') ?></span>
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
@@ -359,7 +359,7 @@ use Helpers\Format;
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?= $rentalHotDeal['price_discount'] > 0 ? Format::forMatPrice($rentalHotDeal['price_discount']) :  Format::forMatPrice($rentalHotDeal['price']) ?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?= $rentalHotDeal['area'] ?> m²</div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?= htmlspecialchars($rentalHotDeal['area'], ENT_QUOTES, 'UTF-8') ?> m²</div>
 								</div>
 							</div>
 						</div>
@@ -411,18 +411,18 @@ use Helpers\Format;
 							<!-- Camera -->
 							<div class="absolute top-2 right-4 bg-white bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center">
 								<i class="fas fa-camera text-gray-600"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?= count(json_decode($rentalStayNow['images'])) ?></span>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-xs rounded-full w-4 h-4 flex items-center justify-center z-10"><?= !empty($rentalStayNow['images']) ? count(json_decode($rentalStayNow['images'])) : 0 ?></span>
 							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-4">
 							<h3 class="font-semibold text-gray-900 mb-2 text-sm leading-tight h-8">
-								<?= $rentalStayNow['rental_post_title'] ?>
+								<?= htmlspecialchars($rentalStayNow['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
 							</h3>
 							<div class="flex items-center text-sm text-gray-600 mb-3 text-nowrap overflow-hidden">
 								<i class="fas fa-user text-gray-400 mr-2"></i>
-								<span><?= $rentalStayNow['contact'] ?> - <?= $rentalStayNow['province'] ?> . <?= $rentalStayNow['ward'] ?></span>
+								<span><?= htmlspecialchars($rentalStayNow['contact'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($rentalStayNow['province'], ENT_QUOTES, 'UTF-8') ?> . <?= htmlspecialchars($rentalStayNow['ward'], ENT_QUOTES, 'UTF-8') ?></span>
 							</div>
 							<div class="flex items-start justify-between flex-col">
 								<div class="flex items-center gap-2">
@@ -431,7 +431,7 @@ use Helpers\Format;
 								</div>
 								<div class="text-right flex w-full items-center justify-between pt-1">
 									<div class="text-[16px] font-bold text-red-600"><?= $rentalStayNow['price_discount'] > 0 ? Format::forMatPrice($rentalStayNow['price_discount']) :  Format::forMatPrice($rentalStayNow['price']) ?>đ/tháng</div>
-									<div class="text-sm text-gray-600 font-medium mr-3"><?= $rentalStayNow['area'] ?> m²</div>
+									<div class="text-sm text-gray-600 font-medium mr-3"><?= htmlspecialchars($rentalStayNow['area'], ENT_QUOTES, 'UTF-8') ?> m²</div>
 								</div>
 							</div>
 						</div>
@@ -473,18 +473,18 @@ use Helpers\Format;
 							<!-- Camera -->
 							<div class="absolute top-1 right-4 bg-white bg-opacity-90 rounded-full w-6 h-6 flex items-center justify-center">
 								<i class="fas fa-camera text-gray-600 text-xs"></i>
-								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center z-10"><?= count(json_decode($rentalNewPost['images'])) ?></span>
+								<span class="absolute -top-1 -right-1 bg-red-500 text-white text-nowrap text-[8px] rounded-full w-3 h-3 flex items-center justify-center z-10"><?= !empty($rentalNewPost['images']) ? count(json_decode($rentalNewPost['images'])) : 0 ?></span>
 							</div>
 						</div>
 
 						<!-- Content Area -->
 						<div class="p-3 flex-1">
 							<h3 class="font-semibold text-gray-900 mb-1 text-sm leading-tight h-10">
-								<?= $rentalNewPost['rental_post_title'] ?>
+								<?= htmlspecialchars($rentalNewPost['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
 							</h3>
 							<div class="flex items-center text-xs text-gray-600 mb-2">
 								<i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
-								<span class="truncate"><?= $rentalNewPost['contact'] ?> - <?= $rentalNewPost['province'] ?> . <?= $rentalNewPost['ward'] ?></span>
+								<span class="truncate"><?= htmlspecialchars($rentalNewPost['contact'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($rentalNewPost['province'], ENT_QUOTES, 'UTF-8') ?> . <?= htmlspecialchars($rentalNewPost['ward'], ENT_QUOTES, 'UTF-8') ?></span>
 							</div>
 							<div class="flex items-center justify-between mb-2">
 								<div class="flex items-start justify-between flex-col">
@@ -496,14 +496,14 @@ use Helpers\Format;
 										<div class="text-[16px] font-bold text-red-600"><?= $rentalNewPost['price_discount'] > 0 ? Format::forMatPrice($rentalNewPost['price_discount']) :  Format::forMatPrice($rentalNewPost['price']) ?>đ/tháng</div>
 									</div>
 								</div>
-								<div class="text-xs text-gray-600 font-medium"><?= $rentalNewPost['area'] ?> m²</div>
+								<div class="text-xs text-gray-600 font-medium"><?= htmlspecialchars($rentalNewPost['area'], ENT_QUOTES, 'UTF-8') ?> m²</div>
 							</div>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center text-xs text-gray-500">
 									<div class="w-4 h-4 bg-gray-300 rounded-full mr-1 flex items-center justify-center">
 										<i class="fas fa-user text-gray-600 text-[8px]"></i>
 									</div>
-									<span><?= $rentalNewPost['contact'] ?></span>
+									<span><?= htmlspecialchars($rentalNewPost['contact'], ENT_QUOTES, 'UTF-8') ?></span>
 									<span class="ml-1"></span>
 								</div>
 							</div>

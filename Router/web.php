@@ -126,6 +126,7 @@ $router->get('/admin/posts/get', [PostManagementController::class, 'getPost'], [
 $router->post('/admin/posts/update', [PostManagementController::class, 'update'], [AuthAdminMiddleware::class]);
 $router->post('/admin/posts/hide', [PostManagementController::class, 'updateStatus'], [AuthAdminMiddleware::class]);
 $router->post('/admin/posts/delete', [PostManagementController::class, 'delete'], [AuthAdminMiddleware::class]);
+$router->post('/admin/posts/approve',[PostManagementController::class, 'approvedPost'], [AuthAdminMiddleware::class]);
 
 // USER MANAGEMENT
 $router->get('/admin/users', [UserManagementController::class, 'index'], [AuthAdminMiddleware::class]);

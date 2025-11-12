@@ -77,7 +77,7 @@
                         
                         <!-- Area -->
                         <div class="col-span-1">
-                            <p class="text-sm text-gray-600"><?= $room['area'] ?> m<sup>2</sup></p>
+                            <p class="text-sm text-gray-600"><?= htmlspecialchars($room['area'], ENT_QUOTES, 'UTF-8') ?> m<sup>2</sup></p>
                         </div>
                         
                         <!-- Date start  -->
@@ -90,19 +90,19 @@
                         <!-- Status -->
                         <div class="col-span-2">
                             <span class="<?= $status['class'] ?> text-xs px-2 py-1 rounded-full">
-                                <i class="fas <?= $status['icon'] ?> mr-1"></i><?= $status['text'] ?>
+                                <i class="fas <?= $status['icon'] ?> mr-1"></i><?= htmlspecialchars($status['text'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
                         </div>
                         
                         <!-- Actions -->
                         <div class="col-span-1">
                             <div class="flex items-center space-x-2">
-                                <a href="<?= BASE_URL ?>/customer/room-detail/<?= $room['id'] ?>" 
+                                <a href="<?= BASE_URL ?>/customer/room-detail/<?= htmlspecialchars($room['id'], ENT_QUOTES, 'UTF-8') ?>" 
                                    class="text-green-600 hover:text-green-700 text-sm font-medium">
                                     <i class="fas fa-eye mr-1"></i>Xem
                                 </a>
                                 <button class="text-blue-600 hover:text-blue-700 text-sm font-medium contact-landlord" 
-                                        data-phone="<?= $room['phone'] ?>"
+                                        data-phone="<?= htmlspecialchars($room['phone'], ENT_QUOTES, 'UTF-8') ?>"
                                         title="Liên hệ chủ nhà">
                                     <i class="fas fa-phone"></i>
                                 </button>

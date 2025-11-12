@@ -16,6 +16,7 @@ use App\Models\RentalAmenity;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Banned;
+use App\Models\PaymentHistory;
 use App\Models\ReportViolation;
 use Core\QueryBuilder;
 
@@ -28,6 +29,8 @@ class AdminController extends BaseCustomerController {
 	protected $roleModel;
 	protected $bannedModel;
 	protected $queryBuilder;
+	protected $paymentHostoryModel;
+	protected $reportViolationModel;
 
 	public function __construct() {
 		parent::__construct();
@@ -37,5 +40,7 @@ class AdminController extends BaseCustomerController {
 		$this->roleModel = new Role();
 		$this->bannedModel = new Banned();
 		$this->queryBuilder = new QueryBuilder();
+		$this->paymentHostoryModel = new PaymentHistory();
+		$this->reportViolationModel = new ReportViolation();
 	}
 }

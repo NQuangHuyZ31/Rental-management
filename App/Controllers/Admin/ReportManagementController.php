@@ -32,19 +32,19 @@ class ReportManagementController extends AdminController
         }
 
         // Get total and paginated reports
-        $totalReports = $this->reportModel->getReports($filters, $limit, $offset, true);
-        $reports = $this->reportModel->getReports($filters, $limit, $offset, false);
+        $totalReports = $this->reportViolationModel->getReports($filters, $limit, $offset, true);
+        $reports = $this->reportViolationModel->getReports($filters, $limit, $offset, false);
 
         // Global total (do NOT apply current filters) for stats card
-        $globalTotalReports = $this->reportModel->getReports([], $limit, 0, true);
+        $globalTotalReports = $this->reportViolationModel->getReports([], $limit, 0, true);
 
         // Pagination data
         $pagination = $this->getPagination($page, $totalReports, $limit, $offset);
 
         // Stats counts: use global counts (do NOT apply current filters) so stats remain stable
-        $countPending = $this->reportModel->getReports(['status' => 'pending'], $limit, 0, true);
-        $countProcessing = $this->reportModel->getReports(['status' => 'reviewed'], $limit, 0, true);
-        $countResolved = $this->reportModel->getReports(['status' => 'resolved'], $limit, 0, true);
+        $countPending = $this->reportViolationModel->getReports(['status' => 'pending'], $limit, 0, true);
+        $countProcessing = $this->reportViolationModel->getReports(['status' => 'reviewed'], $limit, 0, true);
+        $countResolved = $this->reportViolationModel->getReports(['status' => 'resolved'], $limit, 0, true);
 
         // Label maps (defined in controller)
         $statusList = $this->getStatusList();
@@ -73,7 +73,7 @@ class ReportManagementController extends AdminController
     public function edit($id)
     {
         try {
-            $report = $this->reportModel->getReportById($id);
+            $report = $this->reportViolationModel->getReportById($id);
 
             if (!$report) {
                 return Response::json([
@@ -152,7 +152,7 @@ class ReportManagementController extends AdminController
             $statusLabels = $this->getStatusList();
             $statusLabel = $statusLabels[$status] ?? $status;
 
-            $report = $this->reportModel->getReportById($id);
+            $report = $this->reportViolationModel->getReportById($id);
             $prevAction = '';
             if ($report) {
                 if (is_array($report)) {
@@ -191,14 +191,14 @@ class ReportManagementController extends AdminController
             }
             $data['updated_at'] = $now;
 
-            $updated = $this->reportModel->updateStatus($id, $status, $data);
+            $updated = $this->reportViolationModel->updateStatus($id, $status, $data);
 
             if ($updated === false) {
                 return Response::json(['success' => false, 'message' => 'Cập nhật không thành công'], 500);
             }
 
             // Return updated report for client to display (attach labels)
-            $updatedReport = $this->reportModel->getReportById($id);
+            $updatedReport = $this->reportViolationModel->getReportById($id);
             $typeList = $this->getTypeList();
             $statusList = $this->getStatusList();
             if (is_array($updatedReport)) {

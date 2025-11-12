@@ -27,13 +27,13 @@ use Helpers\Format;
         <div class="flex-1 p-6">
             <!-- Title -->
             <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-600 transition-colors">
-                <?= $post['rental_post_title'] ?>
+                <?= htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
             </h3>
 
             <!-- Location -->
             <div class="flex items-center gap-2 text-sm text-gray-600 mb-3">
                 <i class="fas fa-map-marker-alt text-gray-400"></i>
-                <span class="line-clamp-1"><?= $post['address'] ?> - <?= $post['ward'] ?> - <?= $post['province'] ?></span>
+                <span class="line-clamp-1"><?= htmlspecialchars($post['address'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($post['ward'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($post['province'], ENT_QUOTES, 'UTF-8') ?></span>
             </div>
 
             <!-- Price and Area -->
@@ -49,7 +49,7 @@ use Helpers\Format;
                         <?= $post['price_discount'] > 0 ? Format::forMatPrice($post['price_discount']) : Format::forMatPrice($post['price']) ?> đ/tháng
                     </div>
                 </div>
-                <div class="text-sm text-gray-500 font-medium"><?= $post['area'] ?> m²</div>
+                <div class="text-sm text-gray-500 font-medium"><?= htmlspecialchars($post['area'], ENT_QUOTES, 'UTF-8') ?> m²</div>
             </div>
 
             <!-- Utilities -->
@@ -70,7 +70,7 @@ use Helpers\Format;
                     <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                         <i class="fas fa-user text-gray-500 text-xs"></i>
                     </div>
-                    <span><?= $post['contact'] ?></span>
+                    <span><?= htmlspecialchars($post['contact'], ENT_QUOTES, 'UTF-8') ?></span>
                     <span class="text-gray-400">•</span>
                     <span><?= date('d/m/Y', strtotime($post['created_at'])) ?></span>
                 </div>

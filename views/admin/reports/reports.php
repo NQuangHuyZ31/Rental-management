@@ -31,7 +31,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 truncate">Tổng báo cáo</dt>
-                        <dd class="text-lg font-medium text-gray-900"><?php echo $globalTotalReports ?? ($totalReports ?? 0); ?></dd>
+                        <dd class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($globalTotalReports ?? ($totalReports ?? 0), ENT_QUOTES, 'UTF-8'); ?></dd>
                     </dl>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 truncate">Chờ xử lý</dt>
-                        <dd class="text-lg font-medium text-gray-900"><?php echo $countPending ?? 0; ?></dd>
+                        <dd class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($countPending ?? 0, ENT_QUOTES, 'UTF-8'); ?></dd>
                     </dl>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 truncate">Đang xử lý</dt>
-                        <dd class="text-lg font-medium text-gray-900"><?php echo $countProcessing ?? 0; ?></dd>
+                        <dd class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($countProcessing ?? 0, ENT_QUOTES, 'UTF-8'); ?></dd>
                     </dl>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 truncate">Đã xử lý</dt>
-                        <dd class="text-lg font-medium text-gray-900"><?php echo $countResolved ?? 0; ?></dd>
+                        <dd class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($countResolved ?? 0, ENT_QUOTES, 'UTF-8'); ?></dd>
                     </dl>
                 </div>
             </div>
