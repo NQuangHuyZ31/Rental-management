@@ -108,7 +108,7 @@ class ProfileController extends CustomerController {
             exit;
         }
 
-        $user = $this->userModel->getUserById($this->userID);
+        $user = $this->userModel->getUserById($this->userID, true);
         if (!$user) {
             Response::json(['status' => 'error', 'message' => 'Không tìm thấy người dùng', 'token' => CSRF::getTokenRefresh()], 400);
             exit;

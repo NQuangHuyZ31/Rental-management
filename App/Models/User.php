@@ -39,9 +39,10 @@ class User extends Model {
         }
     }
 
-    public function getUserById($id) {
+    public function getUserById($id, $password = false) {
         $this->field[] = 'citizen_id';
         $this->field[] = 'email'; // Added by Huy Nguyen on 2025-10-14 to include email
+        if ($password) $this->field[] = 'password';
         return $this->table($this->table)->select($this->field)->where('id', $id)->where('deleted', 0)->first();
     }
 
