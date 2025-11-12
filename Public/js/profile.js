@@ -131,12 +131,14 @@ $(document).ready(function () {
                         if (response.token) App.setToken(response.token);
                         // Optional: reload to reflect new avatar
                         setTimeout(() => window.location.reload(), 2000);
+                        $profilePictureInput.val(''); // Reset input
                     },
                     error: function (xhr) {
                         if (window.JsLoadingOverlay?.hide) JsLoadingOverlay.hide();
                         const json = xhr.responseJSON || {};
                         showErrorMessage(json.message || 'Có lỗi xảy ra');
                         if (json.token) App.setToken(json.token);
+                        $profilePictureInput.val(''); // Reset input để click lại
                     },
                 });
             });
