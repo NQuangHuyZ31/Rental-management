@@ -281,7 +281,7 @@ use Helpers\Format;
                 <!-- Pagination -->
                 <?php if (!empty($pagination) && is_array($pagination) && ($pagination['total_pages'] ?? 0) > 1): ?>
                     <div class="mt-8 px-6">
-                        <?= \Helpers\Pagination::render($pagination, '', $queryParams ?? []) ?>
+                        <?= \Helpers\Pagination::render($pagination, BASE_URL . '/landlord', $queryParams ?? []) ?>
                     </div>
                 <?php endif; ?>
                 <?php elseif ($selectedHouse && empty($rooms)): ?>
@@ -987,7 +987,8 @@ use Helpers\Format;
                                    name="rental_amount"
                                    id="rentalAmount"
                                    value="${Math.floor(Number(room.room_price) || 0)}" 
-                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
+                                   readonly
+                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white outline-none cursor-not-allowed">
                             <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tiền phòng (₫)</label>
                         </div>
                     </div>

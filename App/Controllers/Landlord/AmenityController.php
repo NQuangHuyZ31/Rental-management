@@ -23,25 +23,35 @@ class AmenityController extends LandlordController {
 
         $amenities = [];
         $rooms = [];
+        $pagination = null;
+        $queryParams = [];
 
         // Lấy danh sách phòng của nhà được chọn
         if ($selectedHouse) {
             $rooms = $this->roomModel->getRoomsByHouseId($selectedHouse['id']);
 
-            // Lấy danh sách tài sản của nhà được chọn
-            $amenities = $this->amenityModel->getAmenitiesByHouseId($selectedHouse['id']);
+            // Pagination params
+            $page = (int) ($this->request->get('page') ?? 1);
+            if ($page < 1) $page = 1;
+            $limit = $this->limit ?? 10;
+            $offset = ($page - 1) * $limit;
 
-            // Lấy thông tin phòng và kiểm tra quyền xóa cho mỗi tài sản
+            // Get total count
+            $totalAmenities = $this->amenityModel->getAmenitiesCountByHouseId($selectedHouse['id']);
+
+            // Lấy danh sách tài sản của nhà được chọn với pagination
+            $amenities = $this->amenityModel->getAmenitiesByHouseIdPaginated($selectedHouse['id'], $limit, $offset);
+
+            // Lấy thông tin phòng đang sử dụng cho mỗi tài sản
             foreach ($amenities as &$amenity) {
                 // Lấy danh sách phòng đang áp dụng tài sản
                 $usedRooms = $this->amenityModel->getUsedRoomsByAmenityId($amenity['id'], $selectedHouse['id']);
                 $amenity['used_rooms'] = $usedRooms;
-
-                // Kiểm tra có thể xóa tài sản không
-                $canDeleteResult = $this->amenityModel->canDeleteAmenity($amenity['id'], $this->user['id']);
-                $amenity['can_delete'] = $canDeleteResult['can_delete'];
-                $amenity['delete_reason'] = $canDeleteResult['reason'];
             }
+
+            // Build pagination
+            $pagination = $this->getPagination($page, $totalAmenities, $limit, $offset);
+            $queryParams = ['house_id' => $selectedHouse['id']];
         }
 
         // Lấy các giá trị enum cho đơn vị
@@ -54,6 +64,8 @@ class AmenityController extends LandlordController {
             'amenities' => $amenities,
             'rooms' => $rooms,
             'unitOptions' => $unitOptions,
+            'pagination' => $pagination,
+            'queryParams' => $queryParams,
         ]);
     }
 
@@ -261,10 +273,10 @@ class AmenityController extends LandlordController {
             // Xóa tài sản
             $result = $this->amenityModel->deleteAmenity($amenityId, $this->user['id']);
 
-            if ($result['success']) {
-                $this->request->redirectWithSuccess('/landlord/amenity', $result['message']);
+            if ($result) {
+                $this->request->redirectWithSuccess('/landlord/amenity', 'Xóa tài sản thành công!');
             } else {
-                $this->request->redirectWithError('/landlord/amenity', $result['message']);
+                $this->request->redirectWithError('/landlord/amenity', 'Tài sản có phòng đang thuê sử dụng, không thể xóa!');
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord/amenity', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');

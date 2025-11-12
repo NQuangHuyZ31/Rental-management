@@ -186,141 +186,108 @@ class Service extends Model {
     /**
      * Kiểm tra dịch vụ có thể xóa được không
      */
-    public function canDeleteService($serviceId, $ownerId) {
-        try {
-            // Kiểm tra dịch vụ có tồn tại và thuộc về owner không
-            $service = $this->queryBuilder
-                ->table($this->table)
-                ->join('houses', 'services.house_id', '=', 'houses.id')
-                ->where('services.id', $serviceId)
-                ->where('houses.owner_id', $ownerId)
-                ->first();
-
-            if (!$service) {
-                return ['can_delete' => false, 'reason' => 'Dịch vụ không tồn tại hoặc bạn không có quyền truy cập'];
-            }
-
-            // Kiểm tra có phòng nào đang sử dụng dịch vụ này không
-            $roomCount = $this->queryBuilder
-                ->table('room_services')
-                ->where('service_id', $serviceId)
-                ->count();
-
-            if ($roomCount > 0) {
-                // Kiểm tra xem các phòng đang sử dụng dịch vụ có khách thuê không
-                $result = $this->queryBuilder
-                    ->table('room_services rs')
-                    ->select('COUNT(DISTINCT rs.room_id) as count')
-                    ->join('rooms r', 'rs.room_id', '=', 'r.id')
-                    ->where('rs.service_id', $serviceId)
-                    ->where('r.room_status', 'occupied')
-                    ->first();
-                $occupiedRoomCount = $result ? $result['count'] : 0;
-
-                if ($occupiedRoomCount > 0) {
-                    return ['can_delete' => false, 'reason' => 'Dịch vụ đang được sử dụng bởi ' . $occupiedRoomCount . ' phòng có khách thuê'];
-                }
-
-                // Có phòng sử dụng nhưng không có khách thuê - có thể xóa
-                return ['can_delete' => true, 'reason' => 'Dịch vụ đang được sử dụng bởi ' . $roomCount . ' phòng trống. Xóa sẽ gỡ bỏ dịch vụ khỏi tất cả phòng.', 'has_rooms' => true];
-            }
-
-            // Kiểm tra có dữ liệu sử dụng không
-            $usageCount = $this->queryBuilder
-                ->table('service_usages')
-                ->where('service_id', $serviceId)
-                ->count();
-
-            // Kiểm tra có hóa đơn nào sử dụng dịch vụ này không
-            // Chỉ kiểm tra nếu dịch vụ có dữ liệu sử dụng
-            $invoiceCount = 0;
-            if ($usageCount > 0) {
-                // Kiểm tra hóa đơn với JOIN
-                $result = $this->queryBuilder
-                    ->table('invoices i')
-                    ->select('COUNT(DISTINCT i.id) as count')
-                    ->join('service_usages su', 'i.room_id', '=', 'su.room_id')
-                    ->where('su.service_id', $serviceId)
-                    ->where('i.deleted', 0)
-                    ->first();
-                $invoiceCount = $result ? $result['count'] : 0;
-            }
-
-            if ($invoiceCount > 0) {
-                return ['can_delete' => false, 'reason' => 'Không thể xóa dịch vụ đã có hóa đơn'];
-            }
-
-            if ($usageCount > 0) {
-                return ['can_delete' => true, 'reason' => 'Dịch vụ có dữ liệu sử dụng. Xóa sẽ mất tất cả dữ liệu sử dụng.', 'has_usage' => true];
-            }
-
-            return ['can_delete' => true, 'reason' => 'Có thể xóa dịch vụ', 'has_usage' => false];
-
-        } catch (\Exception $e) {
-            // Log lỗi để debug
-            error_log("Service canDeleteService error: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
-            return ['can_delete' => false, 'reason' => 'Có lỗi xảy ra khi kiểm tra: ' . $e->getMessage()];
-        }
-    }
-
     /**
      * Xóa dịch vụ và dữ liệu liên quan
      */
     public function deleteService($serviceId, $ownerId) {
-        try {
-            // Kiểm tra có thể xóa không
-            $checkResult = $this->canDeleteService($serviceId, $ownerId);
-            if (!$checkResult['can_delete']) {
-                return ['success' => false, 'message' => $checkResult['reason']];
-            }
+        // Kiểm tra dịch vụ có tồn tại và thuộc về owner không
+        $service = $this->queryBuilder
+            ->table($this->table)
+            ->join('houses', 'services.house_id', '=', 'houses.id')
+            ->where('services.id', $serviceId)
+            ->where('houses.owner_id', $ownerId)
+            ->first();
 
-            // Bắt đầu transaction
-            $this->beginTransaction();
-
-            // Xóa dữ liệu sử dụng nếu có
-            if (isset($checkResult['has_usage']) && $checkResult['has_usage']) {
-                $this->queryBuilder
-                    ->table('service_usages')
-                    ->where('service_id', $serviceId)
-                    ->delete();
-            }
-
-            // Xóa liên kết phòng-dịch vụ nếu có phòng trống sử dụng
-            if (isset($checkResult['has_rooms']) && $checkResult['has_rooms']) {
-                $this->queryBuilder
-                    ->table('room_services')
-                    ->where('service_id', $serviceId)
-                    ->delete();
-            }
-
-            // Lấy danh sách house_id của owner trước
-            $houseIds = $this->queryBuilder
-                ->table('houses')
-                ->select('id')
-                ->where('owner_id', $ownerId)
-                ->get();
-
-            $houseIdArray = array_column($houseIds, 'id');
-
-            // Xóa dịch vụ
-            $result = $this->queryBuilder
-                ->table($this->table)
-                ->where('id', $serviceId)
-                ->whereIn('house_id', $houseIdArray)
-                ->delete();
-
-            if ($result) {
-                $this->commit();
-                return ['success' => true, 'message' => 'Xóa dịch vụ thành công'];
-            } else {
-                $this->rollback();
-                return ['success' => false, 'message' => 'Không thể xóa dịch vụ'];
-            }
-
-        } catch (\PDOException $e) {
-            $this->rollback();
-            return ['success' => false, 'message' => 'Có lỗi xảy ra khi xóa dịch vụ: ' . $e->getMessage()];
+        if (!$service) {
+            return false;
         }
+
+        // Kiểm tra có phòng nào đang sử dụng dịch vụ này không
+        $roomCount = $this->queryBuilder
+            ->table('room_services')
+            ->where('service_id', $serviceId)
+            ->count();
+
+        if ($roomCount > 0) {
+            // Kiểm tra xem các phòng đang sử dụng dịch vụ có khách thuê không
+            $result = $this->queryBuilder
+                ->table('room_services rs')
+                ->select('COUNT(DISTINCT rs.room_id) as count')
+                ->join('rooms r', 'rs.room_id', '=', 'r.id')
+                ->where('rs.service_id', $serviceId)
+                ->where('r.room_status', 'occupied')
+                ->first();
+            $occupiedRoomCount = $result ? $result['count'] : 0;
+
+            if ($occupiedRoomCount > 0) {
+                return false;
+            }
+        }
+
+        // Kiểm tra có dữ liệu sử dụng không
+        $usageCount = $this->queryBuilder
+            ->table('service_usages')
+            ->where('service_id', $serviceId)
+            ->count();
+
+        // Kiểm tra có hóa đơn nào sử dụng dịch vụ này không
+        $invoiceCount = 0;
+        if ($usageCount > 0) {
+            $result = $this->queryBuilder
+                ->table('invoices i')
+                ->select('COUNT(DISTINCT i.id) as count')
+                ->join('service_usages su', 'i.room_id', '=', 'su.room_id')
+                ->where('su.service_id', $serviceId)
+                ->where('i.deleted', 0)
+                ->first();
+            $invoiceCount = $result ? $result['count'] : 0;
+        }
+
+        if ($invoiceCount > 0) {
+            return false;
+        }
+
+        // Bắt đầu transaction
+        $this->beginTransaction();
+
+        // Xóa dữ liệu sử dụng nếu có
+        if ($usageCount > 0) {
+            $this->queryBuilder
+                ->table('service_usages')
+                ->where('service_id', $serviceId)
+                ->delete();
+        }
+
+        // Xóa liên kết phòng-dịch vụ nếu có phòng trống sử dụng
+        if ($roomCount > 0) {
+            $this->queryBuilder
+                ->table('room_services')
+                ->where('service_id', $serviceId)
+                ->delete();
+        }
+
+        // Lấy danh sách house_id của owner trước
+        $houseIds = $this->queryBuilder
+            ->table('houses')
+            ->select('id')
+            ->where('owner_id', $ownerId)
+            ->get();
+
+        $houseIdArray = array_column($houseIds, 'id');
+
+        // Xóa dịch vụ
+        $result = $this->queryBuilder
+            ->table($this->table)
+            ->where('id', $serviceId)
+            ->whereIn('house_id', $houseIdArray)
+            ->delete();
+
+        if ($result) {
+            $this->commit();
+        } else {
+            $this->rollback();
+        }
+
+        return $result;
     }
 }

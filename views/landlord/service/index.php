@@ -67,7 +67,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                             </button>
-                                            <button onclick="deleteService(<?= $service['id'] ?>, '<?= htmlspecialchars($service['service_name']) ?>', <?= $service['can_delete'] ? 'true' : 'false' ?>, '<?= htmlspecialchars($service['delete_reason']) ?>')" class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors" title="Xóa dịch vụ">
+                                            <button onclick="deleteService(<?= $service['id'] ?>, '<?= htmlspecialchars($service['service_name']) ?>')" class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors" title="Xóa dịch vụ">
                                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -553,23 +553,11 @@
             document.getElementById('serviceForm').action = `${App.appURL}landlord/service/update`;
         }
 
-        function deleteService(serviceId, serviceName, canDelete, deleteReason) {
-            if (!canDelete) {
-                // Không thể xóa - hiển thị thông báo lý do
-                Swal.fire({
-                    title: 'Không thể xóa dịch vụ',
-                    text: deleteReason,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Đóng'
-                });
-                return;
-            }
-
-            // Có thể xóa - hiển thị xác nhận
+        function deleteService(serviceId, serviceName) {
+            // Luôn hiển thị modal xác nhận trước
             Swal.fire({
                 title: 'Xác nhận xóa dịch vụ',
-                html: `Bạn có chắc chắn muốn xóa dịch vụ "<strong>${serviceName}</strong>"?<br>Dịch vụ sẽ được gỡ bỏ khỏi tất cả phòng trống.`,
+                html: `Bạn có chắc chắn muốn xóa dịch vụ "<strong>${serviceName}</strong>"?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -579,7 +567,7 @@
                 focusCancel: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Tạo form để gửi request xóa
+                    // Tạo form để gửi request xóa (server sẽ xử lý logic kiểm tra)
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = `${App.appURL}landlord/service/delete`;

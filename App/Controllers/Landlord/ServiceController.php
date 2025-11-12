@@ -42,11 +42,6 @@ class ServiceController extends LandlordController {
 
                 // Tạo unit_vi dựa trên unit
                 $service['unit_vi'] = $this->getUnitVietnamese($service['unit']);
-
-                // Kiểm tra có thể xóa dịch vụ không
-                $canDelete = $this->serviceModel->canDeleteService($service['id'], $userId);
-                $service['can_delete'] = $canDelete['can_delete'];
-                $service['delete_reason'] = $canDelete['reason'];
             }
         }
 
@@ -388,13 +383,13 @@ class ServiceController extends LandlordController {
     public function delete() {
         // Kiểm tra request method
         if (!$this->request->isPost()) {
-            $this->request->redirectWithError('/landlord/service', 'Phương thức không hợp lệ');
+            $this->request->redirectWithError('/landlord/service', 'Phương thức không hợp lệ!');
             return;
         }
 
         // Kiểm tra CSRF token
         if (!CSRF::validatePostRequest()) {
-            $this->request->redirectWithError('/landlord/service', 'CSRF token không hợp lệ hoặc đã hết hạn');
+            $this->request->redirectWithError('/landlord/service', 'Có lỗi xảy ra. Vui lòng thử lại sau!');
             return;
         }
 
@@ -407,7 +402,7 @@ class ServiceController extends LandlordController {
 
         // Validate dữ liệu
         if (empty($serviceId)) {
-            $this->request->redirectWithError('/landlord/service', 'Thiếu thông tin dịch vụ cần xóa');
+            $this->request->redirectWithError('/landlord/service', 'Thiếu thông tin dịch vụ cần xóa!');
             return;
         }
 
@@ -415,13 +410,13 @@ class ServiceController extends LandlordController {
             // Xóa dịch vụ
             $result = $this->serviceModel->deleteService($serviceId, $ownerId);
 
-            if ($result['success']) {
-                $this->request->redirectWithSuccess('/landlord/service', $result['message']);
+            if ($result) {
+                $this->request->redirectWithSuccess('/landlord/service', 'Xóa dịch vụ thành công!');
             } else {
-                $this->request->redirectWithError('/landlord/service', $result['message']);
+                $this->request->redirectWithError('/landlord/service', 'Dịch vụ có phòng đang thuê sử dụng, không thể xóa!');
             }
         } catch (\Exception $e) {
-            $this->request->redirectWithError('/landlord/service', 'Có lỗi xảy ra: ' . $e->getMessage());
+            $this->request->redirectWithError('/landlord/service', 'Có lỗi xảy ra: ' . $e->getMessage() . '!');
         }
     }
 }
