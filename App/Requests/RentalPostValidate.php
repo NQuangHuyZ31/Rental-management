@@ -13,6 +13,7 @@ class RentalPostValidate
 	public static function validate($data)
 	{
 		$error = '';
+		 $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
 		if (empty($data['title']) || empty($data['category'])|| empty($data['contact_name']) 
 		|| empty($data['contact_phone']) || empty($data['price']) || empty($data['area']) || empty($data['electricity_price'])
@@ -39,12 +40,15 @@ class RentalPostValidate
 		// validate image 
 		else if (!empty($data['images'])) { 
 			foreach ($data['images'] as $image) {
+				$ext = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
 				if ($image['error'] !== UPLOAD_ERR_OK) {
 					$error = 'Ảnh không được để trống';
 				} else if ($image['size'] > 10 * 1024 * 1024) {
 					$error = 'Ảnh không được vượt quá 10MB';
 				} else if ($image['type'] !== 'image/jpeg' && $image['type'] !== 'image/png' && $image['type'] !== 'image/jpg' && $image['type'] !== 'image/webp') {
 					$error = 'Ảnh không đúng định dạng';
+				} else if (!in_array($ext, $allowedExtensions)) {
+					$error = 'Định dạng ảnh không được phép';
 				}
 			}
 		}
