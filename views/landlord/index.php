@@ -44,6 +44,9 @@ use Helpers\Format;
                                     <p class="text-blue-500 font-bold text-lg"><?= $totalTenants ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/tenant" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -59,6 +62,9 @@ use Helpers\Format;
                                     <p class="text-green-500 font-bold text-lg"><?= $totalRooms ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -74,6 +80,9 @@ use Helpers\Format;
                                     <p class="text-green-500 font-bold text-lg"><?= $totalAmenities ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/amenity" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -89,6 +98,9 @@ use Helpers\Format;
                                     <p class="text-red-500 font-bold text-lg"><?= $totalServices ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/service" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -114,7 +126,7 @@ use Helpers\Format;
                         </div>
 
                         <div class="flex items-center space-x-3">
-                            <button onclick="openRoomModal()" class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors">
+                            <button onclick="openRoomModal()" class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors" title="Thêm phòng mới">
                                 <i class="fas fa-plus text-white"></i>
                             </button>
                         </div>
@@ -240,7 +252,10 @@ use Helpers\Format;
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border border-gray-200">
                                         <div class="flex items-center justify-center space-x-4">
                                             <!-- Edit Icon -->
-                                            <button onclick="editRoom(<?= $room['id'] ?>)" class="hover:scale-110 transition-transform" title="Chỉnh sửa phòng">
+                                            <button onclick="editRoom(<?= $room['id'] ?>, event)" 
+                                                    data-room='<?= json_encode($room, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
+                                                    class="hover:scale-110 transition-transform" 
+                                                    title="Chỉnh sửa phòng">
                                                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
@@ -563,10 +578,33 @@ use Helpers\Format;
             document.getElementById('room_id').value = '';
         }
 
-        function editRoom(roomId) {
-            // Lấy thông tin phòng từ danh sách rooms
-            const rooms = <?= json_encode($rooms) ?>;
-            const room = rooms.find(r => r.id == roomId);
+        function editRoom(roomId, event) {
+            // Lấy thông tin phòng từ data attribute của button
+            let room = null;
+            
+            // Nếu được gọi từ event, lấy từ button element
+            if (event && event.target) {
+                const button = event.target.closest('button[data-room]');
+                if (button && button.dataset.room) {
+                    try {
+                        room = JSON.parse(button.dataset.room);
+                    } catch (e) {
+                        console.error('Error parsing room data:', e);
+                    }
+                }
+            }
+            
+            // Fallback: tìm button theo roomId trong DOM
+            if (!room) {
+                const button = document.querySelector(`button[onclick*="editRoom(${roomId})"]`);
+                if (button && button.dataset.room) {
+                    try {
+                        room = JSON.parse(button.dataset.room);
+                    } catch (e) {
+                        console.error('Error parsing room data:', e);
+                    }
+                }
+            }
 
             if (!room) {
                 Swal.fire({

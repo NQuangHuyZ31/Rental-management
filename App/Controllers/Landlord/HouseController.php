@@ -87,14 +87,15 @@ class HouseController extends LandlordController {
         // Tính toán dữ liệu cho summary cards
         $totalTenants = 0;
         $totalDeposit = 0;
-        $totalRooms = count($rooms);
+        $totalRooms = 0;
         $maintenanceIssues = 0;
         $occupiedRooms = 0;
         $availableRooms = 0;
 
-        // Lấy số lượng khách thuê cho nhà trọ được chọn
+        // Lấy số lượng khách thuê và tổng số phòng cho nhà trọ được chọn
         if ($selectedHouse) {
             $totalTenants = $this->tenantModel->countTenantsByHouseId($selectedHouse['id'], $this->user['id']);
+            $totalRooms = $this->roomModel->getRoomsCountByHouseId($selectedHouse['id']);
         }
 
         // Tính số phòng theo trạng thái từ roomStats

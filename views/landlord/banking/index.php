@@ -111,7 +111,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700 text-center">
                                                 <?= !empty($ph['created_at']) ? date('d/m/Y H:i:s', strtotime($ph['created_at'])) : '' ?>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700">
+                                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700 text-center">
                                                 <div class="text-gray-900"><?= htmlspecialchars($ph['invoice_name'] ?? '') ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap border border-gray-300 text-sm text-gray-700 text-center">
