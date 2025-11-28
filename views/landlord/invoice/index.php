@@ -354,8 +354,16 @@ use Helpers\Format;
                     <input type="hidden" id="invoiceId" name="invoice_id" value="${invoice.id}">
                     <input type="hidden" id="csrfToken" name="csrf_token" value="${csrfToken}">
                     
-                    <!-- Thông tin cơ bản -->
-                    <div class="space-y-4">
+                    <!-- Thông tin hóa đơn -->
+                    <div>
+                        <div class="flex mb-4 px-4">
+                            <div class="w-1 bg-green-600 mr-3"></div>
+                            <div>
+                                <h5 class="text-base font-medium text-gray-800">Thông tin hóa đơn:</h5>
+                                <p class="text-gray-600 italic mt-1 text-sm">Thông tin cơ bản của hóa đơn</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4 px-4">
                     <!-- Tên hóa đơn -->
                     <div class="relative">
                         <input type="text" 
@@ -363,7 +371,7 @@ use Helpers\Format;
                                id="invoiceName"
                                value="${invoice.invoice_name || ''}" 
                                class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
-                        <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tên hóa đơn</label>
+                        <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tên hóa đơn <span class="text-red-500">*</span></label>
                                 </div>
                     
                     <!-- Tháng lập phiếu -->
@@ -375,7 +383,7 @@ use Helpers\Format;
                                readonly 
                                class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none cursor-pointer bg-white"
                                placeholder=" ">
-                        <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tháng lập phiếu</label>
+                        <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tháng lập phiếu <span class="text-red-500">*</span></label>
                         <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5 cursor-pointer" id="modalCalendarIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
@@ -425,7 +433,7 @@ use Helpers\Format;
                                    id="invoiceDay"
                                    value="${invoice.invoice_day ? new Date(invoice.invoice_day).toISOString().split('T')[0] : ''}" 
                                    class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
-                            <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Ngày lập hóa đơn</label>
+                            <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Ngày lập hóa đơn <span class="text-red-500">*</span></label>
                         </div>
                                 <div class="relative">
                             <input type="date" 
@@ -433,19 +441,21 @@ use Helpers\Format;
                                    id="dueDate"
                                    value="${invoice.due_date ? new Date(invoice.due_date).toISOString().split('T')[0] : ''}" 
                                    class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-transparent outline-none">
-                            <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Hạn đóng tiền</label>
+                            <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Hạn đóng tiền <span class="text-red-500">*</span></label>
                         </div>
                     </div>
                     
                     <!-- Tiền phòng trọ -->
                     <div class="relative">
+                        <!-- Display input with formatted value -->
                         <input type="text" 
-                               name="room_price"
                                id="roomPrice"
-                               value="${formatMoney(invoice.room_price || 0)}" 
+                               value="${formatMoney(invoice.rental_amount || 0)}" 
                                readonly
                                class="peer w-full px-4 py-3 border border-blue-300 rounded-lg bg-white outline-none cursor-default">
                         <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tiền phòng trọ</label>
+                    </div>
+                        </div>
                     </div>
                     
                     <!-- Chi tiết dịch vụ -->
@@ -484,6 +494,7 @@ use Helpers\Format;
                                                         <input type="number" 
                                                                name="services[${service.id}][old_value]"
                                                                value="${service.old_value}" 
+                                                               oninput="validateUpdateMeterInput(this)"
                                                                class="w-16 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
                                                     </div>
                                                     <div class="flex items-center">
@@ -491,6 +502,7 @@ use Helpers\Format;
                                                         <input type="number" 
                                                                name="services[${service.id}][new_value]"
                                                                value="${service.new_value}" 
+                                                               oninput="validateUpdateMeterInput(this)"
                                                                class="w-16 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
                                                     </div>
                                                 </div>
@@ -500,6 +512,9 @@ use Helpers\Format;
                                                     <input type="number" 
                                                            name="services[${service.id}][usage_amount]"
                                                            value="${service.usage_amount}" 
+                                                           min="1"
+                                                           step="1"
+                                                           oninput="validateUpdateQuantityInput(this)"
                                                            class="w-16 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
                                                 </div>
                                             `}
@@ -508,8 +523,8 @@ use Helpers\Format;
                                     
                                     <!-- Thành tiền -->
                                     <div class="mt-3 text-right">
-                                        <div class="text-lg font-bold text-green-600">
-                                            ${formatMoney(service.total_amount)}
+                                        <div class="text-sm text-gray-600">
+                                            Tổng: <span class="font-medium">${formatMoney(service.total_amount)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -519,15 +534,15 @@ use Helpers\Format;
                     ` : ''}
                     
                     <!-- Tổng tiền -->
-                    <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="mt-6 px-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-lg font-semibold text-gray-800">Tổng tiền:</span>
-                            <span class="text-2xl font-bold text-green-600">${formatMoney(invoice.total || 0)}</span>
+                            <span class="text-gray-800">Tổng tiền:</span>
+                            <span class="text-gray-800">${formatMoney(invoice.total || 0)}</span>
                         </div>
                     </div>
                     
                     <!-- Ghi chú -->
-                    <div class="mt-6">
+                    <div class="mt-6 px-4">
                                 <div class="relative">
                             <input type="text" 
                                    name="note"
@@ -798,7 +813,17 @@ use Helpers\Format;
         function updateInvoice() {
             const form = document.getElementById('updateInvoiceForm');
             if (!form) {
-                showErrorMessage('Không tìm thấy form cập nhật');
+                Swal.fire({
+                    title: 'Lỗi',
+                    text: 'Không tìm thấy form cập nhật',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            // Validate form trước khi submit
+            if (!validateUpdateInvoiceForm()) {
                 return;
             }
 
@@ -1022,6 +1047,181 @@ use Helpers\Format;
                     form.submit();
                 }
             });
+        }
+
+        // Validation functions for update invoice modal
+        function validateUpdateMeterInput(input) {
+            let value = parseFloat(input.value);
+            
+            // Convert to integer (round down)
+            value = Math.floor(value);
+            
+            // Prevent negative numbers
+            if (value < 0) {
+                input.value = 0;
+                value = 0;
+            }
+            
+            // Ensure integer value
+            input.value = value;
+            
+            // Clear any existing error for this service
+            const match = input.name.match(/services\[(\d+)\]\[(\w+)\]/);
+            if (match) {
+                const serviceId = match[1];
+                clearUpdateServiceError(serviceId);
+                
+                // Remove red border from this input
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+                
+                // Validate old_value vs new_value
+                if (match[2] === 'old_value' || match[2] === 'new_value') {
+                    const oldInput = document.querySelector('input[name="services[' + serviceId + '][old_value]"');
+                    const newInput = document.querySelector('input[name="services[' + serviceId + '][new_value]"');
+                    
+                    if (oldInput && newInput && oldInput.value && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            // Show error
+                            showUpdateServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                        } else {
+                            // Clear error
+                            oldInput.classList.remove('border-red-500');
+                            oldInput.classList.add('border-gray-300');
+                            newInput.classList.remove('border-red-500');
+                            newInput.classList.add('border-gray-300');
+                        }
+                    }
+                }
+            }
+        }
+
+        function showUpdateServiceError(serviceId, message) {
+            const form = document.getElementById('updateInvoiceForm');
+            if (!form) return;
+            
+            // Find the service container
+            const oldInput = form.querySelector('input[name="services[' + serviceId + '][old_value]"');
+            if (!oldInput) return;
+            
+            const serviceContainer = oldInput.closest('.bg-white');
+            if (!serviceContainer) return;
+            
+            // Remove existing error for this service
+            const existingError = serviceContainer.querySelector('.service-error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Create error message element
+            const errorElement = document.createElement('div');
+            errorElement.className = 'service-error text-red-500 text-xs mt-2';
+            errorElement.textContent = message;
+            
+            // Find .ml-4 container and add error below inputs
+            const mlContainer = serviceContainer.querySelector('.ml-4');
+            if (mlContainer) {
+                mlContainer.appendChild(errorElement);
+            } else {
+                serviceContainer.appendChild(errorElement);
+            }
+        }
+
+        function clearUpdateServiceError(serviceId) {
+            const form = document.getElementById('updateInvoiceForm');
+            if (!form) return;
+            
+            const oldInput = form.querySelector('input[name="services[' + serviceId + '][old_value]"');
+            if (oldInput) {
+                const serviceContainer = oldInput.closest('.bg-white');
+                if (serviceContainer) {
+                    const existingError = serviceContainer.querySelector('.service-error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                }
+            }
+        }
+
+        function validateUpdateQuantityInput(input) {
+            let value = parseFloat(input.value);
+            
+            // Convert to integer (round down)
+            value = Math.floor(value);
+            
+            // Prevent negative numbers and ensure minimum value of 1
+            if (value < 1) {
+                input.value = 1;
+            } else {
+                input.value = value;
+            }
+        }
+
+        function validateUpdateInvoiceForm() {
+            const form = document.getElementById('updateInvoiceForm');
+            if (!form) return false;
+            
+            let isValid = true;
+            
+            // Clear all previous errors
+            const allErrors = form.querySelectorAll('.service-error');
+            allErrors.forEach(err => err.remove());
+            const allInputs = form.querySelectorAll('input');
+            allInputs.forEach(inp => {
+                inp.classList.remove('border-red-500');
+                if (inp.classList.contains('border-gray-300')) {
+                    // Keep border-gray-300 if it has it
+                } else {
+                    inp.classList.add('border-gray-300');
+                }
+            });
+            
+            // Validate old_value vs new_value for all meter services
+            const oldInputs = form.querySelectorAll('input[name*="[old_value]"]');
+            oldInputs.forEach(oldInput => {
+                const match = oldInput.name.match(/services\[(\d+)\]/);
+                if (match) {
+                    const serviceId = match[1];
+                    const newInput = form.querySelector('input[name="services[' + serviceId + '][new_value]"');
+                    
+                    if (oldInput.value && newInput && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            showUpdateServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            isValid = false;
+                        }
+                    } else if (!oldInput.value || !newInput || !newInput.value) {
+                        // Check if inputs are empty
+                        if (!oldInput.value) {
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                        }
+                        if (newInput && !newInput.value) {
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                        }
+                        if (!oldInput.value || (newInput && !newInput.value)) {
+                            showUpdateServiceError(serviceId, 'Vui lòng nhập đầy đủ số cũ và số mới');
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            
+            return isValid;
         }
     </script>
 </body>

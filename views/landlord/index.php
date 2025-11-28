@@ -936,8 +936,16 @@ use Helpers\Format;
                     <input type="hidden" id="roomId" name="room_id" value="${room.id}">
                     <input type="hidden" id="csrfToken" name="csrf_token" value="${csrfToken}">
                     
-                    <!-- Thông tin cơ bản -->
-                    <div class="space-y-4">
+                    <!-- Thông tin hóa đơn -->
+                    <div>
+                        <div class="flex mb-4 px-4">
+                            <div class="w-1 bg-green-600 mr-3"></div>
+                            <div>
+                                <h5 class="text-base font-medium text-gray-800">Thông tin hóa đơn:</h5>
+                                <p class="text-gray-600 italic mt-1 text-sm">Thông tin cơ bản của hóa đơn</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4 px-4">
                         <!-- Tên hóa đơn -->
                         <div class="relative">
                             <input type="text" 
@@ -1021,13 +1029,16 @@ use Helpers\Format;
                         
                         <!-- Tiền phòng -->
                         <div class="relative">
-                            <input type="number" 
-                                   name="rental_amount"
+                            <!-- Hidden input with actual number for form submission -->
+                            <input type="hidden" name="rental_amount" value="${Math.floor(Number(room.room_price) || 0)}">
+                            <!-- Display input with formatted value -->
+                            <input type="text" 
                                    id="rentalAmount"
-                                   value="${Math.floor(Number(room.room_price) || 0)}" 
+                                   value="${formatMoney(Math.floor(Number(room.room_price) || 0))}" 
                                    readonly
-                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white outline-none cursor-not-allowed">
+                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg bg-white outline-none cursor-default">
                             <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tiền phòng (₫)</label>
+                        </div>
                         </div>
                     </div>
                     
@@ -1093,7 +1104,7 @@ use Helpers\Format;
                                                     <input type="number" 
                                                            name="services[${service.id}][usage_amount]"
                                                            value="${service.unit === 'person' ? (tenantCount || 1) : (service.quantity || 1)}" 
-                                                           min="0"
+                                                           min="1"
                                                            step="1"
                                                            required
                                                            oninput="validateQuantityInput(this)"
@@ -1109,7 +1120,7 @@ use Helpers\Format;
                     ` : ''}
                     
                     <!-- Ghi chú -->
-                    <div class="mt-6">
+                    <div class="mt-6 px-4">
                         <div class="relative">
                             <input type="text" 
                                    name="note"
@@ -1146,8 +1157,41 @@ use Helpers\Format;
             input.value = value;
             
             // Clear any existing error for this service
-            const serviceId = input.name.match(/services\[(\d+)\]/)[1];
-            clearServiceError(serviceId);
+            const match = input.name.match(/services\[(\d+)\]\[(\w+)\]/);
+            if (match) {
+                const serviceId = match[1];
+                clearServiceError(serviceId);
+                
+                // Remove red border from this input
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+                
+                // Validate old_value vs new_value
+                if (match[2] === 'old_value' || match[2] === 'new_value') {
+                    const oldInput = document.querySelector('input[name="services[' + serviceId + '][old_value]"]');
+                    const newInput = document.querySelector('input[name="services[' + serviceId + '][new_value]"]');
+                    
+                    if (oldInput && newInput && oldInput.value && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            // Show error
+                            showServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                        } else {
+                            // Clear error
+                            oldInput.classList.remove('border-red-500');
+                            oldInput.classList.add('border-gray-300');
+                            newInput.classList.remove('border-red-500');
+                            newInput.classList.add('border-gray-300');
+                        }
+                    }
+                }
+            }
         }
         
         function validateQuantityInput(input) {
@@ -1197,8 +1241,14 @@ use Helpers\Format;
             errorElement.className = 'service-error text-red-500 text-xs mt-2';
             errorElement.textContent = message;
             
-            // Add error to the service container
-            serviceContainer.appendChild(errorElement);
+            // Find .ml-4 container and add error below inputs
+            const mlContainer = serviceContainer.querySelector('.ml-4');
+            if (mlContainer) {
+                mlContainer.appendChild(errorElement);
+            } else {
+                // Fallback: add to service container
+                serviceContainer.appendChild(errorElement);
+            }
         }
         
         function clearServiceError(serviceId) {
@@ -1216,19 +1266,65 @@ use Helpers\Format;
         
         function validateInvoiceForm() {
             const form = document.getElementById('createInvoiceForm');
+            let isValid = true;
             
-            // Basic validation - let backend handle detailed validation
-            // Just check if required fields are filled
+            // Clear all previous errors
+            const allErrors = form.querySelectorAll('.service-error');
+            allErrors.forEach(err => err.remove());
+            const allInputs = form.querySelectorAll('input');
+            allInputs.forEach(inp => {
+                inp.classList.remove('border-red-500');
+                inp.classList.add('border-gray-300');
+            });
+            
+            // Check if required fields are filled
             const requiredFields = form.querySelectorAll('input[required]');
             for (let i = 0; i < requiredFields.length; i++) {
                 const field = requiredFields[i];
                 if (!field.value.trim()) {
-                    field.focus();
-                    return false;
+                    field.classList.remove('border-gray-300');
+                    field.classList.add('border-red-500');
+                    
+                    // Show error for empty meter inputs
+                    const match = field.name.match(/services\[(\d+)\]\[(\w+)\]/);
+                    if (match) {
+                        const serviceId = match[1];
+                        const fieldType = match[2];
+                        if (fieldType === 'old_value' || fieldType === 'new_value') {
+                            showServiceError(serviceId, 'Vui lòng nhập đầy đủ số cũ và số mới');
+                        }
+                    }
+                    
+                    isValid = false;
+                    if (i === 0) field.focus();
                 }
             }
             
-            return true;
+            // Validate old_value vs new_value for all meter services
+            const oldInputs = form.querySelectorAll('input[name*="[old_value]"]');
+            oldInputs.forEach(oldInput => {
+                const match = oldInput.name.match(/services\[(\d+)\]/);
+                if (match) {
+                    const serviceId = match[1];
+                    const newInput = form.querySelector('input[name="services[' + serviceId + '][new_value]"]');
+                    
+                    if (oldInput.value && newInput && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            showServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            
+            return isValid;
         }
         
         function clearFieldErrors() {

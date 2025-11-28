@@ -193,45 +193,58 @@ class Invoice extends Model {
      * Cập nhật thông tin hóa đơn
      */
     public function updateInvoice($invoiceId, $data, $ownerId) {
-        // Kiểm tra quyền sở hữu hóa đơn
-        $invoice = $this->queryBuilder
-            ->table('invoices')
-            ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
-            ->join('houses', 'rooms.house_id', '=', 'houses.id')
-            ->where('invoices.id', $invoiceId)
-            ->where('houses.owner_id', $ownerId)
-            ->where('invoices.deleted', 0)
-            ->first();
+        try {
+            // Bắt đầu transaction
+            $this->queryBuilder->beginTransaction();
+            
+            // Kiểm tra quyền sở hữu hóa đơn
+            $invoice = $this->queryBuilder
+                ->table('invoices')
+                ->join('rooms', 'invoices.room_id', '=', 'rooms.id')
+                ->join('houses', 'rooms.house_id', '=', 'houses.id')
+                ->where('invoices.id', $invoiceId)
+                ->where('houses.owner_id', $ownerId)
+                ->where('invoices.deleted', 0)
+                ->first();
 
-        if (!$invoice) {
-            return false;
+            if (!$invoice) {
+                $this->queryBuilder->rollback();
+                return false;
+            }
+
+            // Chuẩn bị dữ liệu cập nhật
+            $updateData = [
+                'invoice_name' => $data['invoice_name'] ?? $invoice['invoice_name'],
+                'invoice_month' => $data['invoice_month'] ?? $invoice['invoice_month'],
+                'invoice_day' => $data['invoice_day'] ?? $invoice['invoice_day'],
+                'due_date' => $data['due_date'] ?? $invoice['due_date'],
+                'note' => $data['note'] ?? $invoice['note'],
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+
+            // Cập nhật hóa đơn
+            $result = $this->queryBuilder
+                ->table('invoices')
+                ->where('id', $invoiceId)
+                ->update($updateData);
+
+            // Cập nhật dịch vụ nếu có
+            if (isset($data['services']) && is_array($data['services'])) {
+                $this->updateInvoiceServices($invoiceId, $data['services'], $ownerId);
+            }
+
+            // Tính lại tổng tiền
+            $this->recalculateInvoiceTotal($invoiceId, $ownerId);
+
+            // Commit transaction
+            $this->queryBuilder->commit();
+            
+            return $result;
+            
+        } catch (\Exception $e) {
+            $this->queryBuilder->rollback();
+            throw $e;
         }
-
-        // Chuẩn bị dữ liệu cập nhật
-        $updateData = [
-            'invoice_name' => $data['invoice_name'] ?? $invoice['invoice_name'],
-            'invoice_month' => $data['invoice_month'] ?? $invoice['invoice_month'],
-            'invoice_day' => $data['invoice_day'] ?? $invoice['invoice_day'],
-            'due_date' => $data['due_date'] ?? $invoice['due_date'],
-            'note' => $data['note'] ?? $invoice['note'],
-            'updated_at' => date('Y-m-d H:i:s'),
-        ];
-
-        // Cập nhật hóa đơn
-        $result = $this->queryBuilder
-            ->table('invoices')
-            ->where('id', $invoiceId)
-            ->update($updateData);
-
-        // Cập nhật dịch vụ nếu có
-        if (isset($data['services']) && is_array($data['services'])) {
-            $this->updateInvoiceServices($invoiceId, $data['services'], $ownerId);
-        }
-
-        // Tính lại tổng tiền
-        $this->recalculateInvoiceTotal($invoiceId, $ownerId);
-
-        return $result;
     }
 
     /**
@@ -267,24 +280,25 @@ class Invoice extends Model {
                 $unitPrice = $serviceUsage['unit_price'] ?? 0;
                 $serviceId = $serviceUsage['service_id'];
 
-                // Lấy thông tin loại dịch vụ
+                // Lấy thông tin loại dịch vụ và đơn vị tính
                 $serviceInfo = $this->queryBuilder
                     ->table('services')
-                    ->select(['service_type'])
+                    ->select(['service_type', 'unit'])
                     ->where('id', $serviceId)
                     ->first();
 
                 $serviceType = $serviceInfo['service_type'] ?? '';
+                $serviceUnit = $serviceInfo['unit'] ?? '';
 
-                // Tính usage_amount dựa trên loại dịch vụ
+                // Tính usage_amount dựa trên đơn vị tính
                 $usageAmount = 0;
-                if ($serviceType === 'electric' || $serviceType === 'water') {
-                    // Điện/nước: usage_amount = new_value - old_value
+                if ($serviceUnit === 'KWH' || $serviceUnit === 'm3') {
+                    // Điện (KWH) hoặc Nước theo đồng hồ (m3): usage_amount = new_value - old_value
                     $oldValue = floatval($serviceData['old_value'] ?? 0);
                     $newValue = floatval($serviceData['new_value'] ?? 0);
                     $usageAmount = max(0, $newValue - $oldValue);
                 } else {
-                    // Dịch vụ khác: dùng usage_amount trực tiếp
+                    // Dịch vụ theo người/tháng: dùng usage_amount trực tiếp
                     $usageAmount = floatval($serviceData['usage_amount'] ?? 0);
                 }
 
@@ -326,23 +340,64 @@ class Invoice extends Model {
             return false;
         }
 
-        // Tính tổng tiền dịch vụ
-        $serviceTotal = $this->queryBuilder
+        // Lấy tất cả service_usages với service_type
+        $services = $this->queryBuilder
             ->table('service_usages')
-            ->select('SUM(total_amount) as total')
-            ->where('room_id', $invoice['room_id'])
-            ->where('month_year', $invoice['invoice_month'])
-            ->first();
+            ->select([
+                'service_usages.total_amount',
+                'services.service_type'
+            ])
+            ->join('services', 'service_usages.service_id', '=', 'services.id')
+            ->where('service_usages.room_id', $invoice['room_id'])
+            ->where('service_usages.month_year', $invoice['invoice_month'])
+            ->get();
 
-        $serviceAmount = $serviceTotal['total'] ?? 0;
+        // Tính tổng theo từng loại dịch vụ
+        $electricAmount = 0;
+        $waterAmount = 0;
+        $internetAmount = 0;
+        $parkingAmount = 0;
+        $garbageAmount = 0;
+        $otherAmount = 0;
 
-        // Cập nhật tổng tiền
+        foreach ($services as $service) {
+            $amount = $service['total_amount'] ?? 0;
+            switch ($service['service_type']) {
+                case 'electric':
+                    $electricAmount += $amount;
+                    break;
+                case 'water':
+                    $waterAmount += $amount;
+                    break;
+                case 'internet':
+                    $internetAmount += $amount;
+                    break;
+                case 'parking':
+                    $parkingAmount += $amount;
+                    break;
+                case 'garbage':
+                    $garbageAmount += $amount;
+                    break;
+                default:
+                    $otherAmount += $amount;
+                    break;
+            }
+        }
+
+        $serviceAmount = $electricAmount + $waterAmount + $internetAmount + $parkingAmount + $garbageAmount + $otherAmount;
         $totalAmount = $invoice['rental_amount'] + $serviceAmount;
 
+        // Cập nhật tất cả các cột
         $this->queryBuilder
             ->table('invoices')
             ->where('id', $invoiceId)
             ->update([
+                'electric_amount' => $electricAmount,
+                'water_amount' => $waterAmount,
+                'internet_amount' => $internetAmount,
+                'parking_amount' => $parkingAmount,
+                'garbage_amount' => $garbageAmount,
+                'other_amount' => $otherAmount,
                 'service_amount' => $serviceAmount,
                 'total' => $totalAmount,
                 'updated_at' => date('Y-m-d H:i:s'),
