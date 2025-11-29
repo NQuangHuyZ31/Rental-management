@@ -139,7 +139,7 @@ $images = isset($post['images']) ? json_decode($post['images'], true) : [];
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Giờ giấc:</span>
-                                        <span class="text-gray-900"><?= $post['rental_open_time'] ?> a.m - <?= $post['rental_close_time'] ?> p.m</span>
+                                        <span class="text-gray-900"><?= ($post['rental_open_time'] == 'all' && $post['rental_close_time'] == 'all') ? 'tự do' : $post['rental_open_time'] . 'a.m - ' . $post['rental_close_time'] . ' p.m' ?></span>
                                     </div>
                                 </div>
                             </div>
