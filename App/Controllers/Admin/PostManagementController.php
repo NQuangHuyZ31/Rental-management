@@ -17,6 +17,7 @@ use Core\ViewRender;
 class PostManagementController extends BaseRentalPostController {
     protected $title = "Quản lí bài đăng";
     protected $role = 'admin';
+    protected $ownerId = 0;
 
     public function __construct() {
         parent::__construct();

@@ -13,6 +13,7 @@ use Core\ViewRender;
 
 class RentalPostController extends BaseRentalPostController {
     protected $role = 'landlord';
+    protected $ownerId = 1;
 
     public function __construct() {
         parent::__construct();

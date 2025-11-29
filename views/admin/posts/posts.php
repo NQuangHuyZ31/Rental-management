@@ -258,9 +258,11 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết" onclick="viewPost('<?= $post['id'] ?>')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        <?php if ($post['owner_id'] == \Core\Session::get('user')['id']): ?>
+                                            <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết" onclick="viewPost('<?= $post['id'] ?>')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        <?php endif; ?>
                                         <?php if ($post['approval_status'] === 'pending') : ?>
                                             <button class="text-green-600 hover:text-green-900 pending-post" title="Duyệt">
                                                 <i class="fas fa-check"></i>

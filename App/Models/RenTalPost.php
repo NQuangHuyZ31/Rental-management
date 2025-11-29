@@ -251,7 +251,7 @@ class RenTalPost extends Model {
         return $this->table($this->table)->insert($postData);
     }
 
-    public function updateRentalPost($id, $data) {
+    public function updateRentalPost($id, $data, $ownerId = 1) {
         $updateData = [
             'owner_id' => $this->getCurrentUserId(),
             'rental_category_id' => $data['category'],
@@ -276,10 +276,14 @@ class RenTalPost extends Model {
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
-        return $this->table($this->table)
-            ->where('id', $id)
-            ->where('owner_id', $this->getCurrentUserId())
-            ->update($updateData);
+        $query = $this->table($this->table)
+            ->where('id', $id);
+
+        if ($ownerId == 1) {
+            $query->where('owner_id', $this->getCurrentUserId());
+        }
+
+        return $query->update($updateData);
     }
 
     public function updateRentalPostStatus($id, $status, $role = '') {

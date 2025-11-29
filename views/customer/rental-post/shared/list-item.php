@@ -13,7 +13,7 @@ use Helpers\Format;
             <!-- Photo count badge -->
             <div class="absolute top-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
                 <i class="fas fa-camera text-xs"></i>
-                <span><?= count(json_decode($post['images'])) ?></span>
+                <span><?= count(json_decode($post['images'])) ?? 0 ?></span>
             </div>
 
             <!-- Verified badge -->

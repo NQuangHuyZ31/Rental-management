@@ -853,11 +853,6 @@ class Invoice extends Model {
         return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update(['invoice_status' => $status]);
     }
 
-    // Added by Huy Nguyen on 2025-09-17 update column
-    public function updateColumn($invoiceId, $column, $value) {
-        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
-    }
-
     // Added by Huy Nguyen on 2025-10-24 to get invoice by roomid and month
     public function getInvoiceByRoomIdAndMonth($roomId = '', $month = '') {
         $query = $this->table('invoices')->where('deleted', 0);

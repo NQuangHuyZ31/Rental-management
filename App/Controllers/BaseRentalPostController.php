@@ -28,6 +28,7 @@ class BaseRentalPostController extends BaseCustomerController {
 	protected $uploadImageOnCloud;
 	protected $queryBuilder;
     protected $user;
+    protected $ownerId;
 
     public function __construct() {
 		parent::__construct();
@@ -114,7 +115,7 @@ class BaseRentalPostController extends BaseCustomerController {
             $post = $this->rentalPostModel->getRentalPostById($data['post_id'], $this->role);
             // Update rental post
             if (!empty($post)) {
-                $updated = $this->rentalPostModel->updateRentalPost($post['id'], $data);
+                $updated = $this->rentalPostModel->updateRentalPost($post['id'], $data, $this->ownerId);
             } else {
                 Response::json(['status' => 'error', 'error' => 'Không thể cập nhật tin đăng. Vui lòng thử lại!', 'token' => CSRF::getTokenRefresh()], 500);
                 return;
