@@ -44,6 +44,9 @@ use Helpers\Format;
                                     <p class="text-blue-500 font-bold text-lg"><?= $totalTenants ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/tenant" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -59,6 +62,9 @@ use Helpers\Format;
                                     <p class="text-green-500 font-bold text-lg"><?= $totalRooms ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -74,6 +80,9 @@ use Helpers\Format;
                                     <p class="text-green-500 font-bold text-lg"><?= $totalAmenities ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/amenity" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -89,6 +98,9 @@ use Helpers\Format;
                                     <p class="text-red-500 font-bold text-lg"><?= $totalServices ?></p>
                                 </div>
                             </div>
+                            <a href="<?= BASE_URL ?>/landlord/service" class="w-10 h-10 border-2 border-[#CCCCCC] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-right text-black"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -114,7 +126,7 @@ use Helpers\Format;
                         </div>
 
                         <div class="flex items-center space-x-3">
-                            <button onclick="openRoomModal()" class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors">
+                            <button onclick="openRoomModal()" class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors" title="Thêm phòng mới">
                                 <i class="fas fa-plus text-white"></i>
                             </button>
                         </div>
@@ -240,7 +252,10 @@ use Helpers\Format;
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border border-gray-200">
                                         <div class="flex items-center justify-center space-x-4">
                                             <!-- Edit Icon -->
-                                            <button onclick="editRoom(<?= $room['id'] ?>)" class="hover:scale-110 transition-transform" title="Chỉnh sửa phòng">
+                                            <button onclick="editRoom(<?= $room['id'] ?>, event)" 
+                                                    data-room='<?= json_encode($room, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
+                                                    class="hover:scale-110 transition-transform" 
+                                                    title="Chỉnh sửa phòng">
                                                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
@@ -563,10 +578,33 @@ use Helpers\Format;
             document.getElementById('room_id').value = '';
         }
 
-        function editRoom(roomId) {
-            // Lấy thông tin phòng từ danh sách rooms
-            const rooms = <?= json_encode($rooms) ?>;
-            const room = rooms.find(r => r.id == roomId);
+        function editRoom(roomId, event) {
+            // Lấy thông tin phòng từ data attribute của button
+            let room = null;
+            
+            // Nếu được gọi từ event, lấy từ button element
+            if (event && event.target) {
+                const button = event.target.closest('button[data-room]');
+                if (button && button.dataset.room) {
+                    try {
+                        room = JSON.parse(button.dataset.room);
+                    } catch (e) {
+                        console.error('Error parsing room data:', e);
+                    }
+                }
+            }
+            
+            // Fallback: tìm button theo roomId trong DOM
+            if (!room) {
+                const button = document.querySelector(`button[onclick*="editRoom(${roomId})"]`);
+                if (button && button.dataset.room) {
+                    try {
+                        room = JSON.parse(button.dataset.room);
+                    } catch (e) {
+                        console.error('Error parsing room data:', e);
+                    }
+                }
+            }
 
             if (!room) {
                 Swal.fire({
@@ -898,8 +936,16 @@ use Helpers\Format;
                     <input type="hidden" id="roomId" name="room_id" value="${room.id}">
                     <input type="hidden" id="csrfToken" name="csrf_token" value="${csrfToken}">
                     
-                    <!-- Thông tin cơ bản -->
-                    <div class="space-y-4">
+                    <!-- Thông tin hóa đơn -->
+                    <div>
+                        <div class="flex mb-4 px-4">
+                            <div class="w-1 bg-green-600 mr-3"></div>
+                            <div>
+                                <h5 class="text-base font-medium text-gray-800">Thông tin hóa đơn:</h5>
+                                <p class="text-gray-600 italic mt-1 text-sm">Thông tin cơ bản của hóa đơn</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4 px-4">
                         <!-- Tên hóa đơn -->
                         <div class="relative">
                             <input type="text" 
@@ -983,13 +1029,16 @@ use Helpers\Format;
                         
                         <!-- Tiền phòng -->
                         <div class="relative">
-                            <input type="number" 
-                                   name="rental_amount"
+                            <!-- Hidden input with actual number for form submission -->
+                            <input type="hidden" name="rental_amount" value="${Math.floor(Number(room.room_price) || 0)}">
+                            <!-- Display input with formatted value -->
+                            <input type="text" 
                                    id="rentalAmount"
-                                   value="${Math.floor(Number(room.room_price) || 0)}" 
+                                   value="${formatMoney(Math.floor(Number(room.room_price) || 0))}" 
                                    readonly
-                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white outline-none cursor-not-allowed">
+                                   class="peer w-full px-4 py-3 border border-blue-300 rounded-lg bg-white outline-none cursor-default">
                             <label class="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-1 text-gray-500 transition-all duration-200 pointer-events-none text-base peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-focus:font-medium peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500 peer-[:not(:placeholder-shown)]:font-medium">Tiền phòng (₫)</label>
+                        </div>
                         </div>
                     </div>
                     
@@ -1055,7 +1104,7 @@ use Helpers\Format;
                                                     <input type="number" 
                                                            name="services[${service.id}][usage_amount]"
                                                            value="${service.unit === 'person' ? (tenantCount || 1) : (service.quantity || 1)}" 
-                                                           min="0"
+                                                           min="1"
                                                            step="1"
                                                            required
                                                            oninput="validateQuantityInput(this)"
@@ -1071,7 +1120,7 @@ use Helpers\Format;
                     ` : ''}
                     
                     <!-- Ghi chú -->
-                    <div class="mt-6">
+                    <div class="mt-6 px-4">
                         <div class="relative">
                             <input type="text" 
                                    name="note"
@@ -1108,8 +1157,41 @@ use Helpers\Format;
             input.value = value;
             
             // Clear any existing error for this service
-            const serviceId = input.name.match(/services\[(\d+)\]/)[1];
-            clearServiceError(serviceId);
+            const match = input.name.match(/services\[(\d+)\]\[(\w+)\]/);
+            if (match) {
+                const serviceId = match[1];
+                clearServiceError(serviceId);
+                
+                // Remove red border from this input
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+                
+                // Validate old_value vs new_value
+                if (match[2] === 'old_value' || match[2] === 'new_value') {
+                    const oldInput = document.querySelector('input[name="services[' + serviceId + '][old_value]"]');
+                    const newInput = document.querySelector('input[name="services[' + serviceId + '][new_value]"]');
+                    
+                    if (oldInput && newInput && oldInput.value && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            // Show error
+                            showServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                        } else {
+                            // Clear error
+                            oldInput.classList.remove('border-red-500');
+                            oldInput.classList.add('border-gray-300');
+                            newInput.classList.remove('border-red-500');
+                            newInput.classList.add('border-gray-300');
+                        }
+                    }
+                }
+            }
         }
         
         function validateQuantityInput(input) {
@@ -1159,8 +1241,14 @@ use Helpers\Format;
             errorElement.className = 'service-error text-red-500 text-xs mt-2';
             errorElement.textContent = message;
             
-            // Add error to the service container
-            serviceContainer.appendChild(errorElement);
+            // Find .ml-4 container and add error below inputs
+            const mlContainer = serviceContainer.querySelector('.ml-4');
+            if (mlContainer) {
+                mlContainer.appendChild(errorElement);
+            } else {
+                // Fallback: add to service container
+                serviceContainer.appendChild(errorElement);
+            }
         }
         
         function clearServiceError(serviceId) {
@@ -1178,19 +1266,65 @@ use Helpers\Format;
         
         function validateInvoiceForm() {
             const form = document.getElementById('createInvoiceForm');
+            let isValid = true;
             
-            // Basic validation - let backend handle detailed validation
-            // Just check if required fields are filled
+            // Clear all previous errors
+            const allErrors = form.querySelectorAll('.service-error');
+            allErrors.forEach(err => err.remove());
+            const allInputs = form.querySelectorAll('input');
+            allInputs.forEach(inp => {
+                inp.classList.remove('border-red-500');
+                inp.classList.add('border-gray-300');
+            });
+            
+            // Check if required fields are filled
             const requiredFields = form.querySelectorAll('input[required]');
             for (let i = 0; i < requiredFields.length; i++) {
                 const field = requiredFields[i];
                 if (!field.value.trim()) {
-                    field.focus();
-                    return false;
+                    field.classList.remove('border-gray-300');
+                    field.classList.add('border-red-500');
+                    
+                    // Show error for empty meter inputs
+                    const match = field.name.match(/services\[(\d+)\]\[(\w+)\]/);
+                    if (match) {
+                        const serviceId = match[1];
+                        const fieldType = match[2];
+                        if (fieldType === 'old_value' || fieldType === 'new_value') {
+                            showServiceError(serviceId, 'Vui lòng nhập đầy đủ số cũ và số mới');
+                        }
+                    }
+                    
+                    isValid = false;
+                    if (i === 0) field.focus();
                 }
             }
             
-            return true;
+            // Validate old_value vs new_value for all meter services
+            const oldInputs = form.querySelectorAll('input[name*="[old_value]"]');
+            oldInputs.forEach(oldInput => {
+                const match = oldInput.name.match(/services\[(\d+)\]/);
+                if (match) {
+                    const serviceId = match[1];
+                    const newInput = form.querySelector('input[name="services[' + serviceId + '][new_value]"]');
+                    
+                    if (oldInput.value && newInput && newInput.value) {
+                        const oldValue = parseInt(oldInput.value);
+                        const newValue = parseInt(newInput.value);
+                        
+                        if (newValue <= oldValue) {
+                            showServiceError(serviceId, 'Số mới phải lớn hơn số cũ');
+                            oldInput.classList.remove('border-gray-300');
+                            oldInput.classList.add('border-red-500');
+                            newInput.classList.remove('border-gray-300');
+                            newInput.classList.add('border-red-500');
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            
+            return isValid;
         }
         
         function clearFieldErrors() {
