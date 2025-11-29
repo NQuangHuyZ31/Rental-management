@@ -7,10 +7,6 @@
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,8 +23,8 @@ SET time_zone = "+00:00";
 -- Cấu trúc bảng cho bảng `activity_logs`
 --
 
-CREATE TABLE `activity_logs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+CREATE TABLE activity_logs (
+  id bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `action` enum('select','create','update','delete') NOT NULL,
   `table_name` varchar(255) NOT NULL,

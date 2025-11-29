@@ -90,6 +90,7 @@ class User extends Model {
 
     public function getUserByEmail($email, $account_status = 'active') {
         try {
+            $this->field[] = 'email'; // Added by Huy Nguyen on 2025-11-29 to include email
             $user = $this->table($this->table)->select($this->field)->where('email', $email)->where('account_status', $account_status)->where('deleted', 0)->first();
             return $user;
         } catch (\Exception $e) {

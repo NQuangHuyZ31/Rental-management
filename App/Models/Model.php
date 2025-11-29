@@ -29,13 +29,17 @@ class Model extends QueryBuilder {
         return $query->insert($data);
     }
 
-    public function updateColumn($id, $column, $value) {
+    public function updateColumn($id, $column, $value, $deleted = true) {
         if ($column == '' || $value == '') {
             return;
         }
 
         $value = is_array($value) ? json_encode($value) : $value;
-        $query = $this->table($this->table)->where('deleted', 0);
+        $query = $this->table($this->table);
+        
+        if ($deleted) {
+            $query->where('deleted', 0);
+        }
 
         if (is_array($id)) {
             $query->whereIn('id', $id);

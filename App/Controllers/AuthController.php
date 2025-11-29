@@ -163,8 +163,8 @@ class AuthController extends Controller {
         $this->user->updateColumn($user['id'], 'account_status', 'active');
         $this->user->updateColumn($user['id'], 'updated_at', date('Y-m-d H:i:s'));
         $this->user->updateColumn($user['id'], 'email_verified_at', date('Y-m-d H:i:s'));
-        $this->otp->updateColumn($otp['id'], 'is_verified', '1');
-        $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'));
+        $this->otp->updateColumn($otp['id'], 'is_verified', '1', false);
+        $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'), false);
 
         // Xóa session
         Session::delete('email');
@@ -322,8 +322,8 @@ class AuthController extends Controller {
                 Response::json(['status' => 'error', 'msg' => 'Token đã hết hạn', 'token' => CSRF::getTokenRefresh()], 400);
             }
 
-            $this->otp->updateColumn($otp['id'], 'is_verified', '1');
-            $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'));
+            $this->otp->updateColumn($otp['id'], 'is_verified', '1', false);
+            $this->otp->updateColumn($otp['id'], 'updated_at', date('Y-m-d H:i:s'), false);
         } else {
             $this->user->updateColumn($user['id'], 'account_status', 'active');
         }
