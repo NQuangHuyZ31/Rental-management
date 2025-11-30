@@ -148,8 +148,19 @@
                                     <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') ?></p>
                                     <p class="text-sm text-gray-500">Người liên hệ: <?= htmlspecialchars($post['contact'], ENT_QUOTES, 'UTF-8') ?></p>
                                 </div>
+                                <?php
+                                $colorbg = '';
+                                if ($post['approval_status'] == 'pending') {
+                                    $colorbg = 'yellow-100 text-yellow-800';
+                                } else if ($post['approval_status'] == 'approved') {
+                                    $colorbg = 'green-100 text-green-800';
+                                } else {
+                                    $colorbg = 'red-100 text-red-800';
+                                }
+
+                                ?>
                                 <div class="flex flex-col space-x-2">
-                                    <span class="items-center px-2.5 py-0.5 w-fit rounded-full text-xs font-medium bg-<?= $post['approval_status'] == 'pending' ? 'yellow-100 text-yellow-800' : 'green-100 text-green-800' ?>">
+                                    <span class="items-center px-2.5 py-0.5 w-fit rounded-full text-xs font-medium bg-<?= $colorbg ?>">
                                         <?= htmlspecialchars($post['approval_status'], ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                     <p class="text-[12px] text-gray-500">Ngày đăng: <?= date('d/m/Y', strtotime($post['created_at'])) ?></p>
@@ -173,18 +184,18 @@
             <div class="divide-y divide-gray-200">
                 <?php if (!empty($allReportCurrent)) : ?>
                     <?php foreach ($allReportCurrent as $report) : ?>
-                        <?php 
-                            $textColor = '';
+                        <?php
+                        $textColor = '';
 
-                            if ($report['status'] == 'pending') {
-                                $textColor = 'yellow-100 text-yellow-800';
-                            } else if ($report['status'] == 'reviewed') {
-                                $textColor = 'blue-100 text-blue-800';
-                            } else if ($report['status'] == 'resolved') {
-                                $textColor = 'green-100 text-green-800';
-                            } else {
-                                $textColor = 'red-100 text-red-800';
-                            }
+                        if ($report['status'] == 'pending') {
+                            $textColor = 'yellow-100 text-yellow-800';
+                        } else if ($report['status'] == 'reviewed') {
+                            $textColor = 'blue-100 text-blue-800';
+                        } else if ($report['status'] == 'resolved') {
+                            $textColor = 'green-100 text-green-800';
+                        } else {
+                            $textColor = 'red-100 text-red-800';
+                        }
                         ?>
                         <div class="px-6 py-4">
                             <div class="flex items-center justify-between">
