@@ -1,127 +1,132 @@
 window.CustomChart = {
-    renderChart(chartName, chartData) {
-        console.log('Rendering chart:', chartName, chartData);
-
+    renderChart: function (chartName, chartData) {
         // Validate data
         if (!chartData || !chartData.type) {
             console.error('Invalid chart data:', chartData);
-            this.showError(chartName, 'Không có dữ liệu để hiển thị');
+            document.getElementById(chartName).innerHTML = '<p class="text-center text-gray-500">Không có dữ liệu để hiển thị</p>';
             return;
         }
 
-        let isPie = chartData.type === 'pie' || chartData.type === 'doughnut';
-
-        const chartOptions = isPie ? this.getPieChartOptions(chartData) : this.getStandardChartOptions(chartData);
-
-        try {
-            Highcharts.chart(chartName, chartOptions);
-        } catch (error) {
-            console.error('Error rendering chart:', error);
-            this.showError(chartName, 'Lỗi hiển thị biểu đồ');
-        }
-    },
-
-    showError(chartName, message) {
-        document.getElementById(chartName).innerHTML = `<p class="text-center text-gray-500">${message}</p>`;
-    },
-
-    getStandardChartOptions(chartData) {
-        return {
+        let chartOptions = {
             chart: {
                 type: chartData.type,
                 backgroundColor: 'transparent',
                 height: 300,
             },
-            title: { text: chartData.title || '' },
+            title: {
+                text: '',
+            },
             xAxis: {
                 categories: chartData.categories || [],
-                title: { text: chartData.xAxisTitle || '' },
+                title: {
+                    text: chartData.xAxisTitle || '',
+                },
             },
             yAxis: {
+                title: {
+                    text: chartData.yAxisTitle || 'Giá trị',
+                },
                 min: 0,
-                title: { text: chartData.yAxisTitle || 'Giá trị' },
             },
             series: chartData.series || [],
-            credits: { enabled: false },
+            credits: {
+                enabled: false,
+            },
             plotOptions: this.getPlotOptions(chartData.type),
         };
-    },
 
-    getPieChartOptions(chartData) {
-        return {
-            chart: {
-                type: 'pie',
-                backgroundColor: 'transparent',
-                height: 300,
-            },
-            title: { text: chartData.title || '' },
-            tooltip: {
-                pointFormat: '<b>{point.percentage:.1f}%</b>',
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        distance: 25, // Đưa label ra ngoài
-                        format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+        // Special handling for pie charts
+        if (chartData.type === 'pie' || chartData.type === 'doughnut') {
+            chartOptions = {
+                chart: {
+                    type: chartData.type,
+                    backgroundColor: 'transparent',
+                    height: 300,
+                },
+                title: {
+                    text: chartData.title || '',
+                },
+                series: [
+                    {
+                        name: chartData.series[0]?.name || 'Data',
+                        data: chartData.series[0]?.data || [],
                     },
-                    innerSize: chartData.type === 'doughnut' ? '50%' : '0%',
+                ],
+                credits: {
+                    enabled: false,
                 },
-            },
-            series: [
-                {
-                    name: chartData.series?.[0]?.name || 'Data',
-                    data: chartData.series?.[0]?.data || [],
-                },
-            ],
-            credits: { enabled: false },
-        };
+            };
+        }
+
+        try {
+            Highcharts.chart(chartName, chartOptions);
+        } catch (error) {
+            console.error('Error rendering chart:', error);
+            document.getElementById(chartName).innerHTML = '<p class="text-center text-gray-500">Lỗi hiển thị biểu đồ</p>';
+        }
     },
 
-    getPieChartOptions(chartData) {
-        return {
-            chart: {
-                type: 'pie',
-                backgroundColor: 'transparent',
-                height: 300,
-            },
-            title: { text: chartData.title || '' },
-
-            tooltip: {
-                pointFormat: '<b>{point.percentage:.1f}%</b>',
-            },
-
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-
+    getPlotOptions: function (type) {
+        switch (type) {
+            case 'column':
+                return {
+                    column: {
+                        color: '#3B82F6',
+                    },
                     dataLabels: {
                         enabled: true,
-                        distance: -50, // distance dương = ngoài, âm = trong —> đổi sang DƯƠNG
-                        format: '<b>{point.name}</b>: {point.percentage:.1f}%',
-                        style: {
-                            color: '#000', // tránh mất chữ khi trùng màu
-                            fontSize: '13px',
-                            fontWeight: 'bold',
+                    },
+                };
+            case 'bar':
+                return {
+                    bar: {
+                        color: '#10B981',
+                    },
+                    dataLabels: {
+                        enabled: true,
+                    },
+                };
+            case 'line':
+                return {
+                    line: {
+                        marker: {
+                            enabled: true,
+                        },
+                        color: '#F59E0B',
+                    },
+                };
+            case 'pie':
+                return {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+
+                        dataLabels: {
+                            enabled: true,
+                            distance: -50, // distance dương = ngoài, âm = trong —> đổi sang DƯƠNG
+                            format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+                            style: {
+                                color: '#000', // tránh mất chữ khi trùng màu
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                            },
                         },
                     },
-
-                    showInLegend: false,
-                    innerSize: chartData.type === 'doughnut' ? '50%' : '0%',
-                },
-            },
-
-            series: [
-                {
-                    name: chartData.series?.[0]?.name || 'Data',
-                    data: chartData.series?.[0]?.data || [],
-                },
-            ],
-
-            credits: { enabled: false },
-        };
+                };
+            case 'doughnut':
+                return {
+                    pie: {
+                        innerSize: '50%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+                        },
+                    },
+                };
+            default:
+                return {};
+        }
     },
 };
