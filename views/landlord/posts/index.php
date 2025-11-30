@@ -161,7 +161,7 @@
                                         <!-- Rejection Reason Column -->
                                         <div class="col-span-2">
                                             <span class="text-sm <?= $rentalPost['rejection_reason'] ? 'text-red-600' : 'text-gray-500' ?>">
-                                                <?= $rentalPost['rejection_reason'] ?: '-' ?>
+                                                <?= $rentalPost['approval_reason'] ?: '-' ?>
                                             </span>
                                         </div>
 

@@ -24,10 +24,10 @@ Purpose: Build Header for Landlord Layout
                 </a>
 
                 <!-- Tổng báo cáo (General Report) -->
-                <a href="#" class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <!-- <a href="#" class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-chart-pie text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Tổng báo cáo</span>
-                </a>
+                </a> -->
 
                 <!-- Đăng tin (Post News) -->
                 <a href="<?= BASE_URL ?>/landlord/post-news" class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
@@ -36,10 +36,10 @@ Purpose: Build Header for Landlord Layout
                 </a>
 
                 <!-- Thông báo (Notifications) -->
-                <button class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
+                <!-- <button class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">
                     <i class="fas fa-bell text-lg mb-1"></i>
                     <span class="text-sm whitespace-nowrap">Thông báo</span>
-                </button>
+                </button> -->
 
                 <!-- Tài khoản (Account) -->
                 <a href="<?= BASE_URL ?>/landlord/profile" class="nav-item flex flex-col items-center px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded">

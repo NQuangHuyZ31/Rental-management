@@ -94,8 +94,10 @@ class BaseRentalPostController extends BaseCustomerController {
 
 		$post = $this->rentalPostModel->getRentalPostById($postId, $this->role);
 
+        $isUpdate = $post && $post['owner_id'] == $this->user['id'] ? 1 : 0;
+
 		if ($post) {
-			Response::json(['status' => 'success', 'post' => $post], 200);
+			Response::json(['status' => 'success', 'post' => $post, 'is_update' => $isUpdate], 200);
 		} else {
 			Response::json(['status' => 'error', 'error' => 'Bài đăng không tồn tại!'], 400);
 		}

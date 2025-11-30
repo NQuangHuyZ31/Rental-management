@@ -123,6 +123,12 @@
  					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
  			</div>
 
+            <div>
+ 				<label class="block text-gray-700 font-medium mb-1">Số điện thoại <span class="text-red-500">*</span></label>
+ 				<input type="text" placeholder="Nhập số điện thoại liên hệ" name="customer_phone"
+ 					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+ 			</div>
+
  			<div>
  				<label class="block text-gray-700 font-medium mb-1">Loại vấn đề <span class="text-red-500">*</span></label>
  				<select name="support_type" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">

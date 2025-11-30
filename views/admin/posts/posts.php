@@ -258,21 +258,22 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <?php if ($post['owner_id'] == \Core\Session::get('user')['id']): ?>
-                                            <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết" onclick="viewPost('<?= $post['id'] ?>')">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        <?php endif; ?>
+                                        <button class="text-blue-600 hover:text-blue-900" title="Xem chi tiết" onclick="viewPost('<?= $post['id'] ?>')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
                                         <?php if ($post['approval_status'] === 'pending') : ?>
-                                            <button class="text-green-600 hover:text-green-900 pending-post" title="Duyệt">
+                                            <button class="text-green-600 hover:text-green-900 approval-post" title="Duyệt">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button class="text-red-600 hover:text-red-900" title="Từ chối">
+                                            <button class="text-red-600 hover:text-red-900 rejection-post" data-modal-target="rejectPostModal" data-modal-toggle="rejectPostModal" title="Từ chối">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         <?php elseif ($post['approval_status'] === 'rejected') : ?>
-                                            <button class="text-green-600 hover:text-green-900" title="Duyệt lại">
+                                            <button class="text-green-600 hover:text-green-900 restore-post" title="Duyệt lại">
                                                 <i class="fas fa-redo"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-900 review-reject-detail" data-modal-target="rejectPostModal" data-modal-toggle="rejectPostModal" title="Xem lí do từ chối">
+                                                <i class="fas fa-file"></i>
                                             </button>
                                         <?php endif; ?>
                                         <button class="text-red-600 hover:text-red-900" title="Xóa" onclick="deletePost('<?= $post['id'] ?>')">
@@ -293,6 +294,7 @@
         <?php endif; ?>
     </div>
     <?php include_once VIEW_PATH . 'partials/edit-post.php'; ?>
+    <?php include_once VIEW_PATH . 'partials/reject-post-modal.php'; ?>
 </div>
 <!--  -->
 <script>

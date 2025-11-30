@@ -2,6 +2,7 @@
 
 // Core
 
+use App\Controllers\Admin\AdminTransactionController;
 use App\Controllers\Admin\AuthAdminController;
 use App\Controllers\Admin\DashboardAdminController;
 use App\Controllers\Admin\PostManagementController;
@@ -18,6 +19,7 @@ use App\Controllers\Customer\RentalPostDormitoryController;
 use App\Controllers\Admin\UserManagementController;
 use App\Controllers\Admin\CategoryManagementController;
 use App\Controllers\Admin\AmenityManagementController;
+use App\Controllers\Admin\CustomerSupportController;
 use App\Controllers\Admin\ReportManagementController;
 use App\Controllers\BaseCustomerController;
 // Landlord Controller
@@ -43,6 +45,7 @@ use App\Controllers\TestController;
 use App\Middleware\AuthAdminMiddleware;
 use App\Middleware\AuthLandlordMiddleware;
 use App\Middleware\AuthMiddleware;
+use App\Models\CustomerSupport;
 use App\Models\PaymentHistory;
 use Core\Router;
 
@@ -70,6 +73,7 @@ $router->post('/reset-password', [AuthController::class, 'handleResetPassword'])
 // Developer Page Route
 $router->get('/tim-viec', [BaseCustomerController::class, 'showJobPage']);
 $router->get('/hosty-plus', [BaseCustomerController::class, 'showHostyPlusPage']);
+$router->get('/gioi-thieu', [BaseCustomerController::class, 'showIntroducePage']);
 $router->get('/ho-tro', [BaseCustomerController::class, 'showSupportPage']);
 $router->post('/ho-tro', [BaseCustomerController::class, 'handleSupportProblem']);
 
@@ -127,6 +131,8 @@ $router->post('/admin/posts/update', [PostManagementController::class, 'update']
 $router->post('/admin/posts/hide', [PostManagementController::class, 'updateStatus'], [AuthAdminMiddleware::class]);
 $router->post('/admin/posts/delete', [PostManagementController::class, 'delete'], [AuthAdminMiddleware::class]);
 $router->post('/admin/posts/approve',[PostManagementController::class, 'approvedPost'], [AuthAdminMiddleware::class]);
+$router->post('/admin/posts/reject',[PostManagementController::class, 'rejectPost'], [AuthAdminMiddleware::class]);
+$router->get('/admin/posts/rejection-detail', [PostManagementController::class, 'getRejectionDetail'], [AuthAdminMiddleware::class]);
 
 // USER MANAGEMENT
 $router->get('/admin/users', [UserManagementController::class, 'index'], [AuthAdminMiddleware::class]);
@@ -163,6 +169,15 @@ $router->post('/admin/amenities/update/{id}', [AmenityManagementController::clas
 $router->get('/admin/reports', [ReportManagementController::class, 'index'], [AuthAdminMiddleware::class]);
 $router->get('/admin/reports/get/{id}', [ReportManagementController::class, 'edit'], [AuthAdminMiddleware::class]);
 $router->post('/admin/reports/update-status/{id}', [ReportManagementController::class, 'updateStatus'], [AuthAdminMiddleware::class]);
+
+// TRANSACTION MANAGEMENT
+$router->get('/admin/transactions', [AdminTransactionController::class, 'showTransactionPage'], [AuthAdminMiddleware::class]);
+
+// CUSTOMER SUPPORT MANAGEMENT
+$router->get('/admin/customer-supports', [CustomerSupportController::class, 'showCustomerSupportPage'], [AuthAdminMiddleware::class]);
+$router->post('/admin/customer-supports', [CustomerSupportController::class, 'handleResolved'], [AuthAdminMiddleware::class]);
+$router->post('/admin/customer-supports/delete', [CustomerSupportController::class, 'deleteCS'], [AuthAdminMiddleware::class]);
+
 // =============================================================ROUTER LANDLORD==================================================
 // House Management Routes
 $router->get('/landlord', [HouseController::class, 'index'], [AuthLandlordMiddleware::class]);

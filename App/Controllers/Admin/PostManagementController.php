@@ -150,8 +150,8 @@ class PostManagementController extends BaseRentalPostController {
                 Response::json(['status' => 'error', 'msg' => 'Không còn bài đăng nào cần duyệt', 'token' => CSRF::getTokenRefresh()], 400);
             }
 
-            foreach($pendingPosts as $post) {
-                $postIds [] = $post['id'];
+            foreach ($pendingPosts as $post) {
+                $postIds[] = $post['id'];
             }
         }
 
@@ -159,6 +159,57 @@ class PostManagementController extends BaseRentalPostController {
             Response::json(['status' => 'error', 'msg' => 'Duyệt không thành công. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
+        $this->rentalPostModel->updateColumn($requests['type'] != 'all' ? $requests['posts_id'] : $postIds, 'approval_reason', '-');
+
         Response::json(['status' => 'success', 'msg' => 'Bài đăng đã được duyệt thành công', 'token' => CSRF::getTokenRefresh()], 200);
+    }
+
+    // Added by Huy Nguyen on 2025-11-30 to reject single posts in pending status
+    public function rejectPost() {
+        $requests = $this->request->post();
+
+        if (!isset($requests['post_id']) || empty($requests['post_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Chưa có bài đăng nào được chọn', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if (empty($requests['violation_type']) || empty($requests['violation_content'])) {
+            Response::json(['status' => 'error', 'msg' => 'Vui lòng cung cấp đầy đủ thông tin lý do từ chối', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $reason = "Loại: " . $requests['violation_type'] . "; Nội dung: " . $requests['violation_content'];
+
+        if (!$this->rentalPostModel->updateColumn((int) $requests['post_id'], 'approval_status', 'rejected')) {
+            Response::json(['status' => 'error', 'msg' => 'Từ chối không thành công. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $this->rentalPostModel->updateColumn((int) $requests['post_id'], 'approval_reason', $reason);
+
+        Response::json(['status' => 'success', 'msg' => 'Bài đăng đã bị từ chối thành công', 'token' => CSRF::getTokenRefresh()], 200);
+    }
+
+    // Added by Huy Nguyen on 2025-11-30 to get rejection detail of a post
+    public function getRejectionDetail() {
+        $postId = $this->request->get('post_id') ?? '';
+
+        if (empty($postId)) {
+            Response::json(['status' => 'error', 'msg' => 'Chưa có bài đăng nào được chọn', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $post = $this->rentalPostModel->getColumn('approval_reason', 'rental_posts', (int) $postId);
+
+        if (empty($post)) {
+            Response::json(['status' => 'error', 'msg' => 'Bài đăng không tồn tại', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
+        $parts = explode(';', $post['approval_reason']);
+
+        $type = trim(str_replace('Loại:', '', $parts[0]));
+        $content = trim(str_replace('Nội dung:', '', $parts[1]));
+
+        Response::json(['status' => 'success', 'data' => ['violation_type' => $type, 'violation_content' => $content], 'token' => CSRF::getTokenRefresh()], 200);
     }
 }

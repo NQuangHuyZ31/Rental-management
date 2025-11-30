@@ -695,7 +695,7 @@ class QueryBuilder {
     public function logActivityDB($sql, $type)
     {
         $this->query("INSERT INTO activity_logs (user_id, action, table_name, field_name, value, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-            [$this->getCurrentUserId(), $type, $this->table, json_encode($this->columns), json_encode($this->values), $sql, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]);
+            [$this->getCurrentUserId() , $type, $this->table, json_encode($this->columns), json_encode($this->values), $sql, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]);
     }
 
 

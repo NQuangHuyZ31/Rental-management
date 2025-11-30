@@ -120,6 +120,7 @@
     <script src="<?= BASE_URL ?>/Public/js/custom-chart.js"></script>
     <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
     <script src="<?= BASE_URL ?>/Public/js/admin/post-management.js?v=<?= rand() ?>"></script>
+        <script src="<?= BASE_URL ?>/Public/js/admin/customer-support.js?v=<?= rand() ?>"></script>
 
     <script>
         // Use App.showSuccessMessage for notifications (centralized in Public/js/app.js)

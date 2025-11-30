@@ -41,6 +41,13 @@ class BaseCustomerController extends Controller {
         ViewRender::renderWithLayout('developer-page', [], 'customer/layouts/app');
     }
 
+    // Added by Huy Nguyen on 2025-10-22 to show introduce page
+    public function showIntroducePage() {
+        ViewRender::renderWithLayout('introduce', [
+            'title' => 'Giới thiệu'
+        ], 'customer/layouts/app');
+    }
+
     // Added by Huy Nguyen on 2025-10-22 to show support page
     public function showSupportPage() {
         ViewRender::renderWithLayout('support',
@@ -71,6 +78,7 @@ class BaseCustomerController extends Controller {
         $data = [
             'customer_name' => $requests['customer_name'],
             'customer_email' => $requests['customer_email'],
+            'customer_phone' => $requests['customer_phone'],
             'support_type' => $requests['support_type'],
             'description_problem' => $requests['description_problem'],
             'created_at' => date('Y-m-d H:s:i'),

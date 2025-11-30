@@ -16,6 +16,7 @@ Purpose: Build Footer for Landlord Layout
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 <script src="<?=BASE_URL?>/Public/js/app.js"></script>
 <script src="<?=BASE_URL?>/Public/js/posts.js"></script>
 <script src="<?=BASE_URL?>/Public/js/customer-profile.js"></script>

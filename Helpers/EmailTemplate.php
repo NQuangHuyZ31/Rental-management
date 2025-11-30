@@ -110,4 +110,15 @@ class EmailTemplate
             'resetUrl' => $resetUrl
         ]);
     }
+
+    public static function renderResolvedReport($customer, $actionMessage, $resolvedAt, $message = '', $rentalPostDate = '')
+    {
+        return self::render('resolved-report', [
+            'customer' => $customer,
+            'actionMessage' => $actionMessage,
+            'resolvedAt' => $resolvedAt,
+            'message' => $message,
+            'rentalPostDate' => $rentalPostDate
+        ]);
+    }
 }

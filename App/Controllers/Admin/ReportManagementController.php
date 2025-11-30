@@ -7,17 +7,22 @@
 
 namespace App\Controllers\Admin;
 
-use Core\ViewRender;
-use Core\Session;
-use Core\Response;
 use Core\CSRF;
+use Core\Response;
+use Core\Session;
+use Core\ViewRender;
+use Queue\SendEmailResolvedReport;
 
-class ReportManagementController extends AdminController
-{
+class ReportManagementController extends AdminController {
     protected $title = 'Quản lý báo cáo';
+    protected $sendMailResolvedReport;
 
-    public function index()
-    {
+    public function __construct() {
+        parent::__construct();
+        $this->sendMailResolvedReport = new SendEmailResolvedReport();
+    }
+
+    public function index() {
         // Pagination & filters (follow pattern from UserManagementController)
         $page = $this->request->get('page') != '' ? (int) $this->request->get('page') : 1;
         $limit = $this->limit;
@@ -63,15 +68,14 @@ class ReportManagementController extends AdminController
             'countResolved' => $countResolved,
             'statusList' => $statusList,
             'typeList' => $typeList,
-            'title' => $this->title
+            'title' => $this->title,
         ], 'admin/layouts/app');
     }
 
     /**
      * Return report details as JSON for modal view
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         try {
             $report = $this->reportViolationModel->getReportById($id);
 
@@ -112,8 +116,7 @@ class ReportManagementController extends AdminController
      * Update report status (AJAX POST)
      * Expected POST body: { status: 'reviewed' | 'resolved' | 'rejected' }
      */
-    public function updateStatus($id)
-    {
+    public function updateStatus($id) {
         // Only allow POST
         if (!$this->request->isPost()) {
             return Response::json(['success' => false, 'message' => 'Phương thức không hợp lệ'], 405);
@@ -197,6 +200,21 @@ class ReportManagementController extends AdminController
                 return Response::json(['success' => false, 'message' => 'Cập nhật không thành công'], 500);
             }
 
+            // Send email notification to reporter if report is resolved
+            $post = $this->rentalPostModel->getRentalPostById($report['rental_post_id']);
+            $user = $this->userModel->getUserById($post['owner_id']);
+
+            if ($status === 'resolved' && $report) {
+                $this->sendMailResolvedReport->dispatch([
+                    'to' => $user['email'],
+                    'customer' => $user['username'],
+                    'action' => $this->request->post('note'),
+                    'rental_post_date' => date('d-m-Y', strtotime($post['created_at'])),
+                    'resolved_at' => date('d-m-Y H:i:s', strtotime('+1 day')),
+                    'message' => 'Báo cáo của bạn đã được xử lý thành công.',
+                ]);
+            }
+
             // Return updated report for client to display (attach labels)
             $updatedReport = $this->reportViolationModel->getReportById($id);
             $typeList = $this->getTypeList();
@@ -220,13 +238,12 @@ class ReportManagementController extends AdminController
      * Status label map (controller source of truth)
      * @return array
      */
-    private function getStatusList()
-    {
+    private function getStatusList() {
         return [
             'pending' => 'Chờ xử lý',
             'reviewed' => 'Đang xử lý',
             'resolved' => 'Đã xử lý',
-            'rejected' => 'Bị từ chối'
+            'rejected' => 'Bị từ chối',
         ];
     }
 
@@ -234,15 +251,14 @@ class ReportManagementController extends AdminController
      * Report type label map
      * @return array
      */
-    private function getTypeList()
-    {
+    private function getTypeList() {
         return [
             'spam' => 'Spam',
             'fake' => 'Thông tin sai lệch',
             'scam' => 'Lừa đảo',
             'inappropriate' => 'Nội dung không phù hợp',
             'violence' => 'Bạo lực',
-            'other' => 'Khác'
+            'other' => 'Khác',
         ];
     }
 }

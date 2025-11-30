@@ -36,7 +36,7 @@ class Model extends QueryBuilder {
 
         $value = is_array($value) ? json_encode($value) : $value;
         $query = $this->table($this->table);
-        
+
         if ($deleted) {
             $query->where('deleted', 0);
         }
@@ -55,8 +55,8 @@ class Model extends QueryBuilder {
         $query->select($column);
 
         if (!empty($id)) {
-            return $query->where(!empty($table) ? $table .'.id' : $this->table . '.id', $id)
-					->where(!empty($table) ? $table . '.deleted' : $this->table . '.deleted', 0)->first();
+            return $query->where(!empty($table) ? $table . '.id' : $this->table . '.id', $id)
+                ->where(!empty($table) ? $table . '.deleted' : $this->table . '.deleted', 0)->first();
         }
 
         if (!empty($extWhere) || is_array($extWhere)) {
@@ -74,7 +74,9 @@ class Model extends QueryBuilder {
 
     // Added by Huy Nguyen on 2025-11-04 to update record
     public function updateTable($id, $data, $table = '') {
-        if ($id == '' || empty($data)) return;
+        if ($id == '' || empty($data)) {
+            return;
+        }
 
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
         $data['updated_at'] = date('Y-m-d H:i:s');
@@ -88,23 +90,40 @@ class Model extends QueryBuilder {
     }
 
     // Added by Huy Nguyen on 2025-11-07 to get all record
-    public function getAll($table = '', $extWhere = [], $limit = 0, $orderByField = '', $orderByType = 'DESC') {
+    public function getAll($table = '', $extWhere = [], $limit = 0, $orderByField = '', $orderByType = 'DESC', $offset = 0) {
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
 
-        if (!empty($extWhere) || is_array($extWhere)) {
-            foreach ($extWhere as $column => $value) {
-                $condition = '=';
+        if (!empty($extWhere) && is_array($extWhere)) {
 
-                if (isset($value['condition']) && !empty($value['condition'])) {
-                    $condition = $value['condition'];
+            foreach ($extWhere as $column => $value) {
+
+                // 1️⃣ Trường hợp value là string → where column = value
+                if (!is_array($value)) {
+                    $query->where($column, '=', $value);
+                    continue;
                 }
 
-                $query->where($column, $condition, $value['value']);
+                // 2️⃣ Trường hợp value là 1 điều kiện duy nhất
+                if (isset($value['value'])) {
+                    $condition = $value['condition'] ?? '=';
+                    $query->where($column, $condition, $value['value']);
+                    continue;
+                }
+
+                // 3️⃣ Trường hợp là nhiều điều kiện cho 1 cột
+                foreach ($value as $cond) {
+                    if (!isset($cond['value'])) {
+                        continue; // tránh lỗi nếu dữ liệu thiếu
+                    }
+
+                    $condition = $cond['condition'] ?? '=';
+                    $query->where($column, $condition, $cond['value']);
+                }
             }
         }
 
         if (!empty($limit) || $limit > 0) {
-            $query->limit($limit);
+            $query->limit($limit)->offset($offset);
         }
 
         if (!empty($orderByField)) {

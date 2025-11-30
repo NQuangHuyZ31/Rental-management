@@ -27,8 +27,8 @@ $modelDataHelper = new \Helpers\DataModelHelper();
                 <!-- Logo Section -->
                 <a href="<?= BASE_URL ?>/" class="flex items-center">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
-                            <span class="text-green-600 font-bold text-lg">H</span>
+                        <div class="flex items-center justify-center mr-2">
+                            <span class="text-green-600 font-bold text-lg"><img class="w-20 h-14" src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.png" alt="HOSTY Logo"></span>
                         </div>
                         <div class="text-[12px]">
                             <h1 class="text-base font-bold text-white">HOSTY</h1>

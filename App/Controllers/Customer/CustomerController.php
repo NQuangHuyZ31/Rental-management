@@ -67,7 +67,7 @@ class CustomerController extends BaseCustomerController {
         }
 
         if (!CSRF::validatePostRequest()) {
-            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại.'], 400);
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại.', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
         $data = [
@@ -83,7 +83,7 @@ class CustomerController extends BaseCustomerController {
         }
 
         if (!$this->rentalPostInterestModel->add($data)) {
-            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại.'], 400);
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại.', 'token' => CSRF::getTokenRefresh()], 400);
         }
 
         $rentalPostInterestAll = $this->rentalPostInterestModel->getByUserId($this->user['id']);

@@ -286,7 +286,7 @@
         
         <div class="footer">
             <p><strong>Hệ thống quản lý cho thuê nhà</strong></p>
-            <p>Email này được gửi tự động, vui lòng không trả lời</p>
+            <p>Email này được gửi tự động</p>
             <p>© <?= date('Y') ?> - Bảo mật và tin cậy</p>
         </div>
     </div>

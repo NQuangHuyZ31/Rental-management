@@ -138,7 +138,7 @@ $(document).ready(function () {
     $('button#openModalBtn').on('click', function () {
         $('#modalNewPost-title').text('Thêm tin đăng');
         $('#errorMessage').text('');
-        $('.modal-action').find('button').text('Thêm tin đăng').removeClass('pointer-events-none opacity-50 updatePostBtn').addClass('addNewPostBtn');
+        $('.modal-action').find('button').text('Thêm tin đăng').removeClass('pointer-events-none opacity-50 updatePostBtn hidden').addClass('addNewPostBtn').attr('disabled', false);
         $('form#formNewPost')[0].reset();
         // Reset current post ID for new post
         currentPostId = null;
@@ -266,6 +266,13 @@ $(document).ready(function () {
                         if (post.images) {
                             const images = JSON.parse(post.images);
                             displayExistingImages(images);
+                        }
+
+                        // Kích hoạt nút cập nhật
+                        if (response.is_update == 1) {
+                            $('#formNewPost').find('button.updatePostBtn').attr('disabled', false).removeClass('hidden');
+                        } else {
+                            $('#formNewPost').find('button.updatePostBtn').attr('disabled', true).addClass('hidden');
                         }
                     }
                 },

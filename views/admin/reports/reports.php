@@ -214,49 +214,49 @@
                                     <div class="text-sm text-gray-500">Bài đăng: "<?= htmlspecialchars($r['rental_post_id']) ?>"</div>
                                 <?php endif; ?>
                                 <?php if ($description !== '') : ?>
-                                    <div class="text-sm text-gray-500"><?php echo $description; ?></div>
+                                    <div class="text-sm text-gray-500"><?php echo htmlspecialchars($description); ?></div>
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900"><?php echo $reporterName; ?></div>
+                                <div class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($reporterName); ?></div>
                                 <?php if ($reporterEmail !== '') : ?>
-                                    <div class="text-sm text-gray-500"><?php echo $reporterEmail; ?></div>
+                                    <div class="text-sm text-gray-500"><?php echo htmlspecialchars($reporterEmail); ?></div>
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $typeClass ?>">
-                                    <?php echo $typeLabel; ?>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= htmlspecialchars($typeClass) ?>">
+                                    <?php echo htmlspecialchars($typeLabel); ?>
                                 </span>
                             </td>
                             <!-- Priority column removed in frontend -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusClass ?>">
-                                    <?php echo $statusLabel; ?>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= htmlspecialchars($statusClass) ?>">
+                                    <?php echo htmlspecialchars($statusLabel); ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <?php echo $created; ?>
+                                <?php echo htmlspecialchars($created); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
-                                    <button onclick="openReportModal(<?= $id ?>)" class="text-blue-600 hover:text-blue-900" title="Xem chi tiết">
+                                    <button onclick="openReportModal(<?= htmlspecialchars($id) ?>)" class="text-blue-600 hover:text-blue-900" title="Xem chi tiết">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <!-- Mark as reviewed -->
-                                    <?php if ($status !== 'reviewed') : ?>
-                                    <button onclick="changeReportStatus(<?= $id ?>, 'reviewed')" class="text-yellow-600 hover:text-yellow-900" title="Đánh dấu Đang xử lý">
+                                    <?php if ($status !== 'reviewed' && $status !== 'resolved') : ?>
+                                    <button onclick="changeReportStatus(<?= htmlspecialchars($id) ?>, 'reviewed')" class="text-yellow-600 hover:text-yellow-900" title="Đánh dấu Đang xử lý">
                                         <i class="fas fa-hourglass-half"></i>
                                     </button>
                                     <?php endif; ?>
                                     <!-- Mark as resolved -->
                                     <?php if ($status !== 'resolved') : ?>
-                                    <button onclick="changeReportStatus(<?= $id ?>, 'resolved')" class="text-green-600 hover:text-green-900" title="Đánh dấu Đã xử lý">
+                                    <button onclick="changeReportStatus(<?= htmlspecialchars($id) ?>, 'resolved')" class="text-green-600 hover:text-green-900" title="Đánh dấu Đã xử lý">
                                         <i class="fas fa-check-circle"></i>
                                     </button>
                                     <?php endif; ?>
                                     <!-- Mark as rejected -->
-                                    <?php if ($status !== 'rejected') : ?>
-                                    <button onclick="changeReportStatus(<?= $id ?>, 'rejected')" class="text-red-600 hover:text-red-900" title="Đánh dấu Bị từ chối">
+                                    <?php if ($status !== 'rejected' && $status !== 'resolved') : ?>
+                                    <button onclick="changeReportStatus(<?= htmlspecialchars($id) ?>, 'rejected')" class="text-red-600 hover:text-red-900" title="Đánh dấu Bị từ chối">
                                         <i class="fas fa-times-circle"></i>
                                     </button>
                                     <?php endif; ?>
@@ -465,12 +465,12 @@
             icon: 'warning',
             title: `Xác nhận cập nhật "${LABEL[status] || status}"?`,
             input: 'textarea',
-            inputPlaceholder: 'Nhập ghi chú (bắt buộc)...',
+            inputPlaceholder: status == 'resolved' ? 'Nhập nội dung xử lý (bắt buộc)...' : 'Nhập ghi chú (bắt buộc)...',
             inputAttributes: {
                 'aria-label': 'Ghi chú'
             },
             showCancelButton: true,
-            confirmButtonText: 'Cập nhật',
+            confirmButtonText: status == 'resolved' ? 'Xác nhận' : 'Cập nhật',
             cancelButtonText: 'Hủy',
             customClass: {
                 container: 'swal2-modal-high-z',

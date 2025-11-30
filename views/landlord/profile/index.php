@@ -127,28 +127,28 @@ use Core\CSRF;
 						<p class="text-gray-600 text-sm mt-1">Cập nhật mật khẩu để bảo mật tài khoản</p>
 					</div>
 					<div class="p-6">
-						<form id="changePasswordForm" class="space-y-6">
+						<form id="changePasswordForm">
 							<div>
-								<label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu hiện tại</label>
-								<input type="password" id="currentPassword" name="currentPassword"
-									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+								<label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu hiện tại</label>
+								<input type="password" id="current_password" name="current_password"
+									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 							</div>
 
 							<div>
-								<label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu mới</label>
-								<input type="password" id="newPassword" name="newPassword"
-									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+								<label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu mới</label>
+								<input type="password" id="password" name="password"
+									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 							</div>
 
 							<div>
-								<label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Xác nhận mật khẩu mới</label>
-								<input type="password" id="confirmPassword" name="confirmPassword"
-									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+								<label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-2">Xác nhận mật khẩu mới</label>
+								<input type="password" id="confirm_password" name="confirm_password"
+									class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
 							</div>
 
-							<div class="flex justify-end">
-								<button type="submit"
-									class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+							<div class="flex justify-end mt-2">
+								<button type="button" id="changePassword"
+									class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
 									<i class="fas fa-key mr-2"></i>
 									Đổi mật khẩu
 								</button>
@@ -166,15 +166,15 @@ use Core\CSRF;
 						<h2 class="text-xl font-bold text-gray-900">Ảnh đại diện</h2>
 					</div>
 					<div class="p-6">
-                        <div class="text-center">
+						<div class="text-center">
 							<div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
 								<?= $user['avatar'] != '' ? '<img src="' . BASE_URL . '/Public/images/dong-nai.png" alt="Ảnh đại diện" class="w-full h-full object-cover rounded-full">' : '<i class="fas fa-user text-gray-400 text-4xl"></i>' ?>
 							</div>
-                            <input type="file" id="profilePicture" name="profilePicture" class="hidden" accept="image/*">
-                            <button id="updateProfilePictureTrigger" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                                <i class="fas fa-camera mr-2"></i>
-                                Thay đổi ảnh
-                            </button>
+							<input type="file" id="profilePicture" name="profilePicture" class="hidden" accept="image/*">
+							<button id="updateProfilePictureTrigger" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+								<i class="fas fa-camera mr-2"></i>
+								Thay đổi ảnh
+							</button>
 							<p class="text-sm text-gray-600 mt-2">JPG, PNG tối đa 2MB</p>
 						</div>
 					</div>
@@ -259,17 +259,20 @@ use Core\CSRF;
 				</div>
 			</div>
 		</div>
-		<?php include_once ROOT_PATH .'/views/partials/deleted-account-modal.php'; ?>
+		<?php include_once ROOT_PATH . '/views/partials/deleted-account-modal.php'; ?>
 	</main>
 	<?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
-    <script src="<?= BASE_URL ?>/Public/js/profile.js"></script>
-    <script>
-    $(document).ready(function(){
-        if (typeof initProfileHandlers === 'function') {
-            initProfileHandlers({ role: 'landlord' });
-        }
-    });
-    </script>
+	<script src="<?= BASE_URL ?>/Public/js/index.js"></script>
+	<script src="<?= BASE_URL ?>/Public/js/profile.js"></script>
+	<script>
+		$(document).ready(function() {
+			if (typeof initProfileHandlers === 'function') {
+				initProfileHandlers({
+					role: 'landlord'
+				});
+			}
+		});
+	</script>
 </body>
 
 </html>

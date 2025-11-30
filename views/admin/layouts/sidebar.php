@@ -1,6 +1,7 @@
 <?php
 
 use Helpers\DataModelHelper;
+
 $dataModelHelper = new DataModelHelper();
 ?>
 <!-- 
@@ -8,12 +9,12 @@ $dataModelHelper = new DataModelHelper();
     Date: 2025-09-09
     Purpose: Sidebar for admin
 -->
-    
+
 <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform sidebar-transition">
     <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
         <h1 class="text-xl font-bold text-white">Admin Panel</h1>
     </div>
-    
+
     <nav class="mt-5 px-2">
         <div class="space-y-1">
             <!-- Dashboard -->
@@ -21,26 +22,26 @@ $dataModelHelper = new DataModelHelper();
                 <i class="fas fa-tachometer-alt mr-3 flex-shrink-0 h-6 w-6"></i>
                 Dashboard
             </a>
-            
+
             <!-- Quản lý tài khoản -->
             <a href="<?= BASE_URL ?>/admin/users" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                 <i class="fas fa-users mr-3 flex-shrink-0 h-6 w-6"></i>
                 Quản lý tài khoản
             </a>
-            
+
             <!-- Quản lý bài đăng -->
             <!-- <div class="space-y-1"> -->
-                <!-- <button onclick="toggleSubmenu('posts-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+            <!-- <button onclick="toggleSubmenu('posts-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                     <i class="fas fa-newspaper mr-3 flex-shrink-0 h-6 w-6"></i>
                     Quản lý bài đăng
                     <i class="fas fa-chevron-down ml-auto flex-shrink-0 h-4 w-4" id="posts-chevron"></i>
                 </button> -->
-                <!-- <div id="posts-menu" class="hidden space-y-1 ml-8"> -->
-                    <a href="<?= BASE_URL ?>/admin/posts" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <i class="fas fa-list mr-3 flex-shrink-0 h-4 w-4"></i>
-                        Quản lý bài đăng
-                    </a>
-                    <!-- <a href="<?= BASE_URL ?>/admin/posts/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+            <!-- <div id="posts-menu" class="hidden space-y-1 ml-8"> -->
+            <a href="<?= BASE_URL ?>/admin/posts" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                <i class="fas fa-list mr-3 flex-shrink-0 h-4 w-4"></i>
+                Quản lý bài đăng
+            </a>
+            <!-- <a href="<?= BASE_URL ?>/admin/posts/pending" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                         <i class="fas fa-clock mr-3 flex-shrink-0 h-4 w-4"></i>
                         Chờ duyệt
                         <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= htmlspecialchars($dataModelHelper->getRentalPostStatus('pending'), ENT_QUOTES, 'UTF-8') ?></span>
@@ -53,21 +54,27 @@ $dataModelHelper = new DataModelHelper();
                         <i class="fas fa-times mr-3 flex-shrink-0 h-4 w-4"></i>
                         Từ chối
                     </a> -->
-                <!-- </div> -->
             <!-- </div> -->
-            
+            <!-- </div> -->
+
             <!-- Quản lý báo cáo -->
             <a href="<?= BASE_URL ?>/admin/reports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <i class="fas fa-flag mr-3 flex-shrink-0 h-6 w-6"></i>
                 Báo cáo vi phạm
             </a>
-            
+
+            <!-- Hỗ trợ khách hàng -->
+            <a href="<?= BASE_URL ?>/admin/customer-supports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                <i class="fas fa-headset mr-3 flex-shrink-0 h-6 w-6"></i>
+                Hỗ trợ khách hàng
+            </a>
+
             <!-- Quản lý giao dịch -->
             <a href="<?= BASE_URL ?>/admin/transactions" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <i class="fas fa-credit-card mr-3 flex-shrink-0 h-6 w-6"></i>
                 Giao dịch
             </a>
-            
+
             <!-- Quản lý danh mục -->
             <div class="space-y-1">
                 <button onclick="toggleSubmenu('categories-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
@@ -86,15 +93,9 @@ $dataModelHelper = new DataModelHelper();
                     </a>
                 </div>
             </div>
-            
-            <!-- Thống kê -->
-            <a href="<?= BASE_URL ?>/admin/statistics" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-                <i class="fas fa-chart-bar mr-3 flex-shrink-0 h-6 w-6"></i>
-                Thống kê
-            </a>
-            
+
             <!-- Cài đặt hệ thống -->
-            <div class="space-y-1">
+            <!-- <div class="space-y-1">
                 <button onclick="toggleSubmenu('settings-menu')" class="group w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
                     <i class="fas fa-cog mr-3 flex-shrink-0 h-6 w-6"></i>
                     Cài đặt
@@ -114,10 +115,10 @@ $dataModelHelper = new DataModelHelper();
                         Thanh toán
                     </a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </nav>
-    
+
     <!-- User info at bottom -->
     <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
         <div class="flex items-center">
@@ -136,7 +137,7 @@ $dataModelHelper = new DataModelHelper();
     function toggleSubmenu(menuId) {
         const menu = document.getElementById(menuId);
         const chevron = document.getElementById(menuId.replace('-menu', '-chevron'));
-        
+
         if (menu.classList.contains('hidden')) {
             menu.classList.remove('hidden');
             chevron.classList.add('rotate-180');

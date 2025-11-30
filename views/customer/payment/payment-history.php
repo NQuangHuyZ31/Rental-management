@@ -155,7 +155,7 @@
 </div>
 
 <!-- Payment Details Modal -->
-<div id="paymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+<div id="paymentModal" class="hidden fixed inset-0 z-50 justify-center items-center w-full h-full overflow-y-auto bg-black/40">
 	<div class="flex items-center justify-center min-h-screen p-4">
 		<div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
 			<div class="px-6 py-4 border-b border-gray-200">

@@ -23,7 +23,7 @@ class AuthMiddleware implements Middleware {
     }
 
     public function handle($request, $next) {
-        if (!Session::has('user')) {
+        if (!Session::has('user') || (Session::has('user') && Session::get('user')['role'] != '3')) {
             if ($this->isApiRequest($request)) {
                 Response::json(['status' => 'error', 'msg' => 'Vui lòng đăng nhập', 'token' => CSRF::getTokenRefresh()], 401);
                 exit();

@@ -20,12 +20,14 @@ class DashboardAdminController extends AdminController {
         $allTransaction = $this->paymentHostoryModel->getAll('',
             [
                 'created_at' => [
-                    'condition' => '>=',
-                    'value' => date('Y-m-01 00:00:00'),
-                ],
-                'created_at' => [
-                    '<=',
-                    'value' => date('Y-m-d H:s:i'),
+                    [
+                        'condition' => '>=',
+                        'value' => date('Y-m-01 00:00:00'),
+                    ],
+                    [
+                        'condition' => '<=',
+                        'value' => date('Y-m-d H:i:s'),
+                    ],
                 ],
             ]
         );
