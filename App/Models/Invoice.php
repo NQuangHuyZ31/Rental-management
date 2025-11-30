@@ -777,12 +777,12 @@ class Invoice extends Model {
     public function getAllInvoicesByStatus($status) {
         return $this->table('invoices')
             ->join('room_tenants', 'invoices.room_id', '=', 'room_tenants.room_id')
-            ->where('invoice_status', $status)->where('deleted', 0)->where('room_tenants.user_id', $this->userID)->get();
+            ->where('invoice_status', $status)->where('invoices.deleted', 0)->where('room_tenants.user_id', $this->userID)->get();
     }
 
     // Added by Huy Nguyen get total amount
     public function getTotalAmount() {
-        return $this->table('invoices')->select('SUM(total) as total')->where('deleted', 0)
+        return $this->table('invoices')->select('SUM(total) as total')->where('invoices.deleted', 0)
             ->where('user_id', $this->userID)->where('invoice_status', 'paid')->first();
     }
 
@@ -834,7 +834,7 @@ class Invoice extends Model {
 
     // Added by Huy Nguyen on 2025-09-14 get invoice by user id
     public function getInvoiceByInvoiceId($invoiceId) {
-        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->first();
+        return $this->table('invoices')->where('id', $invoiceId)->where('invoices.deleted', 0)->first();
     }
 
     // Added by Huy Nguyen on 2025-09-14 get invoice with room and house info
@@ -850,12 +850,12 @@ class Invoice extends Model {
 
     // Added by Huy Nguyen on 2025-09-17 update invoice status
     public function updateInvoiceOnlyStatus($invoiceId, $status) {
-        return $this->table('invoices')->where('id', $invoiceId)->where('deleted', 0)->update(['invoice_status' => $status]);
+        return $this->table('invoices')->where('id', $invoiceId)->where('invoices.deleted', 0)->update(['invoice_status' => $status]);
     }
 
     // Added by Huy Nguyen on 2025-10-24 to get invoice by roomid and month
     public function getInvoiceByRoomIdAndMonth($roomId = '', $month = '') {
-        $query = $this->table('invoices')->where('deleted', 0);
+        $query = $this->table('invoices')->where('invoices.deleted', 0);
 
         if (!empty($roomId)) {
             $query->where('room_id', $roomId);
