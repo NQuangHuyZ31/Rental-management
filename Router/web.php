@@ -86,7 +86,7 @@ $router->get('/van-phong', [RentalPostOfficeController::class, 'searchByFilter']
 $router->get('/can-ho-chung-cu', [RentalPostOfficeController::class, 'searchByFilter']);
 $router->get('/rental-post/{slug}-{id}', [RentalPostCustomerController::class, 'getRentalPostDetail']);
 $router->post('/addPostInterest', [CustomerController::class, 'addPostInterest'], [AuthMiddleware::class]);
-$router->post('/sendReportViolation', [CustomerController::class, 'sendReportViolation'], [AuthMiddleware::class]);
+$router->post('/sendReportViolation', [CustomerController::class, 'sendReportViolation']);
 
 // PROFILE
 $router->get('/customer/profile', [ProfileCustomerController::class, 'profile'], [AuthMiddleware::class]);

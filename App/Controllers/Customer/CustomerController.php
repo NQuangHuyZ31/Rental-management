@@ -96,6 +96,10 @@ class CustomerController extends BaseCustomerController {
         $files = $this->request->file('evidence_urls');
         $error = '';
 
+        if (!Session::has('user')) {
+            Response::json(['status' => 'error', 'msg' => 'Vui lòng đăng nhập để báo cáo vi phạm', 'token' => CSRF::getTokenRefresh()], 400);
+        }
+
         if (!CSRF::validatePostRequest()) {
             Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 400);
         }
