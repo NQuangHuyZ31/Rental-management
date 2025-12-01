@@ -121,4 +121,14 @@ class EmailTemplate
             'rentalPostDate' => $rentalPostDate
         ]);
     }
+
+    public static function renderResolvedSupport($customer, $supportAt, $message = '', $description = '')
+    {
+        return self::render('resolved-support', [
+            'customer' => $customer,
+            'supportAt' => $supportAt,
+            'message' => $message,
+            'description' => $description
+        ]);
+    }
 }

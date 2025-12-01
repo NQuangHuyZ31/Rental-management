@@ -11,7 +11,6 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseCustomerController;
 use App\Models\RentalCategory;
-use App\Models\RenTalPost;
 use App\Models\RentalAmenity;
 use App\Models\User;
 use App\Models\Role;

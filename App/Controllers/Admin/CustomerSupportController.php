@@ -11,15 +11,18 @@ use Core\CSRF;
 use Core\Response;
 use Core\Session;
 use Core\ViewRender;
+use Queue\SendEmailResolvedReport;
 
 class CustomerSupportController extends AdminController {
     protected $title = "Hỗ trợ khách hàng";
     protected $role = 'admin';
     protected $ownerId = 0;
     protected $limit = 5;
+    protected $sendEmailResolvedSupport;
 
     public function __construct() {
         parent::__construct();
+        $this->sendEmailResolvedSupport = new SendEmailResolvedReport();
     }
 
     // Added by Huy Nguyen on 2025-12-05 to show customer support page
@@ -93,6 +96,20 @@ class CustomerSupportController extends AdminController {
         $this->customerSupportModel->updateColumn($requests['customer_support_id'], 'user_process_id', Session::get('user')['id']);
         $this->customerSupportModel->updateColumn($requests['customer_support_id'], 'date_process', date('Y-m-d H:i:s'));
         $this->customerSupportModel->updateColumn($requests['customer_support_id'], 'description_process', $content);
+
+        if ($requests['resolved_type'] == 'Gửi email') {
+            $cs = $this->customerSupportModel->getById($requests['customer_support_id'], 'customer_supports');
+
+            $this->sendEmailResolvedSupport->dispatch([
+                'to' => $cs['customer_email'],
+                'customer' => $cs['customer_name'],
+                'support_at' => date('d-m-Y H:i:s', strtotime($cs['created_at'])),
+                'message' => $requests['resolved_content'],
+                'type' => 'support',
+                'description' => $cs['description_problem'],
+                'resolved_at' => date('d-m-Y H:i:s'),
+            ]);
+        }
 
         Response::json(['status' => 'success', 'msg' => 'Cập nhật yêu cầu hỗ trợ thành công.', 'token' => CSRF::getTokenRefresh()], 200);
     }

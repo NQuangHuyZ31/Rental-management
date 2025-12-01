@@ -10,5 +10,9 @@ namespace App\Models;
 
 class CustomerSupport extends Model {
 	protected $table = 'customer_supports';
-	protected $primaty_key = 'id';
+	protected $primary_key = 'id';
+
+	public function __construct() {
+		parent::__construct();
+	}
 }

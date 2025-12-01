@@ -18,18 +18,25 @@ class SendEmailResolvedReport extends Job {
 
     public function handle($data) {
         try {
-            $to = $data['to'] ?? '';
-			$customer = $data['customer'] ?? '';
-			$message = $data['message'] ?? '';
-            $actionMessage = $data['action'] ?? '';
-            $resolvedAt = $data['resolved_at'] ?? '';
-            $rentalPostDate = $data['rental_post_date'] ?? '';
+            $to = isset($data['to']) ? $data['to'] : '';
+			$customer = isset($data['customer']) ? $data['customer'] : '';
+			$message = isset($data['message']) ? $data['message'] : '';
+            $actionMessage = isset($data['action']) ? $data['action'] : '';
+            $resolvedAt = isset($data['resolved_at']) ? $data['resolved_at'] : '';
+            $rentalPostDate = isset($data['rental_post_date']) ? $data['rental_post_date'] : '';
+            $type = isset($data['type']) ? $data['type'] : '';
+            $supportAt = isset($data['support_at']) ? $data['support_at'] : '';
+            $description = isset($data['description']) ? $data['description'] : '';
 
             if (empty($to) || empty($customer) || empty($resolvedAt)) {
                 throw new \Exception("Missing required email data");
             }
 			
-			$this->sendEmail->sendResolvedReport($to, $customer, $actionMessage, $resolvedAt, $message, $rentalPostDate);
+			if ($type === 'support') {
+                $this->sendEmail->sendResolvedSupportReport($to, $customer, $supportAt, $message, $description);
+            } else {
+                $this->sendEmail->sendResolvedReport($to, $customer, $actionMessage, $resolvedAt, $message, $rentalPostDate);
+            }
             
         } catch (\Throwable $th) {
             Log::queue("Failed to send resolved report email to {$data['to']}: {$th->getMessage()}");

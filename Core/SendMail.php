@@ -199,4 +199,21 @@ class SendMail {
             return false;
         }
     }
+
+    // Gửi email thông báo báo cáo hỗ trợ đã được xử lý
+    public function sendResolvedSupportReport($email, $customer, $supportAt, $message = '', $description = '') {
+        try {
+            $this->config();
+            $this->mail->addAddress($email, $customer);
+            $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+            $this->mail->Subject = "Hỗ trợ khách hàng – Hosty";
+            $this->mail->Body = EmailTemplate::renderResolvedSupport($customer, $supportAt, $message, $description);
+            $this->mail->send();
+            Log::queue("Resolved support report email sent successfully to: " . $email);
+            return true;
+        } catch (Exception $e) {
+            Log::queue("Failed to send resolved support report email to {$email}: {$this->mail->ErrorInfo}");
+            return false;
+        }
+    }
 }

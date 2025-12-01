@@ -49,6 +49,29 @@ class Model extends QueryBuilder {
         return $this->update([$column => $value, 'updated_at' => date('Y-m-d H:s:i')]);
     }
 
+    // Added by Huy Nguyen on 2025-11-01 to get by id
+    public function getById($id, $table = '', $extWhere = []) {
+        if (empty($id)) {
+            return;
+        }
+        
+        $query = !empty($table) ? $this->table($table) : $this->table($this->table);
+
+        if (!empty($extWhere) || is_array($extWhere)) {
+            foreach ($extWhere as $column => $value) {
+                if (!empty($value['condition'])) {
+                    $query->where($column, $value['condition'], $value['value']);
+                } else {
+                    $query->where($column, $value['value']);
+                }
+            }
+        }
+
+        return $query->where('id', $id)
+            ->where('deleted', 0)
+            ->first();
+    }
+
     // Added by Huy Nguyen on 2025-10-31 to get column
     public function getColumn($column = [], $table = '', $id = '', $extWhere = []) {
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
