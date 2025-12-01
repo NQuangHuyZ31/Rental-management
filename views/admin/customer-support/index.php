@@ -135,7 +135,7 @@ use Core\CSRF;
 					<?php
 					if (empty($csData)) : ?>
 						<tr>
-							<td colspan="7" class="px-6 py-12 text-center text-gray-500">
+							<td colspan="10" class="px-6 py-12 text-center text-gray-500">
 								<i class="fas fa-inbox text-4xl mb-4"></i>
 								<p class="text-lg">Không có yêu cầu hỗ trợ nào</p>
 							</td>

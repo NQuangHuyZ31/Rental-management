@@ -24,6 +24,7 @@ class User extends Model {
         'account_status',
         'avatar',
         'last_login',
+        'created_at'
     ];
 
     public function __construct() {
