@@ -144,3 +144,34 @@ button {
 .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
     height: 200px;
 }
+
+/* Added by Huy Nguyen on 2025-12-07 to custom scrollbar */
+
+/* Ẩn scrollbar mặc định */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Chỉ hiện khi hover container */
+.custom-scrollbar:hover::-webkit-scrollbar {
+    opacity: 1;
+}
+
+/* Track (nền) */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Tay cuộn */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 9999px;
+    transition: background 0.2s;
+}
+
+/* Đậm hơn khi hover vào thanh cuộn */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.35);
+}

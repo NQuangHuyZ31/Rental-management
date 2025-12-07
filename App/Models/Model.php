@@ -75,14 +75,19 @@ class Model extends QueryBuilder {
     // Added by Huy Nguyen on 2025-10-31 to get column
     public function getColumn($column = [], $table = '', $id = '', $extWhere = []) {
         $query = !empty($table) ? $this->table($table) : $this->table($this->table);
-        $query->select($column);
+
+        if (is_array($column)) {
+            $query->select($column);
+        } else {
+            $query->select([$column]);
+        }
 
         if (!empty($id)) {
             return $query->where(!empty($table) ? $table . '.id' : $this->table . '.id', $id)
                 ->where(!empty($table) ? $table . '.deleted' : $this->table . '.deleted', 0)->first();
         }
 
-        if (!empty($extWhere) || is_array($extWhere)) {
+        if (!empty($extWhere) && is_array($extWhere)) {
             foreach ($extWhere as $column => $value) {
                 if (!empty($value['condition'])) {
                     $query->where($column, $value['condition'], $value['value']);

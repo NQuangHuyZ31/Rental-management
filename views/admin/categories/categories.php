@@ -11,10 +11,10 @@
                     <i class="fas fa-plus mr-2"></i>
                     Thêm danh mục
                 </button>
-                <button class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center">
+                <!-- <button class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center">
                     <i class="fas fa-download mr-2"></i>
                     Xuất Excel
-                </button>
+                </button> -->
             </div>
         </div>
     </div>

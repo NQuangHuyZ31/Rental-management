@@ -136,7 +136,7 @@
  					<option value="Tìm trọ, tìm nhà">Tìm trọ, tìm nhà</option>
  					<option value="Thanh toán">Thanh toán</option>
  					<option value="Tài khoản">Tài khoản</option>
- 					<option value="Kỹ thuâth">Kỹ thuật</option>
+ 					<option value="Kỹ thuật">Kỹ thuật</option>
  					<option value="Góp ý">Góp ý / Phản hồi</option>
  				</select>
  			</div>

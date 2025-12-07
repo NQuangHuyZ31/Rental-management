@@ -184,7 +184,7 @@ use Core\CSRF;
 									</div>
 								</td>
 								<td class="px-6 py-4 text-sm font-medium">
-									<div class="text-sm font-medium text-gray-900">
+									<div class="text-sm font-medium text-gray-900 max-h-40 overflow-y-scroll custom-scrollbar">
 										<?= htmlspecialchars(!empty($cs['description_process']) ? $cs['description_process'] : 'N/A') ?>
 									</div>
 								</td>
