@@ -71,133 +71,210 @@ class RenTalPost extends Model {
     }
 
     public function searchRentalPosts($filters = [], $limit = 10, $offset = 0, $ownerId = false, $customerPage = false, $orderBy = 'created_at', $sort = 'DESC') {
-        $query = $this->table($this->table)
-            ->select([
-                'rental_posts.*',
-                'rental_categories.rental_category_name',
-                'users.username as landlord_name',
-            ])
-            ->join('rental_categories', 'rental_posts.rental_category_id', '=', 'rental_categories.id')
-            ->join('users', 'rental_posts.owner_id', '=', 'users.id')
-            ->where('rental_posts.deleted', 0);
+        $sql = "
+                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name FROM rental_posts INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id INNER JOIN users ON rental_posts.owner_id = users.id WHERE rental_posts.deleted = 0
+                ";
 
-        if ($ownerId) {
-            $query->where('rental_posts.owner_id', $this->getCurrentUserId());
+        $params = [];
+
+        if (!empty($ownerId)) {
+            $sql .= " AND rental_posts.owner_id = :current_user_id";
+            $params['current_user_id'] = $this->getCurrentUserId();
         }
 
-        if ($customerPage) {
-            $query->where('rental_posts.approval_status', 'approved');
-            $query->where('rental_posts.status', 'active');
+        if (!empty($customerPage)) {
+            $sql .= " AND rental_posts.approval_status = 'approved'";
+            $sql .= " AND rental_posts.status = 'active'";
         }
 
-        if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
-            $query->where('rental_posts.approval_status', $filters['approval_status']);
+        if (!empty($filters['approval_status'])) {
+            $sql .= " AND rental_posts.approval_status = :approval_status";
+            $params['approval_status'] = $filters['approval_status'];
         }
 
-        if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
-            $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
+        if (!empty($filters['rental_category_id'])) {
+            $sql .= " AND rental_posts.rental_category_id = :rental_category_id";
+            $params['rental_category_id'] = $filters['rental_category_id'];
         }
 
-        if (isset($filters['category_name']) && !empty($filters['category_name'])) {
-            $raw = $filters['category_name'] ?? '';
+        if (!empty($filters['category_name'])) {
+
+            $raw = $filters['category_name'];
             $nameList = array_filter(array_map('trim', preg_split('/\s*,\s*/', $raw)));
 
-            foreach ($nameList as $i => $name) {
-                $query->whereOr('rental_categories.rental_category_name COLLATE utf8mb4_general_ci', 'LIKE', "%{$name}%");
+            if (!empty($nameList)) {
+                $sql .= " AND (";
+
+                foreach ($nameList as $i => $name) {
+                    $key = "cat_name_$i";
+
+                    if ($i > 0) {
+                        $sql .= " OR ";
+                    }
+
+                    $sql .= " rental_categories.rental_category_name COLLATE utf8mb4_general_ci LIKE :$key";
+
+                    $params[$key] = "%$name%";
+                }
+
+                $sql .= ")";
             }
         }
 
-        if (isset($filters['province']) && !empty($filters['province'])) {
-            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
+        if (!empty($filters['province'])) {
+            $sql .= " AND rental_posts.province LIKE :province";
+            $params['province'] = "%{$filters['province']}%";
         }
 
-        if (isset($filters['price']) && !empty($filters['price'])) {
-            [$fromPrice, $toPrice] = explode('-', $filters['price']);
-            $query->where('rental_posts.price', '>=', $fromPrice * 1000000);
-            $query->where('rental_posts.price', '<=', $toPrice * 1000000);
+        if (!empty($filters['price'])) {
+            [$fromPrice, $toPrice] = explode("-", $filters['price']);
+
+            $sql .= " AND rental_posts.price >= :from_price";
+            $sql .= " AND rental_posts.price <= :to_price";
+
+            $params['from_price'] = $fromPrice * 1000000;
+            $params['to_price'] = $toPrice * 1000000;
         }
 
-        if (isset($filters['area']) && !empty($filters['area'])) {
-            [$fromArea, $toArea] = explode('-', $filters['area']);
-            $query->where('rental_posts.area', '>=', "{$fromArea}");
-            $query->where('rental_posts.area', '<=', "{$toArea}");
+        if (!empty($filters['area'])) {
+            [$fromArea, $toArea] = explode("-", $filters['area']);
+
+            $sql .= " AND rental_posts.area >= :from_area";
+            $sql .= " AND rental_posts.area <= :to_area";
+
+            $params['from_area'] = $fromArea;
+            $params['to_area'] = $toArea;
         }
 
-        if (isset($filters['search']) && !empty($filters['search'])) {
-            $query->whereOr('rental_posts.rental_post_title', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.description', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.address', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.province', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.ward', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$filters['search']}%");
+        if (!empty($filters['search'])) {
+            $sql .= " AND (
+                    rental_posts.rental_post_title LIKE :search1
+                    OR rental_posts.description LIKE :search2
+                    OR rental_posts.address LIKE :search3
+                    OR rental_posts.province LIKE :search4
+                    OR rental_posts.ward LIKE :search5
+                    OR rental_categories.rental_category_name LIKE :search6
+                )";
+
+            $params['search1'] = "%" . $filters['search'] . "%";
+            $params['search2'] = "%" . $filters['search'] . "%";
+            $params['search3'] = "%" . $filters['search'] . "%";
+            $params['search4'] = "%" . $filters['search'] . "%";
+            $params['search5'] = "%" . $filters['search'] . "%";
+            $params['search6'] = "%" . $filters['search'] . "%";
         }
 
-        return $query->orderBy('rental_posts.' . $orderBy, $sort)
-            ->limit($limit)
-            ->offset($offset)
-            ->get();
+        $orderBy = !empty($orderBy) ? $orderBy : "created_at";
+        $sort = !empty($sort) ? strtoupper($sort) : "DESC";
+
+        $sql .= " ORDER BY rental_posts.`$orderBy` $sort";
+
+        $sql .= " LIMIT {$limit} OFFSET {$offset}";
+        // die($sql);
+        return $this->queryAll($sql, $params);
     }
 
     // get total rental posts count
     public function getTotalRentalPostsCount($filters = [], $customerPage = false, $ownerId = false) {
-        $query = $this->table($this->table)
-            ->select([
-                'rental_posts.*',
-                'rental_categories.rental_category_name',
-                'users.username as landlord_name',
-            ])
-            ->join('rental_categories', 'rental_posts.rental_category_id', '=', 'rental_categories.id')
-            ->join('users', 'rental_posts.owner_id', '=', 'users.id')
-            ->where('rental_posts.deleted', 0);
+        $sql = "
+                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name FROM rental_posts INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id INNER JOIN users ON rental_posts.owner_id = users.id WHERE rental_posts.deleted = 0
+                ";
 
-        if ($ownerId) {
-            $query->where('rental_posts.owner_id', $this->getCurrentUserId());
+        $params = [];
+
+        if (!empty($ownerId)) {
+            $sql .= " AND rental_posts.owner_id = :current_user_id";
+            $params['current_user_id'] = $this->getCurrentUserId();
         }
 
-        if ($customerPage) {
-            $query->where('rental_posts.approval_status', 'approved');
-            $query->where('rental_posts.status', 'active');
+        if (!empty($customerPage)) {
+            $sql .= " AND rental_posts.approval_status = 'approved'";
+            $sql .= " AND rental_posts.status = 'active'";
         }
 
-        if (isset($filters['approval_status']) && !empty($filters['approval_status'])) {
-            $query->where('rental_posts.approval_status', $filters['approval_status']);
+        if (!empty($filters['approval_status'])) {
+            $sql .= " AND rental_posts.approval_status = :approval_status";
+            $params['approval_status'] = $filters['approval_status'];
         }
 
-        if (isset($filters['rental_category_id']) && !empty($filters['rental_category_id'])) {
-            $query->where('rental_posts.rental_category_id', $filters['rental_category_id']);
+        if (!empty($filters['rental_category_id'])) {
+            $sql .= " AND rental_posts.rental_category_id = :rental_category_id";
+            $params['rental_category_id'] = $filters['rental_category_id'];
         }
 
-        if (isset($filters['category_name']) && !empty($filters['category_name'])) {
-            $name = array_map('trim', explode(',', $filters['category_name']));
-            $query->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$name[0]}%");
-            $query->whereOr('rental_categories.rental_category_name', 'LIKE', "%{$name[1]}%");
+        if (!empty($filters['category_name'])) {
+
+            $raw = $filters['category_name'];
+            $nameList = array_filter(array_map('trim', preg_split('/\s*,\s*/', $raw)));
+
+            if (!empty($nameList)) {
+                $sql .= " AND (";
+
+                foreach ($nameList as $i => $name) {
+                    $key = "cat_name_$i";
+
+                    if ($i > 0) {
+                        $sql .= " OR ";
+                    }
+
+                    $sql .= " rental_categories.rental_category_name COLLATE utf8mb4_general_ci LIKE :$key";
+
+                    $params[$key] = "%$name%";
+                }
+
+                $sql .= ")";
+            }
         }
 
-        if (isset($filters['province']) && !empty($filters['province'])) {
-            $query->where('rental_posts.province', 'LIKE', "%{$filters['province']}%");
+        if (!empty($filters['province'])) {
+            $sql .= " AND rental_posts.province LIKE :province";
+            $params['province'] = "%{$filters['province']}%";
         }
 
-        if (isset($filters['price']) && !empty($filters['price'])) {
-            [$fromPrice, $toPrice] = explode('-', $filters['price']);
-            $query->where('rental_posts.price', '>=', $fromPrice * 1000000);
-            $query->where('rental_posts.price', '<=', $toPrice * 1000000);
+        if (!empty($filters['price'])) {
+            [$fromPrice, $toPrice] = explode("-", $filters['price']);
+
+            $sql .= " AND rental_posts.price >= :from_price";
+            $sql .= " AND rental_posts.price <= :to_price";
+
+            $params['from_price'] = $fromPrice * 1000000;
+            $params['to_price'] = $toPrice * 1000000;
         }
 
-        if (isset($filters['area']) && !empty($filters['area'])) {
-            [$fromArea, $toArea] = explode('-', $filters['area']);
-            $query->where('rental_posts.area', '>=', "{$fromArea}");
-            $query->where('rental_posts.area', '<=', "{$toArea}");
+        if (!empty($filters['area'])) {
+            [$fromArea, $toArea] = explode("-", $filters['area']);
+
+            $sql .= " AND rental_posts.area >= :from_area";
+            $sql .= " AND rental_posts.area <= :to_area";
+
+            $params['from_area'] = $fromArea;
+            $params['to_area'] = $toArea;
         }
 
-        if (isset($filters['search']) && !empty($filters['search'])) {
-            $query->whereOr('rental_posts.rental_post_title', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.description', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.address', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.province', 'LIKE', "%{$filters['search']}%")
-                ->whereOr('rental_posts.ward', 'LIKE', "%{$filters['search']}%");
+        if (!empty($filters['search'])) {
+            $sql .= " AND (
+                    rental_posts.rental_post_title LIKE :search1
+                    OR rental_posts.description LIKE :search2
+                    OR rental_posts.address LIKE :search3
+                    OR rental_posts.province LIKE :search4
+                    OR rental_posts.ward LIKE :search5
+                    OR rental_categories.rental_category_name LIKE :search6
+                )";
+
+            $params['search1'] = "%" . $filters['search'] . "%";
+            $params['search2'] = "%" . $filters['search'] . "%";
+            $params['search3'] = "%" . $filters['search'] . "%";
+            $params['search4'] = "%" . $filters['search'] . "%";
+            $params['search5'] = "%" . $filters['search'] . "%";
+            $params['search6'] = "%" . $filters['search'] . "%";
         }
 
-        return $query->count();
+        $orderBy = !empty($orderBy) ? $orderBy : "created_at";
+        $sort = !empty($sort) ? strtoupper($sort) : "DESC";
+
+        $sql .= " ORDER BY rental_posts.`$orderBy` $sort";
+        // die($sql);
+        return count($this->queryAll($sql, $params)) ?? 0;
     }
 
     public function getRentalPostById($id, $role = '') {
