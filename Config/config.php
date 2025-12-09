@@ -15,11 +15,11 @@ define('VIEW_PATH_USER_LAYOUT', ROOT_PATH . '/views/user/layout/');
 define('UPLOAD_DIR', ROOT_PATH . '/Public/upload/');
 define('URL_IMAGE', ROOT_PATH . '/Public/images/');
 
-define('CLOUD_NAME', $_ENV['CLOUD_NAME']);
-define('CLOUD_API_KEY', $_ENV['CLOUD_API_KEY']);
-define('CLOUD_API_SECRET', $_ENV['CLOUD_API_SECRET']);
+define('CLOUD_NAME', $_ENV['CLOUD_NAME'] ?? null);
+define('CLOUD_API_KEY', $_ENV['CLOUD_API_KEY'] ?? null);
+define('CLOUD_API_SECRET', $_ENV['CLOUD_API_SECRET'] ?? null);
 
-define('ACCOUNT_BANK_NUMBER', $_ENV['ACCOUNT_BANK_NUMBER']);
-define('ACCOUNT_BANK_CODE', $_ENV['ACCOUNT_BANK_CODE']);
-define('ACCOUNT_SECRET_KEY', $_ENV['ACCOUNT_SECRET_KEY']);
-define('ACCOUNT_BANK_NAME', $_ENV['ACCOUNT_BANK_NAME']);
+define('ACCOUNT_BANK_NUMBER', $_ENV['ACCOUNT_BANK_NUMBER'] ?? null);
+define('ACCOUNT_BANK_CODE', $_ENV['ACCOUNT_BANK_CODE'] ?? null);
+define('ACCOUNT_SECRET_KEY', $_ENV['ACCOUNT_SECRET_KEY'] ?? null);
+define('ACCOUNT_BANK_NAME', $_ENV['ACCOUNT_BANK_NAME'] ?? null);
