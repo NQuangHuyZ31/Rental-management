@@ -72,7 +72,11 @@ class RenTalPost extends Model {
 
     public function searchRentalPosts($filters = [], $limit = 10, $offset = 0, $ownerId = false, $customerPage = false, $orderBy = 'created_at', $sort = 'DESC') {
         $sql = "
-                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name FROM rental_posts INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id INNER JOIN users ON rental_posts.owner_id = users.id WHERE rental_posts.deleted = 0
+                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name, houses.house_name FROM rental_posts 
+                INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id 
+                INNER JOIN users ON rental_posts.owner_id = users.id 
+                LEFT JOIN houses ON rental_posts.house_id = houses.id
+                WHERE rental_posts.deleted = 0
                 ";
 
         $params = [];
@@ -154,6 +158,7 @@ class RenTalPost extends Model {
                     OR rental_posts.province LIKE :search4
                     OR rental_posts.ward LIKE :search5
                     OR rental_categories.rental_category_name LIKE :search6
+                    OR houses.house_name LIKE :search7
                 )";
 
             $params['search1'] = "%" . $filters['search'] . "%";
@@ -162,6 +167,7 @@ class RenTalPost extends Model {
             $params['search4'] = "%" . $filters['search'] . "%";
             $params['search5'] = "%" . $filters['search'] . "%";
             $params['search6'] = "%" . $filters['search'] . "%";
+            $params['search7'] = "%" . $filters['search'] . "%";
         }
 
         $orderBy = !empty($orderBy) ? $orderBy : "created_at";
@@ -177,7 +183,11 @@ class RenTalPost extends Model {
     // get total rental posts count
     public function getTotalRentalPostsCount($filters = [], $customerPage = false, $ownerId = false) {
         $sql = "
-                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name FROM rental_posts INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id INNER JOIN users ON rental_posts.owner_id = users.id WHERE rental_posts.deleted = 0
+                SELECT rental_posts.*, rental_categories.rental_category_name, users.username AS landlord_name, houses.house_name FROM rental_posts 
+                INNER JOIN rental_categories ON rental_posts.rental_category_id = rental_categories.id 
+                INNER JOIN users ON rental_posts.owner_id = users.id 
+                LEFT JOIN houses ON rental_posts.house_id = houses.id
+                WHERE rental_posts.deleted = 0
                 ";
 
         $params = [];
@@ -259,6 +269,7 @@ class RenTalPost extends Model {
                     OR rental_posts.province LIKE :search4
                     OR rental_posts.ward LIKE :search5
                     OR rental_categories.rental_category_name LIKE :search6
+                    OR houses.house_name LIKE :search7
                 )";
 
             $params['search1'] = "%" . $filters['search'] . "%";
@@ -267,6 +278,7 @@ class RenTalPost extends Model {
             $params['search4'] = "%" . $filters['search'] . "%";
             $params['search5'] = "%" . $filters['search'] . "%";
             $params['search6'] = "%" . $filters['search'] . "%";
+            $params['search7'] = "%" . $filters['search'] . "%";
         }
 
         $orderBy = !empty($orderBy) ? $orderBy : "created_at";
@@ -285,7 +297,9 @@ class RenTalPost extends Model {
                 'users.username as landlord_name',
                 'users.phone as landlord_phone',
                 'users.email as landlord_email',
+                'houses.house_name',
             ])
+            ->leftJoin('houses', 'rental_posts.house_id', '=', 'houses.id')
             ->join('rental_categories', 'rental_posts.rental_category_id', '=', 'rental_categories.id')
             ->join('users', 'rental_posts.owner_id', '=', 'users.id')
             ->where('rental_posts.id', $id)
@@ -302,6 +316,7 @@ class RenTalPost extends Model {
         $postData = [
             'owner_id' => $this->getCurrentUserId(),
             'rental_category_id' => $data['category'],
+            'house_id' => $data['house'] ?? null,
             'rental_post_title' => $data['title'],
             'contact' => $data['contact_name'],
             'phone' => $data['contact_phone'],

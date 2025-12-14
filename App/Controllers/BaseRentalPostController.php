@@ -8,6 +8,7 @@ Purpose: base rental post controller
 
 namespace App\Controllers;
 
+use App\Models\House;
 use App\Models\RentalAmenity;
 use App\Models\RentalCategory;
 use App\Models\RenTalPost;
@@ -21,27 +22,29 @@ use Exception;
 use Queue\UploadImageOnCloud;
 
 class BaseRentalPostController extends BaseCustomerController {
-	protected $role = '';
+    protected $role = '';
     protected $limit = 10;
-	protected $rentalCategoryModel;
-	protected $rentalAmenityModel;
-	protected $uploadImageOnCloud;
-	protected $queryBuilder;
+    protected $rentalCategoryModel;
+    protected $rentalAmenityModel;
+    protected $uploadImageOnCloud;
+    protected $queryBuilder;
     protected $user;
     protected $ownerId;
+    protected $houseModel;
 
     public function __construct() {
-		parent::__construct();
+        parent::__construct();
         $this->request = new Request();
-		$this->rentalPostModel = new RenTalPost();
-		$this->rentalCategoryModel = new RentalCategory();
-		$this->rentalAmenityModel = new RentalAmenity();
-		$this->uploadImageOnCloud = new UploadImageOnCloud();
-		$this->queryBuilder = new QueryBuilder();
+        $this->rentalPostModel = new RenTalPost();
+        $this->rentalCategoryModel = new RentalCategory();
+        $this->rentalAmenityModel = new RentalAmenity();
+        $this->uploadImageOnCloud = new UploadImageOnCloud();
+        $this->queryBuilder = new QueryBuilder();
         $this->user = Session::get('user');
+        $this->houseModel = new House();
     }
 
-	public function create() {
+    public function create() {
         $data = $this->request->post();
         $error = RentalPostValidate::validate($data);
 
@@ -85,23 +88,23 @@ class BaseRentalPostController extends BaseCustomerController {
         }
     }
 
-	public function getPost() {
-		$postId = $this->request->get('post_id');
+    public function getPost() {
+        $postId = $this->request->get('post_id');
 
-		if ($postId == '') {
-			Response::json(['status' => 'error', 'error' => 'Bài đăng không tồn tại!'], 400);
-		}
+        if ($postId == '') {
+            Response::json(['status' => 'error', 'error' => 'Bài đăng không tồn tại!'], 400);
+        }
 
-		$post = $this->rentalPostModel->getRentalPostById($postId, $this->role);
+        $post = $this->rentalPostModel->getRentalPostById($postId, $this->role);
 
         $isUpdate = $post && $post['owner_id'] == $this->user['id'] ? 1 : 0;
 
-		if ($post) {
-			Response::json(['status' => 'success', 'post' => $post, 'is_update' => $isUpdate], 200);
-		} else {
-			Response::json(['status' => 'error', 'error' => 'Bài đăng không tồn tại!'], 400);
-		}
-	}
+        if ($post) {
+            Response::json(['status' => 'success', 'post' => $post, 'is_update' => $isUpdate], 200);
+        } else {
+            Response::json(['status' => 'error', 'error' => 'Bài đăng không tồn tại!'], 400);
+        }
+    }
 
     public function update() {
         $data = $this->request->post();
@@ -240,5 +243,14 @@ class BaseRentalPostController extends BaseCustomerController {
 
     public function getAllRentalAmenity() {
         return $this->rentalAmenityModel->getAllRentalAmenities();
+    }
+
+    // Added by Huy Nguyen on 2025-12-14 to get all houses of landlord
+    public function getAllHouse() {
+        if ($this->role == 'landlord') {
+            return $this->houseModel->getAllHousesByOwnerId($this->user['id']);
+        } else {
+            return $this->houseModel->getAll('houses');
+        }
     }
 }

@@ -161,7 +161,7 @@
                                 ?>
                                 <div class="flex flex-col space-x-2">
                                     <span class="items-center px-2.5 py-0.5 w-fit rounded-full text-xs font-medium bg-<?= $colorbg ?>">
-                                        <?= htmlspecialchars($post['approval_status'], ENT_QUOTES, 'UTF-8') ?>
+                                        <?= htmlspecialchars(\Helpers\MappingData::mapStatus($post['approval_status']), ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                     <p class="text-[12px] text-gray-500">Ngày đăng: <?= date('d/m/Y', strtotime($post['created_at'])) ?></p>
                                 </div>
@@ -205,7 +205,7 @@
                                 </div>
                                 <div class="flex flex-col space-x-2">
                                     <span class="items-center px-2.5 py-0.5 w-fit rounded-full text-xs font-medium bg-<?= $textColor ?>">
-                                        <?= htmlspecialchars($report['status'], ENT_QUOTES, 'UTF-8') ?>
+                                        <?= htmlspecialchars(\Helpers\MappingData::mapStatus($report['status']), ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                     <p class="text-[12px] text-gray-500">Ngày báo cáo: <?= date('d/m/Y', strtotime($report['created_at'])) ?></p>
                                 </div>

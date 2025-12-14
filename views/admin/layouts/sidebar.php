@@ -62,14 +62,14 @@ $dataModelHelper = new DataModelHelper();
             <a href="<?= BASE_URL ?>/admin/reports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <i class="fas fa-flag mr-3 flex-shrink-0 h-6 w-6"></i>
                 Báo cáo vi phạm
-                <span class="ml-auto bg-red-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded-full <?= $dataModelHelper->getReportCountByStatus('pending') > 0 ? '' : 'hidden'  ?> ?>"><?= htmlspecialchars($dataModelHelper->getReportCountByStatus('pending'), ENT_QUOTES, 'UTF-8') ?></span>
+                <span class="ml-auto bg-red-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded-full <?= $dataModelHelper->getReportCountByStatus('pending') > 0 ? '' : 'hidden'  ?>"><?= htmlspecialchars($dataModelHelper->getReportCountByStatus('pending'), ENT_QUOTES, 'UTF-8') ?></span>
             </a>
 
             <!-- Hỗ trợ khách hàng -->
             <a href="<?= BASE_URL ?>/admin/customer-supports" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <i class="fas fa-headset mr-3 flex-shrink-0 h-6 w-6"></i>
                 Hỗ trợ khách hàng
-                <span class="ml-auto bg-yellow-200 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full"><?= htmlspecialchars($dataModelHelper->getCustomerSupportCountNotProcessed(), ENT_QUOTES, 'UTF-8') ?></span>
+                <span class="ml-auto bg-yellow-200 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full <?= $dataModelHelper->getCustomerSupportCountNotProcessed() > 0 ? '' : 'hidden'  ?>"><?= htmlspecialchars($dataModelHelper->getCustomerSupportCountNotProcessed(), ENT_QUOTES, 'UTF-8') ?></span>
             </a>
 
             <!-- Quản lý giao dịch -->

@@ -99,7 +99,7 @@
                                             <?php if ($user['avatar']): ?>
                                                 <img class="h-10 w-10 rounded-full" src="<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['username']) ?>">
                                             <?php else: ?>
-                                                <div class="h-10 w-10 rounded-full <?= $user['role_code'] === 'admin' ? 'bg-red-500' : ($user['role_code'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
+                                                <div class="h-10 w-10 rounded-full <?= $user['role_name'] === 'admin' ? 'bg-red-500' : ($user['role_name'] === 'landlord' ? 'bg-blue-500' : 'bg-green-500') ?> flex items-center justify-center">
                                                     <span class="text-sm font-medium text-white">
                                                         <?= strtoupper(substr($user['username'], 0, 2)) ?>
                                                     </span>
@@ -111,8 +111,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    <?= $user['role_code'] === 'admin' ? 'bg-red-100 text-red-800' : ($user['role_code'] === 'landlord' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') ?>">
-                                        <?= htmlspecialchars($user['role_name']) ?>
+                                    <?= $user['role_name'] === 'admin' ? 'bg-red-100 text-red-800' : ($user['role_name'] === 'landlord' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') ?>">
+                                        <?= htmlspecialchars(\Helpers\MappingData::mappingUserType($user['role_name'])) ?>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">

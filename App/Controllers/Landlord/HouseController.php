@@ -10,6 +10,7 @@ namespace App\Controllers\Landlord;
 
 use App\Controllers\Landlord\LandlordController;
 use Core\CSRF;
+use Core\Response;
 use Core\Session;
 use Core\ViewRender;
 
@@ -340,6 +341,29 @@ class HouseController extends LandlordController {
             }
         } catch (\Exception $e) {
             $this->request->redirectWithError('/landlord', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
+    }
+
+    // Added by Huy Nguyen on 2025-12-14 to get address house
+    public function getAddressHouse() {
+        $requests = $this->request->post();
+
+        if (!isset($requests['house_id']) || empty($requests['house_id'])) {
+            Response::json(['status' => 'error', 'msg' => 'Chưa có nhà trọ được chọn', 'token' => CSRF::getTokenRefresh()], 400);
+            return;
+        }
+
+        if (!CSRF::validatePostRequest()) {
+            Response::json(['status' => 'error', 'msg' => 'Có lỗi xảy ra. Vui lòng thử lại', 'token' => CSRF::getTokenRefresh()], 401);
+            return;
+        }
+
+        $house = $this->houseModel->getHouseById($requests['house_id'], $this->user['id']);
+        
+        if ($house) {
+            Response::json(['status' => 'success', 'house' => $house, 'token' => CSRF::getTokenRefresh()], 200);
+        } else {
+            Response::json(['status' => 'error', 'msg' => 'Không tìm thấy nhà trọ', 'token' => CSRF::getTokenRefresh()], 404);
         }
     }
 }

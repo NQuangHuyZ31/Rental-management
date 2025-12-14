@@ -69,7 +69,7 @@ $images = isset($post['images']) ? json_decode($post['images'], true) : [];
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <!-- Title and Price -->
                     <div class="mb-4">
-                        <h1 class="text-2xl font-bold text-gray-900 mb-2"><?= htmlspecialchars($post['rental_post_title']) ?></h1>
+                        <h1 class="text-2xl font-bold text-gray-900 mb-2"><?= $post['house_id'] > 0 ? htmlspecialchars($post['house_name'], ENT_QUOTES, 'UTF-8') . ' - ' . htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') : htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') ?></h1>
                         <div class="flex items-center gap-2 text-gray-600 mb-3">
                             <i class="fas fa-map-marker-alt text-gray-400"></i>
                             <span><?= htmlspecialchars($post['address'] . '-' . $post['ward'] . '-' . $post['province']) ?></span>

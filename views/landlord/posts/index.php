@@ -133,7 +133,7 @@
                                             }
                                             ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusClass ?>">
-                                                <?= $rentalPost['status'] ?>
+                                                <?= htmlspecialchars(\Helpers\MappingData::mapStatus($rentalPost['status']), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
 
@@ -154,14 +154,14 @@
                                             }
                                             ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $approvalClass ?>">
-                                                <?= $rentalPost['approval_status'] ?>
+                                                <?= htmlspecialchars(\Helpers\MappingData::mapStatus($rentalPost['approval_status']), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
 
                                         <!-- Rejection Reason Column -->
                                         <div class="col-span-2">
                                             <span class="text-sm <?= $rentalPost['rejection_reason'] ? 'text-red-600' : 'text-gray-500' ?>">
-                                                <?= $rentalPost['approval_reason'] ?: '-' ?>
+                                                <?= htmlspecialchars($rentalPost['approval_reason']) ?: '-' ?>
                                             </span>
                                         </div>
 

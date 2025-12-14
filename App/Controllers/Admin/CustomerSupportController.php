@@ -53,7 +53,7 @@ class CustomerSupportController extends AdminController {
             }
         }
 
-        $csData = $this->customerSupportModel->getAll('customer_supports', [], $limit, 'created_at', 'DESC', $offset);
+        $csData = $this->customerSupportModel->getAll('customer_supports', [], $limit, 'date_process', 'DESC', $offset);
         $csDataProcessed = [];
 
         foreach ($csData as $cs) {

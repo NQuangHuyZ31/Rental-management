@@ -60,6 +60,7 @@ class RentalPostCustomerController extends BaseRentalPostController {
         }
 
         $filters['category_name'] = $this->primaryFilter;
+        $filters['search'] = rtrim($filters['search']);
 
         // Get posts and categories
         if (!empty($sortFilters)) {

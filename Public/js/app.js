@@ -31,6 +31,14 @@ window.App = {
         });
     },
 
+    showOverlay: function () {
+        JsLoadingOverlay.show();
+    },
+
+    hideOverlay: function () {
+        JsLoadingOverlay.hide();
+    },
+
     // Function for showing messages in modal with higher z-index
     showModalMessage: function (message, status) {
         Swal.fire({

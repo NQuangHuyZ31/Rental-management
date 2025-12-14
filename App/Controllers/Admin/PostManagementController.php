@@ -96,6 +96,7 @@ class PostManagementController extends BaseRentalPostController {
             'rentalAmenities' => $this->getAllRentalAmenity(),
             'pagination' => $pagination,
             'queryParams' => $queryParams,
+            'houses' => $this->getAllHouse(),
             'currentFilters' => [
                 'search' => $search,
                 'approval_status' => $approval_status,

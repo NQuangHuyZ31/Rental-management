@@ -27,7 +27,7 @@ use Helpers\Format;
         <div class="flex-1 p-6">
             <!-- Title -->
             <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-600 transition-colors">
-                <?= htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
+                <?= $post['house_id'] > 0 ? htmlspecialchars($post['house_name'], ENT_QUOTES, 'UTF-8') . ' - ' . htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') : htmlspecialchars($post['rental_post_title'], ENT_QUOTES, 'UTF-8') ?>
             </h3>
 
             <!-- Location -->

@@ -35,6 +35,7 @@ class RentalPostController extends BaseRentalPostController {
             'rentalPosts' => $rentalPosts,
             'rentalCategories' => $this->getAllRentalCategory(),
             'rentalAmenities' => $this->getAllRentalAmenity(),
+            'houses' => $this->getAllHouse(),
             'pagination' => $pagination,
             'queryParams' => $queryParams,
         ]);

@@ -185,6 +185,7 @@ $router->post('/landlord/house/create', [HouseController::class, 'create'], [Aut
 $router->post('/landlord/house/update', [HouseController::class, 'update'], [AuthLandlordMiddleware::class]);
 $router->post('/landlord/house/delete', [HouseController::class, 'delete'], [AuthLandlordMiddleware::class]);
 $router->get('/landlord/house/get/{id}', [HouseController::class, 'getHouse'], [AuthLandlordMiddleware::class]);
+$router->post('/landlord/house/get-address', [HouseController::class, 'getAddressHouse'], [AuthLandlordMiddleware::class]);
 
 // Room Management Routes
 $router->post('/landlord/room/create', [RoomController::class, 'create'], [AuthLandlordMiddleware::class]);

@@ -134,18 +134,69 @@ $(document).ready(function () {
         updateFileInput();
     };
 
+    // Added by Huy Nguyen on 2025-12-14 to not allow change address if house is selected
+    function notAllowChangeAddressIfHouseSelected() {
+        $('select[name="province"]').val('').removeClass('pointer-events-none bg-gray-100');
+        $('select[name="ward"]').val('').removeClass('pointer-events-none bg-gray-100');
+        $('textarea[name="address"]').val('').removeClass('pointer-events-none bg-gray-100');
+    }
+
     // show modal
     $('button#openModalBtn').on('click', function () {
         $('#modalNewPost-title').text('Thêm tin đăng');
         $('#errorMessage').text('');
         $('.modal-action').find('button').text('Thêm tin đăng').removeClass('pointer-events-none opacity-50 updatePostBtn hidden').addClass('addNewPostBtn').attr('disabled', false);
         $('form#formNewPost')[0].reset();
+        $('select[name="province"]').val('').removeClass('pointer-events-none bg-gray-100');
+        $('select[name="ward"]').val('').removeClass('pointer-events-none bg-gray-100');
+        $('textarea[name="address"]').val('').removeClass('pointer-events-none bg-gray-100');
+        notAllowChangeAddressIfHouseSelected();
         // Reset current post ID for new post
         currentPostId = null;
         // Reset image upload to clear any existing images
         if (typeof resetImageUpload === 'function') {
             resetImageUpload();
         }
+    });
+
+    // Handle change house selection to load address
+    $('select[name="house"]').on('change', function () {
+        const houseId = $(this).val();
+
+        if (houseId == '0' || houseId === '' || houseId === null) {
+            notAllowChangeAddressIfHouseSelected();
+            return;
+        }
+
+        App.showOverlay();
+
+        $.ajax({
+            type: 'POST',
+            url: App.appURL + role + '/house/get-address',
+            data: {
+                house_id: houseId,
+                csrf_token: App.getToken(),
+            },
+            dataType: 'json',
+            success: function (response) {
+                App.hideOverlay();
+                App.setToken(response.token);
+                if (response.status === 'success') {
+                    $('select[name="province"]').val(response.house.province).addClass('pointer-events-none bg-gray-100');
+                    // Load wards for the province first
+                    const provinceCode = $('select[name="province"] option:selected').data('code');
+                    App.setWardData(provinceCode, $('select[name="ward"]')).then(function () {
+                        $('select[name="ward"]').val(response.house.ward).addClass('pointer-events-none bg-gray-100');
+                    });
+                    $('textarea[name="address"]').val(response.house.address).addClass('pointer-events-none bg-gray-100');
+                }
+            },
+            error: function (xhr, status, error) {
+                App.hideOverlay();
+                App.setToken(xhr.responseJSON.token);
+                showErrorMessage(xhr.responseJSON.error);
+            },
+        });
     });
 
     // Handle form submission - remove existing listener first
@@ -217,6 +268,7 @@ $(document).ready(function () {
                         $('input[name="title"]').val(post.rental_post_title);
                         $('select[name="category"]').val(post.rental_category_id);
                         $('input[name="contact_name"]').val(post.contact);
+                        $('select[name="house"]').val(post.house_id ?? '0');
                         $('textarea[name="description"]').val(post.description);
                         $('input[name="price"]').val(post.price);
                         $('input[name="promotional_price"]').val(post.price_discount);
@@ -234,6 +286,16 @@ $(document).ready(function () {
 
                         // Set tỉnh thành
                         $('select[name="province"]').val(post.province);
+
+                        if (post.house_id && post.house_id != '0') {
+                            $('select[name="province"]').addClass('pointer-events-none bg-gray-100');
+                            $('select[name="ward"]').addClass('pointer-events-none bg-gray-100');
+                            $('textarea[name="address"]').addClass('pointer-events-none bg-gray-100');
+                        } else {
+                            $('select[name="province"]').removeClass('pointer-events-none bg-gray-100');
+                            $('select[name="ward"]').removeClass('pointer-events-none bg-gray-100');
+                            $('textarea[name="address"]').removeClass('pointer-events-none bg-gray-100');
+                        }
 
                         // Sau khi set tỉnh thành, load phường xã
                         if (post.province && post.ward) {
