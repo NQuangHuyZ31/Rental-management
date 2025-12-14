@@ -18,7 +18,7 @@ class RentalPostValidate
 		if (empty($data['title']) || empty($data['category'])|| empty($data['contact_name']) 
 		|| empty($data['contact_phone']) || empty($data['price']) || empty($data['area']) || empty($data['electricity_price'])
 		|| empty($data['water_price']) || empty($data['available_date']) || empty($data['max_occupants']) || empty($data['opening_time'])
-		|| empty($data['closing_time']) || empty($data['province']) || empty($data['ward'])) {
+		|| empty($data['closing_time']) || empty($data['province']) || empty($data['ward']) || empty($data['house'])) {
 			$error = 'Thông tin có dấu * là bắt buộc';
 		}
 
