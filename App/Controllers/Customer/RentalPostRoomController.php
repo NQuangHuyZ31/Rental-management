@@ -10,7 +10,7 @@ namespace App\Controllers\Customer;
 class RentalPostRoomController extends RentalPostCustomerController {
     protected $titlePage = 'Cho thuê Phòng trọ, nhà trọ giá rẻ ';
     protected $returnPage = 'room';
-    protected $primaryFilter = 'Phòng trọ, Nhà trọ';
+    protected $primaryFilter = 'Phòng trọ, Nhà trọ, Phòng trọ sinh viên, Nhà trọ sinh viên';
 
     public function searchByFilter() {
         parent::searchByFilter();

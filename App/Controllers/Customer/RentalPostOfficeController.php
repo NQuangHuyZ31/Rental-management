@@ -10,7 +10,7 @@ namespace App\Controllers\Customer;
 class RentalPostOfficeController extends RentalPostCustomerController {
     protected $titlePage = 'Cho thuê Văn phòng giá rẻ ';
     protected $returnPage = 'office';
-    protected $primaryFilter = 'Văn phòng, Chung cư';
+    protected $primaryFilter = 'Văn phòng, Chung cư, Toà nhà văn phòng, Coworking space, Văn phòng cho thuê';
 
     public function searchByFilter() {
         parent::searchByFilter();

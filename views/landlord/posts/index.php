@@ -133,7 +133,7 @@
                                             }
                                             ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusClass ?>">
-                                                <?= htmlspecialchars(\Helpers\MappingData::mapStatus($rentalPost['status']), ENT_QUOTES, 'UTF-8') ?>
+                                                <?= htmlspecialchars(\App\Config\MappingData::mapStatus($rentalPost['status']), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
 
@@ -154,7 +154,7 @@
                                             }
                                             ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $approvalClass ?>">
-                                                <?= htmlspecialchars(\Helpers\MappingData::mapStatus($rentalPost['approval_status']), ENT_QUOTES, 'UTF-8') ?>
+                                                <?= htmlspecialchars(\App\Config\MappingData::mapStatus($rentalPost['approval_status']), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
 
