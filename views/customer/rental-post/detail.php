@@ -88,7 +88,7 @@ $images = isset($post['images']) ? json_decode($post['images'], true) : [];
                             </div>
                             <div>
                                 <div class="text-sm text-gray-600">Tiền cọc</div>
-                                <div class="font-semibold text-gray-900"><?= !empty($post['rental_deposit']) ? \Helpers\Format::forMatPrice($post['rental_deposit']) : \Helpers\Format::forMatPrice($post['price']) ?> đ</div>
+                                <div class="font-semibold text-gray-900"><?= $post['rental_deposit'] > 0 ? \Helpers\Format::forMatPrice($post['rental_deposit']) : \Helpers\Format::forMatPrice($post['price']) ?> đ</div>
                             </div>
                         </div>
 

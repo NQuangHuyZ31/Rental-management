@@ -101,7 +101,7 @@ class RenTalPost extends Model {
             $params['rental_category_id'] = $filters['rental_category_id'];
         }
 
-        if (!empty($filters['category_name'])) {
+        if (!empty($filters['category_name']) && empty($filters['search'])) {
 
             $raw = $filters['category_name'];
             $nameList = array_filter(array_map('trim', preg_split('/\s*,\s*/', $raw)));
@@ -212,7 +212,7 @@ class RenTalPost extends Model {
             $params['rental_category_id'] = $filters['rental_category_id'];
         }
 
-        if (!empty($filters['category_name'])) {
+        if (!empty($filters['category_name']) && empty($filters['search'])) {
 
             $raw = $filters['category_name'];
             $nameList = array_filter(array_map('trim', preg_split('/\s*,\s*/', $raw)));
