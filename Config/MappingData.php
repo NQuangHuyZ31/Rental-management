@@ -6,7 +6,7 @@
 	Purpose: Helper to map data for various
 */
 
-namespace App\Config;
+namespace Config;
 
 class MappingData {
 	public static function mapStatus($status) {
