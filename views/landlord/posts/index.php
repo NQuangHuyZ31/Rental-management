@@ -68,8 +68,8 @@
                             <div class="grid grid-cols-12 gap-4 items-center text-sm font-medium text-gray-600">
                                 <div class="col-span-4">Tiêu đề</div>
                                 <div class="col-span-2">Giá phòng</div>
-                                <div class="col-span-1">Trạng thái</div>
-                                <div class="col-span-2">Trạng thái duyệt</div>
+                                <div class="col-span-2">Trạng thái</div>
+                                <div class="col-span-1">Trạng thái duyệt</div>
                                 <div class="col-span-2">Nguyên nhân từ chối</div>
                                 <div class="col-span-1">Hành động</div>
                             </div>
@@ -120,7 +120,7 @@
                                         </div>
 
                                         <!-- Status Column -->
-                                        <div class="col-span-1">
+                                        <div class="col-span-2">
                                             <?php
                                             $statusClass = 'bg-gray-100 text-gray-800';
                                             switch ($rentalPost['status']) {
@@ -132,13 +132,13 @@
                                                     break;
                                             }
                                             ?>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusClass ?>">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-nowrap <?= $statusClass ?>">
                                                 <?= htmlspecialchars(\Config\MappingData::mapStatus($rentalPost['status']), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
 
                                         <!-- Approval Status Column -->
-                                        <div class="col-span-2">
+                                        <div class="col-span-1">
                                             <?php
                                             $approvalClass = 'bg-gray-100 text-gray-800';
                                             switch ($rentalPost['approval_status']) {
