@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y \
     git unzip curl \
     libpng-dev libjpeg-dev libfreetype6-dev
 
+# Cài PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql gd
 
 # Cài Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -15,7 +17,6 @@ COPY . .
 
 # Cài dependencies PHP
 RUN composer install
-# đảm bảo cron.sh có quyền chạy
 RUN chmod +x cron.sh
 
 CMD ["sh", "cron.sh"]
