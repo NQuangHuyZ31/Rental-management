@@ -12,8 +12,8 @@ define('ROOT_PATH', $rootPath);
 // Các define khác
 define('VIEW_PATH', ROOT_PATH . '/views/');
 define('VIEW_PATH_USER_LAYOUT', ROOT_PATH . '/views/user/layout/');
-define('UPLOAD_DIR', ROOT_PATH . '/Public/upload/');
-define('URL_IMAGE', ROOT_PATH . '/Public/images/');
+define('UPLOAD_DIR', ROOT_PATH . '/public/upload/');
+define('URL_IMAGE', ROOT_PATH . '/public/images/');
 
 define('CLOUD_NAME', $_ENV['CLOUD_NAME'] ?? null);
 define('CLOUD_API_KEY', $_ENV['CLOUD_API_KEY'] ?? null);
