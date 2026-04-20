@@ -1,9 +1,13 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 
-// Load file .env trước
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$envPath = __DIR__ . '/../.env';
+
+if (file_exists($envPath)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname($envPath));
+    $dotenv->load();
+}
 
 // Sau khi $_ENV có dữ liệu rồi mới require config.php
 require_once 'Config/config.php';
