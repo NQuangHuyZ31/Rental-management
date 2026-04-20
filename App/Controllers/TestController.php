@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Core\ViewRender;
 use Helpers\Hash;
 use Helpers\UploadClound;
+use PDO;
 
 class TestController
 {
@@ -27,6 +28,7 @@ class TestController
     // UploadClound::delete('whr_images/feedback_images/' . $result);
     // $data = Hash::decrypt('Sz5eHv/6tWo5Sq06LSxId5JypqpjMHldQvNXYPGFAyljNTQ2cmopMs5CZx+nH3hoL15/UWLyjIYgJaGhs2ilHFIgMRgnwGEGSb+ySEhnfVGqO+71aaXKnZbKYFjKsyCvGaRXjXaVuJNj1kC3VWX6bXhynSoYwmA6nXFs94fqfto=');
     // var_dump(json_decode($data, true));
+    print_r(PDO::getAvailableDrivers());
     ViewRender::renderWithLayout('template/pdf/invoice-template', [], 'template/pdf/base-pdf-template');
   }
 }
