@@ -198,7 +198,7 @@
                         <!-- Empty State -->
                         <div class="text-center py-12 hidden" id="emptyState">
                             <div class="w-48 h-48 mx-auto mb-4">
-                                <img src="<?= BASE_URL . '/Public/images/admin/empty-houses.jpg' ?>" alt="Không có dữ liệu" class="w-full h-full object-cover rounded-lg">
+                                <img src="<?= BASE_URL . '/public/images/admin/empty-houses.jpg' ?>" alt="Không có dữ liệu" class="w-full h-full object-cover rounded-lg">
                             </div>
                             <p class="text-gray-500 text-lg" id="emptyStateMessage">Không có dữ liệu sử dụng dịch vụ nào!</p>
                         </div>

@@ -24,7 +24,7 @@ $success = $flashData['success'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+    <link rel="icon" href="<?=BASE_URL?>/public/images/favicon.ico">
     <title>Đăng nhập - HOSTY</title>
 
     <!-- Tailwind CSS -->
@@ -37,7 +37,7 @@ $success = $flashData['success'] ?? '';
     <style>
         body {
             background-color: #f7fafc;
-            background: url('<?=BASE_URL?>/Public/images/admin/login-background.jpg') no-repeat;
+            background: url('<?=BASE_URL?>/public/images/admin/login-background.jpg') no-repeat;
             background-size: contain;
             background-position-y: 60%;
             min-height: 100vh;
@@ -51,7 +51,7 @@ $success = $flashData['success'] ?? '';
         <div class="text-center mb-8">
             <!-- Logo -->
             <div class="mb-4">
-                <img src=" <?=BASE_URL?>/Public/images/admin/hosty-removebg.png" onclick="window.location.href = '<?= BASE_URL ?>/'" alt="HOSTY Logo" class="w-18 h-20 mx-auto cursor-pointer">
+                <img src=" <?=BASE_URL?>/public/images/admin/hosty-removebg.png" onclick="window.location.href = '<?= BASE_URL ?>/'" alt="HOSTY Logo" class="w-18 h-20 mx-auto cursor-pointer">
             </div>
             <!-- Title Text -->
             <h1 class="text-[#3C9E46] text-4xl font-bold text-center leading-tight whitespace-nowrap">
@@ -169,7 +169,7 @@ $success = $flashData['success'] ?? '';
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
+    <script src="<?=BASE_URL?>/public/js/app.js"></script>
 
     <!-- JavaScript for Role Selection -->
     <script>
