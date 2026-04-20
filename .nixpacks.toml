@@ -5,3 +5,9 @@ nixPkgs = [
   "php83Packages.gd",
   "php83Packages.pdo_mysql"
 ]
+
+[phases.build]
+cmds = ["composer install --no-dev --optimize-autoloader"]
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t public"
