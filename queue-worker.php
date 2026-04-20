@@ -24,14 +24,14 @@
  *   (Chạy mỗi phút, nhưng queue sẽ xử lý jobs mỗi 5 giây trong 50 giây)
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+ require_once __DIR__ . '/vendor/autoload.php';
 
-$envPath = __DIR__ . '/../.env';
-
-if (file_exists($envPath)) {
-    $dotenv = Dotenv\Dotenv::createImmutable(dirname($envPath));
-    $dotenv->load();
-}
+ // Load file .env trước
+ $envPath = __DIR__ . '/.env';
+ if (file_exists($envPath)) {
+     $dotenv = Dotenv\Dotenv::createImmutable(dirname($envPath));
+     $dotenv->load();
+ }
  
  // Sau khi $_ENV có dữ liệu rồi mới require config.php
  require_once 'Config/config.php';
