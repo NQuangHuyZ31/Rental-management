@@ -1,7 +1,7 @@
 <?php
 // Tách domain ra, chỉ lấy phần path thôi
 $parsedUrl = parse_url($_ENV['APP_URL'] ?? 'https://hosty.up.railway.app');
-$rootPath = $_ENV['ROOT_SITE_URL'] ?? 'https://hosty.up.railway.app';
+$rootPath = $_ENV['ROOT_SITE_URL'] ?? '\app';
 // Nếu có path (ví dụ: /Rental-management), còn không thì để rỗng
 $basePath = isset($parsedUrl['path']) ? rtrim($parsedUrl['path'], '/') : '';
 
