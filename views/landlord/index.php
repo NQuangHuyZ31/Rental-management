@@ -317,7 +317,7 @@ use Helpers\Format;
     <main class="min-h-screen flex items-center bg-white pt-20">
         <div class="max-w-4xl mx-auto text-center px-4 -mt-80">
             <div class="mb-12">
-                <img src="<?= BASE_URL ?>/public/images/admin/empty-houses.jpg" 
+                <img src="<?= BASE_URL ?>/Public/images/admin/empty-houses.jpg" 
                      alt="Empty Houses" 
                      class="w-64 h-64 mx-auto object-cover">
             </div>

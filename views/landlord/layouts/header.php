@@ -9,7 +9,7 @@ Purpose: Build Header for Landlord Layout
             <!-- Logo Section -->
             <div class="flex items-center">
                 <div>
-                    <img src="<?= BASE_URL ?>/public/images/admin/hosty-removebg.png" 
+                    <img src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.png" 
                          alt="HOSTY Logo" 
                          class="h-20 w-35">
                 </div>

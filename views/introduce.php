@@ -19,7 +19,7 @@
 			<div class="w-full lg:w-1/3">
 				<div class="aspect-w-4 aspect-h-3 bg-gradient-to-br from-blue-50 to-white rounded-lg flex items-center justify-center border border-gray-100">
 					<div class="text-center p-6">
-						<img src="<?= BASE_URL  ?>/public/images/admin/hosty-removebg.png" alt="logo" class="mx-auto mb-4 w-60 h-40">
+						<img src="<?= BASE_URL  ?>/Public/images/admin/hosty-removebg.png" alt="logo" class="mx-auto mb-4 w-60 h-40">
 						<p class="mt-4 text-sm text-gray-600">Quản lý tin, giao dịch và hỗ trợ cộng đồng an toàn</p>
 					</div>
 				</div>

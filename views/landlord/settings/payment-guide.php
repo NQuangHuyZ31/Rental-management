@@ -46,7 +46,7 @@
         <div class="space-y-4">
             <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                 <h3 class="font-semibold text-green-800 mb-2">📋</h3>
-                <img src="<?= BASE_URL ?>/public/images/image.png" alt="Sepay Register" class="w-full h-auto">
+                <img src="<?= BASE_URL ?>/Public/images/image.png" alt="Sepay Register" class="w-full h-auto">
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -79,7 +79,7 @@
                 <div class="space-y-4">
                     <h3 class="font-semibold text-gray-900">🏦 Đăng nhập vào sepay -> Mục ngân hàng -> chọn kết nối tài khoản</h3>
                     <div class="gap-2">
-                        <img src="<?php echo BASE_URL ?>/public/images/guide-1.png" alt="Sepay Bank">
+                        <img src="<?php echo BASE_URL ?>/Public/images/guide-1.png" alt="Sepay Bank">
                     </div>
 					<h3>- Chọn ngân hàng và nhập thông tin tài khoản</h3>
                 </div>
@@ -104,7 +104,7 @@
                 <div class="space-y-4">
                     <h3 class="font-semibold text-gray-900">🏦 Đăng nhập vào sepay -> Mục Cấu hình công ty -> API access -> Thêm API key</h3>
                     <div class="gap-2">
-                        <img src="<?php echo BASE_URL ?>/public/images/guide-2.png" alt="Sepay Bank">
+                        <img src="<?php echo BASE_URL ?>/Public/images/guide-2.png" alt="Sepay Bank">
                     </div>
 					<h3>- Copy lại API key</h3>
                 </div>
@@ -146,13 +146,13 @@
 						<li>3. Nhập thông tin webhook</li>
 						<li>4. Copy url webhook ở trên và nhập vào</li>
                     </ol>
-					<img src="<?php echo BASE_URL ?>/public/images/guide-3.png" alt="Sepay Webhook">
+					<img src="<?php echo BASE_URL ?>/Public/images/guide-3.png" alt="Sepay Webhook">
 
 					<ol class="text-sm text-gray-600 space-y-2">
 						<li>5. Kiểu chứng thực chọn API Key</li>
 						<li>6. Nhập API key vừa tạo</li>
 					</ol>
-					<img src="<?php echo BASE_URL ?>/public/images/guide-4.png" alt="Sepay Webhook">
+					<img src="<?php echo BASE_URL ?>/Public/images/guide-4.png" alt="Sepay Webhook">
 					<h3>- Lưu webhook</h3>
                 </div>
 
@@ -176,7 +176,7 @@
 
         <div class="space-y-6">
             <h3>Đăng nhập vào hệ thống hosty -> Mục Cài đặt chung -> Thanh toán -> Thêm thông tin ngân hàng</h3>
-			<img src="<?php echo BASE_URL ?>/public/images/guide-5.png" alt="Sepay Webhook">
+			<img src="<?php echo BASE_URL ?>/Public/images/guide-5.png" alt="Sepay Webhook">
 			<h3>Nhập thông tin ngân hàng và lưu (API key là API key từ Sepay được cấu hình vào webhook)</h3>
 			<h3>Lưu thông tin: <a class="text-blue-600" href="<?php echo BASE_URL ?>/landlord/setting/payment" target="_blank">Tại đây</a></h3>
         </div>

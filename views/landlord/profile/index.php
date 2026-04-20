@@ -168,7 +168,7 @@ use Core\CSRF;
 					<div class="p-6">
 						<div class="text-center">
 							<div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-								<?= $user['avatar'] != '' ? '<img src="' . BASE_URL . '/public/images/dong-nai.png" alt="Ảnh đại diện" class="w-full h-full object-cover rounded-full">' : '<i class="fas fa-user text-gray-400 text-4xl"></i>' ?>
+								<?= $user['avatar'] != '' ? '<img src="' . BASE_URL . '/Public/images/dong-nai.png" alt="Ảnh đại diện" class="w-full h-full object-cover rounded-full">' : '<i class="fas fa-user text-gray-400 text-4xl"></i>' ?>
 							</div>
 							<input type="file" id="profilePicture" name="profilePicture" class="hidden" accept="image/*">
 							<button id="updateProfilePictureTrigger" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
@@ -262,8 +262,8 @@ use Core\CSRF;
 		<?php include_once ROOT_PATH . '/views/partials/deleted-account-modal.php'; ?>
 	</main>
 	<?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
-	<script src="<?= BASE_URL ?>/public/js/index.js"></script>
-	<script src="<?= BASE_URL ?>/public/js/profile.js"></script>
+	<script src="<?= BASE_URL ?>/Public/js/index.js"></script>
+	<script src="<?= BASE_URL ?>/Public/js/profile.js"></script>
 	<script>
 		$(document).ready(function() {
 			if (typeof initProfileHandlers === 'function') {

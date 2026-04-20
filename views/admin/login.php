@@ -22,7 +22,7 @@ $old = $flashData['old'] ??[];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?= BASE_URL ?>/public/images/favicon.ico">
+    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
     <title>Đăng nhập Admin- HOSTY</title>
 
     <!-- Tailwind CSS -->
@@ -34,7 +34,7 @@ $old = $flashData['old'] ??[];
     <style>
         body {
             background-color: #f7fafc;
-            background: url('<?= BASE_URL ?>/public/images/admin/login-background.jpg') no-repeat;
+            background: url('<?= BASE_URL ?>/Public/images/admin/login-background.jpg') no-repeat;
             background-size: contain;
             background-position-y: 60%;
             min-height: 100vh;
@@ -48,7 +48,7 @@ $old = $flashData['old'] ??[];
         <div class="text-center mb-8">
             <!-- Logo -->
             <div class="mb-4">
-                <img src=" <?= BASE_URL ?>/public/images/admin/hosty-removebg.png" alt="HOSTY Logo" class="w-18 h-20 mx-auto">
+                <img src=" <?= BASE_URL ?>/Public/images/admin/hosty-removebg.png" alt="HOSTY Logo" class="w-18 h-20 mx-auto">
             </div>
             <!-- Title Text -->
             <h1 class="text-[#3C9E46] text-4xl font-bold text-center leading-tight whitespace-nowrap">

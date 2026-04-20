@@ -1,6 +1,6 @@
 <div class="space-y-4">
     <a href="#" class="block rounded-xl overflow-hidden border border-gray-200">
-        <img src="<?= BASE_URL ?>/public/images/sample/banner-qr-app.png" alt="QR App" class="w-full h-auto">
+        <img src="<?= BASE_URL ?>/Public/images/sample/banner-qr-app.png" alt="QR App" class="w-full h-auto">
     </a>
 
     <div class="bg-white rounded-xl border border-gray-200 p-4">

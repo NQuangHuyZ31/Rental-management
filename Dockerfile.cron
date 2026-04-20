@@ -1,0 +1,10 @@
+FROM php:8.3-cli
+
+WORKDIR /app
+
+COPY . .
+
+# đảm bảo cron.sh có quyền chạy
+RUN chmod +x cron.sh
+
+CMD ["sh", "cron.sh"]

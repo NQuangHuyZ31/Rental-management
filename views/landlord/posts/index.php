@@ -243,9 +243,9 @@
         });
     </script>
     <!-- Include index.js -->
-    <script src="<?= BASE_URL ?>/public/js/index.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/index.js"></script>
     <!-- Include posts.js -->
-    <script src="<?= BASE_URL ?>/public/js/posts.js"></script>
+    <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
 </body>
 
 </html>

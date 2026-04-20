@@ -55,7 +55,7 @@ class CronQueueWorker
     private $startTime;
     
     // Cấu hình cron mode
-    private $cronTimeLimit = 50;        // Chạy trong 50 giây
+    private $cronTimeLimit = 300;        // Chạy trong 50 giây
     private $jobInterval = 5;           // Xử lý jobs mỗi 5 giây
     
     public function __construct()
