@@ -14,10 +14,10 @@ class Database
     private function __construct()
     {
         // Use environment variables if available, otherwise use defaults for XAMPP
-        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
-        $this->dbname = $_ENV['DB_NAME'] ?? 'rental_management';
+        $this->host = $_ENV['DB_HOST'] ?? 'mysql.railway.internal';
+        $this->dbname = $_ENV['DB_NAME'] ?? 'railway';
         $this->username = $_ENV['DB_USER'] ?? 'root';
-        $this->password = $_ENV['DB_PASS'] ?? '';
+        $this->password = $_ENV['DB_PASS'] ?? 'FTgzrWMpPyWZOXMAyswMajiKpFUwbJtq';
         
         try {
             $this->connection = new \PDO(
