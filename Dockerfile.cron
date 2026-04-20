@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+# Cài dependencies PHP
+RUN composer install
 # đảm bảo cron.sh có quyền chạy
 RUN chmod +x cron.sh
 
