@@ -11,8 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($title) ? 'HOSTY Admin - ' . htmlspecialchars($title) : 'HOSTY Admin Dashboard' ?></title>
-    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/Public/css/app.css?v=<?= rand() ?>">
+    <link rel="icon" href="<?= BASE_URL ?>/public/images/favicon.ico">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/app.css?v=<?= rand() ?>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -115,12 +115,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/cleave.js@1/dist/cleave.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/app.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/index.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/custom-chart.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/admin/post-management.js?v=<?= rand() ?>"></script>
-        <script src="<?= BASE_URL ?>/Public/js/admin/customer-support.js?v=<?= rand() ?>"></script>
+    <script src="<?= BASE_URL ?>/public/js/app.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/index.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/custom-chart.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/posts.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/admin/post-management.js?v=<?= rand() ?>"></script>
+        <script src="<?= BASE_URL ?>/public/js/admin/customer-support.js?v=<?= rand() ?>"></script>
 
     <script>
         // Use App.showSuccessMessage for notifications (centralized in Public/js/app.js)

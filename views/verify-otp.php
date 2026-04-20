@@ -25,7 +25,7 @@ $errors = $flashData['error'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?= BASE_URL ?>/Public/images/favicon.ico">
+    <link rel="icon" href="<?= BASE_URL ?>/public/images/favicon.ico">
     <title>Xác thực OTP - HOSTY</title>
     
     <!-- Tailwind CSS -->
@@ -40,7 +40,7 @@ $errors = $flashData['error'] ?? '';
     <style>
         body {
             background-color: #f7fafc;
-            background: url('<?= BASE_URL ?>/Public/images/admin/login-background.jpg') no-repeat;
+            background: url('<?= BASE_URL ?>/public/images/admin/login-background.jpg') no-repeat;
             background-size: contain;
             background-position-y: 60%;
             min-height: 100vh;
@@ -53,7 +53,7 @@ $errors = $flashData['error'] ?? '';
         <div class="text-center mb-8">
             <!-- Logo -->
             <div class="mb-4">
-                <img src="<?= BASE_URL ?>/Public/images/admin/hosty-removebg.png" alt="LOZIDO Logo" class="w-20 h-20 mx-auto">
+                <img src="<?= BASE_URL ?>/public/images/admin/hosty-removebg.png" alt="LOZIDO Logo" class="w-20 h-20 mx-auto">
             </div>
             <!-- Title Text -->
             <h1 class="text-[#3C9E46] text-4xl font-bold text-center leading-tight whitespace-nowrap">
@@ -140,15 +140,15 @@ $errors = $flashData['error'] ?? '';
         </div>
     </div>
     <!-- Load JS -->
-    <script src="<?= BASE_URL ?>/Public/js/jquery-3.7.1.min.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/jquery-3.7.1.min.js"></script>
     <!-- Toastr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- Loading Overlay -->
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/lazysizes.min.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/lity.min.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/app.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/auth.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/lazysizes.min.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/lity.min.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/app.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/auth.js"></script>
     <!-- JavaScript for OTP functionality -->
     <script>
     </script>

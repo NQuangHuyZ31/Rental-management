@@ -14,7 +14,7 @@ use Core\CSRF;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?=BASE_URL?>/Public/images/favicon.ico">
+    <link rel="icon" href="<?=BASE_URL?>/public/images/favicon.ico">
     <title>Đặt lại mật khẩu - HOSTY</title>
 
     <!-- Tailwind CSS -->
@@ -27,7 +27,7 @@ use Core\CSRF;
     <style>
         body {
             background-color: #f7fafc;
-            background: url('<?=BASE_URL?>/Public/images/admin/login-background.jpg') no-repeat;
+            background: url('<?=BASE_URL?>/public/images/admin/login-background.jpg') no-repeat;
             background-size: contain;
             background-position-y: 60%;
             min-height: 100vh;
@@ -130,8 +130,8 @@ use Core\CSRF;
     <script src="https://cdn.jsdelivr.net/npm/js-loading-overlay@1.1.0/dist/js-loading-overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/app.js"></script>
-    <script src="<?=BASE_URL?>/Public/js/auth.js"></script>
+    <script src="<?=BASE_URL?>/public/js/app.js"></script>
+    <script src="<?=BASE_URL?>/public/js/auth.js"></script>
 
     <script>
         // Toggle password visibility

@@ -148,7 +148,7 @@ Tạo tài khoản Sepay để sử dụng dịch vụ thanh toán
 
 ### 📋
 
-![Sepay Register](https://hosty.shoplands.store/Public/images/image.png)
+![Sepay Register](https://hosty.shoplands.store/public/images/image.png)
 
 ### 🔗 Liên kết đăng ký:
 
@@ -160,7 +160,7 @@ Kết nối tài khoản ngân hàng với Sepay để nhận thanh toán
 
 ### 🏦 Đăng nhập vào sepay -> Mục ngân hàng -> chọn kết nối tài khoản
 
-![Sepay Bank](https://hosty.shoplands.store/Public/images/guide-1.png)
+![Sepay Bank](https://hosty.shoplands.store/public/images/guide-1.png)
 
 ### - Chọn ngân hàng và nhập thông tin tài khoản
 
@@ -170,7 +170,7 @@ Tạo API key để xác thực webhook từ Sepay
 
 ### 🏦 Đăng nhập vào sepay -> Mục Cấu hình công ty -> API access -> Thêm API key
 
-![Sepay Bank](https://hosty.shoplands.store/Public/images/guide-2.png)
+![Sepay Bank](https://hosty.shoplands.store/public/images/guide-2.png)
 
 ### - Copy lại API key
 
@@ -190,12 +190,12 @@ URL chỉ là ví dụ, có thể thay đổi tùy theo domain của bạn
 3.  3. Nhập thông tin webhook
 4.  4. Copy url webhook ở trên và nhập vào
 
-![Sepay Webhook](https://hosty.shoplands.store/Public/images/guide-3.png)
+![Sepay Webhook](https://hosty.shoplands.store/public/images/guide-3.png)
 
 1.  5. Kiểu chứng thực chọn API Key
 2.  6. Nhập API key vừa tạo
 
-![Sepay Webhook](https://hosty.shoplands.store/Public/images/guide-4.png)
+![Sepay Webhook](https://hosty.shoplands.store/public/images/guide-4.png)
 
 ### - Lưu webhook
 
@@ -205,7 +205,7 @@ Lưu thông tin trên hệ thống hosty
 
 ### Đăng nhập vào hệ thống hosty -> Mục Cài đặt chung -> Thanh toán -> Thêm thông tin ngân hàng
 
-![Sepay Webhook](https://hosty.shoplands.store/Public/images/guide-5.png)
+![Sepay Webhook](https://hosty.shoplands.store/public/images/guide-5.png)
 
 ### Nhập thông tin ngân hàng và lưu (API key là API key từ Sepay được cấu hình vào webhook)
 

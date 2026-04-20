@@ -53,8 +53,8 @@
 	<?php include VIEW_PATH . '/landlord/layouts/footer.php'; ?>
 
 	<!-- Include posts.js -->
-	<script src="<?= BASE_URL ?>/Public/js/posts.js"></script>
+	<script src="<?= BASE_URL ?>/public/js/posts.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-	<script src="<?= BASE_URL ?>/Public/js/setting-landlord-ui.js"></script>
+	<script src="<?= BASE_URL ?>/public/js/setting-landlord-ui.js"></script>
 </body>
 </html>

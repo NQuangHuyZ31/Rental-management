@@ -110,7 +110,7 @@
         </div>
     </div>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="<?= BASE_URL ?>/Public/js/custom-chart.js"></script>
+    <script src="<?= BASE_URL ?>/public/js/custom-chart.js"></script>
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <?php foreach ($chartData['header'] as $chart) : ?>
