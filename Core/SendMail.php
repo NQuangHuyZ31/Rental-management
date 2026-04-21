@@ -32,8 +32,13 @@ class SendMail {
             Log::queue("OTP Email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send OTP email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $error = $e->getMessage() . ' | ' . $this->mail->ErrorInfo;
+    
+            error_log("MAIL ERROR: " . $error); // 👈 thêm dòng này
+            
+            Log::queue("Failed to send OTP email to {$email}: " . $error);
+
+            throw new \Exception($error); // 👈 bắt buộc
         }
     }
 
@@ -78,8 +83,9 @@ class SendMail {
             Log::queue("Welcome email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send welcome email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send welcome email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -98,8 +104,9 @@ class SendMail {
             Log::queue("Appointment email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send appointment email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send appointment email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -118,8 +125,9 @@ class SendMail {
             Log::queue("Password reset email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send password reset email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send password reset email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -138,8 +146,9 @@ class SendMail {
             Log::queue("Active account email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send active account email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send active account email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -158,8 +167,9 @@ class SendMail {
             Log::queue("Notification email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send notification email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send notification email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -178,8 +188,9 @@ class SendMail {
             Log::queue("Custom email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send custom email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send custom email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -195,8 +206,9 @@ class SendMail {
             Log::queue("Resolved report email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send resolved report email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send resolved report email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 
@@ -212,8 +224,9 @@ class SendMail {
             Log::queue("Resolved support report email sent successfully to: " . $email);
             return true;
         } catch (Exception $e) {
-            Log::queue("Failed to send resolved support report email to {$email}: {$this->mail->ErrorInfo}");
-            return false;
+            $errorMsg = "Failed to send resolved support report email to {$email}: {$this->mail->ErrorInfo}";
+            Log::queue($errorMsg);
+            throw new \Exception($errorMsg);
         }
     }
 }
