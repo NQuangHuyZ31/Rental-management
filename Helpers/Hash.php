@@ -8,9 +8,9 @@ Purpose: provide hash functionality
 
 namespace Helpers;
 
-class Hash {
+class Hash{
     private static function getKey() {
-        return $_ENV['VERIFY_ACCOUNT_KEY'];
+        return $_ENV['VERIFY_ACCOUNT_KEY'] ?? 'rental_management';
     }
 
     public static function encrypt($value) {
