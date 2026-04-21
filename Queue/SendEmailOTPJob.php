@@ -28,35 +28,40 @@ class SendEmailOTPJob extends Job
     
     public function handle($data)
     {
-        // Xử lý trước khi thực thi
         $this->before();
-        
+
         try {
-            // Giả lập gửi email
+            Log::queue(["START JOB", $data]);
+
             $to = $data['to'] ?? '';
             $customer = $data['customer'] ?? '';
             $otpCode = $data['otpCode'] ?? '';
             $purpose = $data['purpose'] ?? '';
-            $otpCodeDecoded = Hash::decrypt($otpCode)?? '';
-            
+
+            Log::queue(["DATA PARSED", compact('to','customer','otpCode','purpose')]);
+
+            $otpCodeDecoded = Hash::decrypt($otpCode) ?? '';
+
+            Log::queue(["OTP DECODED", $otpCodeDecoded]);
+
             if (empty($to) || empty($customer) || empty($otpCodeDecoded) || empty($purpose)) {
                 throw new \Exception("Missing required email data");
             }
-            
-            // Xử lý sau khi hoàn thành
-            try {
-                $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
-            }
+
+            Log::queue(["SENDING EMAIL"]);
+
+            $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
+
+            Log::queue(["EMAIL SENT OK"]);
+
             $this->after();
-            
+
         } catch (\Exception $e) {
-            // Xử lý khi job thất bại
+            Log::queue(["ERROR", $e->getMessage()]);
             $this->failed($e);
             throw $e;
         }
-    }
+}
     
     public function before()
     {
