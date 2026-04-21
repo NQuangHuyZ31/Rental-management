@@ -10,37 +10,70 @@ namespace Core;
 
 use Helpers\EmailTemplate;
 use Helpers\Log;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use SendGrid\Mail\Mail;
 
 class SendMail {
     private $mail;
 
     public function __construct() {
-        $this->mail = new PHPMailer(true);
+        $this->mail = new Mail();
     }
 
-    public function sendOTP($email, $customer, $otpCode, $purpose = 'Xác minh tài khoản') {
+    use SendGrid\Mail\Mail;
+
+    public function sendOTP($email, $customer, $otpCode, $purpose = 'Xác minh tài khoản')
+    {
+        $mail = new Mail();
+
+        $mail->setFrom("huynguyenharu3108@gmail.com", "Hệ thống quản lý cho thuê nhà");
+        $mail->setSubject("Mã OTP - {$purpose}");
+        $mail->addTo($email, $customer);
+
+        $mail->addContent(
+            "text/html",
+            EmailTemplate::renderOTP($customer, $otpCode, $purpose)
+        );
+
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
         try {
-            $this->config();
-            $this->mail->addAddress($email, $customer);
-            $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+            $response = $sendgrid->send($mail);
 
-            $this->mail->Subject = "Mã xác minh OTP - {$purpose}";
-            $this->mail->Body = EmailTemplate::renderOTP($customer, $otpCode, $purpose);
-            $this->mail->send();
-            Log::queue("OTP Email sent successfully to: " . $email);
-            return true;
-        } catch (Exception $e) {
-            $error = $e->getMessage() . ' | ' . $this->mail->ErrorInfo;
-    
-            error_log("MAIL ERROR: " . $error); // 👈 thêm dòng này
-            
-            Log::queue("Failed to send OTP email to {$email}: " . $error);
+            error_log("SENDGRID STATUS: " . $response->statusCode());
 
-            throw new \Exception($error); // 👈 bắt buộc
+        if ($response->statusCode() >= 400) {
+            throw new \Exception("SendGrid error: " . $response->body());
         }
+
+        return true;
+
+    } catch (\Exception $e) {
+        error_log("SENDGRID ERROR: " . $e->getMessage());
+        throw $e;
     }
+}
+
+    // public function sendOTP($email, $customer, $otpCode, $purpose = 'Xác minh tài khoản') {
+    //     try {
+    //         $this->config();
+    //         $this->mail->addAddress($email, $customer);
+    //         $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
+
+    //         $this->mail->Subject = "Mã xác minh OTP - {$purpose}";
+    //         $this->mail->Body = EmailTemplate::renderOTP($customer, $otpCode, $purpose);
+    //         $this->mail->send();
+    //         Log::queue("OTP Email sent successfully to: " . $email);
+    //         return true;
+    //     } catch (Exception $e) {
+    //         $error = $e->getMessage() . ' | ' . $this->mail->ErrorInfo;
+    
+    //         error_log("MAIL ERROR: " . $error); // 👈 thêm dòng này
+            
+    //         Log::queue("Failed to send OTP email to {$email}: " . $error);
+
+    //         throw new \Exception($error); // 👈 bắt buộc
+    //     }
+    // }
 
     public function config() {
         $this->mail = new PHPMailer(true); // reset instance
