@@ -48,8 +48,8 @@ class SendMail {
         $this->mail->SMTPAuth = true; //Enable SMTP authentication
         $this->mail->Username = 'huynguyenharu3108@gmail.com'; //SMTP username
         $this->mail->Password = 'mfuk uxvq ykdy stst'; //SMTP password
-        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; //Enable implicit TLS encryption
-        $this->mail->Port = 465;
+        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //Enable implicit TLS encryption
+        $this->mail->Port = 587;
         $this->mail->CharSet = 'UTF-8'; // ✅ xử lý tiếng Việt
         $this->mail->Encoding = 'base64'; // hoặc 'quoted-printable'                                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
