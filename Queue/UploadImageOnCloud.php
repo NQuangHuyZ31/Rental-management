@@ -98,6 +98,7 @@ class UploadImageOnCloud extends Job {
 
         } catch (\Exception $e) {
             error_log("UploadImageOnCloud: Error: " . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -107,7 +108,7 @@ class UploadImageOnCloud extends Job {
     private function cleanupTempFiles($postId) {
         // Use __DIR__ to get the correct path in CLI mode
         $rootPath = ROOT_PATH;
-        $tempDir = $rootPath . 'temp_uploads/' . $postId;
+        $tempDir = $rootPath . '/temp_uploads/' . $postId;
 
         if (is_dir($tempDir)) {
             $files = glob($tempDir . '/*');

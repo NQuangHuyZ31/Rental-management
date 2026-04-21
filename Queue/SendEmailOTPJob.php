@@ -47,11 +47,7 @@ class SendEmailOTPJob extends Job
             }
 
 
-            $result = $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
-
-            if (!$result) {
-                throw new \Exception("Send mail failed (return false)");
-            }
+            $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
 
 
             $this->after();

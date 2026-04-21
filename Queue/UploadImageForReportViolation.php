@@ -98,7 +98,8 @@ class UploadImageForReportViolation extends Job {
             $this->cleanupTempFiles($id);
 
         } catch (\Exception $e) {
-            error_log("UploadImageOnCloud: Error: " . $e->getMessage());
+            error_log("UploadImageForReportViolation: Error: " . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -108,7 +109,7 @@ class UploadImageForReportViolation extends Job {
     private function cleanupTempFiles($reportId) {
         // Use __DIR__ to get the correct path in CLI mode
         $rootPath = ROOT_PATH;
-        $tempDir = $rootPath . 'temp_uploads/' . $reportId;
+        $tempDir = $rootPath . '/temp_uploads/' . $reportId;
 
         if (is_dir($tempDir)) {
             $files = glob($tempDir . '/*');
