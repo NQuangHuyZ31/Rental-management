@@ -43,29 +43,28 @@ class SendMail {
     }
 
     public function config() {
-        $this->mail->isSMTP(); //Send using SMTP
-        $this->mail->Host = 'smtp.gmail.com'; //Set the SMTP server to send through
-        $this->mail->SMTPAuth = true; //Enable SMTP authentication
-        $this->mail->Username = 'huynguyenharu3108@gmail.com'; //SMTP username
-        $this->mail->Password = 'mfuk uxvq ykdy stst'; //SMTP password
-        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //Enable implicit TLS encryption
-        $this->mail->Port = 587;
-        $this->mail->CharSet = 'UTF-8'; // ✅ xử lý tiếng Việt
-        $this->mail->Encoding = 'base64'; // hoặc 'quoted-printable'                                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $this->mail = new PHPMailer(true); // reset instance
 
-        //Recipients
-        $this->mail->setFrom('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
-        // $mail->addAddress('ellen@example.com');               //Name is optional
-        $this->mail->addReplyTo('huynguyenharu3108@gmail.com', 'Hệ thống quản lý cho thuê nhà');
-        // $mail->addCC('cc@example.com');
-        // $mail->addBCC('bcc@example.com');
+        $this->mail->isSMTP();
+        $this->mail->Host = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?? 'smtp.sendgrid.net';
+        $this->mail->SMTPAuth = true;
+        $this->mail->Username = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?? 'apikey';
+        $this->mail->Password = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?? '';
+        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $this->mail->Port = $_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?? 587;
 
-        //Attachments
-        // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+        $this->mail->CharSet = 'UTF-8';
+        $this->mail->Encoding = 'base64';
 
-        //Content
-        $this->mail->isHTML(true); //Set email format to HTML
+        $this->mail->setFrom(
+            'huynguyenharu3108@gmail.com',
+            'Hệ thống quản lý cho thuê nhà'
+        );
+
+        $this->mail->isHTML(true);
+
+        // debug (tạm thời bật)
+        $this->mail->SMTPDebug = 0;
     }
 
     /**
