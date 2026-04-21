@@ -38,21 +38,21 @@ class SendEmailOTPJob extends Job
             $otpCode = $data['otpCode'] ?? '';
             $purpose = $data['purpose'] ?? '';
 
-            Log::queue(["DATA PARSED", compact('to','customer','otpCode','purpose')]);
 
             $otpCodeDecoded = Hash::decrypt($otpCode) ?? '';
 
-            Log::queue(["OTP DECODED", $otpCodeDecoded]);
 
             if (empty($to) || empty($customer) || empty($otpCodeDecoded) || empty($purpose)) {
                 throw new \Exception("Missing required email data");
             }
 
-            Log::queue(["SENDING EMAIL"]);
 
-            $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
+            try {
+                $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
+            } catch (\Exception $e) {
+                echo 'failed'. $e->getMessage();
+            }
 
-            Log::queue(["EMAIL SENT OK"]);
 
             $this->after();
 

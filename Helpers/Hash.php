@@ -10,7 +10,7 @@ namespace Helpers;
 
 class Hash{
     private static function getKey() {
-        return $_ENV['VERIFY_ACCOUNT_KEY'] ?? getenv('VERIFY_ACCOUNT_KEY') ?? null;
+        return $_ENV['VERIFY_ACCOUNT_KEY'] ?? getenv('VERIFY_ACCOUNT_KEY') ?? 'rental2026@2026@';
     }
 
     public static function encrypt($value) {
