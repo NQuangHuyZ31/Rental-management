@@ -44,8 +44,10 @@ class SendEmailOTPJob extends Job
             }
             
             // Xử lý sau khi hoàn thành
-            if (!$this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose)) {
-                throw new \Exception("Failed to send OTP email to: " . $to);
+            try {
+                $this->sendEmail->sendOTP($to, $customer, $otpCodeDecoded, $purpose);
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage());
             }
             $this->after();
             
